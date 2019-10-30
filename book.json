@@ -1,0 +1,16 @@
+{
+    "plugins": [
+        "hide-element",
+        "chapter-fold",
+        "katex",
+        "alerts",
+        "code",
+        "emphasize",
+        "ancre-navigation"
+    ],
+    "pluginsConfig": {
+        "hide-element": {
+            "elements": [".gitbook-link"]
+        }
+    }
+}
