@@ -1,3 +1,3 @@
-gitbook build
 rm -r docs/
-cp -r _book/ docs/
+gitbook build
+mv _book/ docs/
