@@ -1,0 +1,473 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>安装 nightly rust · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-ancre-navigation/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part2.html" />
+    
+    
+    <link rel="prev" href="introduction.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.2.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter2/content.html">
+            
+                <a href="../chapter2/content.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >安装 nightly rust</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x5B89;&#x88C5;nightly-rust"><a name="&#x5B89;&#x88C5;nightly-rust" class="anchor-navigation-ex-anchor" href="#&#x5B89;&#x88C5;nightly-rust"><i class="fa fa-link" aria-hidden="true"></i></a>&#x5B89;&#x88C5;nightly rust</h2>
+<p>rust &#x5305;&#x542B;&#xFF1A;stable&#x3001;beta&#x3001;nightly &#x4E09;&#x4E2A;&#x7248;&#x672C;&#x3002;&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#x6211;&#x4EEC;&#x5B89;&#x88C5;&#x7684;&#x662F; stable &#x3002;&#x7531;&#x4E8E;&#x5728;&#x7F16;&#x5199;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x65F6;&#x9700;&#x8981;&#x4F7F;&#x7528; rust &#x7684;&#x4E00;&#x4E9B;&#x4E0D;&#x7A33;&#x5B9A;&#x7684;&#x5B9E;&#x9A8C;&#x529F;&#x80FD;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x5B89;&#x88C5;rust&#x5DE5;&#x5177;&#x94FE;&#x7BA1;&#x7406;&#x5668;rustup&#x3001;rust&#x5305;&#x7BA1;&#x7406;&#x5668;cargo&#xFF0C;&#x5E76;&#x5207;&#x6362;&#x5230;rust&#x7684;nightly&#x7248;&#x672C;&#x3002;</p>
+<pre><code class="lang-sh">curl https://sh.rustup.rs <span class="hljs-_">-s</span>Sf | sh
+<span class="hljs-comment"># reboot</span>
+rustup default nightly
+</code></pre>
+<p>&#x5B89;&#x88C5;&#x6210;&#x529F;&#x540E;&#x4F7F;&#x7528;<code>rustc --version</code>&#x6216;&#x8005;<code>rustup show</code>&#x67E5;&#x770B;&#x5F53;&#x524D;rust&#x7684;&#x7248;&#x672C;&#xFF0C;&#x786E;&#x8BA4;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x5207;&#x6362;&#x5230;&#x4E86;nightly&#x7248;&#x672C;&#x3002;</p>
+<pre><code class="lang-sh">$ rustc --version
+rustc 1.40.0-nightly (fae75<span class="hljs-built_in">cd</span>21 2019-10-26)
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page: 第一章：独立式可执行程序">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part2.html" class="navigation navigation-next " aria-label="Next page: 使用包管理器 cargo 创建 rust binary 项目">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"安装 nightly rust","level":"1.2.1","depth":2,"next":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.2.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},"previous":{"title":"第一章：独立式可执行程序","level":"1.2","depth":1,"path":"chapter1/introduction.md","ref":"chapter1/introduction.md","articles":[{"title":"安装 nightly rust","level":"1.2.1","depth":2,"path":"chapter1/part1.md","ref":"chapter1/part1.md","articles":[]},{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.2.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},{"title":"移除标准库依赖","level":"1.2.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"path":"chapter1/part4.md","ref":"chapter1/part4.md","articles":[]},{"title":"总结与展望","level":"1.2.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","code","emphasize","ancre-navigation"],"pluginsConfig":{"chapter-fold":{},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"alerts":{},"ancre-navigation":{"associatedWithSummary":true,"float":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showLevel":true},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part1.md","mtime":"2019-11-01T10:17:29.878Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-01T17:19:11.674Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

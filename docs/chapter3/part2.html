@@ -1,0 +1,522 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>手动触发断点中断 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-ancre-navigation/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part3.html" />
+    
+    
+    <link rel="prev" href="part1.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter1/introduction.html">
+            
+                <a href="../chapter1/introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../chapter1/part1.html">
+            
+                <a href="../chapter1/part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../chapter1/part2.html">
+            
+                <a href="../chapter1/part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../chapter1/part3.html">
+            
+                <a href="../chapter1/part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../chapter1/part4.html">
+            
+                <a href="../chapter1/part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../chapter1/part5.html">
+            
+                <a href="../chapter1/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter2/content.html">
+            
+                <a href="../chapter2/content.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    rv64中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="part6.html">
+            
+                <a href="part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >手动触发断点中断</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;"><a name="&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;" class="anchor-navigation-ex-anchor" href="#&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;</h2>
+<p>&#x6211;&#x4EEC;&#x5F15;&#x5165;&#x4E00;&#x4E2A;&#x5BF9;&#x5BC4;&#x5B58;&#x5668;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x7684;&#x5E93;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x4E0D;&#x7528;&#x81EA;&#x5DF1;&#x5199;&#x4E86;&#x3002;</p>
+<pre><code class="lang-rust"><span class="hljs-comment">// Cargo.toml</span>
+
+[dependencies]
+riscv = { git = <span class="hljs-string">&quot;https://github.com/rcore-os/riscv&quot;</span>, features = [<span class="hljs-string">&quot;inline-asm&quot;</span>] }
+</code></pre>
+<p>&#x4E3A;&#x4E86;&#x65B9;&#x4FBF;&#x8D77;&#x89C1;&#xFF0C;&#x6211;&#x4EEC;&#x5148;&#x5C06; stvec &#x8BBE;&#x7F6E;&#x4E3A; Direct &#x6A21;&#x5F0F;&#x8DF3;&#x8F6C;&#x5230;&#x4E00;&#x4E2A;&#x7EDF;&#x4E00;&#x7684;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x3002;</p>
+<pre><code class="lang-rust"><span class="hljs-comment">// src/lib.rs</span>
+
+<span class="hljs-keyword">mod</span> interrupt;
+
+<span class="hljs-comment">// src/interrupt.rs</span>
+
+<span class="hljs-keyword">use</span> riscv::register::{
+    scause,
+    sepc,
+    stvec,
+    sscratch
+};
+
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">init</span></span>() {
+    <span class="hljs-keyword">unsafe</span> {
+        sscratch::write(<span class="hljs-number">0</span>);
+        stvec::write(trap_handler <span class="hljs-keyword">as</span> usize, stvec::TrapMode::Direct);
+    }
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;++++ setup interrupt! ++++&quot;</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">trap_handler</span></span>() -&gt; ! {
+    <span class="hljs-keyword">let</span> cause = scause::read().cause();
+    <span class="hljs-keyword">let</span> epc = sepc::read();
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;trap: cause: {:?}, epc: 0x{:#x}&quot;</span>, cause, epc);
+    <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;trap handled!&quot;</span>);
+}
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E; stvec &#x4F7F;&#x5F97;&#x6240;&#x6709;&#x4E2D;&#x65AD;&#x90FD;&#x8DF3;&#x8F6C;&#x5230; <code>trap_handler</code> &#x5E76;&#x5C06;&#x5176;&#x4F5C;&#x4E3A;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x3002;&#x800C;&#x8FD9;&#x4E2A;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x4EC5;&#x4EC5;&#x8F93;&#x51FA;&#x4E86;&#x4E00;&#x4E0B;&#x4E2D;&#x65AD;&#x539F;&#x56E0;&#x4EE5;&#x53CA;&#x4E2D;&#x65AD;&#x53D1;&#x751F;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5C31;&#x5306;&#x5306; panic &#x4E86;&#x4E8B;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x5728;&#x4E3B;&#x51FD;&#x6570;&#x4E2D;&#x901A;&#x8FC7;&#x6C47;&#x7F16;&#x6307;&#x4EE4;&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;&#xFF1A;</p>
+<pre><code class="lang-rust"><span class="hljs-comment">// src/init.rs</span>
+
+<span class="hljs-meta">#[no_mangle]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">rust_main</span></span>() -&gt; ! {
+    crate::interrupt::init();
+    <span class="hljs-keyword">unsafe</span> {
+        asm!(<span class="hljs-string">&quot;ebreak&quot;</span>::::<span class="hljs-string">&quot;volatile&quot;</span>);
+    }
+    <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;end of rust_main&quot;</span>);
+}
+</code></pre>
+<p>&#x4F7F;&#x7528; <code>make run</code>&#x6784;&#x5EFA;&#x5E76;&#x8FD0;&#x884C;&#xFF0C;&#x7ED3;&#x679C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<blockquote>
+<p><strong>[success] trap handled</strong></p>
+<pre><code class="lang-rust">...opensbi output...
+++++ setup interrupt! ++++
+trap: cause: Exception(Breakpoint), epc: <span class="hljs-number">0x0</span>xffffffffc0200040
+panicked at <span class="hljs-symbol">&apos;trap</span> handled!&apos;, src/interrupt.rs:<span class="hljs-number">20</span>:<span class="hljs-number">5</span>
+</code></pre>
+</blockquote>
+<p>&#x53EF;&#x89C1;&#x5728;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x4E4B;&#x524D;&#xFF0C;&#x786C;&#x4EF6;&#x4E3A;&#x6211;&#x4EEC;&#x6B63;&#x786E;&#x7684;&#x8BBE;&#x7F6E;&#x597D;&#x4E86; <code>scause,sepc</code> &#x5BC4;&#x5B58;&#x5668;&#xFF1B;&#x968F;&#x540E;&#x6211;&#x4EEC;&#x6B63;&#x786E;&#x7684;&#x8FDB;&#x5165;&#x4E86;&#x8BBE;&#x5B9A;&#x7684;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part1.html" class="navigation navigation-prev " aria-label="Previous page: rv64中断介绍">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part3.html" class="navigation navigation-next " aria-label="Next page: 程序运行上下文环境">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"手动触发断点中断","level":"1.4.2","depth":2,"next":{"title":"程序运行上下文环境","level":"1.4.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},"previous":{"title":"rv64中断介绍","level":"1.4.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","code","emphasize","ancre-navigation"],"pluginsConfig":{"chapter-fold":{},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"alerts":{},"ancre-navigation":{"associatedWithSummary":true,"float":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showLevel":true},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part2.md","mtime":"2019-11-01T10:10:06.798Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-01T17:19:11.674Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

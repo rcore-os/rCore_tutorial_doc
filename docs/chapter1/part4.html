@@ -1,0 +1,507 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>移除 runtime 依赖 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-ancre-navigation/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part5.html" />
+    
+    
+    <link rel="prev" href="part3.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter2/content.html">
+            
+                <a href="../chapter2/content.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >移除 runtime 依赖</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;"><a name="&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;" class="anchor-navigation-ex-anchor" href="#&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;</h2>
+<p>&#x5BF9;&#x4E8E;&#x5927;&#x591A;&#x6570;&#x8BED;&#x8A00;&#xFF0C;&#x4ED6;&#x4EEC;&#x90FD;&#x4F7F;&#x7528;&#x4E86; <strong>&#x8FD0;&#x884C;&#x65F6;&#x7CFB;&#x7EDF;(runtime system)</strong> &#xFF0C;&#x8FD9;&#x5BFC;&#x81F4; main &#x5E76;&#x4E0D;&#x662F;&#x4ED6;&#x4EEC;&#x6267;&#x884C;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x3002;</p>
+<p>&#x4EE5; rust &#x8BED;&#x8A00;&#x4E3A;&#x4F8B;&#xFF1A;&#x4E00;&#x4E2A;&#x5178;&#x578B;&#x7684;&#x94FE;&#x63A5;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#x7684; rust &#x7A0B;&#x5E8F;&#x4F1A;&#x9996;&#x5148;&#x8DF3;&#x8F6C;&#x5230; C runtime library &#x4E2D;&#x7684; <strong>crt0(C runtime zero)</strong> &#x8FDB;&#x5165;C runtime&#x8BBE;&#x7F6E; C &#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x6240;&#x9700;&#x8981;&#x7684;&#x73AF;&#x5883;(&#x6BD4;&#x5982;&#xFF1A;&#x521B;&#x5EFA;&#x5806;&#x6808;&#xFF0C;&#x8BBE;&#x7F6E;&#x5BC4;&#x5B58;&#x5668;&#x53C2;&#x6570;&#x7B49;)&#x3002;</p>
+<p>&#x7136;&#x540E; C runtime &#x4F1A;&#x8DF3;&#x8F6C;&#x5230; rust runtime &#x7684; <strong>&#x5165;&#x53E3;&#x70B9;(entry point)</strong> &#x8FDB;&#x5165;rust runtime&#x7EE7;&#x7EED;&#x8BBE;&#x7F6E;rust&#x8FD0;&#x884C;&#x73AF;&#x5883;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x5165;&#x53E3;&#x70B9;&#x5C31;&#x662F;&#x88AB;<code>start</code>&#x8BED;&#x4E49;&#x9879;&#x6807;&#x8BB0;&#x7684;&#x3002;rust runtime &#x7ED3;&#x675F;&#x4E4B;&#x540E;&#x624D;&#x4F1A;&#x8C03;&#x7528; main &#x8FDB;&#x5165;&#x4E3B;&#x7A0B;&#x5E8F;&#x3002;</p>
+<p>C runtime &#x548C;rust runtime&#x90FD;&#x9700;&#x8981;&#x6807;&#x51C6;&#x5E93;&#x652F;&#x6301;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x7A0B;&#x5E8F;&#x65E0;&#x6CD5;&#x8BBF;&#x95EE;&#x3002;&#x5982;&#x679C;&#x8986;&#x76D6;&#x4E86;<code>start</code>&#x8BED;&#x4E49;&#x9879;&#xFF0C;&#x4ECD;&#x7136;&#x9700;&#x8981;<code>crt0</code>&#xFF0C;&#x5E76;&#x4E0D;&#x80FD;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#x3002;&#x6240;&#x4EE5;&#x9700;&#x8981;&#x91CD;&#x5199;&#x8986;&#x76D6; <code>crt0</code> &#x5165;&#x53E3;&#x70B9;&#xFF1A;</p>
+<pre><code class="lang-rust"><span class="hljs-comment">// main.rs</span>
+
+<span class="hljs-meta">#![no_std]</span> <span class="hljs-comment">// don&apos;t link the Rust standard library</span>
+<span class="hljs-meta">#![no_main]</span> <span class="hljs-comment">// disable all Rust-level entry points</span>
+
+<span class="hljs-keyword">use</span> core::panic::PanicInfo;
+<span class="hljs-comment">// This function is called on panic.</span>
+<span class="hljs-meta">#[panic_handler]</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">panic</span></span>(_info: &amp;PanicInfo) -&gt; ! {
+    <span class="hljs-keyword">loop</span> {}
+}
+
+<span class="hljs-meta">#[no_mangle]</span> <span class="hljs-comment">// don&apos;t mangle the name of this function</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">_start</span></span>() -&gt; ! {
+    <span class="hljs-comment">// this function is the entry point, since the linker looks for a function named `_start` by default</span>
+    <span class="hljs-keyword">loop</span> {}
+}
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x52A0;&#x4E0A;<code>#![no_main]</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x6211;&#x4EEC;&#x4E0D;&#x7528;&#x5E38;&#x89C4;&#x7684;&#x5165;&#x53E3;&#x94FE;&#x3002;</p>
+<p>&#x540C;&#x65F6;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;<code>_start()</code>&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A;<code>#[no_mangle]</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5BF9;&#x4E8E;&#x6B64;&#x51FD;&#x6570;&#x7981;&#x7528;name mangling&#xFF0C;&#x786E;&#x4FDD;&#x7F16;&#x8BD1;&#x5668;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x540D;&#x4E3A;<code>_start</code>&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x975E;&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x51FD;&#x6570;&#x540D;&#x5B57;&#x552F;&#x4E00;&#x6027;&#x800C;&#x751F;&#x6210;&#x7684;&#x5F62;&#x5982;<code>_ZN3blog_os4_start7hb173fedf945531caE</code>&#x4E71;&#x7801;&#x822C;&#x7684;&#x540D;&#x5B57;&#x3002;&#x7531;&#x4E8E;<code>_start</code>&#x662F;&#x5927;&#x591A;&#x6570;&#x7CFB;&#x7EDF;&#x7684;&#x9ED8;&#x8BA4;&#x5165;&#x53E3;&#x70B9;&#x540D;&#x5B57;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x8981;&#x786E;&#x4FDD;&#x5B83;&#x4E0D;&#x4F1A;&#x53D1;&#x751F;&#x53D8;&#x5316;&#x3002;</p>
+<p>&#x63A5;&#x7740;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>extern &quot;C&quot;</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x8BE5;&#x51FD;&#x6570;&#x9075;&#x5FAA;<a href="https://en.wikipedia.org/wiki/Calling_convention" target="_blank">C calling convention</a>&#x800C;&#x4E0D;&#x662F;&#x9ED8;&#x8BA4;&#x7684;Rust calling convention&#x3002;&#x56E0;&#x4E3A;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;C runtime(crt0)&#x7684;&#x5165;&#x53E3;&#x3002;</p>
+<p>&#x8FD4;&#x56DE;&#x503C;&#x7C7B;&#x578B;&#x4E3A;<code>!</code>&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x662F;&#x53D1;&#x6563;&#x7684;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x8FD4;&#x56DE;&#x3002;&#x7531;&#x4E8E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x88AB;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6216;bootloader&#x76F4;&#x63A5;&#x8C03;&#x7528;&#xFF0C;&#x8FD9;&#x6837;&#x505A;&#x662F;&#x5FC5;&#x987B;&#x7684;&#x3002;&#x4E3A;&#x4E86;&#x4ECE;&#x5165;&#x53E3;&#x70B9;&#x51FD;&#x6570;&#x9000;&#x51FA;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7;<code>exit</code>&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x76EE;&#x524D;&#x8FD8;&#x6CA1;&#x6CD5;&#x505A;&#x5230;&#x8FD9;&#x4E00;&#x6B65;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x8BA9;&#x5B83;&#x5728;&#x539F;&#x5730;&#x8F6C;&#x5708;&#x5427;&#x3002;</p>
+<p>&#x7531;&#x4E8E;&#x7A0B;&#x5E8F;&#x4F1A;&#x4E00;&#x76F4;&#x505C;&#x5728;C runtime crt0&#x7684;&#x5165;&#x53E3;&#x70B9;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x79FB;&#x9664;&#x6CA1;&#x7528;&#x7684;<code>main</code>&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A;<code>![no_main]</code>&#x8868;&#x793A;&#x4E0D;&#x7528;&#x4E0D;&#x4F7F;&#x7528;&#x666E;&#x901A;&#x7684;&#x5165;&#x53E3;&#x70B9;&#x90A3;&#x5957;&#x7406;&#x8BBA;&#x3002;</p>
+<p>&#x518D;&#x6B21;<code>cargo build</code>&#xFF0C;&#x6211;&#x4EEC;&#x5373;&#x5C06;&#x9762;&#x5BF9;&#x8FD9;&#x4E00;&#x7AE0;&#x4E2D;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#xFF01;</p>
+<blockquote>
+<p><strong>[danger] cargo build error</strong></p>
+<p><code>linking with `cc` failed: exit code: 1</code></p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x540C;&#x6837;&#x4E0E;C runtime&#x6709;&#x5173;&#xFF0C;&#x5C3D;&#x7BA1;C runtime&#x7684;&#x5165;&#x53E3;&#x70B9;&#x5DF2;&#x7ECF;&#x88AB;&#x6211;&#x4EEC;&#x8986;&#x76D6;&#x6389;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x9879;&#x76EE;&#x4ECD;&#x9ED8;&#x8BA4;&#x94FE;&#x63A5;C runtime&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4E00;&#x4E9B;C&#x6807;&#x51C6;&#x5E93;(libc)&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x540C;&#x6837;&#x9700;&#x8981;&#x7981;&#x7528;&#x5E38;&#x89C4;&#x7684;C&#x542F;&#x52A8;&#x4F8B;&#x7A0B;&#x3002;</p>
+<p>&#x5C06;<code>cargo build</code>&#x6362;&#x6210;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#xFF1A;</p>
+<blockquote>
+<p><strong>[success] build passed</strong></p>
+<pre><code class="lang-rust">$ cargo rustc -- -C link-arg=-nostartfiles
+  Compiling os v0.<span class="hljs-number">1.0</span> ...
+   Finished dev [unoptimized + debuginfo] target(s) <span class="hljs-keyword">in</span> <span class="hljs-number">4.87</span>s
+</code></pre>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x7EC8;&#x4E8E;&#x6784;&#x5EFA;&#x6210;&#x529F;&#x5566;&#xFF01;&#x867D;&#x7136;&#x6700;&#x540E;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x4E4B;&#x540E;&#x5E76;&#x4E0D;&#x4F1A;&#x7528;&#x5230;&#xFF0C;&#x4F46;&#x662F;&#x6682;&#x65F6;&#x770B;&#x5230;&#x4E86;&#x4E00;&#x4E2A;success&#x4E0D;&#x4E5F;&#x5F88;&#x597D;&#x5417;&#xFF1F;</p>
+<p>&#x6784;&#x5EFA;&#x5F97;&#x5230;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x4F4D;&#x7F6E;&#x653E;&#x5728;<code>os/target/debug/os</code>&#x4E2D;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part3.html" class="navigation navigation-prev " aria-label="Previous page: 移除标准库依赖">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 总结与展望">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"next":{"title":"总结与展望","level":"1.2.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]},"previous":{"title":"移除标准库依赖","level":"1.2.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","code","emphasize","ancre-navigation"],"pluginsConfig":{"chapter-fold":{},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"alerts":{},"ancre-navigation":{"associatedWithSummary":true,"float":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showLevel":true},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part4.md","mtime":"2019-11-01T10:20:13.270Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-01T17:19:11.674Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
