@@ -11,7 +11,7 @@
 * [第二章：最小化内核](chapter2/introduction.md)
 	* [使用目标三元组描述目标平台](chapter2/part1.md)
 	* [使用链接脚本指令内存布局](chapter2/part2.md)
-	* [使用 OpenSBI 提供哦你的服务](chapter2/part3.md)
+	* [使用 OpenSBI 提供的服务](chapter2/part3.md)
 	* [支持格式化输出](chapter2/part4.md)
 	* [总结与展望](chapter2/part5.md)
 * [第三章：中断](chapter3/introduction.md)
