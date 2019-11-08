@@ -149,7 +149,7 @@ fn super_timer() {
 同时修改主函数 ``rust_main`` ：
 
 ```rust
-// src/interrupt.rs
+// src/init.rs
 
 #[no_mangle]
 pub extern "C" fn rust_main() -> ! {
