@@ -30,12 +30,12 @@ __trapret
 
 # 将地址 sp+8×a2 处的值 load 到寄存器 a1 内
 .macro LOAD a1, a2
-	lw \a1, \a2*XLENB(sp)
+	ld \a1, \a2*XLENB(sp)
 .endm
 
 # 将寄存器 a1 内的值 store 到地址 sp+8*a2 内
 .macro STORE a1, a2
-	sw \a1, \a2*XLENB(sp)
+	sd \a1, \a2*XLENB(sp)
 .endm
 ```
 
