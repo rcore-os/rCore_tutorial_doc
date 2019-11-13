@@ -1,6 +1,6 @@
 ## 实现上下文环境保存与恢复
 
-```asm
+```assembly
 # src/trap/trap.asm
 
 	.section.text
@@ -22,7 +22,7 @@ __trapret
 
 我们定义几个宏：
 
-```asm
+```assembly
 # src/trap/trap.asm
 
 # 表示每个寄存器占的字节数，由于是64位，都是8字节

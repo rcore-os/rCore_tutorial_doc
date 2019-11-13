@@ -41,7 +41,7 @@ bootstacktop:
 	.section .text.entry
 	.globl _start
 _start:
-	# t0 <- 三级页表的虚拟地址
+	# t0 := 三级页表的虚拟地址
 	lui     t0, %hi(boot_page_table_sv39)
 	# t0 减去偏移量 0xffffffff40000000，变为三级页表的物理地址
     li      t1, 0xffffffffc0000000 - 0x80000000
@@ -49,7 +49,7 @@ _start:
     # t0 >>= 12，变为三级页表的物理页号
     srli    t0, t0, 12
     
-    # t1 <- 8 << 60，设置 satp 的 MODE 字段为 Sv39
+    # t1 := 8 << 60，设置 satp 的 MODE 字段为 Sv39
     li      t1, 8 << 60
     # 将刚才计算出的预设三级页表物理页号附加到 satp 中
     or      t0, t0, t1
@@ -73,7 +73,7 @@ _start:
     .align 12   
 # 分配 4KiB 内存给预设的三级页表
 boot_page_table_sv39:
-    # 0xffffffff_c0000000 -> 0x80000000 (1G)
+    # 0xffffffff_c0000000 map to 0x80000000 (1G)
     # 前 511 个页表项均设置为 0 ，因此 V=0 ，意味着是空的
     .zero 8 * 511
     # 设置最后一个页表项，PPN=0x80000，标志位 VRWXAD 均为 1
