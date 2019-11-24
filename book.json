@@ -4,11 +4,9 @@
         "chapter-fold",
         "katex",
         "alerts",
-        "code",
         "emphasize",
-        "prism",
-        "-highlight"
-
+        "-highlight",
+	"prism"
     ],
     "pluginsConfig": {
         "hide-element": {
@@ -16,7 +14,6 @@
         },
         "prism": {
             "css": ["prismjs/themes/prism-tomorrow.css"]
-            
         }
     }
 }

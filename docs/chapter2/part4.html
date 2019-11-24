@@ -29,10 +29,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
-                
-            
-                
                 <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
                 
             
@@ -747,7 +743,7 @@
 <p>&#x6211;&#x4EEC;&#x5229;&#x7528; <code>cargo build</code> &#x5E76;&#x6307;&#x5B9A;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x8FDB;&#x884C;&#x6784;&#x5EFA;&#xFF0C;&#x5374;&#x51FA;&#x73B0;&#x4E86;&#x9519;&#x8BEF;&#xFF1A;</p>
 <blockquote>
 <p><strong>[danger] cargo build error</strong></p>
-<pre class="language-"><code class="lang-shell">$ cargo build --target riscv64-os.json    
+<pre class="language-"><code class="lang-bash">$ cargo build --target riscv64-os.json    
 Compiling os v0.1.0 <span class="token punctuation">(</span>/home/shinbokuow/dev/os<span class="token punctuation">)</span>
 error<span class="token punctuation">[</span>E0463<span class="token punctuation">]</span>: can&apos;t <span class="token function">find</span> crate <span class="token keyword">for</span> <span class="token variable"><span class="token variable">`</span>core<span class="token variable">`</span></span>
 <span class="token operator">|</span>
@@ -763,10 +759,10 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
 </blockquote>
 <p>&#x9519;&#x8BEF;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF1A;no_std &#x7684;&#x7A0B;&#x5E8F;&#x4F1A;&#x9690;&#x5F0F;&#x5730;&#x94FE;&#x63A5;&#x5230;&#x6211;&#x4EEC;&#x4E0A;&#x4E00;&#x7AE0;&#x63D0;&#x5230;&#x8FC7;&#x7684; rust &#x7684; <strong>core &#x5E93;</strong> &#x3002; <strong>core &#x5E93;</strong> &#x5305;&#x542B;&#x57FA;&#x7840;&#x7684; Rust &#x7C7B;&#x578B;&#xFF0C;&#x5982; Result&#x3001;Option &#x548C;&#x8FED;&#x4EE3;&#x5668;&#x7B49;&#x3002;&#x800C;&#x8FD9;&#x4E2A;&#x5E93;&#x867D;&#x7136;&#x4E0D;&#x4F9D;&#x8D56;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF0C;&#x4F46;&#x4F9D;&#x8D56;&#x76EE;&#x6807;&#x5E73;&#x53F0;&#xFF0C;&#x9700;&#x8981;&#x6839;&#x636E;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x4E2D;&#x7684;&#x8BBE;&#x7F6E;&#x8FDB;&#x884C;&#x7F16;&#x8BD1;&#x3002;&#x6211;&#x4EEC;&#x5728;&#x672C;&#x5E73;&#x53F0;&#x4E0A;&#x7F16;&#x8BD1;&#x8FD0;&#x884C;&#x5728;&#x5176;&#x4ED6;&#x5E73;&#x53F0;&#x4E0A;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x79F0;&#x4E3A;<strong>&#x4EA4;&#x53C9;&#x7F16;&#x8BD1;</strong>&#x3002;</p>
 <p>Rust &#x5DE5;&#x5177;&#x94FE;&#x4E2D;&#x9ED8;&#x8BA4;&#x53EA;&#x4E3A;&#x539F;&#x751F;&#x7684;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x63D0;&#x4F9B;&#x4E86;&#x9884;&#x7F16;&#x8BD1;&#x597D;&#x7684; core &#x5E93;&#xFF0C;&#x800C;&#x6211;&#x4EEC;&#x5728;&#x7F16;&#x5199; os &#x65F6;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4; &#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E3A;&#x8FD9;&#x4E9B;&#x76EE;&#x6807;&#x91CD;&#x65B0;&#x7F16;&#x8BD1;&#x6574;&#x4E2A; <strong>core &#x5E93;</strong> &#x3002;&#x8FD9;&#x65F6;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981; <strong>cargo xbuild</strong> &#x3002;&#x8FD9;&#x4E2A;&#x5DE5;&#x5177;&#x5C01;&#x88C5;&#x4E86; cargo build &#x3002;&#x540C;&#x65F6;&#xFF0C;&#x5B83;&#x5C06;&#x81EA;&#x52A8;&#x4EA4;&#x53C9;&#x7F16;&#x8BD1; <strong>core &#x5E93;</strong> &#x548C;&#x4E00;&#x4E9B; <strong>&#x7F16;&#x8BD1;&#x5668;&#x5185;&#x5EFA;&#x5E93;(compiler built-in libraries)</strong> &#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#x5B89;&#x88C5;&#x5B83;&#xFF1A;</p>
-<pre class="language-"><code class="lang-shell">cargo <span class="token function">install</span> cargo-xbuild
+<pre class="language-"><code class="lang-bash">cargo <span class="token function">install</span> cargo-xbuild
 </code></pre>
 <p>&#x73B0;&#x5728;&#x8FD0;&#x884C;&#x547D;&#x4EE4;&#x6765;&#x7F16;&#x8BD1;&#x76EE;&#x6807;&#x7A0B;&#x5E8F;&#xFF1A;</p>
-<pre class="language-"><code class="lang-shell">cargo xbuild --target riscv64-os.json
+<pre class="language-"><code class="lang-bash">cargo xbuild --target riscv64-os.json
 </code></pre>
 <p>&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x6210;&#x529F;&#x5566;&#xFF01;</p>
 
@@ -812,7 +808,7 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"编译、运行 (Writing)","level":"1.3.4","depth":2,"next":{"title":"使用 OpenSBI 提供的服务 (Writing)","level":"1.3.5","depth":2,"path":"chapter2/part5.md","ref":"chapter2/part5.md","articles":[]},"previous":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","code","emphasize","prism","-highlight"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part4.md","mtime":"2019-11-12T17:52:39.371Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-13T00:24:07.581Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"编译、运行 (Writing)","level":"1.3.4","depth":2,"next":{"title":"使用 OpenSBI 提供的服务 (Writing)","level":"1.3.5","depth":2,"path":"chapter2/part5.md","ref":"chapter2/part5.md","articles":[]},"previous":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part4.md","mtime":"2019-11-24T09:18:47.315Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:15:37.458Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -831,10 +827,6 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
     
         
         <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
-        
-    
-        
-        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
         
     
         

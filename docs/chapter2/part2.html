@@ -29,10 +29,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
-                
-            
-                
                 <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
                 
             
@@ -766,7 +762,7 @@
 <p><img src="figures/program_memory_layout.png" style="height:400px"></p>
 </blockquote>
 <p>&#x6211;&#x4EEC;&#x5982;&#x679C;&#x4E0D;&#x6307;&#x5B9A;&#x94FE;&#x63A5;&#x5DE5;&#x5177;&#x4F7F;&#x7528;&#x7684;&#x94FE;&#x63A5;&#x811A;&#x672C;&#xFF0C;&#x5219;&#x5B83;&#x4F1A;&#x4F7F;&#x7528;&#x9ED8;&#x8BA4;&#x7684;&#x94FE;&#x63A5;&#x811A;&#x672C;&#x6307;&#x5B9A;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#xFF0C;&#x5C06;&#x5404;&#x6BB5;&#x653E;&#x5728;&#x4F4E;&#x5730;&#x5740;&#x3002;&#x4E8B;&#x5B9E;&#x4E0A;&#x6211;&#x4EEC;&#x8981;&#x6C42;&#x5185;&#x6838;&#x7684;&#x6BB5;&#x653E;&#x5728;&#x9AD8;&#x5730;&#x5740;&#xFF0C;&#x6240;&#x4EE5;&#x4F7F;&#x7528;&#x81EA;&#x5DF1;&#x7684;&#x94FE;&#x63A5;&#x811A;&#x672C;&#x5219;&#x4E0D;&#x80FD;&#x4F7F;&#x7528;&#x9ED8;&#x8BA4;&#x7684;&#xFF1A;</p>
-<pre class="language-"><code class="lang-c"><span class="token comment">// src/boot/linker64.ld</span>
+<pre class="language-"><code class="lang-clike"><span class="token comment">// src/boot/linker64.ld</span>
 
 <span class="token comment">/* Copy from bbl-ucore : https://ring00.github.io/bbl-ucore      */</span>
 
@@ -784,7 +780,7 @@ SECTIONS
     <span class="token punctuation">.</span> <span class="token operator">=</span> BASE_ADDRESS<span class="token punctuation">;</span>
     start <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">.</span>text <span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span>text <span class="token punctuation">:</span> <span class="token punctuation">{</span>
         stext <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>text<span class="token punctuation">.</span>entry<span class="token punctuation">)</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>text <span class="token punctuation">.</span>text<span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>
@@ -792,24 +788,24 @@ SECTIONS
         etext <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token punctuation">.</span>rodata <span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span>rodata <span class="token punctuation">:</span> <span class="token punctuation">{</span>
         srodata <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>rodata <span class="token punctuation">.</span>rodata<span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>
         <span class="token punctuation">.</span> <span class="token operator">=</span> <span class="token function">ALIGN</span><span class="token punctuation">(</span><span class="token number">4</span>K<span class="token punctuation">)</span><span class="token punctuation">;</span>
         erodata <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token punctuation">.</span>data <span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span>data <span class="token punctuation">:</span> <span class="token punctuation">{</span>
         sdata <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>data <span class="token punctuation">.</span>data<span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>
         edata <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token punctuation">.</span>stack <span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span>stack <span class="token punctuation">:</span> <span class="token punctuation">{</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>bss<span class="token punctuation">.</span>stack<span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 
-    <span class="token punctuation">.</span>bss <span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span>bss <span class="token punctuation">:</span> <span class="token punctuation">{</span>
         sbss <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
         <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">.</span>bss <span class="token punctuation">.</span>bss<span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>
         ebss <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">;</span>
@@ -869,7 +865,7 @@ SECTIONS
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"使用链接脚本指定内存布局","level":"1.3.2","depth":2,"next":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"previous":{"title":"使用目标三元组描述目标平台","level":"1.3.1","depth":2,"path":"chapter2/part1.md","ref":"chapter2/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","code","emphasize","prism","-highlight"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part2.md","mtime":"2019-11-12T14:22:56.023Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-13T00:24:07.581Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"使用链接脚本指定内存布局","level":"1.3.2","depth":2,"next":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"previous":{"title":"使用目标三元组描述目标平台","level":"1.3.1","depth":2,"path":"chapter2/part1.md","ref":"chapter2/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part2.md","mtime":"2019-11-24T09:18:10.001Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:15:37.458Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -888,10 +884,6 @@ SECTIONS
     
         
         <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
-        
-    
-        
-        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
         
     
         
