@@ -1,6 +1,6 @@
 ## 实现上下文环境保存与恢复
 
-```assembly
+```riscv
 # src/trap/trap.asm
 
 	.section.text
@@ -22,7 +22,7 @@ __trapret
 
 我们定义几个宏：
 
-```assembly
+```riscv
 # src/trap/trap.asm
 
 # 表示每个寄存器占的字节数，由于是64位，都是8字节
@@ -41,7 +41,7 @@ __trapret
 
 ``SAVE_ALL`` 的原理是：将一整个 ``TrapFrame`` 保存在**内核栈**上。我们现在就处在内核态(S 态)，因此现在的栈顶地址 ``sp`` 就指向内核栈地址。但是，之后我们还要支持运行**用户态程序**，顾名思义，要在用户态(U 态)上运行，在中断时栈顶地址 ``sp`` 将指向用户栈顶地址，这种情况下我们要从用户栈切换到内核栈。
 
-```assembly
+```riscv
 # src/trap/trap.asm
 
 # 规定若在中断之前处于 U 态(用户态)
@@ -103,7 +103,7 @@ trap_from_user:
 
 而 ``RESTORE_ALL`` 正好是一个反过来的过程：
 
-```assembly
+```riscv
 # src/trap/trap.asm
 
 .macro RESTORE_ALL
@@ -135,10 +135,10 @@ _to_kernel:
 	# 恢复除 x0, x2(sp) 之外的通用寄存器
 	LOAD x1, 1
 	LOAD x3, 3
-    LOAD x4, 4
+	LOAD x4, 4
 	...
-    LOAD x31, 31
-
+	LOAD x31, 31
+	
 	# 如果从用户态进入中断， sp+2*8 地址处保存用户栈顶地址
 	# 切换回用户栈
 	# 如果从内核态进入中断， sp+2*8 地址处保存内核栈顶地址
@@ -202,13 +202,13 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 我们检查一下生成的汇编代码，看看是不是哪里出了问题：
 切换到 ``os/target/riscv64-os/debug`` 目录，我们构建之后得到了 elf 可执行文件 ``os``，我们考虑将其反汇编：
 
-```sh
+```bash
 $ riscv64-unknown-elf-objdump -d os > os.asm
 ```
 
 在 ``os.asm`` 中找到我们手动触发中断的 ``ebreak`` 指令：
 
-```assembly
+```riscv
 ...
 ffffffffc020003a:	0ee080e7          	jalr	238(ra) # ffffffffc0200124 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
 ffffffffc020003e:	a009                	j	ffffffffc0200040 <rust_main+0x12>
@@ -230,7 +230,7 @@ ffffffffc0200046:	02050513          	addi	a0,a0,32 # ffffffffc0203020
 
 我们去掉 ``+c`` ，删除掉 ``os/target`` 文件夹并重新构建，再来在 ``os.asm`` 中看看 ``ebreak`` 变成了什么样子：
 
-```assembly
+```riscv
 ...
 ffffffffc020004c:	180080e7          	jalr	384(ra) # ffffffffc02001c8 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
 ffffffffc0200050:	0040006f          	j	ffffffffc0200054 <rust_main+0x1c>
