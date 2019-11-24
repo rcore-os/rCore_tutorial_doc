@@ -29,7 +29,7 @@
 
 我们如果不指定链接工具使用的链接脚本，则它会使用默认的链接脚本指定内存布局，将各段放在低地址。事实上我们要求内核的段放在高地址，所以使用自己的链接脚本则不能使用默认的：
 
-```c
+```clike
 // src/boot/linker64.ld
 
 /* Copy from bbl-ucore : https://ring00.github.io/bbl-ucore      */

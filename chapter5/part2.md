@@ -2,14 +2,14 @@
 
 让我们回顾一下在相当于 bootloader 的 OpenSBI 结束后，我们要面对的是怎样一种局面：
 
-* 物理内存状态：OpenSBI 代码放在 $$[0\text{x}80000000,0\text{x}80200000)$$ 中，内核代码放在以 $$0\text{x}80200000$$ 开头的一块连续物理内存中。
+* 物理内存状态：OpenSBI 代码放在 ``[0x80000000,0x80200000)`` 中，内核代码放在以 ``0x80200000`` 开头的一块连续物理内存中。
 * CPU 状态：处于 S Mode ，寄存器 ``satp`` 的 $$\text{MODE}$$ 被设置为 ``Bare`` ，即无论取指还是访存我们通过物理地址直接访问物理内存。 $$\text{PC}=0\text{x}80200000$$ 指向内核的第一条指令。栈顶地址 $$\text{SP}$$ 处在 OpenSBI 代码内。
-* 内核代码：使用虚拟地址，代码和数据段均放在以虚拟地址 $$0\text{xffffffffc0200000}$$ 开头的一段连续虚拟内存中。
+* 内核代码：使用虚拟地址，代码和数据段均放在以虚拟地址 ``0xffffffffc0200000``开头的一段连续虚拟内存中。
 * 我们所要做的事情：将 $$\text{SP}$$ 从 OpenSBI 中移到我们的内核内，使得我们可以完全支配启动栈；同时需要跳转到函数 ``rust_main`` 中。
 
 我们已经在 ``src/boot/entry64.asm`` 中自己分配了一块 $$16\text{KiB}$$ 的内存用来做启动栈：
 
-```asm
+```riscv
 # src/boot/entry64.asm
 
 	.section .bss.stack
@@ -35,7 +35,7 @@ bootstacktop:
 
 因此，汇编代码为：
 
-```assembly
+```riscv
 # src/boot/entry64.asm
 
 	.section .text.entry
