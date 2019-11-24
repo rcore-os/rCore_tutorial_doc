@@ -6,7 +6,7 @@ cargo 在编译项目时，可以附加目标参数 `--target <target triple>` �
 
 ``rustc --version --verbose``来查看rust的默认目标三元组：
 
-```sh
+```bash
 rustc 1.40.0-nightly (fae75cd21 2019-10-26)
 binary: rustc
 commit-hash: fae75cd216c481de048e4951697c8f8525669c65

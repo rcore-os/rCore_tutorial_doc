@@ -26,7 +26,7 @@
 
 接着我们要在 ``_start`` 中设置内核的运行环境了，我们直接来看代码：
 
-```assembly
+```riscv
 # src/boot/entry64.asm
 
 	.section .text.entry

@@ -6,7 +6,7 @@
 
 > **[danger] cargo build error**
 >
-> ```shell
+> ```bash
 > $ cargo build --target riscv64-os.json    
 > Compiling os v0.1.0 (/home/shinbokuow/dev/os)
 > error[E0463]: can't find crate for `core`
@@ -26,13 +26,13 @@
 
 Rust 工具链中默认只为原生的目标三元组提供了预编译好的 core 库，而我们在编写 os 时使用的是自定义的目标三元组 。因此我们需要为这些目标重新编译整个 **core 库** 。这时我们就需要 **cargo xbuild** 。这个工具封装了 cargo build 。同时，它将自动交叉编译 **core 库** 和一些 **编译器内建库(compiler built-in libraries)** 。我们可以用下面的命令安装它：
 
-```shell
+```bash
 cargo install cargo-xbuild
 ```
 
 现在运行命令来编译目标程序：
 
-```shell
+```bash
 cargo xbuild --target riscv64-os.json
 ```
 
