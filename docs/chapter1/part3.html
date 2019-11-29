@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    编译、运行 (Writing)
+                    编译、生成内核镜像
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    使用 OpenSBI 提供的服务 (Writing)
+                    使用 Qemu 加载内核镜像
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    支持格式化输出 (Writing)
+                    封装 OpenSBI 接口
             
                 </a>
             
@@ -297,6 +297,19 @@
         <li class="chapter " data-level="1.3.7" data-path="../chapter2/part7.html">
             
                 <a href="../chapter2/part7.html">
+            
+                    
+                    实现格式化输出 (Writing)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="../chapter2/part8.html">
+            
+                <a href="../chapter2/part8.html">
             
                     
                     总结与展望 (Writing)
@@ -739,7 +752,7 @@
                                 <section class="normal markdown-section">
                                 
                                 <h2 id="&#x79FB;&#x9664;&#x6807;&#x51C6;&#x5E93;&#x4F9D;&#x8D56;">&#x79FB;&#x9664;&#x6807;&#x51C6;&#x5E93;&#x4F9D;&#x8D56;</h2>
-<p>&#x9879;&#x76EE;&#x9ED8;&#x8BA4;&#x662F;&#x94FE;&#x63A5;rust&#x6807;&#x51C6;&#x5E93;std&#x7684;&#xFF0C;&#x5B83;&#x4F9D;&#x8D56;&#x4E8E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x663E;&#x5F0F;&#x5C06;&#x5176;&#x7981;&#x7528;&#xFF1A;</p>
+<p>&#x9879;&#x76EE;&#x9ED8;&#x8BA4;&#x662F;&#x94FE;&#x63A5; rust &#x6807;&#x51C6;&#x5E93; std &#x7684;&#xFF0C;&#x5B83;&#x4F9D;&#x8D56;&#x4E8E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x663E;&#x5F0F;&#x5C06;&#x5176;&#x7981;&#x7528;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// main.rs</span>
 
 <span class="token attribute attr-name">#![no_std]</span>
@@ -747,7 +760,7 @@
     <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Hello, world!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>cargo build</code>&#x6784;&#x5EFA;&#x9879;&#x76EE;&#xFF0C;&#x4F1A;&#x51FA;&#x73B0;&#x4E0B;&#x9762;&#x7684;&#x9519;&#x8BEF;&#xFF1A;</p>
+<p>&#x6211;&#x4EEC;&#x4F7F;&#x7528;  <code>cargo build</code>  &#x6784;&#x5EFA;&#x9879;&#x76EE;&#xFF0C;&#x4F1A;&#x51FA;&#x73B0;&#x4E0B;&#x9762;&#x7684;&#x9519;&#x8BEF;&#xFF1A;</p>
 <blockquote>
 <p><strong>[danger] cargo build error</strong></p>
 <pre class="language-"><code class="lang-rust">error<span class="token punctuation">:</span> cannot find macro `println` <span class="token keyword">in</span> this scope
@@ -760,12 +773,12 @@ error<span class="token punctuation">:</span> language item required<span class=
 </code></pre>
 </blockquote>
 <p>&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x6211;&#x4EEC;&#x4F9D;&#x6B21;&#x89E3;&#x51B3;&#x8FD9;&#x4E9B;&#x95EE;&#x9898;&#x3002;</p>
-<p>&#x7B2C;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x662F;&#x8BF4;<code>println!</code>&#x5B8F;&#x672A;&#x627E;&#x5230;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x8FD9;&#x4E2A;&#x5B8F;&#x5C5E;&#x4E8E;rust&#x6807;&#x51C6;&#x5E93;std&#xFF0C;&#x7531;&#x4E8E;&#x5B83;&#x88AB;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x5F53;&#x7136;&#x5C31;&#x627E;&#x4E0D;&#x5230;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x6682;&#x65F6;&#x5C06;&#x5176;&#x5220;&#x9664;&#xFF0C;&#x4E4B;&#x540E;&#x81EA;&#x5DF1;&#x7ED9;&#x51FA;&#x4E0D;&#x4F9D;&#x8D56;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x5B9E;&#x73B0;&#x3002;</p>
+<p>&#x7B2C;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x662F;&#x8BF4;  <code>println!</code>  &#x5B8F;&#x672A;&#x627E;&#x5230;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x8FD9;&#x4E2A;&#x5B8F;&#x5C5E;&#x4E8E; rust &#x6807;&#x51C6;&#x5E93; std&#xFF0C;&#x7531;&#x4E8E;&#x5B83;&#x88AB;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x5F53;&#x7136;&#x5C31;&#x627E;&#x4E0D;&#x5230;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x6682;&#x65F6;&#x5C06;&#x5176;&#x5220;&#x9664;&#xFF0C;&#x4E4B;&#x540E;&#x81EA;&#x5DF1;&#x7ED9;&#x51FA;&#x4E0D;&#x4F9D;&#x8D56;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x5B9E;&#x73B0;&#x3002;</p>
 <blockquote>
 <p><strong>[info] <code>println!</code>&#x54EA;&#x91CC;&#x4F9D;&#x8D56;&#x4E86;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;</strong></p>
 <p>&#x8FD9;&#x4E2A;&#x5B8F;&#x4F1A;&#x8F93;&#x51FA;&#x5230;<strong>&#x6807;&#x51C6;&#x8F93;&#x51FA;</strong>&#xFF0C;&#x800C;&#x8FD9;&#x9700;&#x8981;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x652F;&#x6301;&#x3002;</p>
 </blockquote>
-<p>&#x7B2C;&#x4E8C;&#x4E2A;&#x9519;&#x8BEF;&#x662F;&#x8BF4;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x4F5C;&#x4E3A;<code>panic_handler</code>&#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x8D1F;&#x8D23;&#x5728;&#x7A0B;&#x5E8F;<code>panic</code>&#x65F6;&#x8C03;&#x7528;&#x3002;&#x5B83;&#x9ED8;&#x8BA4;&#x4F7F;&#x7528;&#x6807;&#x51C6;&#x5E93;std&#x4E2D;&#x5B9E;&#x73B0;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x56E0;&#x6B64;&#x53EA;&#x80FD;&#x81EA;&#x5DF1;&#x5B9E;&#x73B0;&#x5B83;&#xFF1A;</p>
+<p>&#x7B2C;&#x4E8C;&#x4E2A;&#x9519;&#x8BEF;&#x662F;&#x8BF4;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x4F5C;&#x4E3A; <code>panic_handler</code> &#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x8D1F;&#x8D23;&#x5728;&#x7A0B;&#x5E8F; <code>panic</code> &#x65F6;&#x8C03;&#x7528;&#x3002;&#x5B83;&#x9ED8;&#x8BA4;&#x4F7F;&#x7528;&#x6807;&#x51C6;&#x5E93; std &#x4E2D;&#x5B9E;&#x73B0;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x56E0;&#x6B64;&#x53EA;&#x80FD;&#x81EA;&#x5DF1;&#x5B9E;&#x73B0;&#x5B83;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// main.rs</span>
 
 <span class="token keyword">use</span> core<span class="token punctuation">::</span>panic<span class="token punctuation">::</span>PanicInfo<span class="token punctuation">;</span>
@@ -777,14 +790,14 @@ error<span class="token punctuation">:</span> language item required<span class=
 </code></pre>
 <blockquote>
 <p><strong>[info] panic</strong></p>
-<p>panic&#x5728;rust&#x4E2D;&#x8868;&#x660E;&#x7A0B;&#x5E8F;&#x9047;&#x5230;&#x4E86;&#x4E0D;&#x53EF;&#x6062;&#x590D;&#x7684;&#x9519;&#x8BEF;&#xFF0C;&#x53EA;&#x80FD;&#x88AB;&#x8FEB;&#x505C;&#x6B62;&#x8FD0;&#x884C;&#x3002;</p>
+<p>panic &#x5728; rust &#x4E2D;&#x8868;&#x660E;&#x7A0B;&#x5E8F;&#x9047;&#x5230;&#x4E86;&#x4E0D;&#x53EF;&#x6062;&#x590D;&#x7684;&#x9519;&#x8BEF;&#xFF0C;&#x53EA;&#x80FD;&#x88AB;&#x8FEB;&#x505C;&#x6B62;&#x8FD0;&#x884C;&#x3002;</p>
 </blockquote>
-<p>&#x7A0B;&#x5E8F;&#x5728;panic&#x540E;&#x5C31;&#x5E94;&#x8BE5;&#x7ED3;&#x675F;&#xFF0C;&#x4E0D;&#x8FC7;&#x6211;&#x4EEC;&#x6682;&#x65F6;&#x5148;&#x8BA9;&#x8FD9;&#x4E2A;handler&#x5361;&#x5728;&#x4E00;&#x4E2A;&#x6B7B;&#x5FAA;&#x73AF;&#x91CC;&#x3002;&#x56E0;&#x6B64;&#x8FD9;&#x4E2A;handler&#x4E0D;&#x4F1A;&#x7ED3;&#x675F;&#xFF0C;&#x6211;&#x4EEC;&#x7528;<code>!</code>&#x7C7B;&#x578B;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x4E0D;&#x4F1A;&#x8FD4;&#x56DE;&#x3002;</p>
-<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x7528;&#x5230;&#x4E86;&#x6838;&#x5FC3;&#x5E93;<code>core</code>&#xFF0C;&#x4E0E;&#x6807;&#x51C6;&#x5E93;<code>std</code>&#x4E0D;&#x540C;&#xFF0C;&#x8FD9;&#x4E2A;&#x5E93;&#x4E0D;&#x9700;&#x8981;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x652F;&#x6301;&#xFF0C;&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x8FD8;&#x4F1A;&#x4E0E;&#x5B83;&#x6253;&#x4EA4;&#x9053;&#x3002;</p>
-<p>&#x7B2C;&#x4E09;&#x4E2A;&#x9519;&#x8BEF;&#x63D0;&#x5230;&#x4E86;&#x8BED;&#x4E49;&#x9879;(language item)&#xFF0C;&#x5B83;&#x662F;&#x7F16;&#x8BD1;&#x5668;&#x5185;&#x90E8;&#x6240;&#x9700;&#x7684;&#x7279;&#x6B8A;&#x51FD;&#x6570;&#x6216;&#x7C7B;&#x578B;&#x3002;&#x521A;&#x624D;&#x7684;<code>panic_handler</code>&#x4E5F;&#x662F;&#x4E00;&#x4E2A;&#x8BED;&#x4E49;&#x9879;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x7528;&#x5B83;&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5F53;&#x7A0B;&#x5E8F;panic&#x4E4B;&#x540E;&#x5982;&#x4F55;&#x5904;&#x7406;&#x3002;</p>
-<p>&#x800C;&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x76F8;&#x5173;&#x8BED;&#x4E49;&#x9879;<code>eh_personality</code>&#xFF0C;&#x5176;&#x4E2D;<code>eh</code>&#x662F;<code>exception handling</code>&#x7684;&#x7B80;&#x5199;&#xFF0C;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x6807;&#x8BB0;&#x67D0;&#x51FD;&#x6570;&#x7528;&#x6765;&#x5B9E;&#x73B0;<strong>&#x5806;&#x6808;&#x5C55;&#x5F00;</strong>&#x5904;&#x7406;&#x529F;&#x80FD;&#x7684;&#x8BED;&#x4E49;&#x9879;&#x3002;&#x8FD9;&#x4E2A;&#x8BED;&#x4E49;&#x9879;&#x4E5F;&#x4E0E;<code>panic</code>&#x6709;&#x5173;&#x3002;</p>
+<p>&#x7A0B;&#x5E8F;&#x5728; panic &#x540E;&#x5C31;&#x5E94;&#x8BE5;&#x7ED3;&#x675F;&#xFF0C;&#x4E0D;&#x8FC7;&#x6211;&#x4EEC;&#x6682;&#x65F6;&#x5148;&#x8BA9;&#x8FD9;&#x4E2A; handler &#x5361;&#x5728;&#x4E00;&#x4E2A;&#x6B7B;&#x5FAA;&#x73AF;&#x91CC;&#x3002;&#x56E0;&#x6B64;&#x8FD9;&#x4E2A; handler &#x4E0D;&#x4F1A;&#x7ED3;&#x675F;&#xFF0C;&#x6211;&#x4EEC;&#x7528;<code>!</code>&#x7C7B;&#x578B;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x4E0D;&#x4F1A;&#x8FD4;&#x56DE;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x7528;&#x5230;&#x4E86;&#x6838;&#x5FC3;&#x5E93; <code>core</code> &#xFF0C;&#x4E0E;&#x6807;&#x51C6;&#x5E93; <code>std</code> &#x4E0D;&#x540C;&#xFF0C;&#x8FD9;&#x4E2A;&#x5E93;&#x4E0D;&#x9700;&#x8981;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x652F;&#x6301;&#xFF0C;&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x8FD8;&#x4F1A;&#x4E0E;&#x5B83;&#x6253;&#x4EA4;&#x9053;&#x3002;</p>
+<p>&#x7B2C;&#x4E09;&#x4E2A;&#x9519;&#x8BEF;&#x63D0;&#x5230;&#x4E86;&#x8BED;&#x4E49;&#x9879; (language item) &#xFF0C;&#x5B83;&#x662F;&#x7F16;&#x8BD1;&#x5668;&#x5185;&#x90E8;&#x6240;&#x9700;&#x7684;&#x7279;&#x6B8A;&#x51FD;&#x6570;&#x6216;&#x7C7B;&#x578B;&#x3002;&#x521A;&#x624D;&#x7684; <code>panic_handler</code> &#x4E5F;&#x662F;&#x4E00;&#x4E2A;&#x8BED;&#x4E49;&#x9879;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x7528;&#x5B83;&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5F53;&#x7A0B;&#x5E8F; panic &#x4E4B;&#x540E;&#x5982;&#x4F55;&#x5904;&#x7406;&#x3002;</p>
+<p>&#x800C;&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x76F8;&#x5173;&#x8BED;&#x4E49;&#x9879; <code>eh_personality</code> &#xFF0C;&#x5176;&#x4E2D; <code>eh</code> &#x662F; <code>exception handling</code> &#x7684;&#x7F29;&#x5199;&#xFF0C;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x6807;&#x8BB0;&#x67D0;&#x51FD;&#x6570;&#x7528;&#x6765;&#x5B9E;&#x73B0;<strong>&#x5806;&#x6808;&#x5C55;&#x5F00;</strong>&#x5904;&#x7406;&#x529F;&#x80FD;&#x7684;&#x8BED;&#x4E49;&#x9879;&#x3002;&#x8FD9;&#x4E2A;&#x8BED;&#x4E49;&#x9879;&#x4E5F;&#x4E0E; <code>panic</code> &#x6709;&#x5173;&#x3002;</p>
 <blockquote>
-<p><strong>[info] &#x5806;&#x6808;&#x5C55;&#x5F00;(stack unwinding)</strong></p>
+<p><strong>[info] &#x5806;&#x6808;&#x5C55;&#x5F00; (stack unwinding) </strong></p>
 <p>&#x901A;&#x5E38;&#xFF0C;&#x5F53;&#x7A0B;&#x5E8F;&#x51FA;&#x73B0;&#x4E86;&#x5F02;&#x5E38; (&#x8FD9;&#x91CC;&#x6307;&#x7C7B;&#x4F3C; Java &#x4E2D;&#x5C42;&#x5C42;&#x629B;&#x51FA;&#x7684;&#x5F02;&#x5E38;)&#xFF0C;&#x4ECE;&#x5F02;&#x5E38;&#x70B9;&#x5F00;&#x59CB;&#x4F1A;&#x6CBF;&#x7740; caller &#x8C03;&#x7528;&#x6808;&#x4E00;&#x5C42;&#x4E00;&#x5C42;&#x56DE;&#x6EAF;&#xFF0C;&#x76F4;&#x5230;&#x627E;&#x5230;&#x67D0;&#x4E2A;&#x51FD;&#x6570;&#x80FD;&#x591F;&#x6355;&#x83B7; (catch) &#x8FD9;&#x4E2A;&#x5F02;&#x5E38;&#x3002;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x79F0;&#x4E3A; &#x5806;&#x6808;&#x5C55;&#x5F00;&#x3002;</p>
 <p>&#x5F53;&#x7A0B;&#x5E8F;&#x51FA;&#x73B0;&#x4E0D;&#x53EF;&#x6062;&#x590D;&#x9519;&#x8BEF;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x6CBF;&#x7740;&#x8C03;&#x7528;&#x6808;&#x4E00;&#x5C42;&#x5C42;&#x56DE;&#x6EAF;&#x4E0A;&#x53BB;&#x56DE;&#x6536;&#x6BCF;&#x4E2A;caller &#x4E2D;&#x5B9A;&#x4E49;&#x7684;&#x5C40;&#x90E8;&#x53D8;&#x91CF;<strong>&#x907F;&#x514D;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6EA2;&#x51FA;</strong>&#x3002;&#x8FD9;&#x91CC;&#x7684;&#x56DE;&#x6536;&#x5305;&#x62EC; C++ &#x7684; RAII &#x7684;&#x6790;&#x6784;&#x4EE5;&#x53CA; Rust &#x7684; drop&#x3002;</p>
 <p>&#x800C;&#x5728; Rust &#x4E2D;&#xFF0C;panic &#x8BC1;&#x660E;&#x7A0B;&#x5E8F;&#x51FA;&#x73B0;&#x4E86;&#x4E0D;&#x53EF;&#x6062;&#x590D;&#x9519;&#x8BEF;&#xFF0C;&#x6211;&#x4EEC;&#x5219;&#x4F1A;&#x5BF9;&#x4E8E;&#x6BCF;&#x4E2A; caller &#x51FD;&#x6570;&#x8C03;&#x7528;&#x4F9D;&#x6B21;&#x8FD9;&#x4E2A;&#x88AB;&#x6807;&#x8BB0;&#x4E3A;&#x5806;&#x6808;&#x5C55;&#x5F00;&#x5904;&#x7406;&#x51FD;&#x6570;&#x7684;&#x51FD;&#x6570;&#x3002;</p>
@@ -800,11 +813,10 @@ panic <span class="token operator">=</span> <span class="token string">&quot;abo
 <span class="token punctuation">[</span>profile<span class="token punctuation">.</span>release<span class="token punctuation">]</span>
 panic <span class="token operator">=</span> <span class="token string">&quot;abort&quot;</span>
 </code></pre>
-<p>&#x6B64;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;<code>cargo build</code>&#xFF0C;&#x4F46;&#x662F;&#x53C8;&#x51FA;&#x73B0;&#x4E86;&#x65B0;&#x7684;&#x9519;&#x8BEF;...</p>
+<p>&#x6B64;&#x65F6;&#xFF0C;&#x6211;&#x4EEC; <code>cargo build</code> &#xFF0C;&#x4F46;&#x662F;&#x53C8;&#x51FA;&#x73B0;&#x4E86;&#x65B0;&#x7684;&#x9519;&#x8BEF;...</p>
 <blockquote>
 <p><strong>[danger] cargo build error</strong></p>
-<pre class="language-"><code class="lang-rust">error<span class="token punctuation">:</span> requires `start` lang_item
-</code></pre>
+<p><code>error: requires `start` lang_item</code></p>
 </blockquote>
 
                                 
@@ -849,7 +861,7 @@ panic <span class="token operator">=</span> <span class="token string">&quot;abo
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"移除标准库依赖","level":"1.2.3","depth":2,"next":{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"path":"chapter1/part4.md","ref":"chapter1/part4.md","articles":[]},"previous":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.2.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part3.md","mtime":"2019-11-24T09:15:56.952Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:54:07.852Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"移除标准库依赖","level":"1.2.3","depth":2,"next":{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"path":"chapter1/part4.md","ref":"chapter1/part4.md","articles":[]},"previous":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.2.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part3.md","mtime":"2019-11-27T07:53:04.229Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-29T01:32:20.209Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

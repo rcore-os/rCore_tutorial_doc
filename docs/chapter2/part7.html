@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>总结与展望 (Writing) · GitBook</title>
+        <title>实现格式化输出 (Writing) · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -73,7 +73,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../chapter3/introduction.html" />
+    <link rel="next" href="part8.html" />
     
     
     <link rel="prev" href="part6.html" />
@@ -260,7 +260,7 @@
                 <a href="part4.html">
             
                     
-                    编译、运行 (Writing)
+                    编译、生成内核镜像
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="part5.html">
             
                     
-                    使用 OpenSBI 提供的服务 (Writing)
+                    使用 Qemu 加载内核镜像
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="part6.html">
             
                     
-                    支持格式化输出 (Writing)
+                    封装 OpenSBI 接口
             
                 </a>
             
@@ -297,6 +297,19 @@
         <li class="chapter active" data-level="1.3.7" data-path="part7.html">
             
                 <a href="part7.html">
+            
+                    
+                    实现格式化输出 (Writing)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="part8.html">
+            
+                <a href="part8.html">
             
                     
                     总结与展望 (Writing)
@@ -723,7 +736,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >总结与展望 (Writing)</a>
+        <a href=".." >实现格式化输出 (Writing)</a>
     </h1>
 </div>
 
@@ -738,7 +751,31 @@
     
                                 <section class="normal markdown-section">
                                 
-                                
+                                <h2 id="&#x5B9E;&#x73B0;&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;">&#x5B9E;&#x73B0;&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;</h2>
+<p>&#x53EA;&#x80FD;&#x4F7F;&#x7528; <code>console_putchar</code> &#x8FD9;&#x79CD;&#x82CD;&#x767D;&#x65E0;&#x529B;&#x7684;&#x8F93;&#x51FA;&#x624B;&#x6BB5;&#x8BA9;&#x4EBA;&#x5934;&#x76AE;&#x53D1;&#x9EBB;&#x3002;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x80FD;&#x4F7F;&#x7528; <code>print!</code> &#x5B8F;&#x7684;&#x8BDD;&#x8BE5;&#x6709;&#x591A;&#x597D;&#x554A;&#xFF01;&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x5C31;&#x6765;&#x5B9E;&#x73B0;&#x81EA;&#x5DF1;&#x7684; <code>print!</code> &#x5B8F;&#xFF01;</p>
+<p>&#x6211;&#x4EEC;&#x5C06;&#x8FD9;&#x4E00;&#x90E8;&#x5206;&#x653E;&#x5728; <code>src/io.rs</code> &#x4E2D;&#xFF0C;&#x5148;&#x7528; <code>console_putchar</code> &#x5B9E;&#x73B0;&#x4E24;&#x4E2A;&#x57FA;&#x7840;&#x51FD;&#x6570;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/lib.rs</span>
+
+<span class="token comment">// &#x7531;&#x4E8E;&#x4F7F;&#x7528;&#x5230;&#x4E86;&#x5B8F;&#xFF0C;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x8BBE;&#x7F6E;</span>
+<span class="token comment">// &#x540C;&#x65F6;&#xFF0C;&#x8FD9;&#x4E2A; mod &#x8FD8;&#x5FC5;&#x987B;&#x653E;&#x5728;&#x5176;&#x4ED6; mod &#x524D;</span>
+<span class="token attribute attr-name">#[macro_use]</span>
+<span class="token keyword">mod</span> io<span class="token punctuation">;</span>
+
+<span class="token comment">// src/io.rs</span>
+
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>sbi<span class="token punctuation">;</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">putchar</span><span class="token punctuation">(</span>ch<span class="token punctuation">:</span> char<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    sbi<span class="token punctuation">::</span><span class="token function">console_putchar</span><span class="token punctuation">(</span>ch <span class="token keyword">as</span> u8 <span class="token keyword">as</span> usize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">puts</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span>str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> ch <span class="token keyword">in</span> s<span class="token punctuation">.</span><span class="token function">chars</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">putchar</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
                                 
                                 </section>
                             
@@ -765,12 +802,12 @@
 
             
                 
-                <a href="part6.html" class="navigation navigation-prev " aria-label="Previous page: 支持格式化输出 (Writing)">
+                <a href="part6.html" class="navigation navigation-prev " aria-label="Previous page: 封装 OpenSBI 接口">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../chapter3/introduction.html" class="navigation navigation-next " aria-label="Next page: 第三章：中断">
+                <a href="part8.html" class="navigation navigation-next " aria-label="Next page: 总结与展望 (Writing)">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -781,7 +818,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"总结与展望 (Writing)","level":"1.3.7","depth":2,"next":{"title":"第三章：中断","level":"1.4","depth":1,"path":"chapter3/introduction.md","ref":"chapter3/introduction.md","articles":[{"title":"rv64中断介绍","level":"1.4.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},{"title":"手动触发断点中断","level":"1.4.2","depth":2,"path":"chapter3/part2.md","ref":"chapter3/part2.md","articles":[]},{"title":"程序运行上下文环境","level":"1.4.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},{"title":"实现上下文环境保存与恢复","level":"1.4.4","depth":2,"path":"chapter3/part4.md","ref":"chapter3/part4.md","articles":[]},{"title":"时钟中断","level":"1.4.5","depth":2,"path":"chapter3/part5.md","ref":"chapter3/part5.md","articles":[]},{"title":"总结与展望","level":"1.4.6","depth":2,"path":"chapter3/part6.md","ref":"chapter3/part6.md","articles":[]}]},"previous":{"title":"支持格式化输出 (Writing)","level":"1.3.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"dir":"neutral"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part7.md","mtime":"2019-11-13T00:05:58.755Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:54:07.852Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"实现格式化输出 (Writing)","level":"1.3.7","depth":2,"next":{"title":"总结与展望 (Writing)","level":"1.3.8","depth":2,"path":"chapter2/part8.md","ref":"chapter2/part8.md","articles":[]},"previous":{"title":"封装 OpenSBI 接口","level":"1.3.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part7.md","mtime":"2019-11-29T01:18:56.218Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-29T01:32:20.209Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

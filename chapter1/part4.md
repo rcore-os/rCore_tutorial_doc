@@ -2,11 +2,11 @@
 
 对于大多数语言，他们都使用了 **运行时系统(runtime system)** ，这导致 main 并不是他们执行的第一个函数。
 
-以 rust 语言为例：一个典型的链接了标准库的 rust 程序会首先跳转到 C runtime library 中的 **crt0(C runtime zero)** 进入C runtime设置 C 程序运行所需要的环境(比如：创建堆栈，设置寄存器参数等)。
+以 rust 语言为例：一个典型的链接了标准库的 rust 程序会首先跳转到 C runtime library 中的 **crt0(C runtime zero)** 进入C runtime 设置 C 程序运行所需要的环境(比如：创建堆栈，设置寄存器参数等)。
 
-然后 C runtime 会跳转到 rust runtime 的 **入口点(entry point)** 进入rust runtime继续设置rust运行环境，而这个入口点就是被``start``语义项标记的。rust runtime 结束之后才会调用 main 进入主程序。
+然后 C runtime 会跳转到 rust runtime 的 **入口点(entry point)** 进入 rust runtime 继续设置 rust 运行环境，而这个入口点就是被 ``start`` 语义项标记的。rust runtime 结束之后才会调用 main 进入主程序。
 
-C runtime 和rust runtime都需要标准库支持，我们的程序无法访问。如果覆盖了``start``语义项，仍然需要``crt0``，并不能解决问题。所以需要重写覆盖 ``crt0`` 入口点：
+C runtime 和 rust runtime 都需要标准库支持，我们的程序无法访问。如果覆盖了 ``start`` 语义项，仍然需要 ``crt0``，并不能解决问题。所以需要重写覆盖 ``crt0`` 入口点：
 
 ```rust
 // main.rs
@@ -28,35 +28,37 @@ pub extern "C" fn _start() -> ! {
 }
 ```
 
-我们加上``#![no_main]``告诉编译器我们不用常规的入口链。
+我们加上 ``#![no_main]`` 告诉编译器我们不用常规的入口链。
 
-同时我们实现一个``_start()``函数，并加上``#[no_mangle]``告诉编译器对于此函数禁用name mangling，确保编译器生成一个名为``_start``的函数，而非为了保证函数名字唯一性而生成的形如`` _ZN3blog_os4_start7hb173fedf945531caE ``乱码般的名字。由于``_start``是大多数系统的默认入口点名字，所以我们要确保它不会发生变化。
+同时我们实现一个 ``_start`` 函数，并加上 ``#[no_mangle]`` 告诉编译器对于此函数禁用 name mangling ，确保编译器生成一个名为 ``_start`` 的函数，而非为了保证函数名字唯一性而生成的形如 `` _ZN3blog_os4_start7hb173fedf945531caE `` 乱码般的名字。由于 ``_start`` 是大多数系统的默认入口点名字，所以我们要确保它不会发生变化。
 
-接着，我们使用``extern "C"``告诉编译器该函数遵循[C calling convention](https://en.wikipedia.org/wiki/Calling_convention)而不是默认的Rust calling convention。因为这是一个C runtime(crt0)的入口。
+接着，我们使用 ``extern "C"`` 描述 ``_start`` 函数，这是 rust 中的 ``FFI, Foreign Function Interface`` 语法，表示此函数是一个 C 函数而非 rust 函数。由于 ``_start`` 是作为 C runtime 的入口点，看起来合情合理。
 
-返回值类型为``!``表明这个函数是发散的，不允许返回。由于这个函数被操作系统或bootloader直接调用，这样做是必须的。为了从入口点函数退出，我们需要通过``exit``系统调用，但我们目前还没法做到这一步，因此就让它在原地转圈吧。
+返回值类型为``!``表明这个函数是发散的，不允许返回。由于这个函数被操作系统或 bootloader 直接调用，这样做是必须的。为了从入口点函数退出，我们需要通过 ``exit`` 系统调用，但我们目前还没法做到这一步，因此就让它在原地转圈吧。
 
-由于程序会一直停在C runtime crt0的入口点，我们可以移除没用的``main``函数，并加上``![no_main]``表示不用不使用普通的入口点那套理论。
+由于程序会一直停在 C runtime crt0 的入口点，我们可以移除没用的 ``main`` 函数，并加上 ``![no_main]`` 表示不用不使用普通的入口点那套理论。
 
-再次``cargo build``，我们即将面对这一章中的最后一个错误！
+再次 ``cargo build`` ，我们即将面对这一章中的最后一个错误！
 
 > **[danger] cargo build error**
 > 
 > ``linking with `cc` failed: exit code: 1``
 > 
 
-这个错误同样与C runtime有关，尽管C runtime的入口点已经被我们覆盖掉了，我们的项目仍默认链接C runtime，因此需要一些C标准库(libc)的内容，由于我们禁用了标准库，我们也同样需要禁用常规的C启动例程。
+这个错误同样与 C runtime 有关，尽管 C runtime 的入口点已经被我们覆盖掉了，我们的项目仍默认链接 C runtime，因此需要一些 C 标准库 (libc) 的内容，由于我们禁用了标准库，我们也同样需要禁用常规的 C 启动例程。
 
-将``cargo build``换成以下命令：
+将 ``cargo build`` 换成以下命令：
 
 > **[success] build passed**
->```rust
->$ cargo rustc -- -C link-arg=-nostartfiles
->   Compiling os v0.1.0 ...
->    Finished dev [unoptimized + debuginfo] target(s) in 4.87s
->```
+>
+> ```bash
+> $ cargo rustc -- -C link-arg=-nostartfiles
+> Compiling os v0.1.0 ...
+> Finished dev [unoptimized + debuginfo] target(s) in 4.87s
+> ```
 >
 
-我们终于构建成功啦！虽然最后这个命令之后并不会用到，但是暂时看到了一个success不也很好吗？
+我们终于构建成功啦！虽然最后这个命令之后并不会用到，但是暂时看到了一个 success 不也很好吗？
 
-构建得到的可执行文件位置放在``os/target/debug/os``中。
+构建得到的可执行文件位置放在 ``os/target/debug/os`` 中。
+

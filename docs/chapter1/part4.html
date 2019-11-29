@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    编译、运行 (Writing)
+                    编译、生成内核镜像
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    使用 OpenSBI 提供的服务 (Writing)
+                    使用 Qemu 加载内核镜像
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    支持格式化输出 (Writing)
+                    封装 OpenSBI 接口
             
                 </a>
             
@@ -297,6 +297,19 @@
         <li class="chapter " data-level="1.3.7" data-path="../chapter2/part7.html">
             
                 <a href="../chapter2/part7.html">
+            
+                    
+                    实现格式化输出 (Writing)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="../chapter2/part8.html">
+            
+                <a href="../chapter2/part8.html">
             
                     
                     总结与展望 (Writing)
@@ -740,9 +753,9 @@
                                 
                                 <h2 id="&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;">&#x79FB;&#x9664;runtime&#x4F9D;&#x8D56;</h2>
 <p>&#x5BF9;&#x4E8E;&#x5927;&#x591A;&#x6570;&#x8BED;&#x8A00;&#xFF0C;&#x4ED6;&#x4EEC;&#x90FD;&#x4F7F;&#x7528;&#x4E86; <strong>&#x8FD0;&#x884C;&#x65F6;&#x7CFB;&#x7EDF;(runtime system)</strong> &#xFF0C;&#x8FD9;&#x5BFC;&#x81F4; main &#x5E76;&#x4E0D;&#x662F;&#x4ED6;&#x4EEC;&#x6267;&#x884C;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x3002;</p>
-<p>&#x4EE5; rust &#x8BED;&#x8A00;&#x4E3A;&#x4F8B;&#xFF1A;&#x4E00;&#x4E2A;&#x5178;&#x578B;&#x7684;&#x94FE;&#x63A5;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#x7684; rust &#x7A0B;&#x5E8F;&#x4F1A;&#x9996;&#x5148;&#x8DF3;&#x8F6C;&#x5230; C runtime library &#x4E2D;&#x7684; <strong>crt0(C runtime zero)</strong> &#x8FDB;&#x5165;C runtime&#x8BBE;&#x7F6E; C &#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x6240;&#x9700;&#x8981;&#x7684;&#x73AF;&#x5883;(&#x6BD4;&#x5982;&#xFF1A;&#x521B;&#x5EFA;&#x5806;&#x6808;&#xFF0C;&#x8BBE;&#x7F6E;&#x5BC4;&#x5B58;&#x5668;&#x53C2;&#x6570;&#x7B49;)&#x3002;</p>
-<p>&#x7136;&#x540E; C runtime &#x4F1A;&#x8DF3;&#x8F6C;&#x5230; rust runtime &#x7684; <strong>&#x5165;&#x53E3;&#x70B9;(entry point)</strong> &#x8FDB;&#x5165;rust runtime&#x7EE7;&#x7EED;&#x8BBE;&#x7F6E;rust&#x8FD0;&#x884C;&#x73AF;&#x5883;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x5165;&#x53E3;&#x70B9;&#x5C31;&#x662F;&#x88AB;<code>start</code>&#x8BED;&#x4E49;&#x9879;&#x6807;&#x8BB0;&#x7684;&#x3002;rust runtime &#x7ED3;&#x675F;&#x4E4B;&#x540E;&#x624D;&#x4F1A;&#x8C03;&#x7528; main &#x8FDB;&#x5165;&#x4E3B;&#x7A0B;&#x5E8F;&#x3002;</p>
-<p>C runtime &#x548C;rust runtime&#x90FD;&#x9700;&#x8981;&#x6807;&#x51C6;&#x5E93;&#x652F;&#x6301;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x7A0B;&#x5E8F;&#x65E0;&#x6CD5;&#x8BBF;&#x95EE;&#x3002;&#x5982;&#x679C;&#x8986;&#x76D6;&#x4E86;<code>start</code>&#x8BED;&#x4E49;&#x9879;&#xFF0C;&#x4ECD;&#x7136;&#x9700;&#x8981;<code>crt0</code>&#xFF0C;&#x5E76;&#x4E0D;&#x80FD;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#x3002;&#x6240;&#x4EE5;&#x9700;&#x8981;&#x91CD;&#x5199;&#x8986;&#x76D6; <code>crt0</code> &#x5165;&#x53E3;&#x70B9;&#xFF1A;</p>
+<p>&#x4EE5; rust &#x8BED;&#x8A00;&#x4E3A;&#x4F8B;&#xFF1A;&#x4E00;&#x4E2A;&#x5178;&#x578B;&#x7684;&#x94FE;&#x63A5;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#x7684; rust &#x7A0B;&#x5E8F;&#x4F1A;&#x9996;&#x5148;&#x8DF3;&#x8F6C;&#x5230; C runtime library &#x4E2D;&#x7684; <strong>crt0(C runtime zero)</strong> &#x8FDB;&#x5165;C runtime &#x8BBE;&#x7F6E; C &#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x6240;&#x9700;&#x8981;&#x7684;&#x73AF;&#x5883;(&#x6BD4;&#x5982;&#xFF1A;&#x521B;&#x5EFA;&#x5806;&#x6808;&#xFF0C;&#x8BBE;&#x7F6E;&#x5BC4;&#x5B58;&#x5668;&#x53C2;&#x6570;&#x7B49;)&#x3002;</p>
+<p>&#x7136;&#x540E; C runtime &#x4F1A;&#x8DF3;&#x8F6C;&#x5230; rust runtime &#x7684; <strong>&#x5165;&#x53E3;&#x70B9;(entry point)</strong> &#x8FDB;&#x5165; rust runtime &#x7EE7;&#x7EED;&#x8BBE;&#x7F6E; rust &#x8FD0;&#x884C;&#x73AF;&#x5883;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x5165;&#x53E3;&#x70B9;&#x5C31;&#x662F;&#x88AB; <code>start</code> &#x8BED;&#x4E49;&#x9879;&#x6807;&#x8BB0;&#x7684;&#x3002;rust runtime &#x7ED3;&#x675F;&#x4E4B;&#x540E;&#x624D;&#x4F1A;&#x8C03;&#x7528; main &#x8FDB;&#x5165;&#x4E3B;&#x7A0B;&#x5E8F;&#x3002;</p>
+<p>C runtime &#x548C; rust runtime &#x90FD;&#x9700;&#x8981;&#x6807;&#x51C6;&#x5E93;&#x652F;&#x6301;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x7A0B;&#x5E8F;&#x65E0;&#x6CD5;&#x8BBF;&#x95EE;&#x3002;&#x5982;&#x679C;&#x8986;&#x76D6;&#x4E86; <code>start</code> &#x8BED;&#x4E49;&#x9879;&#xFF0C;&#x4ECD;&#x7136;&#x9700;&#x8981; <code>crt0</code>&#xFF0C;&#x5E76;&#x4E0D;&#x80FD;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#x3002;&#x6240;&#x4EE5;&#x9700;&#x8981;&#x91CD;&#x5199;&#x8986;&#x76D6; <code>crt0</code> &#x5165;&#x53E3;&#x70B9;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// main.rs</span>
 
 <span class="token attribute attr-name">#![no_std]</span> <span class="token comment">// don&apos;t link the Rust standard library</span>
@@ -761,27 +774,27 @@
     <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x6211;&#x4EEC;&#x52A0;&#x4E0A;<code>#![no_main]</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x6211;&#x4EEC;&#x4E0D;&#x7528;&#x5E38;&#x89C4;&#x7684;&#x5165;&#x53E3;&#x94FE;&#x3002;</p>
-<p>&#x540C;&#x65F6;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;<code>_start()</code>&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A;<code>#[no_mangle]</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5BF9;&#x4E8E;&#x6B64;&#x51FD;&#x6570;&#x7981;&#x7528;name mangling&#xFF0C;&#x786E;&#x4FDD;&#x7F16;&#x8BD1;&#x5668;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x540D;&#x4E3A;<code>_start</code>&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x975E;&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x51FD;&#x6570;&#x540D;&#x5B57;&#x552F;&#x4E00;&#x6027;&#x800C;&#x751F;&#x6210;&#x7684;&#x5F62;&#x5982;<code>_ZN3blog_os4_start7hb173fedf945531caE</code>&#x4E71;&#x7801;&#x822C;&#x7684;&#x540D;&#x5B57;&#x3002;&#x7531;&#x4E8E;<code>_start</code>&#x662F;&#x5927;&#x591A;&#x6570;&#x7CFB;&#x7EDF;&#x7684;&#x9ED8;&#x8BA4;&#x5165;&#x53E3;&#x70B9;&#x540D;&#x5B57;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x8981;&#x786E;&#x4FDD;&#x5B83;&#x4E0D;&#x4F1A;&#x53D1;&#x751F;&#x53D8;&#x5316;&#x3002;</p>
-<p>&#x63A5;&#x7740;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>extern &quot;C&quot;</code>&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x8BE5;&#x51FD;&#x6570;&#x9075;&#x5FAA;<a href="https://en.wikipedia.org/wiki/Calling_convention" target="_blank">C calling convention</a>&#x800C;&#x4E0D;&#x662F;&#x9ED8;&#x8BA4;&#x7684;Rust calling convention&#x3002;&#x56E0;&#x4E3A;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;C runtime(crt0)&#x7684;&#x5165;&#x53E3;&#x3002;</p>
-<p>&#x8FD4;&#x56DE;&#x503C;&#x7C7B;&#x578B;&#x4E3A;<code>!</code>&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x662F;&#x53D1;&#x6563;&#x7684;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x8FD4;&#x56DE;&#x3002;&#x7531;&#x4E8E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x88AB;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6216;bootloader&#x76F4;&#x63A5;&#x8C03;&#x7528;&#xFF0C;&#x8FD9;&#x6837;&#x505A;&#x662F;&#x5FC5;&#x987B;&#x7684;&#x3002;&#x4E3A;&#x4E86;&#x4ECE;&#x5165;&#x53E3;&#x70B9;&#x51FD;&#x6570;&#x9000;&#x51FA;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7;<code>exit</code>&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x76EE;&#x524D;&#x8FD8;&#x6CA1;&#x6CD5;&#x505A;&#x5230;&#x8FD9;&#x4E00;&#x6B65;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x8BA9;&#x5B83;&#x5728;&#x539F;&#x5730;&#x8F6C;&#x5708;&#x5427;&#x3002;</p>
-<p>&#x7531;&#x4E8E;&#x7A0B;&#x5E8F;&#x4F1A;&#x4E00;&#x76F4;&#x505C;&#x5728;C runtime crt0&#x7684;&#x5165;&#x53E3;&#x70B9;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x79FB;&#x9664;&#x6CA1;&#x7528;&#x7684;<code>main</code>&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A;<code>![no_main]</code>&#x8868;&#x793A;&#x4E0D;&#x7528;&#x4E0D;&#x4F7F;&#x7528;&#x666E;&#x901A;&#x7684;&#x5165;&#x53E3;&#x70B9;&#x90A3;&#x5957;&#x7406;&#x8BBA;&#x3002;</p>
-<p>&#x518D;&#x6B21;<code>cargo build</code>&#xFF0C;&#x6211;&#x4EEC;&#x5373;&#x5C06;&#x9762;&#x5BF9;&#x8FD9;&#x4E00;&#x7AE0;&#x4E2D;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#xFF01;</p>
+<p>&#x6211;&#x4EEC;&#x52A0;&#x4E0A; <code>#![no_main]</code> &#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x6211;&#x4EEC;&#x4E0D;&#x7528;&#x5E38;&#x89C4;&#x7684;&#x5165;&#x53E3;&#x94FE;&#x3002;</p>
+<p>&#x540C;&#x65F6;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A; <code>_start</code> &#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A; <code>#[no_mangle]</code> &#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5BF9;&#x4E8E;&#x6B64;&#x51FD;&#x6570;&#x7981;&#x7528; name mangling &#xFF0C;&#x786E;&#x4FDD;&#x7F16;&#x8BD1;&#x5668;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x540D;&#x4E3A; <code>_start</code> &#x7684;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x975E;&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x51FD;&#x6570;&#x540D;&#x5B57;&#x552F;&#x4E00;&#x6027;&#x800C;&#x751F;&#x6210;&#x7684;&#x5F62;&#x5982; <code>_ZN3blog_os4_start7hb173fedf945531caE</code> &#x4E71;&#x7801;&#x822C;&#x7684;&#x540D;&#x5B57;&#x3002;&#x7531;&#x4E8E; <code>_start</code> &#x662F;&#x5927;&#x591A;&#x6570;&#x7CFB;&#x7EDF;&#x7684;&#x9ED8;&#x8BA4;&#x5165;&#x53E3;&#x70B9;&#x540D;&#x5B57;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x8981;&#x786E;&#x4FDD;&#x5B83;&#x4E0D;&#x4F1A;&#x53D1;&#x751F;&#x53D8;&#x5316;&#x3002;</p>
+<p>&#x63A5;&#x7740;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528; <code>extern &quot;C&quot;</code> &#x63CF;&#x8FF0; <code>_start</code> &#x51FD;&#x6570;&#xFF0C;&#x8FD9;&#x662F; rust &#x4E2D;&#x7684; <code>FFI, Foreign Function Interface</code> &#x8BED;&#x6CD5;&#xFF0C;&#x8868;&#x793A;&#x6B64;&#x51FD;&#x6570;&#x662F;&#x4E00;&#x4E2A; C &#x51FD;&#x6570;&#x800C;&#x975E; rust &#x51FD;&#x6570;&#x3002;&#x7531;&#x4E8E; <code>_start</code> &#x662F;&#x4F5C;&#x4E3A; C runtime &#x7684;&#x5165;&#x53E3;&#x70B9;&#xFF0C;&#x770B;&#x8D77;&#x6765;&#x5408;&#x60C5;&#x5408;&#x7406;&#x3002;</p>
+<p>&#x8FD4;&#x56DE;&#x503C;&#x7C7B;&#x578B;&#x4E3A;<code>!</code>&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x662F;&#x53D1;&#x6563;&#x7684;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x8FD4;&#x56DE;&#x3002;&#x7531;&#x4E8E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x88AB;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6216; bootloader &#x76F4;&#x63A5;&#x8C03;&#x7528;&#xFF0C;&#x8FD9;&#x6837;&#x505A;&#x662F;&#x5FC5;&#x987B;&#x7684;&#x3002;&#x4E3A;&#x4E86;&#x4ECE;&#x5165;&#x53E3;&#x70B9;&#x51FD;&#x6570;&#x9000;&#x51FA;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7; <code>exit</code> &#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x76EE;&#x524D;&#x8FD8;&#x6CA1;&#x6CD5;&#x505A;&#x5230;&#x8FD9;&#x4E00;&#x6B65;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x8BA9;&#x5B83;&#x5728;&#x539F;&#x5730;&#x8F6C;&#x5708;&#x5427;&#x3002;</p>
+<p>&#x7531;&#x4E8E;&#x7A0B;&#x5E8F;&#x4F1A;&#x4E00;&#x76F4;&#x505C;&#x5728; C runtime crt0 &#x7684;&#x5165;&#x53E3;&#x70B9;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x79FB;&#x9664;&#x6CA1;&#x7528;&#x7684; <code>main</code> &#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x52A0;&#x4E0A; <code>![no_main]</code> &#x8868;&#x793A;&#x4E0D;&#x7528;&#x4E0D;&#x4F7F;&#x7528;&#x666E;&#x901A;&#x7684;&#x5165;&#x53E3;&#x70B9;&#x90A3;&#x5957;&#x7406;&#x8BBA;&#x3002;</p>
+<p>&#x518D;&#x6B21; <code>cargo build</code> &#xFF0C;&#x6211;&#x4EEC;&#x5373;&#x5C06;&#x9762;&#x5BF9;&#x8FD9;&#x4E00;&#x7AE0;&#x4E2D;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#xFF01;</p>
 <blockquote>
 <p><strong>[danger] cargo build error</strong></p>
 <p><code>linking with `cc` failed: exit code: 1</code></p>
 </blockquote>
-<p>&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x540C;&#x6837;&#x4E0E;C runtime&#x6709;&#x5173;&#xFF0C;&#x5C3D;&#x7BA1;C runtime&#x7684;&#x5165;&#x53E3;&#x70B9;&#x5DF2;&#x7ECF;&#x88AB;&#x6211;&#x4EEC;&#x8986;&#x76D6;&#x6389;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x9879;&#x76EE;&#x4ECD;&#x9ED8;&#x8BA4;&#x94FE;&#x63A5;C runtime&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4E00;&#x4E9B;C&#x6807;&#x51C6;&#x5E93;(libc)&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x540C;&#x6837;&#x9700;&#x8981;&#x7981;&#x7528;&#x5E38;&#x89C4;&#x7684;C&#x542F;&#x52A8;&#x4F8B;&#x7A0B;&#x3002;</p>
-<p>&#x5C06;<code>cargo build</code>&#x6362;&#x6210;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#xFF1A;</p>
+<p>&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x540C;&#x6837;&#x4E0E; C runtime &#x6709;&#x5173;&#xFF0C;&#x5C3D;&#x7BA1; C runtime &#x7684;&#x5165;&#x53E3;&#x70B9;&#x5DF2;&#x7ECF;&#x88AB;&#x6211;&#x4EEC;&#x8986;&#x76D6;&#x6389;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x9879;&#x76EE;&#x4ECD;&#x9ED8;&#x8BA4;&#x94FE;&#x63A5; C runtime&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4E00;&#x4E9B; C &#x6807;&#x51C6;&#x5E93; (libc) &#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x7981;&#x7528;&#x4E86;&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x540C;&#x6837;&#x9700;&#x8981;&#x7981;&#x7528;&#x5E38;&#x89C4;&#x7684; C &#x542F;&#x52A8;&#x4F8B;&#x7A0B;&#x3002;</p>
+<p>&#x5C06; <code>cargo build</code> &#x6362;&#x6210;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#xFF1A;</p>
 <blockquote>
 <p><strong>[success] build passed</strong></p>
-<pre class="language-"><code class="lang-rust">$ cargo rustc <span class="token operator">-</span><span class="token operator">-</span> <span class="token operator">-</span>C link<span class="token operator">-</span>arg<span class="token operator">=</span><span class="token operator">-</span>nostartfiles
-  Compiling os v0<span class="token number">.1</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token punctuation">...</span>
-   Finished dev <span class="token punctuation">[</span>unoptimized <span class="token operator">+</span> debuginfo<span class="token punctuation">]</span> <span class="token function">target</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token number">4</span><span class="token punctuation">.</span>87s
+<pre class="language-"><code class="lang-bash">$ cargo rustc -- -C link-arg<span class="token operator">=</span>-nostartfiles
+Compiling os v0.1.0 <span class="token punctuation">..</span>.
+Finished dev <span class="token punctuation">[</span>unoptimized + debuginfo<span class="token punctuation">]</span> target<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token number">4</span>.87s
 </code></pre>
 </blockquote>
-<p>&#x6211;&#x4EEC;&#x7EC8;&#x4E8E;&#x6784;&#x5EFA;&#x6210;&#x529F;&#x5566;&#xFF01;&#x867D;&#x7136;&#x6700;&#x540E;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x4E4B;&#x540E;&#x5E76;&#x4E0D;&#x4F1A;&#x7528;&#x5230;&#xFF0C;&#x4F46;&#x662F;&#x6682;&#x65F6;&#x770B;&#x5230;&#x4E86;&#x4E00;&#x4E2A;success&#x4E0D;&#x4E5F;&#x5F88;&#x597D;&#x5417;&#xFF1F;</p>
-<p>&#x6784;&#x5EFA;&#x5F97;&#x5230;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x4F4D;&#x7F6E;&#x653E;&#x5728;<code>os/target/debug/os</code>&#x4E2D;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x7EC8;&#x4E8E;&#x6784;&#x5EFA;&#x6210;&#x529F;&#x5566;&#xFF01;&#x867D;&#x7136;&#x6700;&#x540E;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x4E4B;&#x540E;&#x5E76;&#x4E0D;&#x4F1A;&#x7528;&#x5230;&#xFF0C;&#x4F46;&#x662F;&#x6682;&#x65F6;&#x770B;&#x5230;&#x4E86;&#x4E00;&#x4E2A; success &#x4E0D;&#x4E5F;&#x5F88;&#x597D;&#x5417;&#xFF1F;</p>
+<p>&#x6784;&#x5EFA;&#x5F97;&#x5230;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x4F4D;&#x7F6E;&#x653E;&#x5728; <code>os/target/debug/os</code> &#x4E2D;&#x3002;</p>
 
                                 
                                 </section>
@@ -825,7 +838,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"next":{"title":"总结与展望","level":"1.2.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]},"previous":{"title":"移除标准库依赖","level":"1.2.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part4.md","mtime":"2019-11-24T09:15:09.452Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:54:07.852Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"移除 runtime 依赖","level":"1.2.4","depth":2,"next":{"title":"总结与展望","level":"1.2.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]},"previous":{"title":"移除标准库依赖","level":"1.2.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part4.md","mtime":"2019-11-28T13:26:29.515Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-29T01:32:20.209Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

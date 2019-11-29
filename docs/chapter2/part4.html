@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>编译、运行 (Writing) · GitBook</title>
+        <title>编译、生成内核镜像 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -260,7 +260,7 @@
                 <a href="part4.html">
             
                     
-                    编译、运行 (Writing)
+                    编译、生成内核镜像
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="part5.html">
             
                     
-                    使用 OpenSBI 提供的服务 (Writing)
+                    使用 Qemu 加载内核镜像
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="part6.html">
             
                     
-                    支持格式化输出 (Writing)
+                    封装 OpenSBI 接口
             
                 </a>
             
@@ -297,6 +297,19 @@
         <li class="chapter " data-level="1.3.7" data-path="part7.html">
             
                 <a href="part7.html">
+            
+                    
+                    实现格式化输出 (Writing)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="part8.html">
+            
+                <a href="part8.html">
             
                     
                     总结与展望 (Writing)
@@ -723,7 +736,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >编译、运行 (Writing)</a>
+        <a href=".." >编译、生成内核镜像</a>
     </h1>
 </div>
 
@@ -738,7 +751,7 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="&#x7F16;&#x8BD1;&#x3001;&#x8FD0;&#x884C;">&#x7F16;&#x8BD1;&#x3001;&#x8FD0;&#x884C;</h2>
+                                <h2 id="&#x7F16;&#x8BD1;&#x3001;&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;">&#x7F16;&#x8BD1;&#x3001;&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;</h2>
 <h3 id="&#x4EA4;&#x53C9;&#x7F16;&#x8BD1;">&#x4EA4;&#x53C9;&#x7F16;&#x8BD1;</h3>
 <p>&#x6211;&#x4EEC;&#x5229;&#x7528; <code>cargo build</code> &#x5E76;&#x6307;&#x5B9A;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x8FDB;&#x884C;&#x6784;&#x5EFA;&#xFF0C;&#x5374;&#x51FA;&#x73B0;&#x4E86;&#x9519;&#x8BEF;&#xFF1A;</p>
 <blockquote>
@@ -759,12 +772,97 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
 </blockquote>
 <p>&#x9519;&#x8BEF;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF1A;no_std &#x7684;&#x7A0B;&#x5E8F;&#x4F1A;&#x9690;&#x5F0F;&#x5730;&#x94FE;&#x63A5;&#x5230;&#x6211;&#x4EEC;&#x4E0A;&#x4E00;&#x7AE0;&#x63D0;&#x5230;&#x8FC7;&#x7684; rust &#x7684; <strong>core &#x5E93;</strong> &#x3002; <strong>core &#x5E93;</strong> &#x5305;&#x542B;&#x57FA;&#x7840;&#x7684; Rust &#x7C7B;&#x578B;&#xFF0C;&#x5982; Result&#x3001;Option &#x548C;&#x8FED;&#x4EE3;&#x5668;&#x7B49;&#x3002;&#x800C;&#x8FD9;&#x4E2A;&#x5E93;&#x867D;&#x7136;&#x4E0D;&#x4F9D;&#x8D56;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF0C;&#x4F46;&#x4F9D;&#x8D56;&#x76EE;&#x6807;&#x5E73;&#x53F0;&#xFF0C;&#x9700;&#x8981;&#x6839;&#x636E;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x4E2D;&#x7684;&#x8BBE;&#x7F6E;&#x8FDB;&#x884C;&#x7F16;&#x8BD1;&#x3002;&#x6211;&#x4EEC;&#x5728;&#x672C;&#x5E73;&#x53F0;&#x4E0A;&#x7F16;&#x8BD1;&#x8FD0;&#x884C;&#x5728;&#x5176;&#x4ED6;&#x5E73;&#x53F0;&#x4E0A;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x79F0;&#x4E3A;<strong>&#x4EA4;&#x53C9;&#x7F16;&#x8BD1;</strong>&#x3002;</p>
 <p>Rust &#x5DE5;&#x5177;&#x94FE;&#x4E2D;&#x9ED8;&#x8BA4;&#x53EA;&#x4E3A;&#x539F;&#x751F;&#x7684;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x63D0;&#x4F9B;&#x4E86;&#x9884;&#x7F16;&#x8BD1;&#x597D;&#x7684; core &#x5E93;&#xFF0C;&#x800C;&#x6211;&#x4EEC;&#x5728;&#x7F16;&#x5199; os &#x65F6;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4; &#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E3A;&#x8FD9;&#x4E9B;&#x76EE;&#x6807;&#x91CD;&#x65B0;&#x7F16;&#x8BD1;&#x6574;&#x4E2A; <strong>core &#x5E93;</strong> &#x3002;&#x8FD9;&#x65F6;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981; <strong>cargo xbuild</strong> &#x3002;&#x8FD9;&#x4E2A;&#x5DE5;&#x5177;&#x5C01;&#x88C5;&#x4E86; cargo build &#x3002;&#x540C;&#x65F6;&#xFF0C;&#x5B83;&#x5C06;&#x81EA;&#x52A8;&#x4EA4;&#x53C9;&#x7F16;&#x8BD1; <strong>core &#x5E93;</strong> &#x548C;&#x4E00;&#x4E9B; <strong>&#x7F16;&#x8BD1;&#x5668;&#x5185;&#x5EFA;&#x5E93;(compiler built-in libraries)</strong> &#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#x5B89;&#x88C5;&#x5B83;&#xFF1A;</p>
-<pre class="language-"><code class="lang-bash">cargo <span class="token function">install</span> cargo-xbuild
+<pre class="language-"><code class="lang-bash">$ cargo <span class="token function">install</span> cargo-xbuild
 </code></pre>
 <p>&#x73B0;&#x5728;&#x8FD0;&#x884C;&#x547D;&#x4EE4;&#x6765;&#x7F16;&#x8BD1;&#x76EE;&#x6807;&#x7A0B;&#x5E8F;&#xFF1A;</p>
-<pre class="language-"><code class="lang-bash">cargo xbuild --target riscv64-os.json
+<pre class="language-"><code class="lang-bash">$ cargo xbuild --target riscv64-os.json
 </code></pre>
 <p>&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x6210;&#x529F;&#x5566;&#xFF01;</p>
+<h3 id="&#x9A8C;&#x8BC1;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x6B63;&#x786E;&#x6027;">&#x9A8C;&#x8BC1;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x6B63;&#x786E;&#x6027;</h3>
+<p>&#x4E0B;&#x8F7D;&#x6700;&#x65B0;&#x7684;&#x9884;&#x7F16;&#x8BD1;&#x7248;&#x672C; <a href="https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz" target="_blank">RISCV-GCC &#x5DE5;&#x5177;&#x94FE;</a> &#x5E76;&#x5B89;&#x88C5;&#xFF0C;&#x5982;&#x679C;&#x8BE5;&#x94FE;&#x63A5;&#x8FC7;&#x671F;&#x7684;&#x8BDD;&#x53EF;&#x4EE5;&#x5728;<a href="https://www.sifive.com/boards#software" target="_blank">&#x8FD9;&#x91CC;</a>&#x81EA;&#x5DF1;&#x627E;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x4E4B;&#x540E;&#x7684;&#x4EA7;&#x7269;&#x4E3A; <code>target/riscv64-os/debug/os</code> &#xFF0C;&#x8BA9;&#x6211;&#x4EEC;&#x5148;&#x770B;&#x770B;&#x5B83;&#x7684;&#x6587;&#x4EF6;&#x7C7B;&#x578B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ <span class="token function">file</span> target/riscv64-os/debug/os
+target/riscv64-os/debug/os: ELF <span class="token number">64</span>-bit LSB executable, UCB RISC-V, version <span class="token number">1</span> <span class="token punctuation">(</span>SYSV<span class="token punctuation">)</span>, statically linked, not stripped
+</code></pre>
+<p>&#x4ECE;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x51FA;&#x5B83;&#x662F;&#x4E00;&#x4E2A; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn><mn>4</mn></mrow><annotation encoding="application/x-tex">64</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">6</span><span class="mord mathrm">4</span></span></span></span> &#x4F4D;&#x7684; <code>elf</code> &#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#xFF0C;&#x67B6;&#x6784;&#x662F; <code>RISC-V</code> &#xFF1B;&#x94FE;&#x63A5;&#x65B9;&#x5F0F;&#x4E3A;<strong>&#x9759;&#x6001;&#x94FE;&#x63A5;</strong>&#xFF1B;<code>not stripped</code> &#x6307;&#x7684;&#x662F;&#x91CC;&#x9762;&#x7B26;&#x53F7;&#x8868;&#x7684;&#x4FE1;&#x606F;&#x672A;&#x88AB;&#x5254;&#x9664;&#xFF0C;&#x800C;&#x8FD9;&#x4E9B;&#x4FE1;&#x606F;&#x5728;&#x8C03;&#x8BD5;&#x7A0B;&#x5E8F;&#x65F6;&#x4F1A;&#x7528;&#x5230;&#xFF0C;&#x7A0B;&#x5E8F;&#x6B63;&#x5E38;&#x6267;&#x884C;&#x65F6;&#x901A;&#x5E38;&#x4E0D;&#x4F1A;&#x4F7F;&#x7528;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x521A;&#x521A;&#x5B89;&#x88C5;&#x7684;&#x5DE5;&#x5177;&#x94FE;&#x4E2D;&#x7684; <code>objdump</code> &#x5DE5;&#x5177;&#x770B;&#x770B;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x662F;&#x5426;&#x6B63;&#x786E;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ riscv64-unknown-elf-objdump target/riscv64-os/debug/os -x
+
+target/riscv64-os/debug/os:     <span class="token function">file</span> <span class="token function">format</span> elf64-littleriscv
+target/riscv64-os/debug/os
+architecture: riscv:rv64, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0xffffffffc0200000
+
+Program Header:
+    LOAD off    0x0000000000001000 vaddr 0xffffffffc0200000 paddr 0xffffffffc0200000 align <span class="token number">2</span>**12
+         filesz 0x0000000000001000 memsz 0x0000000000001000 flags r-x
+    LOAD off    0x0000000000002000 vaddr 0xffffffffc0201000 paddr 0xffffffffc0201000 align <span class="token number">2</span>**12
+         filesz 0x0000000000001000 memsz 0x0000000000005000 flags rw-
+   STACK off    0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align <span class="token number">2</span>**0
+         filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  <span class="token number">0</span> .text         00001000  ffffffffc0200000  ffffffffc0200000  00001000  <span class="token number">2</span>**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  <span class="token number">1</span> .rodata       00000000  ffffffffc0201000  ffffffffc0201000  00002000  <span class="token number">2</span>**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  <span class="token number">2</span> .data         00001000  ffffffffc0201000  ffffffffc0201000  00002000  <span class="token number">2</span>**12
+                  CONTENTS, ALLOC, LOAD, DATA
+  <span class="token number">3</span> .stack        00004000  ffffffffc0202000  ffffffffc0202000  00003000  <span class="token number">2</span>**12
+                  ALLOC
+  <span class="token number">4</span> .bss          00000000  ffffffffc0206000  ffffffffc0206000  00003000  <span class="token number">2</span>**0
+                  ALLOC
+  <span class="token number">5</span> .debug_str    000004c1  0000000000000000  0000000000000000  00003000  <span class="token number">2</span>**0
+                  CONTENTS, READONLY, DEBUGGING
+  <span class="token punctuation">..</span>.
+SYMBOL TABLE:
+0000000000000000 l    <span class="token function">df</span> *ABS*    0000000000000000 4vf7g5lz88xrm3fs
+ffffffffc020002e l       .text    0000000000000000 
+ffffffffc020002e l       .text    0000000000000000 
+ffffffffc020002e l       .text    0000000000000000 
+ffffffffc020003a l       .text    0000000000000000 
+0000000000000000 l       .debug_info    0000000000000000 
+0000000000000000 l       .debug_ranges    0000000000000000 
+0000000000000000 l       .debug_frame    0000000000000000 
+0000000000000000 l       .debug_line    0000000000000000 .Lline_table_start0
+ffffffffc0201000 l       .data    0000000000000000 boot_page_table_sv39
+0000000000000000 l    <span class="token function">df</span> *ABS*    0000000000000000 core.5zqet7hh-cgu.14
+<span class="token punctuation">..</span>.
+0000000000000000 l    <span class="token function">df</span> *ABS*    0000000000000000 compiler_builtins.4xdua3jz-cgu.7
+ffffffffc0200000 g       .text    0000000000000000 _start
+ffffffffc0202000 g       .stack    0000000000000000 bootstack
+ffffffffc0206000 g       .stack    0000000000000000 bootstacktop
+ffffffffc020002e g     F .text    000000000000000c rust_main
+ffffffffc0200000 g       *ABS*    0000000000000000 BASE_ADDRESS
+ffffffffc0200000 g       .text    0000000000000000 start
+ffffffffc0200000 g       .text    0000000000000000 stext
+ffffffffc0201000 g       .text    0000000000000000 etext
+ffffffffc0201000 g       .rodata    0000000000000000 srodata
+ffffffffc0201000 g       .rodata    0000000000000000 erodata
+ffffffffc0201000 g       .data    0000000000000000 sdata
+ffffffffc0202000 g       .data    0000000000000000 edata
+ffffffffc0206000 g       .bss    0000000000000000 sbss
+ffffffffc0206000 g       .bss    0000000000000000 ebss
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x770B;&#x5230;&#x91CC;&#x9762;&#x9996;&#x5148;&#x63CF;&#x8FF0;&#x4E86;&#x4E00;&#x4E9B;&#x57FA;&#x672C;&#x4FE1;&#x606F;&#xFF0C;&#x968F;&#x540E;&#x5165;&#x53E3;&#x5730;&#x5740; <code>start address</code> &#x4E0E;&#x6211;&#x4EEC;&#x9884;&#x671F;&#x4E00;&#x81F4;&#x3002;</p>
+<p>&#x63A5;&#x4E0B;&#x6765;&#x662F; <code>program header</code> &#x7684;&#x4FE1;&#x606F;&#x3002;&#x540E;&#x9762; <code>sections, symbol table</code> &#x91CC;&#x9762;&#x7684;&#x5143;&#x4FE1;&#x606F;&#x90FD;&#x5B58;&#x5728;&#x8FD9;&#x91CC;&#x9762;&#x3002;</p>
+<p>&#x7136;&#x540E;&#x662F; <code>sections</code>&#xFF0C;&#x4ECE;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x7A0B;&#x5E8F;&#x5404;&#x6BB5;&#x7684;&#x5404;&#x79CD;&#x4FE1;&#x606F;&#x3002;&#x540E;&#x9762;&#x4EE5; <code>debug</code> &#x5F00;&#x5934;&#x7684;&#x6BB5;&#x662F;&#x8C03;&#x8BD5;&#x4FE1;&#x606F;&#x3002;</p>
+<p>&#x6700;&#x540E;&#x662F; <code>symbol table</code> &#x5373;&#x7B26;&#x53F7;&#x8868;&#xFF0C;&#x4ECE;&#x4E2D;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6211;&#x4EEC;&#x6240;&#x5B9A;&#x4E49;&#x7684;&#x4E00;&#x4E9B;&#x7B26;&#x53F7;&#x7684;&#x5730;&#x5740;&#x3002;</p>
+<p>&#x5728;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7684;&#x662F; <code>-x</code> &#x6765;&#x67E5;&#x770B;&#x7A0B;&#x5E8F;&#x7684;&#x5143;&#x4FE1;&#x606F;&#xFF0C;&#x4E4B;&#x540E;&#x6211;&#x4EEC;&#x8FD8;&#x4F1A;&#x4F7F;&#x7528; <code>-d</code> &#x6765;&#x5BF9;&#x4EE3;&#x7801;&#x8FDB;&#x884C;&#x53CD;&#x6C47;&#x7F16;&#x3002; </p>
+<h3 id="&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;">&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;</h3>
+<p>&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x751F;&#x6210;&#x7684; <code>elf</code> &#x683C;&#x5F0F;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x6709;&#x4EE5;&#x4E0B;&#x7279;&#x70B9;&#xFF1A;</p>
+<ul>
+<li>&#x542B;&#x6709;&#x5197;&#x4F59;&#x7684;&#x8C03;&#x8BD5;&#x4FE1;&#x606F;&#xFF0C;&#x4F7F;&#x5F97;&#x7A0B;&#x5E8F;&#x4F53;&#x79EF;&#x8F83;&#x5927;&#xFF1B;</li>
+<li>&#x9700;&#x8981;&#x5BF9; <code>program header</code> &#x90E8;&#x5206;&#x8FDB;&#x884C;&#x624B;&#x52A8;&#x89E3;&#x6790;&#x624D;&#x80FD;&#x77E5;&#x9053;&#x5404;&#x6BB5;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x800C;&#x8FD9;&#x9700;&#x8981;&#x6211;&#x4EEC;&#x4E86;&#x89E3; <code>program header</code> &#x7684;&#x4E8C;&#x8FDB;&#x5236;&#x683C;&#x5F0F;&#xFF0C;&#x5E76;&#x4EE5;&#x5B57;&#x8282;&#x4E3A;&#x5355;&#x4F4D;&#x8FDB;&#x884C;&#x89E3;&#x6790;&#x3002;</li>
+</ul>
+<p>&#x6211;&#x4EEC;&#x76EE;&#x524D;&#x6CA1;&#x6709;&#x8C03;&#x8BD5;&#x7684;&#x624B;&#x6BB5;&#xFF0C;&#x56E0;&#x6B64;&#x4E0D;&#x9700;&#x8981;&#x8C03;&#x8BD5;&#x4FE1;&#x606F;&#xFF1B;&#x540C;&#x65F6;&#x4E5F;&#x4E0D;&#x60F3;&#x5728;&#x73B0;&#x5728;&#x5C31;&#x8FDB;&#x884C;&#x590D;&#x6742;&#x7684; <code>elf</code> &#x683C;&#x5F0F;&#x89E3;&#x6790;&#xFF0C;&#x800C;&#x662F;&#x7B80;&#x5355;&#x7C97;&#x66B4;&#x7684;&#x5C06;  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">.</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">k</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">s</mi></mtext></mrow><annotation encoding="application/x-tex">\text{.text,.rodata,.data,.stack,.bss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">.text,.rodata,.data,.stack,.bss</span></span></span></span></span> &#x5404;&#x6BB5;&#x4ECE;&#x6587;&#x4EF6;&#x5F00;&#x5934;&#x5F00;&#x59CB;&#x6309;&#x987A;&#x5E8F;&#x63A5;&#x8FDE;&#x653E;&#x5728;&#x4E00;&#x8D77;&#x5373;&#x53EF;&#x3002;&#x800C;&#x5B83;&#x4EEC;&#x5728; <code>elf</code> &#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x4E2D;&#x786E;&#x5B9E;&#x662F;&#x6309;&#x987A;&#x5E8F;&#x653E;&#x5728;&#x4E00;&#x8D77;&#x7684;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5DE5;&#x5177; <code>objcopy</code> &#x4ECE; <code>elf</code> &#x683C;&#x5F0F;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ riscv64-unknown-elf-objcopy target/riscv64-os/debug/os --strip-all -O binary target/riscv64-os/debug/kernel.bin
+</code></pre>
+<p>&#x8FD9;&#x91CC; <code>--strip-all</code> &#x8868;&#x660E;&#x4E22;&#x5F03;&#x6240;&#x6709;&#x7B26;&#x53F7;&#x8868;&#x53CA;&#x8C03;&#x8BD5;&#x4FE1;&#x606F;&#xFF0C;<code>-O binary</code> &#x8868;&#x793A;&#x8F93;&#x51FA;&#x4E3A;&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x3002;</p>
+<p>&#x81F3;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x5E76;&#x751F;&#x6210;&#x4E86;&#x5185;&#x6838;&#x955C;&#x50CF; <code>kernel.bin</code> &#x3002;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528; Qemu &#x6A21;&#x62DF;&#x5668;&#x771F;&#x6B63;&#x5C06;&#x6211;&#x4EEC;&#x7684;&#x5185;&#x6838;&#x955C;&#x50CF;&#x8DD1;&#x8D77;&#x6765;&#x3002;</p>
 
                                 
                                 </section>
@@ -797,7 +895,7 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
                 </a>
                 
                 
-                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 使用 OpenSBI 提供的服务 (Writing)">
+                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 使用 Qemu 加载内核镜像">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -808,7 +906,7 @@ To learn more, run the <span class="token builtin class-name">command</span> aga
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"编译、运行 (Writing)","level":"1.3.4","depth":2,"next":{"title":"使用 OpenSBI 提供的服务 (Writing)","level":"1.3.5","depth":2,"path":"chapter2/part5.md","ref":"chapter2/part5.md","articles":[]},"previous":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part4.md","mtime":"2019-11-24T09:18:47.315Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-24T11:54:07.852Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"编译、生成内核镜像","level":"1.3.4","depth":2,"next":{"title":"使用 Qemu 加载内核镜像","level":"1.3.5","depth":2,"path":"chapter2/part5.md","ref":"chapter2/part5.md","articles":[]},"previous":{"title":"重写程序入口点 _start","level":"1.3.3","depth":2,"path":"chapter2/part3.md","ref":"chapter2/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part4.md","mtime":"2019-11-27T11:56:40.966Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-29T01:32:20.209Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

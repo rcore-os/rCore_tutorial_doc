@@ -6,7 +6,3 @@
 * 如何移除对现有操作系统的依赖，构建一个独立化可执行rust程序。
 
 代码可以在[这里]()找到。
-
-<pre><code class="language-riscv">
-23333
-</code></pre>
