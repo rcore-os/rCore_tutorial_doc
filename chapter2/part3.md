@@ -6,7 +6,7 @@
 
 > **[info] 第一条指令**
 > 
-> 在 CPU 加电或 reset 后，它首先会进行**自检 (POST, Power-On Self-Test)**，通过自检后会跳转到**启动代码 bootloader** 的入口。在 bootloader 中，我们进行外设探测，并对内核的运行环境进行初步设置。随后， bootloader 会将内核代码 load 到内存中，并跳转到内核入口，正式进入内核。
+> 在 CPU 加电或 reset 后，它首先会进行**自检 (POST, Power-On Self-Test)**，通过自检后会跳转到**启动代码 bootloader** 的入口。在 bootloader 中，我们进行外设探测，并对内核的运行环境进行初步设置。随后， bootloader 会将内核代码从硬盘 load 到内存中，并跳转到内核入口，正式进入内核。
 > 
 > 所以 CPU 所执行的第一条指令是指 bootloader 的第一条指令。
 
@@ -88,4 +88,4 @@ pub extern "C" fn rust_main() -> ! {
     loop {}
 }
 ```
-到现在为止我们终于将一切都准备好了。现在我们尝试编译并运行。
+到现在为止我们终于将一切都准备好了。现在我们尝试编译并生成内核镜像。
