@@ -6,7 +6,8 @@
         "alerts",
         "emphasize",
         "-highlight",
-	"prism"
+	"prism",
+	"localized-footer"
     ],
     "pluginsConfig": {
         "hide-element": {
@@ -14,6 +15,9 @@
         },
         "prism": {
             "css": ["prismjs/themes/prism-tomorrow.css"]
-        }
+        },
+		"localized-footer": {
+			"filename": "gitalk.html"
+		}
     }
 }

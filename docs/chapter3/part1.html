@@ -1115,7 +1115,23 @@ panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of r
 <span class="token punctuation">...</span>
 </code></pre>
 </blockquote>
-<p>&#x4E0D;&#x8FC7;&#xFF0C;&#x8FD9;&#x79CD;&#x7269;&#x7406;&#x5185;&#x5B58;&#x5206;&#x914D;&#x7ED9;&#x4EBA;&#x4E00;&#x79CD;&#x8FC7;&#x5BB6;&#x5BB6;&#x7684;&#x611F;&#x89C9;&#x3002;&#x65E0;&#x8BBA;&#x8868;&#x9762;&#x4E0A;&#x5206;&#x914D;&#x3001;&#x56DE;&#x6536;&#x505A;&#x5F97;&#x600E;&#x6837;&#x4E95;&#x4E95;&#x6709;&#x6761;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x90FD;&#x5E76;&#x6CA1;&#x6709;&#x5BF9;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4EA7;&#x751F;&#x4EFB;&#x4F55;&#x5F71;&#x54CD;&#xFF01;&#x4E0D;&#x8981;&#x7740;&#x6025;&#xFF0C;&#x6211;&#x4EEC;&#x4E4B;&#x540E;&#x4F1A;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x7684;&#x3002;</p>
+<p>&#x4E0D;&#x8FC7;&#xFF0C;&#x8FD9;&#x79CD;&#x7269;&#x7406;&#x5185;&#x5B58;&#x5206;&#x914D;&#x7ED9;&#x4EBA;&#x4E00;&#x79CD;&#x8FC7;&#x5BB6;&#x5BB6;&#x7684;&#x611F;&#x89C9;&#x3002;&#x65E0;&#x8BBA;&#x8868;&#x9762;&#x4E0A;&#x5206;&#x914D;&#x3001;&#x56DE;&#x6536;&#x505A;&#x5F97;&#x600E;&#x6837;&#x4E95;&#x4E95;&#x6709;&#x6761;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x90FD;&#x5E76;&#x6CA1;&#x6709;&#x5BF9;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4EA7;&#x751F;&#x4EFB;&#x4F55;&#x5F71;&#x54CD;&#xFF01;&#x4E0D;&#x8981;&#x7740;&#x6025;&#xFF0C;&#x6211;&#x4EEC;&#x4E4B;&#x540E;&#x4F1A;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x7684;&#x3002;
+<div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+var gitalk = new Gitalk({
+  "clientID": "c3b20e343ac397f1b67c",
+  "clientSecret": "be4dd3f990da0c80c9592f38327ac4eb4854a31b",
+  "repo": "rCore_tutorial_doc",
+  "owner": "wyfcyx",
+  "admin": ["wyfcyx"],
+  "id": location.pathname,      
+  "distractionFreeMode": false  
+});
+gitalk.render("gitalk-container");
+</script>
+</div></p>
 
                                 
                                 </section>
@@ -1159,7 +1175,7 @@ panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of r
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"物理内存探测与管理","level":"1.6.1","depth":2,"next":{"title":"动态内存分配","level":"1.6.2","depth":2,"path":"chapter3/part2.md","ref":"chapter3/part2.md","articles":[]},"previous":{"title":"第三章：内存管理","level":"1.6","depth":1,"path":"chapter3/introduction.md","ref":"chapter3/introduction.md","articles":[{"title":"物理内存探测与管理","level":"1.6.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},{"title":"动态内存分配","level":"1.6.2","depth":2,"path":"chapter3/part2.md","ref":"chapter3/part2.md","articles":[]},{"title":"总结与展望 (Writing)","level":"1.6.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part1.md","mtime":"2019-12-04T17:29:06.337Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-06T02:55:47.609Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"物理内存探测与管理","level":"1.6.1","depth":2,"next":{"title":"动态内存分配","level":"1.6.2","depth":2,"path":"chapter3/part2.md","ref":"chapter3/part2.md","articles":[]},"previous":{"title":"第三章：内存管理","level":"1.6","depth":1,"path":"chapter3/introduction.md","ref":"chapter3/introduction.md","articles":[{"title":"物理内存探测与管理","level":"1.6.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},{"title":"动态内存分配","level":"1.6.2","depth":2,"path":"chapter3/part2.md","ref":"chapter3/part2.md","articles":[]},{"title":"总结与展望 (Writing)","level":"1.6.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part1.md","mtime":"2019-12-04T17:29:06.337Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-06T04:07:58.744Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
