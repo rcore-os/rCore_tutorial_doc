@@ -1,4 +1,3 @@
-gitbook install
 \cp prism-riscv.js node_modules/prismjs/components/
 python3 add_riscv_component.py
 rm -r docs/

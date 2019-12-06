@@ -16,10 +16,12 @@ mod io;
 
 use crate::sbi;
 
+// 输出一个字符
 pub fn putchar(ch: char) {
     sbi::console_putchar(ch as u8 as usize);
 }
 
+// 输出一个字符串
 pub fn puts(s: &str) {
     for ch in s.chars() {
         putchar(ch);
@@ -27,5 +29,87 @@ pub fn puts(s: &str) {
 }
 ```
 
+而关于格式化输出， rust 中提供了一个接口 ``core::fmt::Write`` ，你需要实现函数
 
+```rust
+// required
+fn write_str(&mut self, s: &str) -> Result;
+```
 
+随后你就可以调用这个接口利用 ``write_str`` 实现的函数
+
+````rust
+// provided
+fn write_format(&mut self, args: core::fmt::Arguments) -> Result;
+````
+
+你可以用 ``write_format`` 函数来输出 ``Arguments`` 类。而我们已经有一个 ``format_args!`` 宏，它可以将模式字符串+参数列表的输入转化为 ``Arguments`` 类！比如 ``format_args!("{} {}", 1, 2)`` 。
+
+因此，我们的 ``print!`` 宏的实现思路便为：
+
+1. 解析传入参数，转化为 ``format_args!`` 可接受的输入（事实上原封不动就行了），并通过 ``format_args!`` 得到 ``Arguments`` 类；
+2. 调用 ``write_format`` 函数输出这个类；
+
+而为了调用 ``write_format`` 函数，我们必须实现 ``write_str`` 函数，而它可用 ``puts`` 函数来实现。
+
+于是代码为：
+```rust
+// src/io.rs
+
+struct Stdout;
+
+impl fmt::Write for Stdout {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        puts(s);
+        Ok(())
+    }
+}
+
+pub fn _print(args: fmt::Arguments) {
+    Stdout.write_fmt(args).unwrap();
+}
+
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ({
+        $crate::io::_print(format_args!($($arg)*));
+    });
+}
+
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+```
+由于并不是重点就不在这里赘述宏的语法细节了（实际上我也没弄懂），总之我们实现了 ``print!, println!`` 两个宏，现在是时候看看效果了！
+首先，我们在 ``panic`` 时也可以看看到底发生了什么事情了！
+```rust
+// src/lang_items.rs
+
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
+    loop {}
+}
+```
+其次，我们可以验证一下我们之前为内核分配的内存布局是否正确：
+```rust
+// src/init.rs
+
+use crate::io;
+use crate::sbi;
+
+#[no_mangle]
+pub extern "C" fn rust_main() -> ! {
+    extern "C" {
+        fn _start();
+        fn bootstacktop();
+    }
+    println!("_start vaddr = 0x{:x}", _start as usize);
+    println!("bootstacktop vaddr = 0x{:x}", bootstacktop as usize);
+    println!("hello world!");
+    panic!("you want to do nothing!");
+    loop {}
+}
+```
