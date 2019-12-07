@@ -1,4 +1,4 @@
-## 线程初始化
+## 内核线程初始化
 
 回忆一下我们如何进行启动线程的初始化？无非两步：设置栈顶地址、跳转到内核入口地址。从而变为启动线程的初始状态，并准备开始运行。
 
@@ -7,6 +7,8 @@
 首先是要新建一个内核栈，然后在栈上压入我们精心构造的线程状态信息。
 
 ```rust
+// src/context.rs
+
 impl ContextContent {
     // 为一个新内核线程构造栈上的初始状态信息
     // 其入口点地址为 entry ，其内核栈栈顶地址为 kstack_top ，其页表为 satp
@@ -44,3 +46,65 @@ impl ContextContent {
 
 * 将 $$\text{SPP}$$ 设置为 Supervisor ，使得使用 ``sret`` 返回后 CPU 的特权级为 S Mode 。
 * 设置 $$\text{SIE,SPIE}$$，这里的作用是 ``sret`` 返回后，在内核线程中使能异步中断。详情请参考 RISC-V 特权指令集文档。
+
+我们还希望能够给线程传入参数，这只需要修改中断帧中的 $$a_0,a_1,...$$ 即可，``__trapret`` 可以完成参数传递。
+
+```rust
+// src/context.rs
+
+impl Context {
+    pub unsafe fn new_kernel_thread(
+        entry: usize,
+        kstack_top: usize,
+        satp: usize
+        ) -> Context {
+
+        ContextContent::new_kernel_thread(entry, kstack_top, satp).push_at(kstack_top)
+    }
+    
+    pub unsafe fn append_initial_arguments(&self, args: [usize; 3]) {
+        let contextContent = &mut *(self.content_addr as *mut ContextContent);
+        contextContent.tf.x[10] = args[0];
+        contextContent.tf.x[11] = args[1];
+        contextContent.tf.x[12] = args[2];
+    }
+}
+
+impl ContextContent {
+    // 将自身压到栈上，并返回 Context
+    unsafe fn push_at(self, stack_top: usize) -> Context {
+        let ptr = (stack_top as *mut ContextContent).sub(1);
+        *ptr = self;
+        Context { content_addr: ptr as usize }
+    }
+}
+```
+
+接下来就是线程的创建：
+
+```rust
+// src/process/structs.rs
+
+impl Thread {
+    // 创建一个新线程，放在堆上
+    pub fn new_kernel(entry: usize) -> Box<Thread> {
+        unsafe {
+            let kstack_ = KernelStack::new();
+            Box::new(Thread {
+                // 内核线程共享内核资源，因此用目前的 satp 即可
+                context: Context::new_kernel_thread(entry, kstack_.top(), satp::read().bits()),
+                kstack: kstack_,
+            })
+        }
+    }
+
+    // 为线程传入初始参数
+    pub fn append_initial_arguments(&self, args: [usize; 3]) {
+        unsafe {
+            self.context.append_initial_arguments(args);
+        } 
+    }
+}
+```
+
+下一节我们终于能拨云见日，写一个测试看看我们的线程实现究竟有无问题了！
