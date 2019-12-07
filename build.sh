@@ -1,7 +1,7 @@
 gitbook install
-\cp prism-riscv.js node_modules/prismjs/components/
-python3 add_riscv_component.py
+\cp extensions/highlight/prism-riscv.js node_modules/prismjs/components/
+python3 extensions/highlight/add_riscv_component.py
 rm -r docs/
 gitbook build
 mv _book/ docs/
-python3 add_code_style.py
+python3 extensions/highlight/add_code_style.py

@@ -1,107 +1,338 @@
-## 页表：从虚拟内存到物理内存
+## 物理内存探测与管理
 
-回顾第二章，我们曾提到使用了一种“魔法”之后，内核就可以像一个普通的程序一样运行了，它按照我们设定的内存布局决定代码和数据存放的位置，跳转到入口点开始运行...当然，别忘了，在 $$64$$ 位寻址空间下，你需要一块 大小为$$2^{64}$$ 字节即 $$2^{24}\text{TiB}$$的内存！
+我们知道，物理内存通常是一片 RAM ，我们可以把它看成一个以字节为单位的大数组，通过物理地址找到对应的位置进行读写。但是，物理地址**并不仅仅**只能访问物理内存，也可以用来访问其他的外设，因此你也可以认为物理内存也算是一种外设。
 
-现实中一块这么大的内存当然不存在，因此我们称它为虚拟内存。我们知道，实际上内核的代码和数据都存放在物理内存上，而CPU只能通过物理地址来访问它。
+这样设计是因为：一开始访问其他外设与访问物理内存要使用不同的指令，会带来很多麻烦，于是我们通过 MMIO(Memory Mapped I/O) 技术将外设映射到一段物理地址，这样我们访问其他外设就和访问物理内存一样啦！
 
-因此，当我们在程序中通过虚拟地址假想着自己在访问一块虚拟内存的时候，需要有一种机制，将虚拟地址转化为物理地址，交给CPU来根据它到物理内存上进行实打实的访问。
+我们先不管那些外设，来看物理内存。
 
-而这种将虚拟地址转化为物理地址的机制，在 riscv64 中是通过页表来实现的。
+### 物理内存探测
 
-### 虚拟地址和物理地址
+我们怎样知道物理内存所在的那段物理地址呢？这个其实是由 bootloader ，在这个项目中也就是 OpenSBI 来完成的。它来完成对于包括物理内存在内的各外设的扫描，将扫描结果以 DTB(Device Tree Blob) 的格式保存在物理内存中的某个地方。随后 OpenSBI 会将其地址保存在 ``a1`` 寄存器中，给我们使用。
 
-![](figures/sv39_addr.png)
+这个扫描结果描述了所有外设的信息，当中也包括我们的内存。不过为了简单起见，我们并不打算自己去解析这个结果。因为我们知道，Qemu 规定的物理内存开头的物理地址为 ``0x80000000`` 。而在 Qemu 中，可以使用 ``-m`` 指定 RAM 的大小，默认是 $$128\text{MiB}$$ 。因此，默认的物理内存地址范围就是 ``[0x80000000,0x88000000)`` 。我们直接将物理内存结束地址硬编码到内核中：
 
-在本教程中，我们选用 Sv39 作为页表的实现。
+```rust
+// src/lib.rs
 
-在 Sv39 中，定义**物理地址(Physical Address)**有 $$56$$ 位，而**虚拟地址(Virtual Address)** 有 $$64$$ 位。虽然虚拟地址有 $$64$$ 位，只有低 $$39$$ 位有效。不过这不是说高 $$25$$ 位可以随意取值，规定 $$63-39$$ 位的值必须等于第 $$38$$ 位的值，否则会认为该虚拟地址不合法，在访问时会产生异常。
+mod consts;
 
-Sv39 同样是基于页的，在物理内存那一节曾经提到**物理页帧(Frame)** 与**物理页号(PPN, Physical Page Number)** 。在这里物理页号为 $$44$$ 位，每个物理页帧大小 $$2^{12}=4096$$ 字节，即 $$4\text{KiB}$$。同理，我们对于虚拟内存定义**虚拟页(Page)** 以及**虚拟页号(VPN, Virtual Page Number)** 。在这里虚拟页号为 $$27$$ 位，每个虚拟页大小也为 $$2^{12}=4096$$ 字节。物理地址和虚拟地址的最后 $$12$$ 位都表示页内偏移，即表示该地址在所在物理页帧(虚拟页)上的什么位置。
+// src/consts.rs
 
-虚拟地址到物理地址的映射以页为单位，也就是说把虚拟地址所在的虚拟页映射到一个物理页帧，然后再在这个物理页帧上根据页内偏移找到物理地址，从而完成映射。我们要实现虚拟页到物理页帧的映射，由于虚拟页与虚拟页号一一对应，物理页帧与物理页号一一对应，本质上我们要实现**虚拟页号到物理页号的映射**，而这就是页表所做的事情。
+pub const PHYSICAL_MEMORY_END: usize = 0x88000000;
+```
 
-### 页表项
+但是，有一部分空间已经被占用，不能用来存别的东西了！
 
-![](figures/sv39_pte.jpg)
+* 物理地址空间 ``[0x80000000,0x80200000)`` 被 OpenSBI 占用；
+* 物理地址空间 ``[0x80200000,KernelEnd)`` 被内核各代码与数据段占用；
+* 其实设备树扫描结果 DTB 还占用了一部分物理内存，不过由于我们不打算使用它，所以可以将它所占用的空间用来存别的东西。
 
-一个**页表项 (PTE, Page Table Entry)**是用来描述一个虚拟页号如何映射到物理页号的。如果一个虚拟页号通过**某种手段**找到了一个页表项，并通过读取上面的物理页号完成映射，我们称这个虚拟页号**通过该页表项**完成映射。
+于是，我们可以用来存别的东西的物理内存的物理地址范围是：``[KernelEnd, 0x88000000)`` 。这里的 $$\text{KernelEnd}$$ 为内核代码结尾的物理地址。在 ``linker64.ld`` 中定义的 ``end`` 符号为内核代码结尾的虚拟地址，我们需要通过偏移量来将其转化为物理地址。
 
-我们可以看到 Sv39 里面的一个页表项大小为 $$64$$ 位 $$8$$ 字节。其中第 $$53-10$$ 共 $$44$$ 位为一个物理页号，表示这个虚拟页号映射到的物理页号。后面的第 $$9-0$$ 位则描述映射的状态信息。
+我们来将可用的物理内存地址范围打印出来：
 
-* $$\text{V}$$ 表示这个页表项是否合法。如果为 $$0$$ 表示不合法，此时页表项其他位的值都会被忽略。
+```rust
+// src/consts.rs
 
-* $$\text{R,W,X}$$ 为许可位，分别表示是否可读 (Readable)，可写 (Writable)，可执行 (Executable)。
+pub const KERNEL_BEGIN_PADDR: usize = 0x80200000;
+pub const KERNEL_BEGIN_VADDR: usize = 0xffffffffc0200000;
 
-  以 $$\text{W}$$ 这一位为例，如果 $$\text{W}=0$$ 表示不可写，那么如果一条 Store 的指令，它通过这个页表项完成了虚拟页号到物理页号的映射，找到了物理地址。但是仍然会报出异常，是因为这个页表项规定如果物理地址是通过它映射得到的，那么不准写入！$$\text{R,X}$$ 也是同样的道理。
+// src/init.rs
 
-  根据 $$\text{R,W,X}$$ 取值的不同，我们可以分成下面几种类型：
+use crate::consts::*;
 
-  ![](figures/sv39_rwx.jpg)
+#[no_mangle]
+pub extern "C" fn rust_main() -> ! {
+    extern "C" {
+        fn end();
+    }
+    println!(
+        "free physical memory paddr = [0x{:x}, 0x{:x})",
+        end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR,
+        PHYSICAL_MEMORY_END
+    );
+    crate::interrupt::init();
+    crate::timer::init();
+    unsafe {
+        asm!("ebreak"::::"volatile");
+    }
+    panic!("end of rust_main");
+    loop {}
+}
+```
 
-  如果 $$\text{R,W,X}$$ 均为 $$0$$ ，文档上说这表示这个页表项指向下一级页表，我们先暂时记住就好。
+> **[success] 可用物理内存地址 **
+> 
+> ``free physical memory paddr = [0x8020c000, 0x88000000)``
 
-* $$\text{U}$$ 为 $$1$$ 表示用户态 (U Mode) 可以通过该页表项进行映射。事实上用户态也只能够通过 $$\text{U}=1$$ 的页表项进行虚实地址映射。
+### 物理页帧与物理页号
 
-  然而，我们所处在的 S Mode 也并不是理所当然的可以通过这些 $$\text{U}=1$$ 的页表项进行映射。我们需要将 S Mode 的状态寄存器 ``sstatus`` 上的 $$\text{SUM}$$ 位手动设置为 $$1$$ 才可以做到这一点。否则通过 $$\text{U}=1$$ 的页表项进行映射也会报出异常。
+通常，我们在分配物理内存时并不是以字节为单位，而是以一**物理页帧(Frame)**，即连续的 $$2^{12}=4096$$ 字节为单位分配。我们希望用**物理页号(Physical Page Number, PPN)** 来代表一物理页，实际上代表物理地址范围在 $$[\text{PPN}\times 2^{12},(\text{PPN}+1)\times 2^{12})$$ 的一物理页。
 
-* $$\text{A}$$，即 Accessed，如果 $$\text{A}=1$$ 表示自从上次 $$\text{A}$$ 被清零后，有虚拟地址通过这个页表项进行读、或者写、或者取指。
+不难看出，物理页号与物理页形成一一映射。为了能够使用物理页号这种表达方式，每个物理页的开头地址必须是 $$2^{12}=4096$$ 的倍数。但这也给了我们一个方便：对于一个物理地址，其除以 $$4096$$ (或者说右移 $12$ 位) 的商即为这个物理地址所在的物理页号。
 
-  $$\text{D}$$ ，即 Dirty ，如果 $$\text{D}=1$$ 表示自从上次 $$\text{D}$$ 被清零后，有虚拟地址通过这个页表项进行写入。
+以这种方式，我们看一下可用物理内存的物理页号表达。将 ``init.rs`` 中的输出语句略做改动：
 
-* $$\text{RSW}$$ 两位留给 S Mode 的应用程序，我们可以用来进行拓展。
+```rust
+// src/init.rs
 
-### 多级页表
+println!(
+        "free physical memory ppn = [0x{:x}, 0x{:x})",
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+);
+```
 
-一个虚拟页号要通过**某种手段**找到页表项...那么要怎么才能找到呢？
+> **[success] 可用物理页号区间**
+> 
+> ``free physical memory ppn = [0x8020d, 0x88000)``
 
-想一种最为简单粗暴的方法，在物理内存中开一个大数组作为**页表**，把所有虚拟页号对应的页表项都存下来。在找的时候根据虚拟页号来**索引**页表项。即，加上大数组开头的物理地址为 $$a$$ ，虚拟页号为 $$\text{VPN}$$ ，则该虚拟页号对应的页表项的物理地址为 $$a+\text{VPN}\times 8$$ (我们知道每个页表项 $$8$$ 字节)。
+### 物理内存页式管理
 
-但是这样会花掉我们 $$2^{27}\times 8=2^{30}$$ 字节即 $$1\text{GiB}$$ 的内存！不说我们目前只有可怜的 $$128\text{MiB}$$ 内存，即使我们有足够的内存也不应该这样去浪费。这是由于有很多虚拟地址我们根本没有用到，因此他们对应的虚拟页号不需要映射，我们开了很多无用的内存。
+对于物理内存的页式管理而言，我们所要支持的操作是：
+1. 分配一个物理页，返回其物理页号；
+2. 给定一个物理页号，回收其对应的物理页。
+3. 给定一个页号区间进行初始化。
 
-事实上，在 Sv39 中我们采用三级页表，即将 $$27$$ 位的虚拟页号分为三个等长的部分，第 $$26-18$$ 位为三级索引 $$\text{VPN}[2]$$，第 $$17-9$$ 位为二级索引 $$\text{VPN}[1]$$，第 $$8-0$$ 位为一级索引 $$\text{VPN}[0]$$。
+我们考虑用一颗非递归线段树来维护这些操作。节点上的值存的是 $$0/1$$ 表示这个节点对应的区间内是否还有空闲物理页。
 
-我们也将页表分为三级页表，二级页表，一级页表。每个页表都是 $$9$$ 位索引的，因此有 $$2^{9}=512$$ 个页表项，而每个页表项都是 $$8$$ 字节，因此每个页表大小都为 $$512\times 8=4\text{KiB}$$。正好是一个物理页帧的大小。我们可以把一个页表放到一个物理页帧中，并用一个物理页号来描述它。事实上，三级页表的每个页表项中的物理页号描述一个二级页表；二级页表的每个页表项中的物理页号描述一个一级页表；一级页表中的页表项则和我们刚才提到的页表项一样，物理页号描述一个要映射到的物理页帧。
+```rust
+// src/const.rs
 
-具体来说，假设我们有虚拟页号 $$(\text{VPN}[2],\text{VPN}[1],\text{VPN}[0])$$ ，设三级页表的物理页号为 $$\text{PPN}_3$$ ，那么将其映射到物理页号的流程如下：
+pub const MAX_PHYSICAL_MEMORY: usize = 0x8000000;
+pub const MAX_PHYSICAL_PAGES: usize = MAX_PHYSICAL_MEMORY >> 12;
 
-1. 索引控制虚拟页号范围在 $$(\text{VPN}[2],\text{Any},\text{Any})$$ 的三级页表项，其地址为 $$\text{PPN}_3 \times 2^{12}+ \text{VPN}[2] \times 8$$ 。从这个页表项里读出二级页表的物理页号 $$\text{PPN}_2$$ 。
-2. 索引控制虚拟页号范围在 $$(\text{VPN}[2],\text{VPN}[1],\text{Any})$$ 的二级页表项，其地址为 $$\text{PPN}_2\times 2^{12}+\text{VPN}[1]\times 8$$ 。从这个页表项里读出一级页表的物理页号 $$\text{PPN}_1$$ 。
-3. 索引控制虚拟页号范围在 $$(\text{VPN}[2],\text{VPN}[1],\text{VPN}[0])$$ 的一级页表项，其地址为 $$\text{PPN}_1\times 2^{12}+\text{VPN}[0]\times 8$$。可以看出一级页表项只控制一个虚拟页号，因此从这个页表项中读出来的物理页号，就是虚拟页号 $$(\text{VPN}[2],\text{VPN}[1],\text{VPN}[0])$$ 所要映射到的物理页号。
+// src/memory/frame_allocator.rs
 
-我们通过这种复杂的手段，终于从虚拟页号找到了一级页表项，从而得出了物理页号。刚才我们提到若页表项满足 $$\text{R,W,X}=0$$ ，表明这个页表项指向下一级页表。在这里三级和二级页表项的 $$\text{R,W,X}=0$$ 应该成立，因为它们指向了下一级页表。
+use crate::consts::MAX_PHYSICAL_PAGES;
 
-然而三级和二级页表项不一定要指向下一级页表。我们知道每个一级页表项控制一个虚拟页号，即控制 $$4\text{KiB}$$ 虚拟内存；每个二级页表项则控制 $$9$$ 位虚拟页号，总计控制 $$4\text{KiB}\times 2^9=2\text{MiB}$$ 虚拟内存；每个三级页表项控制 $$18$$ 位虚拟页号，总计控制 $$2\text{MiB}\times 2^9=1\text{GiB}$$ 虚拟内存。我们可以将二级页表项的 $$\text{R,W,X}$$ 设置为不是全 $$0$$ 的许可要求，那么它将与一级页表项类似，只不过可以映射一个 $$2\text{MiB}$$ 的**大页 (Huge Page)** 。同理，也可以将三级页表项看作一个叶子，来映射一个 $$1\text{GiB}$$ 的大页。
+pub struct SegmentTreeAllocator {
+    a: [u8; MAX_PHYSICAL_PAGES << 1],
+    m: usize,
+    n: usize,
+    offset: usize
+}
 
-如果不考虑大页的情况，对于每个要映射的虚拟页号，我们最多只需要分配三级页表，二级页表，一级页表三个物理页帧来完成映射，可以做到需要多少就花费多少。
+impl SegmentTreeAllocator {
+    // 使用物理页号区间 [l,r) 进行初始化
+    pub fn init(&mut self, l: usize, r: usize) {
+        self.offset = l - 1;
+        self.n = r - l;
+        self.m = 1;
+        while self.m < self.n + 2 {
+            self.m = self.m << 1;
+        }
+        for i in (1..(self.m << 1)) { self.a[i] = 1; }
+        for i in (1..self.n) { self.a[self.m + i] = 0; }
+        for i in (1..self.m).rev() { self.a[i] = self.a[i << 1] & self.a[(i << 1) | 1]; }
+    }
+    // 分配一个物理页
+    // 自上而下寻找可用的最小物理页号
+    // 注意，我们假定永远不会出现物理页耗尽的情况
+    pub fn alloc(&mut self) -> usize {
+        // assume that we never run out of physical memory
+        if self.a[1] == 1 {
+            panic!("physical memory depleted!");
+        }
+        let mut p = 1;
+        while p < self.m {
+            if self.a[p << 1] == 0 { p = p << 1; } else { p = (p << 1) | 1; }
+        }
+        let result = p + self.offset - self.m;
+        self.a[p] = 1;
+        p >>= 1;
+        while p > 0 {
+            self.a[p] = self.a[p << 1] & self.a[(p << 1) | 1];
+            p >>= 1;
+        }
+        result
+    }
+    // 回收物理页号为 n 的物理页
+    // 自下而上进行更新
+    pub fn dealloc(&mut self, n: usize) {
+        let mut p = n + self.m - self.offset;
+        assert!(self.a[p] == 1);
+        self.a[p] = 0;
+        p >>= 1;
+        while p > 0 {
+            self.a[p] = self.a[p << 1] & self.a[(p << 1) | 1];
+            p >>= 1;
+        }
+    }
+}
+```
 
-### 页表寄存器 satp
+事实上每次分配的是可用的物理页号最小的页面，具体实现方面就不赘述了。
 
-![](figures/sv39_satp.jpg)
+我们还需要将这个类实例化并声明为 ``static`` ，因为它在整个程序运行过程当中均有效。
 
-我们使用寄存器 ``satp`` 来控制CPU进行页表映射。
+```rust
+// os/Cargo.toml
 
-* $$\text{MODE}$$ 控制CPU使用哪种页表实现，我们只需将 $$\text{MODE}$$ 设置为 $$8$$ 即表示 CPU 使用 Sv39 。 
-* $$\text{ASID}$$ 我们先不用管。
-* $$\text{PPN}$$ 存的是三级页表所在的物理页号。这样，给定一个虚拟页号，CPU 就可以从三级页表开始一步步的将其映射到一个物理页号。
+[dependencies]
+spin = "0.5.2"
 
-于是，我们可以通过修改寄存器 ``satp`` 的值来修改 CPU 地址转化及内存保护的行为。然而，仅仅这样做是不够的。
+// src/memory/frame_allocator.rs
 
-### 快表
+use spin::Mutex;
 
-我们知道，物理内存的访问速度要比 CPU 的运行速度慢很多。如果我们按照页表机制循规蹈矩的一步步走，将一个虚拟地址转化为物理地址需要访问 $$3$$ 次物理内存，然后得到物理地址还需要再访问一次物理内存，才能完成访存。这无疑很大程度上降低了效率。
+pub static SEGMENT_TREE_ALLOCATOR: Mutex<SegmentTreeAllocator> = Mutex::new(SegmentTreeAllocator {
+    a: [0; MAX_PHYSICAL_PAGES << 1],
+    m: 0,
+    n: 0,
+    offset: 0
+});
+```
 
-事实上，实践表明虚拟地址的访问具有时间局部性和空间局部性。
+我们注意到在内核中开了一块比较大的静态内存，``a`` 数组。那么 ``a`` 数组究竟有多大呢？实际上 ``a`` 数组的大小为最大可能物理页数的二倍，因此 ``a`` 数组大小仅为物理内存大小的 $$\frac{1}{2^{12}}\times 2\simeq 0.05\%$$，可说是微乎其微。
 
-* 时间局部性是指，被访问过一次的地址很有可能不远的将来再次被访问；
-* 空间局部性是指，如果一个地址被访问，则这个地址附近的地址很有可能在不远的将来被访问。
+我们本来想把 ``SEGMENT_TREE_ALLOCATOR`` 声明为 ``static mut`` 类型，这是因为首先它需要是 ``static`` 类型的；其次，它的三个方法 ``init, alloc, dealloc`` 都需要修改自身。
 
-因此，在 CPU 内部，我们使用**快表 (TLB, Translation Lookaside Buffer)** 来记录近期已完成的虚拟页号到物理页号的映射。由于局部性，当我们要做一个映射时，会有很大可能这个映射在近期被完成过，所以我们可以先到 TLB 里面去查一下，如果有的话我们就可以直接完成映射，而不用访问那么多次内存了。
+但是，对于 ``static mut`` 类型的修改操作是 ``unsafe`` 的。我们之后会提到**线程**的概念，对于 ``static`` 类型的静态数据，所有的线程都能访问。当一个线程正在访问这段数据的时候，如果另一个线程也来访问，就可能会产生冲突，并带来难以预测的结果。
 
-但是，我们如果修改了 ``satp`` 寄存器，比如将上面的 $$\text{PPN}$$ 字段进行了修改，说明我们切换到了一个与先前映射方式完全不同的页表。此时快表里面存储的映射结果就跟不上时代了，很可能是错误的。这种情况下我们要使用 ``sfence.vma`` 指令刷新整个 TLB 。
+所以我们的方法是使用 ``spin::Mutex<T>`` 给这段数据加一把锁，一个线程试图通过 ``.lock()`` 打开锁来获取内部数据的可变引用，如果钥匙被别的线程所占用，那么这个线程就会一直卡在这里；直到那个占用了钥匙的线程对内部数据的访问结束，锁被释放，将钥匙交还出来，被卡住的那个线程拿到了钥匙，就可打开锁获取内部引用，访问内部数据。
 
-同样，我们手动修改一个页表项之后，也修改了映射，但 TLB 并不会自动刷新，我们也需要使用 ``sfence.vma`` 指令刷新 TLB 。如果不加参数的， ``sfence.vma`` 会刷新整个 TLB 。你可以在后面加上一个虚拟地址，这样 ``sfence.vma`` 只会刷新这个虚拟地址的映射。
+这里使用的是 ``spin::Mutex<T>`` ， 我们在 ``Cargo.toml`` 中添加依赖。幸运的是，它也无需任何操作系统支持，我们可以放心使用。
 
-### 小结
+我们在 ``src/memory/mod.rs`` 里面再对这个类包装一下：
 
-这一节我们终于大概讲清楚了页表的前因后果，现在是时候应用这一套理论说明之前的所谓“魔法”到底是怎么一回事了！
+```rust
+// src/memory/mod.rs
 
+use frame_allocator::SEGMENT_TREE_ALLOCATOR as FRAME_ALLOCATOR;
+use riscv::addr::{
+    // 分别为虚拟地址、物理地址、虚拟页、物理页帧
+    // 非常方便，之后会经常用到
+    // 用法可参见 https://github.com/rcore-os/riscv/blob/master/src/addr.rs
+    VirtAddr,
+    PhysAddr,
+    Page,
+    Frame
+};
+
+pub fn init(l: usize, r: usize) {
+    FRAME_ALLOCATOR.lock().init(l, r);
+    println!("++++ setup memory!    ++++");
+}
+pub fn alloc_frame() -> Option<Frame> {
+    //将物理页号转为物理页帧
+    Some(Frame::of_ppn(FRAME_ALLOCATOR.lock().alloc()))
+}
+pub fn dealloc_frame(f: Frame) {
+    FRAME_ALLOCATOR.lock().dealloc(f.number())
+}
+```
+
+现在我们来测试一下它是否能够很好的完成物理页分配与回收：
+
+```rust
+// src/lib.rs
+
+mod memory;
+
+// src/init.rs
+
+use crate::memory::{
+    alloc_frame,
+    dealloc_frame
+};
+
+#[no_mangle]
+pub extern "C" fn rust_main() -> ! {
+    extern "C" {
+        fn end();
+    }
+    println!("kernel end vaddr = 0x{:x}", end as usize);
+    println!(
+        "free physical memory ppn = [0x{:x}, 0x{:x})",
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+    );
+    crate::interrupt::init();
+
+    crate::memory::init(
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+    );
+    frame_allocating_test();
+    crate::timer::init();
+
+    unsafe {
+        asm!("ebreak"::::"volatile");
+    }
+    panic!("end of rust_main");
+    loop {}
+}
+
+fn frame_allocating_test() {
+    println!("alloc {:#x?}", alloc_frame());
+    let f = alloc_frame();
+    println!("alloc {:#x?}", f);
+    println!("alloc {:#x?}", alloc_frame());
+    println!("dealloc {:#x?}", f);
+    dealloc_frame(f.unwrap());
+    println!("alloc {:#x?}", alloc_frame());
+    println!("alloc {:#x?}", alloc_frame());
+}
+```
+我们尝试在分配的过程中回收，之后再进行分配，结果如何呢？
+> **[success] 物理页分配与回收测试**
+>
+> ```rust
+> ...opensbi output...
+> kernel end vaddr = 0xffffffffc0223020
+> free physical memory ppn = [0x80224, 0x88000)
+> ++++ setup interrupt! ++++
+> ++++ setup memory!    ++++
+> alloc Some(
+>     Frame(
+>         PhysAddr(
+>             0x80224000,
+>         ),
+>     ),
+> )
+> alloc Some(
+>     Frame(
+>         PhysAddr(
+>             0x80225000,
+>         ),
+>     ),
+> )
+> alloc Some(
+>    Frame(
+>        PhysAddr(
+>             0x80226000,
+>         ),
+>     ),
+> )
+> dealloc Some(
+>     Frame(
+>         PhysAddr(
+>             0x80225000,
+>         ),
+>     ),
+> )
+> alloc Some(
+>     Frame(
+>         PhysAddr(
+>             0x80225000,
+>         ),
+>     ),
+> )
+> alloc Some(
+>     Frame(
+>         PhysAddr(
+>             0x80227000,
+>         ),
+>     ),
+> )
+> ++++ setup timer!     ++++
+> a breakpoint set @0xffffffffc0200330
+> panicked at 'end of rust_main', src/init.rs:35:5
+> * 100 ticks *
+> ...
+> ```
+>
+
+不过，这种物理内存分配给人一种过家家的感觉。无论表面上分配、回收做得怎样井井有条，实际上都并没有对物理内存产生任何影响！不要着急，我们之后会使用它们的。

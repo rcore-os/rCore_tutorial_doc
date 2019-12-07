@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>实现上下文环境保存与恢复 · GitBook</title>
+        <title>内核重映射实现之一：页表 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -118,20 +118,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="../stepA.html">
-            
-                <a href="../stepA.html">
-            
-                    
-                    Step A
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.3" data-path="../chapter1/introduction.html">
+        <li class="chapter " data-level="1.2" data-path="../chapter1/introduction.html">
             
                 <a href="../chapter1/introduction.html">
             
@@ -145,7 +132,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.3.1" data-path="../chapter1/part1.html">
+        <li class="chapter " data-level="1.2.1" data-path="../chapter1/part1.html">
             
                 <a href="../chapter1/part1.html">
             
@@ -158,7 +145,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="../chapter1/part2.html">
+        <li class="chapter " data-level="1.2.2" data-path="../chapter1/part2.html">
             
                 <a href="../chapter1/part2.html">
             
@@ -171,7 +158,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.3" data-path="../chapter1/part3.html">
+        <li class="chapter " data-level="1.2.3" data-path="../chapter1/part3.html">
             
                 <a href="../chapter1/part3.html">
             
@@ -184,7 +171,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.4" data-path="../chapter1/part4.html">
+        <li class="chapter " data-level="1.2.4" data-path="../chapter1/part4.html">
             
                 <a href="../chapter1/part4.html">
             
@@ -197,7 +184,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.5" data-path="../chapter1/part5.html">
+        <li class="chapter " data-level="1.2.5" data-path="../chapter1/part5.html">
             
                 <a href="../chapter1/part5.html">
             
@@ -215,7 +202,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="../chapter2/introduction.html">
+        <li class="chapter " data-level="1.3" data-path="../chapter2/introduction.html">
             
                 <a href="../chapter2/introduction.html">
             
@@ -229,7 +216,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1" data-path="../chapter2/part1.html">
+        <li class="chapter " data-level="1.3.1" data-path="../chapter2/part1.html">
             
                 <a href="../chapter2/part1.html">
             
@@ -242,7 +229,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="../chapter2/part2.html">
+        <li class="chapter " data-level="1.3.2" data-path="../chapter2/part2.html">
             
                 <a href="../chapter2/part2.html">
             
@@ -255,7 +242,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="../chapter2/part3.html">
+        <li class="chapter " data-level="1.3.3" data-path="../chapter2/part3.html">
             
                 <a href="../chapter2/part3.html">
             
@@ -268,7 +255,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="../chapter2/part4.html">
+        <li class="chapter " data-level="1.3.4" data-path="../chapter2/part4.html">
             
                 <a href="../chapter2/part4.html">
             
@@ -281,7 +268,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="../chapter2/part5.html">
+        <li class="chapter " data-level="1.3.5" data-path="../chapter2/part5.html">
             
                 <a href="../chapter2/part5.html">
             
@@ -294,7 +281,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.6" data-path="../chapter2/part6.html">
+        <li class="chapter " data-level="1.3.6" data-path="../chapter2/part6.html">
             
                 <a href="../chapter2/part6.html">
             
@@ -307,7 +294,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.7" data-path="../chapter2/part7.html">
+        <li class="chapter " data-level="1.3.7" data-path="../chapter2/part7.html">
             
                 <a href="../chapter2/part7.html">
             
@@ -320,7 +307,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.8" data-path="../chapter2/part8.html">
+        <li class="chapter " data-level="1.3.8" data-path="../chapter2/part8.html">
             
                 <a href="../chapter2/part8.html">
             
@@ -338,25 +325,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="../stepB.html">
-            
-                <a href="../stepB.html">
-            
-                    
-                    Step B
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.6" data-path="../chapter3/introduction.html">
+        <li class="chapter " data-level="1.4" data-path="../chapter3/introduction.html">
             
                 <a href="../chapter3/introduction.html">
             
                     
-                    第三章：内存管理
+                    第三章：中断
             
                 </a>
             
@@ -365,9 +339,106 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.6.1" data-path="../chapter3/part1.html">
+        <li class="chapter " data-level="1.4.1" data-path="../chapter3/part1.html">
             
                 <a href="../chapter3/part1.html">
+            
+                    
+                    rv64中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
             
                     
                     物理内存探测与管理
@@ -378,9 +449,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6.2" data-path="../chapter3/part2.html">
+        <li class="chapter " data-level="1.5.2" data-path="../chapter4/part2.html">
             
-                <a href="../chapter3/part2.html">
+                <a href="../chapter4/part2.html">
             
                     
                     动态内存分配
@@ -391,9 +462,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6.3" data-path="../chapter3/part3.html">
+        <li class="chapter " data-level="1.5.3" data-path="../chapter4/part3.html">
             
-                <a href="../chapter3/part3.html">
+                <a href="../chapter4/part3.html">
             
                     
                     总结与展望 (Writing)
@@ -409,12 +480,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="../chapter4/introduction.html">
+        <li class="chapter " data-level="1.6" data-path="introduction.html">
             
-                <a href="../chapter4/introduction.html">
+                <a href="introduction.html">
             
                     
-                    第四章：内存虚拟化
+                    第五章：内存虚拟化
             
                 </a>
             
@@ -423,9 +494,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.7.1" data-path="../chapter4/part1.html">
+        <li class="chapter " data-level="1.6.1" data-path="part1.html">
             
-                <a href="../chapter4/part1.html">
+                <a href="part1.html">
             
                     
                     页表：从虚拟内存到物理内存
@@ -436,9 +507,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.2" data-path="../chapter4/part2.html">
+        <li class="chapter " data-level="1.6.2" data-path="part2.html">
             
-                <a href="../chapter4/part2.html">
+                <a href="part2.html">
             
                     
                     内核初始映射
@@ -449,9 +520,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.3" data-path="../chapter4/part3.html">
+        <li class="chapter " data-level="1.6.3" data-path="part3.html">
             
-                <a href="../chapter4/part3.html">
+                <a href="part3.html">
             
                     
                     内核重映射
@@ -462,9 +533,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.4" data-path="../chapter4/part4.html">
+        <li class="chapter active" data-level="1.6.4" data-path="part4.html">
             
-                <a href="../chapter4/part4.html">
+                <a href="part4.html">
             
                     
                     内核重映射实现之一：页表
@@ -475,9 +546,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.5" data-path="../chapter4/part5.html">
+        <li class="chapter " data-level="1.6.5" data-path="part5.html">
             
-                <a href="../chapter4/part5.html">
+                <a href="part5.html">
             
                     
                     内核重映射实现之二：MemorySet
@@ -488,9 +559,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.6" data-path="../chapter4/part6.html">
+        <li class="chapter " data-level="1.6.6" data-path="part6.html">
             
-                <a href="../chapter4/part6.html">
+                <a href="part6.html">
             
                     
                     内核重映射实现之三：完结
@@ -501,119 +572,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7.7" data-path="../chapter4/part7.html">
+        <li class="chapter " data-level="1.6.7" data-path="part7.html">
             
-                <a href="../chapter4/part7.html">
-            
-                    
-                    总结与展望
-            
-                </a>
-            
-
-            
-        </li>
-    
-
-            </ul>
-            
-        </li>
-    
-        <li class="chapter " data-level="1.8" data-path="../stepC.html">
-            
-                <a href="../stepC.html">
-            
-                    
-                    Step C
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.9" data-path="introduction.html">
-            
-                <a href="introduction.html">
-            
-                    
-                    第五章：中断
-            
-                </a>
-            
-
-            
-            <ul class="articles">
-                
-    
-        <li class="chapter " data-level="1.9.1" data-path="part1.html">
-            
-                <a href="part1.html">
-            
-                    
-                    rv64中断介绍
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.9.2" data-path="part2.html">
-            
-                <a href="part2.html">
-            
-                    
-                    手动触发断点中断
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.9.3" data-path="part3.html">
-            
-                <a href="part3.html">
-            
-                    
-                    程序运行上下文环境
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter active" data-level="1.9.4" data-path="part4.html">
-            
-                <a href="part4.html">
-            
-                    
-                    实现上下文环境保存与恢复
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.9.5" data-path="part5.html">
-            
-                <a href="part5.html">
-            
-                    
-                    时钟中断
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.9.6" data-path="part6.html">
-            
-                <a href="part6.html">
+                <a href="part7.html">
             
                     
                     总结与展望
@@ -629,12 +590,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.10" data-path="../chapter6/introduction.html">
+        <li class="chapter " data-level="1.7" data-path="../chapter6/introduction.html">
             
                 <a href="../chapter6/introduction.html">
             
                     
-                    第六章：内核线程 (Writing)
+                    第六章：内核线程
             
                 </a>
             
@@ -643,12 +604,12 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.10.1" data-path="../chapter6/part1.html">
+        <li class="chapter " data-level="1.7.1" data-path="../chapter6/part1.html">
             
                 <a href="../chapter6/part1.html">
             
                     
-                    进程与线程简介
+                    线程状态与保存
             
                 </a>
             
@@ -656,22 +617,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.10.2" data-path="../chapter6/part2.html">
+        <li class="chapter " data-level="1.7.2" data-path="../chapter6/part2.html">
             
                 <a href="../chapter6/part2.html">
-            
-                    
-                    内核线程
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.10.3" data-path="../chapter6/part3.html">
-            
-                <a href="../chapter6/part3.html">
             
                     
                     线程切换
@@ -682,12 +630,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.10.4" data-path="../chapter6/part4.html">
+        <li class="chapter " data-level="1.7.3" data-path="../chapter6/part3.html">
             
-                <a href="../chapter6/part4.html">
+                <a href="../chapter6/part3.html">
             
                     
-                    线程调度
+                    线程初始化
             
                 </a>
             
@@ -695,9 +643,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.10.5" data-path="../chapter6/part5.html">
+        <li class="chapter " data-level="1.7.4" data-path="../chapter6/part4.html">
             
-                <a href="../chapter6/part5.html">
+                <a href="../chapter6/part4.html">
             
                     
                     总结与展望
@@ -713,12 +661,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.11" data-path="../chapter7/introduction.html">
+        <li class="chapter " data-level="1.8" data-path="../chapter7/introduction.html">
             
                 <a href="../chapter7/introduction.html">
             
                     
-                    第七章：用户进程 (Writing)
+                    第七章：线程调度
             
                 </a>
             
@@ -727,9 +675,80 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.11.1" data-path="../chapter7/part1.html">
+        <li class="chapter " data-level="1.8.1" data-path="../chapter7/part1.html">
             
                 <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    线程调度算法的 Round Robin算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter7/part4.md">
+            
+                <span>
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter8/introduction.md">
+            
+                <span>
+            
+                    
+                    第八章：用户线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter8/part1.md">
+            
+                <span>
             
                     
                     系统调用与用户程序
@@ -740,9 +759,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.11.2" data-path="../chapter7/part2.html">
+        <li class="chapter " data-level="1.9.2" data-path="../chapter8/part2.md">
             
-                <a href="../chapter7/part2.html">
+                <span>
             
                     
                     用户进程
@@ -753,9 +772,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.11.3" data-path="../chapter7/part3.html">
+        <li class="chapter " data-level="1.9.3" data-path="../chapter8/part3.md">
             
-                <a href="../chapter7/part3.html">
+                <span>
             
                     
                     总结与展望
@@ -768,6 +787,19 @@
     
 
             </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter9/introduction.md">
+            
+                <span>
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
             
         </li>
     
@@ -801,7 +833,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >实现上下文环境保存与恢复</a>
+        <a href=".." >内核重映射实现之一：页表</a>
     </h1>
 </div>
 
@@ -816,224 +848,243 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="&#x5B9E;&#x73B0;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#x4FDD;&#x5B58;&#x4E0E;&#x6062;&#x590D;">&#x5B9E;&#x73B0;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#x4FDD;&#x5B58;&#x4E0E;&#x6062;&#x590D;</h2>
-<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
-</span>
-    <span class="token section-directives tag">.section</span><span class="token section-directives tag">.text</span>
-    <span class="token symbol-directives tag">.globl</span> <span class="token last-literals operator">__alltraps</span>
-<span class="token labels operator">__alltraps:</span>
-    <span class="token last-literals operator">SAVE_ALL</span>
-    <span class="token pseudo-instructions important">mv</span> <span class="token general-registers class-name">a0</span>, <span class="token general-registers class-name">sp</span>
-    <span class="token rv32/64i-instructions keyword">jal</span> <span class="token last-literals operator">rust_trap</span>
+                                <h2 id="&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E00;&#xFF1A;&#x9875;&#x8868;">&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E00;&#xFF1A;&#x9875;&#x8868;</h2>
+<p>&#x9996;&#x5148;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x9875;&#x8868;&#x3002;</p>
+<h3 id="&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;">&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;</h3>
+<p>&#x7B80;&#x5355;&#x8D77;&#x89C1;&#xFF0C;&#x65E0;&#x8BBA;&#x662F;&#x521D;&#x59CB;&#x6620;&#x5C04;&#x8FD8;&#x662F;&#x91CD;&#x6620;&#x5C04;&#xFF0C;&#x65E0;&#x8BBA;&#x662F;&#x5185;&#x6838;&#x5404;&#x6BB5;&#x8FD8;&#x662F;&#x7269;&#x7406;&#x5185;&#x5B58;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x91C7;&#x7528;&#x540C;&#x6837;&#x7684;&#x504F;&#x79FB;&#x91CF;&#x8FDB;&#x884C;&#x6620;&#x5C04;&#xFF0C;&#x5177;&#x4F53;&#x800C;&#x8A00;&#xFF1A;<code>va -&gt; pa = va - 0xffffffff40000000</code> &#x3002;</p>
+<p>&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5728;&#x5185;&#x6838;&#x4E2D;&#x8BBF;&#x95EE;&#x5BF9;&#x5E94;&#x7684;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x6765;&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/consts.rs</span>
 
-    <span class="token symbol-directives tag">.globl</span> <span class="token last-literals operator">__trapret</span>
-<span class="token last-literals operator">__trapret</span>
-    <span class="token last-literals operator">RESTORE_ALL</span>
-    <span class="token privilege-instructions keyword">sret</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> PHYSICAL_MEMORY_OFFSET<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0xffffffff40000000</span><span class="token punctuation">;</span>
+
+<span class="token comment">// src/memory/mod.rs</span>
+
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>consts<span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token comment">// &#x5C06;&#x7269;&#x7406;&#x5730;&#x5740;&#x8F6C;&#x5316;&#x4E3A;&#x5BF9;&#x5E94;&#x7684;&#x865A;&#x62DF;&#x5730;&#x5740;</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">access_pa_via_va</span><span class="token punctuation">(</span>pa<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+    pa <span class="token operator">+</span> PHYSICAL_MEMORY_OFFSET
 </code></pre>
-<p>&#x6211;&#x4EEC;&#x9996;&#x5148;&#x5B9A;&#x4E49; <code>__alltraps</code> &#x51FD;&#x6570;&#x4F5C;&#x4E3A;&#x6240;&#x6709;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x7684;&#x5165;&#x53E3;&#xFF0C;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x9996;&#x5148;&#x901A;&#x8FC7; <code>SAVE_ALL</code> &#x6765;&#x4FDD;&#x5B58;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#xFF0C;&#x968F;&#x540E;&#x5C06;&#x5F53;&#x524D;&#x6808;&#x9876;&#x5730;&#x5740; <code>sp</code> &#x7684;&#x503C;&#x7ED9;&#x5230;&#x5BC4;&#x5B58;&#x5668; <code>a0</code> &#xFF0C;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;&#x5728;risc-v calling convention &#x4E2D;&#xFF0C;&#x89C4;&#x5B9A; <code>a0</code> &#x4FDD;&#x5B58;&#x51FD;&#x6570;&#x8F93;&#x5165;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#xFF0C;&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x76F8;&#x5F53;&#x4E8E;&#x5C06;&#x6808;&#x9876;&#x5730;&#x5740;&#x4F20;&#x7ED9;&#x51FD;&#x6570; <code>rust_trap</code> &#x4F5C;&#x4E3A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x3002;</p>
-<p>&#x968F;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x901A;&#x8FC7; <code>jal</code> &#x8C03;&#x7528; <code>rust_trap</code> &#x51FD;&#x6570;&#x5E76;&#x5728;&#x8FD4;&#x56DE;&#x4E4B;&#x540E;&#x8DF3;&#x8F6C;&#x5230;&#x8C03;&#x7528;&#x8BED;&#x53E5;&#x7684;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x3002;&#x5B9E;&#x9645;&#x4E0A;&#x8C03;&#x7528;&#x8FD4;&#x56DE;&#x4E4B;&#x540E;&#x8FDB;&#x5165; <code>__trapret</code> &#x51FD;&#x6570;&#xFF0C;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x901A;&#x8FC7; <code>RESTORE_ALL</code> &#x6062;&#x590D;&#x4E2D;&#x65AD;&#x4E4B;&#x524D;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#xFF0C;&#x5E76;&#x6700;&#x7EC8;&#x901A;&#x8FC7;&#x4E00;&#x6761; <code>sret</code> &#x6307;&#x4EE4;&#x8DF3;&#x8F6C;&#x5230; <code>sepc</code>&#xFF0C;&#x56DE;&#x5230;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x7684;&#x90A3;&#x6761;&#x6307;&#x4EE4;&#x6240;&#x5728;&#x5730;&#x5740;&#x3002;&#x8FD9;&#x4F1A;&#x5BFC;&#x81F4;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x7684;&#x90A3;&#x6761;&#x6307;&#x4EE4;&#x53C8;&#x88AB;&#x6267;&#x884C;&#x4E00;&#x6B21;&#x3002;</p>
-<p>&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x51E0;&#x4E2A;&#x5B8F;&#xFF1A;</p>
-<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
-</span>
-<span class="token comment"># &#x8868;&#x793A;&#x6BCF;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x5360;&#x7684;&#x5B57;&#x8282;&#x6570;&#xFF0C;&#x7531;&#x4E8E;&#x662F;64&#x4F4D;&#xFF0C;&#x90FD;&#x662F;8&#x5B57;&#x8282;
-</span><span class="token symbol-directives tag">.equ</span> <span class="token last-literals operator">XLENB</span> <span class="token number">8</span>
+<p>&#x5728; rust &#x7684; riscv crate &#x4E2D;&#xFF0C;&#x5DF2;&#x7ECF;&#x4E3A;&#x9875;&#x8868;&#x673A;&#x5236;&#x63D0;&#x4F9B;&#x4E86;&#x5982;&#x4E0B;&#x652F;&#x6301;&#xFF1A;</p>
+<ul>
+<li>&#x57FA;&#x4E8E;&#x504F;&#x79FB;&#x91CF;(&#x4E5F;&#x5373;&#x7EBF;&#x6027;&#x6620;&#x5C04;)&#x7684; Sv39 &#x4E09;&#x7EA7;&#x9875;&#x8868; <code>Rv39PageTable</code> </li>
+<li>&#x9875;&#x8868;&#x9879; <code>PageTableEntry</code> </li>
+<li>&#x9875;&#x8868;&#x9879;&#x6570;&#x7EC4; <code>PageTable</code> </li>
+<li>&#x9875;&#x8868;&#x9879;&#x4E2D;&#x7684;&#x6807;&#x5FD7;&#x4F4D; <code>PageTableFlags</code></li>
+</ul>
+<h3 id="&#x9875;&#x8868;&#x9879;">&#x9875;&#x8868;&#x9879;</h3>
+<p>&#x9996;&#x5148;&#x6765;&#x770B;&#x4E00;&#x4E0B;&#x9875;&#x8868;&#x9879;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/memory/mod.rs</span>
 
-<span class="token comment"># &#x5C06;&#x5730;&#x5740; sp+8&#xD7;a2 &#x5904;&#x7684;&#x503C; load &#x5230;&#x5BC4;&#x5B58;&#x5668; a1 &#x5185;
-</span><span class="token miscellaneous-directives tag">.macro</span> <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">a1</span>, <span class="token general-registers class-name">a2</span>
-    <span class="token rv32/64i-instructions keyword">ld</span> \<span class="token general-registers class-name">a1</span>, \<span class="token general-registers class-name">a2</span>*<span class="token last-literals operator">XLENB</span>(<span class="token general-registers class-name">sp</span>)
-<span class="token miscellaneous-directives tag">.endm</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> paging<span class="token punctuation">;</span>
 
-<span class="token comment"># &#x5C06;&#x5BC4;&#x5B58;&#x5668; a1 &#x5185;&#x7684;&#x503C; store &#x5230;&#x5730;&#x5740; sp+8*a2 &#x5185;
-</span><span class="token miscellaneous-directives tag">.macro</span> <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">a1</span>, <span class="token general-registers class-name">a2</span>
-    <span class="token rv32/64i-instructions keyword">sd</span> \<span class="token general-registers class-name">a1</span>, \<span class="token general-registers class-name">a2</span>*<span class="token last-literals operator">XLENB</span>(<span class="token general-registers class-name">sp</span>)
-<span class="token miscellaneous-directives tag">.endm</span>
-</code></pre>
-<p><code>SAVE_ALL</code> &#x7684;&#x539F;&#x7406;&#x662F;&#xFF1A;&#x5C06;&#x4E00;&#x6574;&#x4E2A; <code>TrapFrame</code> &#x4FDD;&#x5B58;&#x5728;<strong>&#x5185;&#x6838;&#x6808;</strong>&#x4E0A;&#x3002;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x5C31;&#x5904;&#x5728;&#x5185;&#x6838;&#x6001;(S &#x6001;)&#xFF0C;&#x56E0;&#x6B64;&#x73B0;&#x5728;&#x7684;&#x6808;&#x9876;&#x5730;&#x5740; <code>sp</code> &#x5C31;&#x6307;&#x5411;&#x5185;&#x6838;&#x6808;&#x5730;&#x5740;&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x4E4B;&#x540E;&#x6211;&#x4EEC;&#x8FD8;&#x8981;&#x652F;&#x6301;&#x8FD0;&#x884C;<strong>&#x7528;&#x6237;&#x6001;&#x7A0B;&#x5E8F;</strong>&#xFF0C;&#x987E;&#x540D;&#x601D;&#x4E49;&#xFF0C;&#x8981;&#x5728;&#x7528;&#x6237;&#x6001;(U &#x6001;)&#x4E0A;&#x8FD0;&#x884C;&#xFF0C;&#x5728;&#x4E2D;&#x65AD;&#x65F6;&#x6808;&#x9876;&#x5730;&#x5740; <code>sp</code> &#x5C06;&#x6307;&#x5411;&#x7528;&#x6237;&#x6808;&#x9876;&#x5730;&#x5740;&#xFF0C;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#x6211;&#x4EEC;&#x8981;&#x4ECE;&#x7528;&#x6237;&#x6808;&#x5207;&#x6362;&#x5230;&#x5185;&#x6838;&#x6808;&#x3002;</p>
-<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
-</span>
-<span class="token comment"># &#x89C4;&#x5B9A;&#x82E5;&#x5728;&#x4E2D;&#x65AD;&#x4E4B;&#x524D;&#x5904;&#x4E8E; U &#x6001;(&#x7528;&#x6237;&#x6001;)
-</span><span class="token comment"># &#x5219; sscratch &#x4FDD;&#x5B58;&#x7684;&#x662F;&#x5185;&#x6838;&#x6808;&#x5730;&#x5740;
-</span><span class="token comment"># &#x5426;&#x5219;&#x4E2D;&#x65AD;&#x4E4B;&#x524D;&#x5904;&#x4E8E; S &#x6001;(&#x5185;&#x6838;&#x6001;)&#xFF0C;sscratch &#x4FDD;&#x5B58;&#x7684;&#x662F; 0
-</span><span class="token miscellaneous-directives tag">.macro</span> <span class="token last-literals operator">SAVE_ALL</span>
-    <span class="token comment"># &#x901A;&#x8FC7;&#x539F;&#x5B50;&#x64CD;&#x4F5C;&#x4EA4;&#x6362; sp, sscratch
-</span>    <span class="token comment"># &#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x5C06;&#x53F3;&#x4FA7;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x5199;&#x5165;&#x4E2D;&#x95F4; csr
-</span>    <span class="token comment"># &#x5E76;&#x5C06;&#x4E2D;&#x95F4; csr &#x7684;&#x503C;&#x5199;&#x5165;&#x5DE6;&#x4FA7;&#x5BC4;&#x5B58;&#x5668;
-</span>    <span class="token csr-instructions keyword">csrrw</span> <span class="token general-registers class-name">sp</span>, <span class="token s-mode-csrs class-name">sscratch</span>, <span class="token general-registers class-name">sp</span>
-    <span class="token comment"># &#x5982;&#x679C; sp=0 &#xFF0C;&#x8BF4;&#x660E;&#x4EA4;&#x6362;&#x524D; sscratch=0
-</span>    <span class="token comment"># &#x8BF4;&#x660E;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x4E0D;&#x7528;&#x5207;&#x6362;&#x6808;
-</span>    <span class="token comment"># &#x56E0;&#x6B64;&#x4E0D;&#x8DF3;&#x8F6C;&#xFF0C;&#x7EE7;&#x7EED;&#x6267;&#x884C; csrr &#x518D;&#x5C06; sscratch &#x7684;&#x503C;&#x8BFB;&#x56DE; sp
-</span>    <span class="token comment"># &#x6B64;&#x65F6; sp,sscratch &#x5747;&#x4FDD;&#x5B58;&#x5185;&#x6838;&#x6808;
-</span>
-    <span class="token comment"># &#x5426;&#x5219; sp!=0&#xFF0C;&#x8BF4;&#x660E;&#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x8981;&#x5207;&#x6362;&#x6808;
-</span>    <span class="token comment"># &#x7531;&#x4E8E; sscratch &#x89C4;&#x5B9A;&#xFF0C;&#x4E8C;&#x8005;&#x4EA4;&#x6362;&#x540E;
-</span>    <span class="token comment"># &#x6B64;&#x65F6; sp &#x4E3A;&#x5185;&#x6838;&#x6808;&#xFF0C; sscratch &#x4E3A;&#x7528;&#x6237;&#x6808;
-</span>    <span class="token comment"># &#x7565;&#x8FC7; csrr &#x6307;&#x4EE4;
-</span>
-    <span class="token comment"># &#x4E24;&#x79CD;&#x60C5;&#x51B5;&#x63A5;&#x4E0B;&#x6765;&#x90FD;&#x662F;&#x5728;&#x5185;&#x6838;&#x6808;&#x4E0A;&#x4FDD;&#x5B58;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;
-</span>    <span class="token pseudo-instructions important">bnez</span> <span class="token general-registers class-name">sp</span>, <span class="token last-literals operator">trap_from_user</span>
-<span class="token labels operator">trap_from_kernel:</span>
-    <span class="token csr-instructions keyword">csrr</span> <span class="token general-registers class-name">sp</span>, <span class="token s-mode-csrs class-name">sscratch</span>
-<span class="token labels operator">trap_from_user:</span>
-    <span class="token comment"># &#x63D0;&#x524D;&#x5206;&#x914D;&#x6808;&#x5E27;
-</span>    <span class="token rv32/64i-instructions keyword">addi</span> <span class="token general-registers class-name">sp</span>, <span class="token general-registers class-name">sp</span>, -<span class="token number">36</span>*<span class="token last-literals operator">XLENB</span>
-    <span class="token comment"># &#x6309;&#x7167;&#x5730;&#x5740;&#x9012;&#x589E;&#x7684;&#x987A;&#x5E8F;&#xFF0C;&#x4FDD;&#x5B58;&#x9664;x0, x2&#x4E4B;&#x5916;&#x7684;&#x901A;&#x7528;&#x5BC4;&#x5B58;&#x5668;
-</span>    <span class="token comment"># x0 &#x6052;&#x4E3A; 0 &#x4E0D;&#x5FC5;&#x4FDD;&#x5B58;
-</span>    <span class="token comment"># x2 &#x4E3A; sp &#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x9700;&#x7279;&#x6B8A;&#x5904;&#x7406;
-</span>    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">x1</span>, <span class="token number">1</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">x3</span>, <span class="token number">3</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">x4</span>, <span class="token number">4</span>
-    ...
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">x30</span>, <span class="token number">30</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">x31</span>, <span class="token number">31</span>
+<span class="token comment">// src/paging.rs</span>
 
-    <span class="token comment"># &#x82E5;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x6B64;&#x65F6; sscratch &#x4E3A;&#x5185;&#x6838;&#x6808;&#x5730;&#x5740;
-</span>    <span class="token comment"># &#x82E5;&#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x6B64;&#x65F6; sscratch &#x4E3A;&#x7528;&#x6237;&#x6808;&#x5730;&#x5740;
-</span>    <span class="token comment"># &#x5C06; sscratch &#x7684;&#x503C;&#x4FDD;&#x5B58;&#x5728; s0 &#x4E2D;&#xFF0C;&#x5E76;&#x5C06; sscratch &#x6E05;&#x96F6;
-</span>    <span class="token csr-instructions keyword">csrrw</span> <span class="token general-registers class-name">s0</span>, <span class="token s-mode-csrs class-name">sscratch</span>, <span class="token general-registers class-name">x0</span>
-    <span class="token comment"># &#x5206;&#x522B;&#x5C06;&#x56DB;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4FDD;&#x5B58;&#x5728; s1,s2,s3,s4 &#x4E2D;
-</span>    <span class="token csr-instructions keyword">csrr</span> <span class="token general-registers class-name">s1</span>, <span class="token s-mode-csrs class-name">sstatus</span>
-    <span class="token csr-instructions keyword">csrr</span> <span class="token general-registers class-name">s2</span>, <span class="token s-mode-csrs class-name">sepc</span>
-    <span class="token csr-instructions keyword">csrr</span> <span class="token general-registers class-name">s3</span>, <span class="token s-mode-csrs class-name">stval</span>
-    <span class="token csr-instructions keyword">csrr</span> <span class="token general-registers class-name">s4</span>, <span class="token s-mode-csrs class-name">scause</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>consts<span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>addr<span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>paging<span class="token punctuation">::</span><span class="token punctuation">{</span>
+    PageTableEntry<span class="token punctuation">,</span>
+    Mapper<span class="token punctuation">,</span>
+    Rv39PageTable<span class="token punctuation">,</span>
+    PageTable <span class="token keyword">as</span> PageTableEntryArray<span class="token punctuation">,</span>
+    PageTableFlags <span class="token keyword">as</span> EF<span class="token punctuation">,</span>
+    FrameAllocator<span class="token punctuation">,</span>
+    FrameDeallocator
 
-    <span class="token comment"># &#x5C06; s0 &#x4FDD;&#x5B58;&#x5728;&#x6808;&#x4E0A;
-</span>    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">s0</span>, <span class="token number">2</span>
-    <span class="token comment"># &#x5C06; s1,s2,s3,s4 &#x4FDD;&#x5B58;&#x5728;&#x6808;&#x4E0A;
-</span>    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">s1</span>, <span class="token number">32</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">s2</span>, <span class="token number">33</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">s3</span>, <span class="token number">34</span>
-    <span class="token last-literals operator">STORE</span> <span class="token general-registers class-name">s4</span>, <span class="token number">35</span>
-<span class="token miscellaneous-directives tag">.endm</span>
-</code></pre>
-<p>&#x5728; <code>SAVE_ALL</code> &#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4E00;&#x6574;&#x4E2A; <code>TrapFrame</code> &#x5B58;&#x5728;&#x4E86;&#x5185;&#x6838;&#x6808;&#x4E0A;&#xFF0C;&#x4E14;&#x5728;&#x5730;&#x5740;&#x533A;&#x95F4;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">p</mi></mtext><mo separator="true">,</mo><mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">p</mi></mtext><mo>+</mo><mn>3</mn><mn>6</mn><mo>&#xD7;</mo><mn>8</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">[\text{sp},\text{sp}+36\times8)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">[</span><span class="mord text textstyle uncramped"><span class="mord mathrm">sp</span></span><span class="mpunct">,</span><span class="mord text textstyle uncramped"><span class="mord mathrm">sp</span></span><span class="mbin">+</span><span class="mord mathrm">3</span><span class="mord mathrm">6</span><span class="mbin">&#xD7;</span><span class="mord mathrm">8</span><span class="mclose">)</span></span></span></span>&#x4E0A;&#x6309;&#x7167;&#x987A;&#x5E8F;&#x5B58;&#x653E;&#x4E86; <code>TrapFrame</code> &#x7684;&#x5404;&#x4E2A;&#x5B57;&#x6BB5;&#x3002;&#x8FD9;&#x6837;&#xFF0C;<code>rust_trap</code> &#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6808;&#x9876;&#x5730;&#x5740;&#x6B63;&#x786E;&#x8BBF;&#x95EE; <code>TrapFrame</code> &#x4E86;&#x3002;</p>
-<p>&#x800C; <code>RESTORE_ALL</code> &#x6B63;&#x597D;&#x662F;&#x4E00;&#x4E2A;&#x53CD;&#x8FC7;&#x6765;&#x7684;&#x8FC7;&#x7A0B;&#xFF1A;</p>
-<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
-</span>
-<span class="token miscellaneous-directives tag">.macro</span> <span class="token last-literals operator">RESTORE_ALL</span>
-    <span class="token comment"># s1 = sstatus
-</span>    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">s1</span>, <span class="token number">32</span>
-    <span class="token comment"># s2 = sepc
-</span>    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">s2</span>, <span class="token number">33</span>
-    <span class="token comment"># &#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x53E6;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x5224;&#x65AD;&#x662F;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FD8;&#x662F;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;
-</span>    <span class="token comment"># &#x5982;&#x679C;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C; sstatus &#x7684; SPP &#x4F4D;&#x88AB;&#x786C;&#x4EF6;&#x8BBE;&#x4E3A; 1
-</span>    <span class="token comment"># &#x5982;&#x679C;&#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C; sstatus &#x7684; SPP &#x4F4D;&#x88AB;&#x786C;&#x4EF6;&#x8BBE;&#x4E3A; 0
-</span>    <span class="token comment"># &#x53D6;&#x51FA; sstatus &#x7684; SPP 
-</span>    <span class="token rv32/64i-instructions keyword">andi</span> <span class="token general-registers class-name">s0</span>, <span class="token general-registers class-name">s1</span>, <span class="token number">1</span> &lt;&lt; <span class="token number">8</span>
-    <span class="token comment"># &#x82E5; SPP=0 &#xFF0C; &#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x8FDB;&#x884C; _to_user &#x989D;&#x5916;&#x5904;&#x7406;
-</span>    <span class="token pseudo-instructions important">bnez</span> <span class="token general-registers class-name">s0</span>, <span class="token last-literals operator">_to_kernel</span>
-<span class="token labels operator">_to_user:</span>
-    <span class="token comment"># &#x91CA;&#x653E;&#x5728;&#x5185;&#x6838;&#x6808;&#x4E0A;&#x5206;&#x914D;&#x7684;&#x5185;&#x5B58;
-</span>    <span class="token rv32/64i-instructions keyword">addi</span> <span class="token general-registers class-name">s0</span>, <span class="token general-registers class-name">sp</span>, <span class="token number">36</span> * <span class="token last-literals operator">XLENB</span>
-    <span class="token comment"># RESTORE_ALL &#x4E4B;&#x540E;&#xFF0C;&#x5982;&#x679C;&#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;
-</span>    <span class="token comment"># sscratch &#x6307;&#x5411;&#x7528;&#x6237;&#x6808;&#x5730;&#x5740;&#xFF01;
-</span>    <span class="token comment"># &#x73B0;&#x5728;&#x4EE4; sscratch &#x6307;&#x5411;&#x5185;&#x6838;&#x6808;&#x9876;&#x5730;&#x5740;
-</span>    <span class="token comment"># &#x5982;&#x679C;&#x662F;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C;&#x5728; SAVE_ALL &#x91CC;&#x9762;
-</span>    <span class="token comment"># &#x5C31;&#x628A; sscratch &#x6E05;&#x96F6;&#x4E86;&#xFF0C;&#x56E0;&#x6B64;&#x4FDD;&#x8BC1;&#x4E86;&#x6211;&#x4EEC;&#x7684;&#x89C4;&#x5B9A;
-</span>    <span class="token csr-instructions keyword">csrw</span> <span class="token s-mode-csrs class-name">sscratch</span>, <span class="token general-registers class-name">s0</span>
-<span class="token labels operator">_to_kernel:</span>
-    <span class="token comment"># &#x6062;&#x590D; sstatus, sepc &#x5BC4;&#x5B58;&#x5668;
-</span>    <span class="token csr-instructions keyword">csrw</span> <span class="token s-mode-csrs class-name">sstatus</span>, <span class="token general-registers class-name">s1</span>
-    <span class="token csr-instructions keyword">csrw</span> <span class="token s-mode-csrs class-name">sepc</span>, <span class="token general-registers class-name">s2</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>asm<span class="token punctuation">::</span><span class="token punctuation">{</span>
+    sfence_vma<span class="token punctuation">,</span>
+    sfence_vma_all<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span>satp<span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>memory<span class="token punctuation">::</span><span class="token punctuation">{</span>
+    alloc_frame<span class="token punctuation">,</span>
+    dealloc_frame<span class="token punctuation">,</span>
+    access_pa_via_va
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token function">PageEntry</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;static</span> <span class="token keyword">mut</span> PageTableEntry<span class="token punctuation">,</span> Page<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token comment"># &#x6062;&#x590D;&#x9664; x0, x2(sp) &#x4E4B;&#x5916;&#x7684;&#x901A;&#x7528;&#x5BC4;&#x5B58;&#x5668;
-</span>    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">x1</span>, <span class="token number">1</span>
-    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">x3</span>, <span class="token number">3</span>
-    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">x4</span>, <span class="token number">4</span>
-    ...
-    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">x31</span>, <span class="token number">31</span>
-
-    <span class="token comment"># &#x5982;&#x679C;&#x4ECE;&#x7528;&#x6237;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C; sp+2*8 &#x5730;&#x5740;&#x5904;&#x4FDD;&#x5B58;&#x7528;&#x6237;&#x6808;&#x9876;&#x5730;&#x5740;
-</span>    <span class="token comment"># &#x5207;&#x6362;&#x56DE;&#x7528;&#x6237;&#x6808;
-</span>    <span class="token comment"># &#x5982;&#x679C;&#x4ECE;&#x5185;&#x6838;&#x6001;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#xFF0C; sp+2*8 &#x5730;&#x5740;&#x5904;&#x4FDD;&#x5B58;&#x5185;&#x6838;&#x6808;&#x9876;&#x5730;&#x5740;
-</span>    <span class="token comment"># &#x5207;&#x6362;&#x56DE;&#x5185;&#x6838;&#x6808;
-</span>    <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">x2</span>, <span class="token number">2</span>
-<span class="token miscellaneous-directives tag">.endm</span>
-</code></pre>
-<p>&#x73B0;&#x5728;&#x662F;&#x65F6;&#x5019;&#x5B9E;&#x73B0;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x51FD;&#x6570; <code>rust_trap</code>&#x4E86;&#xFF01;</p>
-<pre class="language-"><code class="lang-rust"><span class="token comment">// src/interrupt.rs</span>
-
-<span class="token comment">// &#x5F15;&#x5165; TrapFrame &#x7ED3;&#x6784;&#x4F53;</span>
-<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>context<span class="token punctuation">::</span>TrapFrame<span class="token punctuation">;</span>
-
-<span class="token comment">// &#x8F7D;&#x5165; trap.asm</span>
-<span class="token function">global_asm!</span><span class="token punctuation">(</span><span class="token function">include_str!</span><span class="token punctuation">(</span><span class="token string">&quot;trap/trap.asm&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
-        <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token punctuation">{</span>
-            <span class="token comment">// &#x4E2D;&#x65AD;&#x5904;&#x7406;&#x603B;&#x5165;&#x53E3;</span>
-            <span class="token keyword">fn</span> <span class="token function">__alltraps</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">impl</span> PageEntry <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+            <span class="token function">sfence_vma</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">.</span><span class="token function">start_address</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">as_usize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        <span class="token comment">// &#x7ECF;&#x8FC7;&#x4E0A;&#x9762;&#x7684;&#x5206;&#x6790;&#xFF0C;&#x7531;&#x4E8E;&#x73B0;&#x5728;&#x662F;&#x5728;&#x5185;&#x6838;&#x6001;</span>
-        <span class="token comment">// &#x6211;&#x4EEC;&#x8981;&#x628A; sscratch &#x521D;&#x59CB;&#x5316;&#x4E3A; 0</span>
-        sscratch<span class="token punctuation">::</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// &#x4ECD;&#x4F7F;&#x7528; Direct &#x6A21;&#x5F0F;</span>
-        <span class="token comment">// &#x5C06;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x603B;&#x5165;&#x53E3;&#x8BBE;&#x7F6E;&#x4E3A; __alltraps</span>
-        stvec<span class="token punctuation">::</span><span class="token function">write</span><span class="token punctuation">(</span>__alltraps <span class="token keyword">as</span> usize<span class="token punctuation">,</span> stvec<span class="token punctuation">::</span>TrapMode<span class="token punctuation">::</span>Direct<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;++++ setup interrupt! ++++&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// &#x4E00;&#x7CFB;&#x5217;&#x7684;&#x6807;&#x5FD7;&#x4F4D;&#x8BFB;&#x5199;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">accessed</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>ACCESSED<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clear_accessed</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>ACCESSED<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">dirty</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>DIRTY<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clear_dirty</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>DIRTY<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">writable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>WRITABLE<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_writable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> value<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>WRITABLE<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">present</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>VALID <span class="token operator">|</span> EF<span class="token punctuation">::</span>READABLE<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_present</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> value<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>VALID <span class="token operator">|</span> EF<span class="token punctuation">::</span>READABLE<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">user</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>USER<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_user</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> value<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>USER<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>EXECUTABLE<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_execute</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> value<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>EF<span class="token punctuation">::</span>EXECUTABLE<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x6700;&#x7EC8;&#x6620;&#x5C04;&#x5230;&#x7684;&#x7269;&#x7406;&#x9875;&#x53F7;&#x7684;&#x8BFB;&#x5199;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">target</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">addr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">as_usize</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_target</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> flags <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">flags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> frame <span class="token operator">=</span> Frame<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>PhysAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>target<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>frame<span class="token punctuation">,</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x57FA;&#x4E8E;&#x63D0;&#x4F9B;&#x7684;&#x7C7B; <code>PageTableEntry</code> &#x81EA;&#x5DF1;&#x5C01;&#x88C5;&#x4E86;&#x4E00;&#x4E2A; <code>PageEntry</code> &#xFF0C;&#x8868;&#x793A;&#x5355;&#x4E2A;&#x6620;&#x5C04;&#x3002;&#x91CC;&#x9762;&#x5206;&#x522B;&#x4FDD;&#x5B58;&#x4E86;&#x4E00;&#x4E2A;&#x9875;&#x8868;&#x9879; <code>PageTableEntry</code> &#x7684;&#x53EF;&#x53D8;&#x5F15;&#x7528;&#xFF0C;&#x4EE5;&#x53CA;&#x627E;&#x5230;&#x4E86;&#x8FD9;&#x4E2A;&#x9875;&#x8868;&#x9879;&#x7684;&#x865A;&#x62DF;&#x9875;&#x3002;&#x4F46;&#x4E8B;&#x5B9E;&#x4E0A;&#xFF0C;&#x9664;&#x4E86; <code>update</code> &#x51FD;&#x6570;&#x4E4B;&#x5916;&#xFF0C;&#x5269;&#x4E0B;&#x7684;&#x51FD;&#x6570;&#x90FD;&#x662F;&#x5BF9; <code>PageTableEntry</code> &#x7684;&#x7B80;&#x5355;&#x5305;&#x88C5;&#xFF0C;&#x529F;&#x80FD;&#x662F;&#x8BFB;&#x5199;&#x9875;&#x8868;&#x9879;&#x7684;&#x76EE;&#x6807;&#x7269;&#x7406;&#x9875;&#x53F7;&#x4EE5;&#x53CA;&#x6807;&#x5FD7;&#x4F4D;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x63D0;&#x5230;&#x8FC7;&#xFF0C;&#x5728;&#x4FEE;&#x6539;&#x9875;&#x8868;&#x4E4B;&#x540E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7;&#x5C4F;&#x969C;&#x6307;&#x4EE4; <code>sfence.vma</code> &#x6765;&#x5237;&#x65B0; <code>TLB</code> &#x3002;&#x800C;&#x8FD9;&#x6761;&#x6307;&#x4EE4;&#x540E;&#x9762;&#x53EF;&#x4EE5;&#x63A5;&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF0C;&#x8FD9;&#x6837;&#x5728;&#x5237;&#x65B0;&#x7684;&#x65F6;&#x5019;&#x53EA;&#x5173;&#x5FC3;&#x4E0E;&#x8FD9;&#x4E2A;&#x865A;&#x62DF;&#x5730;&#x5740;&#x76F8;&#x5173;&#x7684;&#x90E8;&#x5206;&#xFF0C;&#x53EF;&#x80FD;&#x901F;&#x5EA6;&#x6BD4;&#x8D77;&#x5168;&#x90E8;&#x5237;&#x65B0;&#x8981;&#x5FEB;&#x4E00;&#x70B9;&#x3002;&#xFF08;&#x5B9E;&#x9645;&#x4E0A;&#x6211;&#x4EEC;&#x786E;&#x5B9E;&#x7528;&#x4E86;&#x8FD9;&#x79CD;&#x8F83;&#x5FEB;&#x7684;&#x5237;&#x65B0; TLB &#x65B9;&#x5F0F;&#xFF0C;&#x4F46;&#x5E76;&#x4E0D;&#x662F;&#x5728;&#x8FD9;&#x91CC;&#x4F7F;&#x7528;&#xFF0C;&#x56E0;&#x6B64; <code>update</code> &#x6839;&#x672C;&#x6CA1;&#x88AB;&#x8C03;&#x7528;&#x8FC7;&#xFF0C;&#x8FD9;&#x4E2A;&#x7C7B;&#x6709;&#x4E9B;&#x5197;&#x4F59;&#x4E86;&#xFF09;</p>
+<h3 id="&#x4E3A;-rv39pagetable-&#x63D0;&#x4F9B;&#x7269;&#x7406;&#x9875;&#x5E27;&#x7BA1;&#x7406;">&#x4E3A; Rv39PageTable &#x63D0;&#x4F9B;&#x7269;&#x7406;&#x9875;&#x5E27;&#x7BA1;&#x7406;</h3>
+<p>&#x5728;&#x5B9E;&#x73B0;&#x9875;&#x8868;&#x4E4B;&#x524D;&#xFF0C;&#x6211;&#x4EEC;&#x56DE;&#x5FC6;&#x591A;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x4FEE;&#x6539;&#x4F1A;&#x9690;&#x5F0F;&#x7684;&#x8C03;&#x7528;&#x7269;&#x7406;&#x9875;&#x5E27;&#x5206;&#x914D;&#x4E0E;&#x56DE;&#x6536;&#x3002;&#x6BD4;&#x5982;&#x5728; Sv39 &#x4E2D;&#xFF0C;&#x63D2;&#x5165;&#x4E00;&#x5BF9;&#x6620;&#x5C04;&#x5C31;&#x53EF;&#x80FD;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x4E8C;&#x7EA7;&#x9875;&#x8868;&#x548C;&#x4E00;&#x4E2A;&#x4E00;&#x4E2A;&#x4E00;&#x7EA7;&#x9875;&#x8868;&#xFF0C;&#x800C;&#x8FD9;&#x9700;&#x8981;&#x5206;&#x914D;&#x4E24;&#x4E2A;&#x7269;&#x7406;&#x9875;&#x5E27;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x544A;&#x8BC9; <code>Rv39PageTable</code> &#x5982;&#x4F55;&#x8FDB;&#x884C;&#x7269;&#x7406;&#x9875;&#x5E27;&#x5206;&#x914D;&#x4E0E;&#x56DE;&#x6536;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/memory/paging.rs</span>
+
+<span class="token comment">// &#x4E8B;&#x5B9E;&#x4E0A;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x5B9E;&#x73B0;&#x4E86; FrameAllocator, FrameDeallocator trait&#x7684;&#x7C7B;</span>
+<span class="token comment">// &#x5E76;&#x4E3A;&#x6B64;&#x5206;&#x522B;&#x5B9E;&#x73B0; alloc, dealloc &#x51FD;&#x6570;</span>
+<span class="token keyword">struct</span> FrameAllocatorForPaging<span class="token punctuation">;</span>
+
+<span class="token keyword">impl</span> FrameAllocator <span class="token keyword">for</span> FrameAllocatorForPaging <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">alloc</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Option<span class="token operator">&lt;</span>Frame<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
-<span class="token comment">// &#x5220;&#x9664;&#x539F;&#x6765;&#x7684; trap_handler &#xFF0C;&#x6539;&#x6210; rust_trap </span>
-<span class="token comment">// &#x4EE5; &amp;mut TrapFrame &#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x4E2D;&#x65AD;&#x76F8;&#x5173;&#x4FE1;&#x606F;</span>
-<span class="token comment">// &#x5728;&#x8FD9;&#x91CC;&#x8FDB;&#x884C;&#x4E2D;&#x65AD;&#x5206;&#x53D1;&#x53CA;&#x5904;&#x7406;</span>
-<span class="token attribute attr-name">#[no_mangle]</span>
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">rust_trap</span><span class="token punctuation">(</span>tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> TrapFrame<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;rust_trap!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// &#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x65F6;&#xFF0C;&#x786C;&#x4EF6;&#x4F1A;&#x5C06; sepc &#x8BBE;&#x7F6E;&#x4E3A;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;</span>
-    <span class="token comment">// &#x800C;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7ED3;&#x675F;&#xFF0C;&#x4F7F;&#x7528; sret &#x8FD4;&#x56DE;&#x65F6;&#x4E5F;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230; sepc &#x5904;</span>
-    <span class="token comment">// &#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x53C8;&#x8981;&#x6267;&#x884C;&#x4E00;&#x6B21;&#x90A3;&#x6761;&#x6307;&#x4EE4;&#xFF0C;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#xFF0C;&#x65E0;&#x9650;&#x5FAA;&#x73AF;&#x4E0B;&#x53BB;</span>
-    <span class="token comment">// &#x800C;&#x6211;&#x4EEC;&#x8FD9;&#x91CC;&#x662F;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;&#xFF0C;&#x53EA;&#x60F3;&#x8FD9;&#x4E2A;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x4E00;&#x6B21;</span>
-    <span class="token comment">// &#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x5C06;&#x4E2D;&#x65AD;&#x5E27;&#x5185;&#x7684; sepc &#x5B57;&#x6BB5;&#x8BBE;&#x7F6E;&#x4E3A;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x6307;&#x4EE4;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5373;&#x4E2D;&#x65AD;&#x7ED3;&#x675F;&#x540E;&#x8DF3;&#x8FC7;&#x8FD9;&#x6761;&#x8BED;&#x53E5;</span>
-    <span class="token comment">// &#x7531;&#x4E8E; riscv64 &#x7684;&#x6BCF;&#x6761;&#x6307;&#x4EE4;&#x90FD;&#x662F; 32 &#x4F4D;&#xFF0C;4 &#x5B57;&#x8282;&#xFF0C;&#x56E0;&#x6B64;&#x5C06;&#x5730;&#x5740;+ 4 &#x5373;&#x53EF;</span>
-    <span class="token comment">// &#x8FD9;&#x6837;&#x5728; RESTORE_ALL &#x65F6;&#xFF0C;&#x8FD9;&#x4E2A;&#x4FEE;&#x6539;&#x540E;&#x7684; sepc &#x5B57;&#x6BB5;&#x5C31;&#x4F1A;&#x88AB; load &#x5230; sepc &#x5BC4;&#x5B58;&#x5668;&#x4E2D;</span>
-    <span class="token comment">// &#x4F7F;&#x7528; sret &#x8FD4;&#x56DE;&#x65F6;&#x5C31;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230; ebreak &#x7684;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x4E86;</span>
-    tf<span class="token punctuation">.</span>sepc <span class="token operator">+=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token keyword">impl</span> FrameDeallocator <span class="token keyword">for</span> FrameAllocatorForPaging <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">dealloc</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> frame<span class="token punctuation">:</span> Frame<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">dealloc_frame</span><span class="token punctuation">(</span>frame<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x770B;&#x8D77;&#x6765;&#x5F88;&#x5BF9;&#xFF0C;&#x90A3;&#x6211;&#x4EEC; <code>make run</code> &#x8FD0;&#x884C;&#x4E00;&#x4E0B;&#x5427;&#xFF01;</p>
-<blockquote>
-<p><strong>[danger] infinite rust_trap</strong></p>
-<p>&#x7ED3;&#x679C;&#x5374;&#x4E0D;&#x5C3D;&#x5982;&#x4EBA;&#x610F;&#xFF0C;&#x65E0;&#x9650;&#x5FAA;&#x73AF;&#x8F93;&#x51FA; rust_trap!</p>
-</blockquote>
-<p>&#x6211;&#x4EEC;&#x68C0;&#x67E5;&#x4E00;&#x4E0B;&#x751F;&#x6210;&#x7684;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#xFF0C;&#x770B;&#x770B;&#x662F;&#x4E0D;&#x662F;&#x54EA;&#x91CC;&#x51FA;&#x4E86;&#x95EE;&#x9898;&#xFF1A;
-&#x5207;&#x6362;&#x5230; <code>os/target/riscv64-os/debug</code> &#x76EE;&#x5F55;&#xFF0C;&#x6211;&#x4EEC;&#x6784;&#x5EFA;&#x4E4B;&#x540E;&#x5F97;&#x5230;&#x4E86; elf &#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6; <code>os</code>&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x5C06;&#x5176;&#x53CD;&#x6C47;&#x7F16;&#xFF1A;</p>
-<pre class="language-"><code class="lang-bash">$ riscv64-unknown-elf-objdump -d os <span class="token operator">&gt;</span> os.asm
+<h3 id="&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x7684;&#x9875;&#x8868;-pagetableimpl">&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x7684;&#x9875;&#x8868; PageTableImpl</h3>
+<p>&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528; <code>Rv39PageTable</code>&#x7684;&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x7684;&#x9875;&#x8868; <code>PageTableImpl</code> &#x3002;&#x9996;&#x5148;&#x662F;&#x58F0;&#x660E;&#x53CA;&#x521D;&#x59CB;&#x5316;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/memory/paging.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> PageTableImpl <span class="token punctuation">{</span>
+    page_table<span class="token punctuation">:</span> Rv39PageTable<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;static</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+    <span class="token comment">// &#x4F5C;&#x4E3A;&#x6839;&#x7684;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x6240;&#x5728;&#x7684;&#x7269;&#x7406;&#x9875;&#x5E27;</span>
+    root_frame<span class="token punctuation">:</span> Frame<span class="token punctuation">,</span>
+    <span class="token comment">// &#x5728;&#x64CD;&#x4F5C;&#x8FC7;&#x7A0B;&#x4E2D;&#x4E34;&#x65F6;&#x4F7F;&#x7528;</span>
+    entry<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>PageEntry<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> PageTableImpl <span class="token punctuation">{</span>
+    <span class="token comment">// &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x7A7A;&#x9875;&#x8868;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new_bare</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &#x5206;&#x914D;&#x4E00;&#x4E2A;&#x7269;&#x7406;&#x9875;&#x5E27;&#x5E76;&#x83B7;&#x53D6;&#x7269;&#x7406;&#x5730;&#x5740;&#xFF0C;&#x4F5C;&#x4E3A;&#x6839;&#x7684;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x5C31;&#x653E;&#x5728;&#x8FD9;&#x4E2A;&#x7269;&#x7406;&#x9875;&#x5E27;&#x4E2D;</span>
+        <span class="token keyword">let</span> frame <span class="token operator">=</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">&quot;alloc_frame failed!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> paddr <span class="token operator">=</span> frame<span class="token punctuation">.</span><span class="token function">start_address</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">as_usize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// &#x5229;&#x7528; access_pa_via_va &#x8BBF;&#x95EE;&#x8BE5;&#x7269;&#x7406;&#x9875;&#x5E27;&#x5E76;&#x8FDB;&#x884C;&#x9875;&#x8868;&#x521D;&#x59CB;&#x5316;</span>
+        <span class="token keyword">let</span> table <span class="token operator">=</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token function">access_pa_via_va</span><span class="token punctuation">(</span>paddr<span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">mut</span> PageTableEntryArray<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        table<span class="token punctuation">.</span><span class="token function">zero</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        PageTableImpl <span class="token punctuation">{</span>
+            <span class="token comment">// &#x4F20;&#x5165;&#x53C2;&#x6570;&#xFF1A;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x53EF;&#x53D8;&#x5F15;&#x7528;&#xFF1B;</span>
+            <span class="token comment">// &#x56E0;&#x4E3A; Rv39PageTable &#x7684;&#x601D;&#x8DEF;&#x4E5F;&#x662F;&#x5C06;&#x6574;&#x5757;&#x7269;&#x7406;&#x5185;&#x5B58;&#x8FDB;&#x884C;&#x7EBF;&#x6027;&#x6620;&#x5C04;</span>
+            <span class="token comment">// &#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x4F20;&#x5165;&#x7269;&#x7406;&#x5185;&#x5B58;&#x7684;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x5373; va-pa&#xFF0C;&#x4F7F;&#x5B83;&#x53EF;&#x4EE5;&#x4FEE;&#x6539;&#x9875;&#x8868;</span>
+            page_table<span class="token punctuation">:</span> Rv39PageTable<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>table<span class="token punctuation">,</span> PHYSICAL_MEMORY_OFFSET<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token comment">// &#x4E09;&#x7EA7;&#x9875;&#x8868;&#x6240;&#x5728;&#x7269;&#x7406;&#x9875;&#x5E27;</span>
+            root_frame<span class="token punctuation">:</span> frame<span class="token punctuation">,</span>
+            entry<span class="token punctuation">:</span> None
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
-<p>&#x5728; <code>os.asm</code> &#x4E2D;&#x627E;&#x5230;&#x6211;&#x4EEC;&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#x7684; <code>ebreak</code> &#x6307;&#x4EE4;&#xFF1A;</p>
-<pre class="language-"><code class="lang-riscv">...
-<span class="token labels operator">ffffffffc020003a:</span>    <span class="token number">0ee080e7</span>              <span class="token rv32/64i-instructions keyword">jalr</span>    <span class="token number">238</span>(<span class="token general-registers class-name">ra</span>) <span class="token comment"># ffffffffc0200124 &lt;_ZN2os9interrupt4init17h8bc66cc409cbce91E&gt;
-</span><span class="token labels operator">ffffffffc020003e:</span>    <span class="token number">a009</span>                    <span class="token pseudo-instructions important">j</span>    <span class="token number">ffffffffc0200040</span> &lt;<span class="token last-literals operator">rust_main</span>+<span class="token number">0x12</span>&gt;
-<span class="token labels operator">ffffffffc0200040:</span>    <span class="token number">9002</span>                    <span class="token privilege-instructions keyword">ebreak</span>
-<span class="token labels operator">ffffffffc0200042:</span>    <span class="token number">c0203537</span>              <span class="token rv32/64i-instructions keyword">lui</span>    <span class="token general-registers class-name">a0</span>,<span class="token number">0xc0203</span>
-<span class="token labels operator">ffffffffc0200046:</span>    <span class="token number">02050513</span>              <span class="token rv32/64i-instructions keyword">addi</span>    <span class="token general-registers class-name">a0</span>,<span class="token general-registers class-name">a0</span>,<span class="token number">32</span> <span class="token comment"># ffffffffc0203020
-</span>...
+<p>&#x7136;&#x540E;&#x662F;&#x9875;&#x8868;&#x6700;&#x91CD;&#x8981;&#x7684;&#x63D2;&#x5165;&#x3001;&#x5220;&#x9664;&#x6620;&#x5C04;&#x7684;&#x529F;&#x80FD;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token keyword">impl</span> PageTableImpl <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">map</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> va<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> pa<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> PageEntry <span class="token punctuation">{</span>
+        <span class="token comment">// &#x4E3A;&#x4E00;&#x5BF9;&#x865A;&#x62DF;&#x9875;&#x4E0E;&#x7269;&#x7406;&#x9875;&#x5E27;&#x5EFA;&#x7ACB;&#x6620;&#x5C04;</span>
+
+        <span class="token comment">// &#x8FD9;&#x91CC;&#x7684;&#x6807;&#x5FD7;&#x4F4D;&#x88AB;&#x56FA;&#x5B9A;&#x4E3A; R|W|X&#xFF0C;&#x5373;&#x540C;&#x65F6;&#x5141;&#x8BB8;&#x8BFB;/&#x5199;/&#x6267;&#x884C;</span>
+        <span class="token comment">// &#x540E;&#x9762;&#x6211;&#x4EEC;&#x4F1A;&#x6839;&#x636E;&#x6BB5;&#x7684;&#x6743;&#x9650;&#x4E0D;&#x540C;&#x8FDB;&#x884C;&#x4FEE;&#x6539;</span>
+        <span class="token keyword">let</span> flags <span class="token operator">=</span> EF<span class="token punctuation">::</span>VALID <span class="token operator">|</span> EF<span class="token punctuation">::</span>READABLE <span class="token operator">|</span> EF<span class="token punctuation">::</span>WRITABLE<span class="token punctuation">;</span>
+        <span class="token keyword">let</span> page <span class="token operator">=</span> Page<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>VirtAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> frame <span class="token operator">=</span> Frame<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>PhysAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>pa<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>page_table
+            <span class="token comment">// &#x5229;&#x7528; Rv39PageTable &#x7684; map_to &#x63A5;&#x53E3;</span>
+            <span class="token comment">// &#x4F20;&#x5165;&#x8981;&#x5EFA;&#x7ACB;&#x6620;&#x5C04;&#x7684;&#x865A;&#x62DF;&#x9875;&#x3001;&#x7269;&#x7406;&#x9875;&#x5E27;&#x3001;&#x6620;&#x5C04;&#x6807;&#x5FD7;&#x4F4D;&#x3001;&#x4EE5;&#x53CA;&#x63D0;&#x4F9B;&#x7269;&#x7406;&#x9875;&#x5E27;&#x7BA1;&#x7406;</span>
+            <span class="token punctuation">.</span><span class="token function">map_to</span><span class="token punctuation">(</span>page<span class="token punctuation">,</span> frame<span class="token punctuation">,</span> flags<span class="token punctuation">,</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> FrameAllocatorForPaging<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment">// &#x5F97;&#x5230; MapperFlush(Page)</span>
+            <span class="token comment">// flush &#x505A;&#x7684;&#x4E8B;&#x60C5;&#x5C31;&#x662F;&#x8DDF;&#x4E0A;&#x9762;&#x4E00;&#x6837;&#x7684; sfence_vma</span>
+            <span class="token comment">// &#x5373;&#x5237;&#x65B0;&#x4E0E;&#x8FD9;&#x4E2A;&#x865A;&#x62DF;&#x9875;&#x76F8;&#x5173;&#x7684; TLB</span>
+            <span class="token comment">// &#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x4FEE;&#x6539;&#x540E;&#x6709;&#x6309;&#x65F6;&#x5237;&#x65B0; TLB</span>
+            <span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">get_entry</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">&quot;fail to get an entry!&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">unmap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> va<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &#x5220;&#x9664;&#x4E00;&#x5BF9;&#x6620;&#x5C04;</span>
+        <span class="token comment">// &#x6211;&#x4EEC;&#x53EA;&#x9700;&#x8F93;&#x5165;&#x865A;&#x62DF;&#x9875;&#xFF0C;&#x56E0;&#x4E3A;&#x5DF2;&#x7ECF;&#x53EF;&#x4EE5;&#x627E;&#x5230;&#x9875;&#x8868;&#x9879;&#x4E86;</span>
+        <span class="token keyword">let</span> page <span class="token operator">=</span> Page<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>VirtAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// &#x5229;&#x7528; Rv39PageTable &#x7684; unmap &#x63A5;&#x53E3;</span>
+        <span class="token comment">// * &#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x6CA1;&#x6709;&#x7528;&#x5230;&#x7269;&#x7406;&#x9875;&#x5E27;&#x7BA1;&#x7406;&#xFF0C;&#x6240;&#x4EE5; Rv39PageTable &#x5E76;&#x4E0D;&#x4F1A;&#x56DE;&#x6536;&#x5185;&#x5B58;&#xFF1F;</span>
+        <span class="token keyword">let</span> <span class="token punctuation">(</span>_<span class="token punctuation">,</span> flush<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>page_table<span class="token punctuation">.</span><span class="token function">unmap</span><span class="token punctuation">(</span>page<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// &#x540C;&#x6837;&#x6CE8;&#x610F;&#x6309;&#x65F6;&#x5237;&#x65B0; TLB</span>
+        flush<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">fn</span> <span class="token function">get_entry</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> va<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Option<span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> PageEntry<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &#x83B7;&#x53D6;&#x865A;&#x62DF;&#x9875;&#x5BF9;&#x5E94;&#x7684;&#x9875;&#x8868;&#x9879;&#xFF0C;&#x4EE5;&#x88AB;&#x6211;&#x4EEC;&#x5C01;&#x88C5;&#x8D77;&#x6765;&#x7684; PageEntry &#x7684;&#x53EF;&#x53D8;&#x5F15;&#x7528;&#x7684;&#x5F62;&#x5F0F;</span>
+        <span class="token comment">// &#x4E8E;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x62FF;&#x5230;&#x4E86;&#x9875;&#x8868;&#x9879;&#xFF0C;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x4FEE;&#x6539;&#x4E86;&#xFF01;</span>
+        <span class="token keyword">let</span> page <span class="token operator">=</span> Page<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>VirtAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// &#x8C03;&#x7528; Rv39PageTable &#x7684; ref_entry &#x63A5;&#x53E3;</span>
+        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Ok</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>page_table<span class="token punctuation">.</span><span class="token function">ref_entry</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> e <span class="token operator">=</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token punctuation">(</span>e <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">mut</span> PageTableEntry<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            <span class="token comment">// &#x628A;&#x8FD4;&#x56DE;&#x56DE;&#x6765;&#x7684; PageTableEntry &#x5C01;&#x88C5;&#x8D77;&#x6765;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>entry <span class="token operator">=</span> <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">PageEntry</span><span class="token punctuation">(</span>e<span class="token punctuation">,</span> page<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">Some</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>entry<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            None
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
-<p>&#x4E0D;&#x662F;&#x8BF4; riscv64 &#x91CC;&#x9762;&#x6BCF;&#x6761;&#x6307;&#x4EE4;&#x957F;&#x5EA6;&#x4E3A; 4 &#x5B57;&#x8282;&#x5417;&#xFF1F;&#x6211;&#x4EEC;&#x53D1;&#x73B0; <code>ebreak</code> &#x8FD9;&#x6761;&#x6307;&#x4EE4;&#x4EC5;&#x957F;&#x4E3A; 2 &#x5B57;&#x8282;&#x3002;&#x6211;&#x4EEC;&#x5C06; <code>ebreak</code> &#x6240;&#x5728;&#x7684;&#x5730;&#x5740; +4 &#xFF0C;&#x5F97;&#x5230;&#x7684;&#x751A;&#x81F3;&#x4E0D;&#x662F;&#x4E00;&#x6761;&#x5408;&#x6CD5;&#x6307;&#x4EE4;&#x7684;&#x5F00;&#x5934;&#xFF0C;&#x800C;&#x662F;&#x4E0B;&#x4E00;&#x6761; <code>lui</code> &#x6307;&#x4EE4;&#x6B63;&#x4E2D;&#x95F4;&#x7684;&#x5730;&#x5740;&#xFF01;&#x8FD9;&#x6837;&#x5F53;&#x7136;&#x6709;&#x95EE;&#x9898;&#x4E86;&#x3002;</p>
-<p>&#x6211;&#x4EEC;&#x56DE;&#x5934;&#x6765;&#x770B;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4; <code>riscv64-os.json</code> &#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x8BBE;&#x7F6E;&#xFF1A;</p>
-<pre class="language-"><code class="lang-json"><span class="token property">&quot;features&quot;</span><span class="token operator">:</span> <span class="token string">&quot;+m,+a,+c&quot;</span><span class="token punctuation">,</span>
+<p>&#x4E0A;&#x9762;&#x6211;&#x4EEC;&#x521B;&#x5EFA;&#x9875;&#x8868;&#xFF0C;&#x5E76;&#x53EF;&#x4EE5;&#x63D2;&#x5165;&#x3001;&#x5220;&#x9664;&#x6620;&#x5C04;&#x4E86;&#x3002;&#x4F46;&#x662F;&#x5B83;&#x4F9D;&#x7136;&#x4E00;&#x52A8;&#x4E0D;&#x52A8;&#x7684;&#x653E;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x5982;&#x4F55;&#x5C06;&#x5B83;&#x7528;&#x8D77;&#x6765;&#x5462;&#xFF1F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4FEE;&#x6539; <code>satp</code> &#x5BC4;&#x5B58;&#x5668;&#x7684;&#x7269;&#x7406;&#x9875;&#x53F7;&#x5B57;&#x6BB5;&#x6765;&#x8BBE;&#x7F6E;&#x4F5C;&#x4E3A;&#x6839;&#x7684;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x6240;&#x5728;&#x7684;&#x7269;&#x7406;&#x9875;&#x5E27;&#xFF0C;&#x4E5F;&#x5C31;&#x5B8C;&#x6210;&#x4E86;&#x9875;&#x8868;&#x7684;&#x5207;&#x6362;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token keyword">impl</span> PageTableImpl <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token comment">// &#x6211;&#x4EEC;&#x7528; token &#x4E5F;&#x5C31;&#x662F; satp &#x7684;&#x503C;&#x6765;&#x63CF;&#x8FF0;&#x4E00;&#x4E2A;&#x9875;&#x8868;</span>
+    <span class="token comment">// &#x8FD4;&#x56DE;&#x81EA;&#x8EAB;&#x7684; token</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">token</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>root_frame<span class="token punctuation">.</span><span class="token function">number</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">8</span> <span class="token operator">&lt;&lt;</span> <span class="token number">60</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x4F7F;&#x7528;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x5C06; satp &#x5BC4;&#x5B58;&#x5668;&#x4FEE;&#x6539;&#x4E3A;&#x4F20;&#x8FDB;&#x6765;&#x7684; token</span>
+    <span class="token comment">// &#x8FD9;&#x4E2A; token &#x5BF9;&#x5E94;&#x7684;&#x9875;&#x8868;&#x5C06;&#x7C89;&#x58A8;&#x767B;&#x573A;...</span>
+    <span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">set_token</span><span class="token punctuation">(</span>token<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">asm!</span><span class="token punctuation">(</span><span class="token string">&quot;csrw satp, $0&quot;</span> <span class="token punctuation">::</span> <span class="token string">&quot;r&quot;</span><span class="token punctuation">(</span>token<span class="token punctuation">)</span> <span class="token punctuation">::</span> <span class="token string">&quot;volatile&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x67E5;&#x770B; CPU &#x5F53;&#x524D;&#x7684; satp &#x503C;&#xFF0C;&#x5C31;&#x77E5;&#x9053; CPU &#x76EE;&#x524D;&#x5728;&#x7528;&#x54EA;&#x4E2A;&#x9875;&#x8868;</span>
+    <span class="token keyword">fn</span> <span class="token function">active_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span> satp<span class="token punctuation">::</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bits</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x4FEE;&#x6539; satp &#x503C;&#x5207;&#x6362;&#x9875;&#x8868;&#x540E;&#xFF0C;&#x8FC7;&#x65F6;&#x7684;&#x4E0D;&#x6B62;&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x9875;</span>
+    <span class="token comment">// &#x56E0;&#x6B64;&#x5FC5;&#x987B;&#x4F7F;&#x7528; sfence_vma_all &#x5237;&#x65B0;&#x6574;&#x4E2A; TLB</span>
+    <span class="token keyword">fn</span> <span class="token function">flush_tlb</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token function">sfence_vma_all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x5C06; CPU &#x6240;&#x7528;&#x7684;&#x9875;&#x8868;&#x5207;&#x6362;&#x4E3A;&#x5F53;&#x524D;&#x7684;&#x5B9E;&#x4F8B;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">activate</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> old_token <span class="token operator">=</span> <span class="token keyword">Self</span><span class="token punctuation">::</span><span class="token function">active_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> new_token <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;switch satp from {:#x} to {:#x}&quot;</span><span class="token punctuation">,</span> old_token<span class="token punctuation">,</span> new_token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> new_token <span class="token operator">!=</span> old_token <span class="token punctuation">{</span>
+            <span class="token keyword">Self</span><span class="token punctuation">::</span><span class="token function">set_token</span><span class="token punctuation">(</span>new_token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// &#x522B;&#x5FD8;&#x4E86;&#x5237;&#x65B0; TLB!</span>
+            <span class="token keyword">Self</span><span class="token punctuation">::</span><span class="token function">flush_tlb</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
-<p>&#x5B9E;&#x9645;&#x4E0A;&#xFF0C;&#x8FD9;&#x8868;&#x793A;&#x6307;&#x4EE4;&#x96C6;&#x7684;&#x62D3;&#x5C55;&#x3002;<code>+m</code> &#x8868;&#x793A;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x6574;&#x6570;&#x4E58;&#x9664;&#x6CD5;&#x6307;&#x4EE4;&#xFF1B; <code>+a</code> &#x8868;&#x793A;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x539F;&#x5B50;&#x64CD;&#x4F5C;&#x6307;&#x4EE4;&#xFF1B; <code>+c</code> &#x8868;&#x793A;&#x5F00;&#x542F;&#x538B;&#x7F29;&#x6307;&#x4EE4;&#x96C6;&#xFF0C;&#x5373;&#x5BF9;&#x4E8E;&#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x6307;&#x4EE4;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x4F1A;&#x5C06;&#x5176;&#x538B;&#x7F29;&#x5230; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mn>6</mn></mrow><annotation encoding="application/x-tex">16</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mord mathrm">6</span></span></span></span> &#x4F4D;&#x5373; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span></span></span></span> &#x5B57;&#x8282;&#xFF0C;&#x6765;&#x964D;&#x4F4E;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x7684;&#x5927;&#x5C0F;&#xFF01;&#x8FD9;&#x5C31;&#x51FA;&#x73B0;&#x4E86;&#x4E0A;&#x9762;&#x90A3;&#x79CD;&#x8BE1;&#x5F02;&#x7684;&#x60C5;&#x51B5;&#x3002;</p>
-<p>&#x6211;&#x4EEC;&#x53BB;&#x6389; <code>+c</code> &#xFF0C;&#x5220;&#x9664;&#x6389; <code>os/target</code> &#x6587;&#x4EF6;&#x5939;&#x5E76;&#x91CD;&#x65B0;&#x6784;&#x5EFA;&#xFF0C;&#x518D;&#x6765;&#x5728; <code>os.asm</code> &#x4E2D;&#x770B;&#x770B; <code>ebreak</code> &#x53D8;&#x6210;&#x4E86;&#x4EC0;&#x4E48;&#x6837;&#x5B50;&#xFF1A;</p>
-<pre class="language-"><code class="lang-riscv">...
-<span class="token labels operator">ffffffffc020004c:</span>    <span class="token number">180080e7</span>              <span class="token rv32/64i-instructions keyword">jalr</span>    <span class="token number">384</span>(<span class="token general-registers class-name">ra</span>) <span class="token comment"># ffffffffc02001c8 &lt;_ZN2os9interrupt4init17h8bc66cc409cbce91E&gt;
-</span><span class="token labels operator">ffffffffc0200050:</span>    <span class="token number">0040006f</span>              <span class="token pseudo-instructions important">j</span>    <span class="token number">ffffffffc0200054</span> &lt;<span class="token last-literals operator">rust_main</span>+<span class="token number">0x1c</span>&gt;
-<span class="token labels operator">ffffffffc0200054:</span>    <span class="token number">00100073</span>              <span class="token privilege-instructions keyword">ebreak</span>
-<span class="token labels operator">ffffffffc0200058:</span>    <span class="token number">c0204537</span>              <span class="token rv32/64i-instructions keyword">lui</span>    <span class="token general-registers class-name">a0</span>,<span class="token number">0xc0204</span>
-<span class="token labels operator">ffffffffc020005c:</span>    <span class="token number">02050513</span>              <span class="token rv32/64i-instructions keyword">addi</span>    <span class="token general-registers class-name">a0</span>,<span class="token general-registers class-name">a0</span>,<span class="token number">32</span> <span class="token comment"># ffffffffc0204020
-</span>...
-</code></pre>
-<p>&#x73B0;&#x5728;&#x7EC8;&#x4E8E;&#x6BCF;&#x6761;&#x6307;&#x4EE4;&#x90FD;&#x6B63;&#x597D; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">4</span></span></span></span> &#x5B57;&#x8282;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x4F1A;&#x5BF9;&#x5B83;&#x5F88;&#x6709;&#x4FE1;&#x5FC3;&#x3002;&#x518D; <code>make run</code> &#x5C1D;&#x8BD5;&#x4E00;&#x4E0B;&#xFF1A;</p>
-<blockquote>
-<p><strong>[success] back from trap </strong></p>
-<pre class="language-"><code class="lang-rust"><span class="token punctuation">..</span>opensbi output<span class="token punctuation">...</span>
-<span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
-<span class="token macro-rules function">rust_trap!</span>
-panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of rust_main<span class="token lifetime-annotation symbol">&apos;,</span> src<span class="token operator">/</span>init<span class="token punctuation">.</span>rs<span class="token punctuation">:</span><span class="token number">12</span><span class="token punctuation">:</span><span class="token number">5</span>
-</code></pre>
-</blockquote>
-<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x6211;&#x4EEC;&#x786E;&#x5B9E;&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x4E2D;&#x65AD;&#xFF0C;&#x8C03;&#x7528;&#x4E86;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x901A;&#x8FC7;&#x4E0A;&#x4E0B;&#x6587;&#x4FDD;&#x5B58;&#x4E0E;&#x6062;&#x590D;&#x673A;&#x5236;&#x4FDD;&#x62A4;&#x4E86;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#x4E0D;&#x53D7;&#x5230;&#x7834;&#x574F;&#xFF0C;&#x6B63;&#x786E;&#x5728; <code>ebreak</code> &#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x8FD4;&#x56DE;&#x4E4B;&#x540E; <code>panic</code>&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1077,12 +1128,12 @@ gitalk.render("gitalk-container");
 
             
                 
-                <a href="part3.html" class="navigation navigation-prev " aria-label="Previous page: 程序运行上下文环境">
+                <a href="part3.html" class="navigation navigation-prev " aria-label="Previous page: 内核重映射">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 时钟中断">
+                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 内核重映射实现之二：MemorySet">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1093,7 +1144,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"实现上下文环境保存与恢复","level":"1.9.4","depth":2,"next":{"title":"时钟中断","level":"1.9.5","depth":2,"path":"chapter5/part5.md","ref":"chapter5/part5.md","articles":[]},"previous":{"title":"程序运行上下文环境","level":"1.9.3","depth":2,"path":"chapter5/part3.md","ref":"chapter5/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part4.md","mtime":"2019-12-04T15:21:23.110Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-06T04:07:58.744Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"内核重映射实现之一：页表","level":"1.6.4","depth":2,"next":{"title":"内核重映射实现之二：MemorySet","level":"1.6.5","depth":2,"path":"chapter5/part5.md","ref":"chapter5/part5.md","articles":[]},"previous":{"title":"内核重映射","level":"1.6.3","depth":2,"path":"chapter5/part3.md","ref":"chapter5/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part4.md","mtime":"2019-12-05T16:15:32.992Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T13:44:10.733Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
