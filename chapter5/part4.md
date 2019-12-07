@@ -1,255 +1,259 @@
-## 实现上下文环境保存与恢复
+## 内核重映射实现之一：页表
 
-```riscv
-# src/trap/trap.asm
+首先我们来看如何实现页表。
 
-	.section.text
-	.globl __alltraps
-__alltraps:
-	SAVE_ALL
-	mv a0, sp
-	jal rust_trap
+### 访问物理内存
 
-	.globl __trapret
-__trapret
-	RESTORE_ALL
-	sret
-```
+简单起见，无论是初始映射还是重映射，无论是内核各段还是物理内存，我们都采用同样的偏移量进行映射，具体而言：``va -> pa = va - 0xffffffff40000000`` 。
 
-我们首先定义 ``__alltraps`` 函数作为所有中断处理程序的入口，这里我们首先通过 ``SAVE_ALL`` 来保存上下文环境，随后将当前栈顶地址 ``sp`` 的值给到寄存器 ``a0`` ，这是因为在risc-v calling convention 中，规定 ``a0`` 保存函数输入的第一个参数，于是我们相当于将栈顶地址传给函数 ``rust_trap`` 作为第一个参数。
-
-随后，我们通过 ``jal`` 调用 ``rust_trap`` 函数并在返回之后跳转到调用语句的下一条指令。实际上调用返回之后进入 ``__trapret`` 函数，这里我们通过 ``RESTORE_ALL`` 恢复中断之前的上下文环境，并最终通过一条 ``sret`` 指令跳转到 ``sepc``，回到触发中断的那条指令所在地址。这会导致触发中断的那条指令又被执行一次。
-
-我们定义几个宏：
-
-```riscv
-# src/trap/trap.asm
-
-# 表示每个寄存器占的字节数，由于是64位，都是8字节
-.equ XLENB 8
-
-# 将地址 sp+8×a2 处的值 load 到寄存器 a1 内
-.macro LOAD a1, a2
-	ld \a1, \a2*XLENB(sp)
-.endm
-
-# 将寄存器 a1 内的值 store 到地址 sp+8*a2 内
-.macro STORE a1, a2
-	sd \a1, \a2*XLENB(sp)
-.endm
-```
-
-``SAVE_ALL`` 的原理是：将一整个 ``TrapFrame`` 保存在**内核栈**上。我们现在就处在内核态(S 态)，因此现在的栈顶地址 ``sp`` 就指向内核栈地址。但是，之后我们还要支持运行**用户态程序**，顾名思义，要在用户态(U 态)上运行，在中断时栈顶地址 ``sp`` 将指向用户栈顶地址，这种情况下我们要从用户栈切换到内核栈。
-
-```riscv
-# src/trap/trap.asm
-
-# 规定若在中断之前处于 U 态(用户态)
-# 则 sscratch 保存的是内核栈地址
-# 否则中断之前处于 S 态(内核态)，sscratch 保存的是 0
-.macro SAVE_ALL
-	# 通过原子操作交换 sp, sscratch
-	# 实际上是将右侧寄存器的值写入中间 csr
-	# 并将中间 csr 的值写入左侧寄存器
-	csrrw sp, sscratch, sp
-	# 如果 sp=0 ，说明交换前 sscratch=0
-	# 说明从内核态进入中断，不用切换栈
-	# 因此不跳转，继续执行 csrr 再将 sscratch 的值读回 sp
-	# 此时 sp,sscratch 均保存内核栈
-	
-	# 否则 sp!=0，说明从用户态进入中断，要切换栈
-	# 由于 sscratch 规定，二者交换后
-	# 此时 sp 为内核栈， sscratch 为用户栈
-	# 略过 csrr 指令
-	
-	# 两种情况接下来都是在内核栈上保存上下文环境
-	bnez sp, trap_from_user
-trap_from_kernel:
-	csrr sp, sscratch
-trap_from_user:
-	# 提前分配栈帧
-	addi sp, sp, -36*XLENB
-	# 按照地址递增的顺序，保存除x0, x2之外的通用寄存器
-	# x0 恒为 0 不必保存
-	# x2 为 sp 寄存器，需特殊处理
-	STORE x1, 1
-	STORE x3, 3
-	STORE x4, 4
-	...
-    STORE x30, 30
-    STORE x31, 31
-	
-	# 若从内核态进入中断，此时 sscratch 为内核栈地址
-	# 若从用户态进入中断，此时 sscratch 为用户栈地址
-	# 将 sscratch 的值保存在 s0 中，并将 sscratch 清零
-	csrrw s0, sscratch, x0
-	# 分别将四个寄存器的值保存在 s1,s2,s3,s4 中
-	csrr s1, sstatus
-	csrr s2, sepc
-	csrr s3, stval
-	csrr s4, scause
-	
-	# 将 s0 保存在栈上
-	STORE s0, 2
-	# 将 s1,s2,s3,s4 保存在栈上
-	STORE s1, 32
-	STORE s2, 33
-	STORE s3, 34
-	STORE s4, 35
-.endm
-```
-
-在 ``SAVE_ALL`` 之后，我们将一整个 ``TrapFrame`` 存在了内核栈上，且在地址区间$$[\text{sp},\text{sp}+36\times8)$$上按照顺序存放了 ``TrapFrame`` 的各个字段。这样，``rust_trap`` 可以通过栈顶地址正确访问 ``TrapFrame`` 了。
-
-而 ``RESTORE_ALL`` 正好是一个反过来的过程：
-
-```riscv
-# src/trap/trap.asm
-
-.macro RESTORE_ALL
-	# s1 = sstatus
-	LOAD s1, 32
-	# s2 = sepc
-	LOAD s2, 33
-	# 我们可以通过另一种方式判断是从内核态还是用户态进入中断
-	# 如果从内核态进入中断， sstatus 的 SPP 位被硬件设为 1
-	# 如果从用户态进入中断， sstatus 的 SPP 位被硬件设为 0
-	# 取出 sstatus 的 SPP 
-	andi s0, s1, 1 << 8
-	# 若 SPP=0 ， 从用户态进入中断，进行 _to_user 额外处理
-	bnez s0, _to_kernel
-_to_user:
-	# 释放在内核栈上分配的内存
-	addi s0, sp, 36 * XLENB
-	# RESTORE_ALL 之后，如果从用户态进入中断
-	# sscratch 指向用户栈地址！
-	# 现在令 sscratch 指向内核栈顶地址
-	# 如果是从内核态进入中断，在 SAVE_ALL 里面
-	# 就把 sscratch 清零了，因此保证了我们的规定
-	csrw sscratch, s0
-_to_kernel:
-	# 恢复 sstatus, sepc 寄存器
-	csrw sstatus, s1
-	csrw sepc, s2
-
-	# 恢复除 x0, x2(sp) 之外的通用寄存器
-	LOAD x1, 1
-	LOAD x3, 3
-	LOAD x4, 4
-	...
-	LOAD x31, 31
-	
-	# 如果从用户态进入中断， sp+2*8 地址处保存用户栈顶地址
-	# 切换回用户栈
-	# 如果从内核态进入中断， sp+2*8 地址处保存内核栈顶地址
-	# 切换回内核栈
-	LOAD x2, 2
-.endm
-```
-
-现在是时候实现中断处理函数 ``rust_trap``了！
+于是我们可以通过在内核中访问对应的虚拟内存来访问物理内存。
 
 ```rust
-// src/interrupt.rs
+// src/consts.rs
 
-// 引入 TrapFrame 结构体
-use crate::context::TrapFrame;
+pub const PHYSICAL_MEMORY_OFFSET: usize = 0xffffffff40000000;
 
-// 载入 trap.asm
-global_asm!(include_str!("trap/trap.asm"));
+// src/memory/mod.rs
 
-pub fn init() {
-    unsafe {
-        extern "C" {
-            // 中断处理总入口
-            fn __alltraps();
+use crate::consts::*;
+// 将物理地址转化为对应的虚拟地址
+pub fn access_pa_via_va(pa: usize) -> usize {
+    pa + PHYSICAL_MEMORY_OFFSET
+
+```
+
+在 rust 的 riscv crate 中，已经为页表机制提供了如下支持：
+
+* 基于偏移量(也即线性映射)的 Sv39 三级页表 ``Rv39PageTable`` 
+* 页表项 ``PageTableEntry`` 
+* 页表项数组 ``PageTable`` 
+* 页表项中的标志位 ``PageTableFlags``
+
+### 页表项
+
+首先来看一下页表项：
+
+```rust
+// src/memory/mod.rs
+
+pub mod paging;
+
+// src/paging.rs
+
+use crate::consts::*;
+use riscv::addr::*;
+use riscv::paging::{
+    PageTableEntry,
+    Mapper,
+    Rv39PageTable,
+    PageTable as PageTableEntryArray,
+    PageTableFlags as EF,
+    FrameAllocator,
+    FrameDeallocator
+    
+};
+use riscv::asm::{
+    sfence_vma,
+    sfence_vma_all,
+};
+use riscv::register::satp;
+use crate::memory::{
+    alloc_frame,
+    dealloc_frame,
+    access_pa_via_va
+};
+pub struct PageEntry(&'static mut PageTableEntry, Page);
+
+impl PageEntry {
+    pub fn update(&mut self) {
+        unsafe {
+            sfence_vma(0, self.1.start_address().as_usize());
         }
-        // 经过上面的分析，由于现在是在内核态
-        // 我们要把 sscratch 初始化为 0
-        sscratch::write(0);
-        // 仍使用 Direct 模式
-        // 将中断处理总入口设置为 __alltraps
-        stvec::write(__alltraps as usize, stvec::TrapMode::Direct);
     }
-    println!("++++ setup interrupt! ++++");
+	
+    // 一系列的标志位读写
+    pub fn accessed(&self) -> bool { self.0.flags().contains(EF::ACCESSED) }
+    pub fn clear_accessed(&mut self) { self.0.flags_mut().remove(EF::ACCESSED); }
+
+    pub fn dirty(&self) -> bool { self.0.flags().contains(EF::DIRTY) }
+    pub fn clear_dirty(&mut self) { self.0.flags_mut().remove(EF::DIRTY); }
+
+    pub fn writable(&self) -> bool { self.0.flags().contains(EF::WRITABLE) }
+    pub fn set_writable(&mut self, value: bool) {
+        self.0.flags_mut().set(EF::WRITABLE, value); 
+    }
+
+    pub fn present(&self) -> bool { self.0.flags().contains(EF::VALID | EF::READABLE) }
+    pub fn set_present(&mut self, value: bool) {
+        self.0.flags_mut().set(EF::VALID | EF::READABLE, value);
+    }
+
+    pub fn user(&self) -> bool { self.0.flags().contains(EF::USER) }
+    pub fn set_user(&mut self, value: bool) { self.0.flags_mut().set(EF::USER, value); }
+
+    pub fn execute(&self) -> bool { self.0.flags().contains(EF::EXECUTABLE) }
+    pub fn set_execute(&mut self, value: bool) {
+        self.0.flags_mut().set(EF::EXECUTABLE, value);
+    }
+
+    // 最终映射到的物理页号的读写
+    pub fn target(&self) -> usize {
+        self.0.addr().as_usize()
+    }
+    pub fn set_target(&mut self, target: usize) {
+        let flags = self.0.flags();
+        let frame = Frame::of_addr(PhysAddr::new(target));
+        self.0.set(frame, flags);
+    }
+}
+```
+
+我们基于提供的类 ``PageTableEntry`` 自己封装了一个 ``PageEntry`` ，表示单个映射。里面分别保存了一个页表项 ``PageTableEntry`` 的可变引用，以及找到了这个页表项的虚拟页。但事实上，除了 ``update`` 函数之外，剩下的函数都是对 ``PageTableEntry`` 的简单包装，功能是读写页表项的目标物理页号以及标志位。
+
+我们之前提到过，在修改页表之后我们需要通过屏障指令 ``sfence.vma`` 来刷新 ``TLB`` 。而这条指令后面可以接一个虚拟地址，这样在刷新的时候只关心与这个虚拟地址相关的部分，可能速度比起全部刷新要快一点。（实际上我们确实用了这种较快的刷新 TLB 方式，但并不是在这里使用，因此 ``update`` 根本没被调用过，这个类有些冗余了）
+
+### 为 Rv39PageTable 提供物理页帧管理
+
+在实现页表之前，我们回忆多级页表的修改会隐式的调用物理页帧分配与回收。比如在 Sv39 中，插入一对映射就可能新建一个二级页表和一个一个一级页表，而这需要分配两个物理页帧。因此，我们需要告诉 ``Rv39PageTable`` 如何进行物理页帧分配与回收。
+
+```rust
+// src/memory/paging.rs
+
+// 事实上，我们需要一个实现了 FrameAllocator, FrameDeallocator trait的类
+// 并为此分别实现 alloc, dealloc 函数
+struct FrameAllocatorForPaging;
+
+impl FrameAllocator for FrameAllocatorForPaging {
+    fn alloc(&mut self) -> Option<Frame> {
+        alloc_frame()
+    }
 }
 
-// 删除原来的 trap_handler ，改成 rust_trap 
-// 以 &mut TrapFrame 作为参数，因此可以知道中断相关信息
-// 在这里进行中断分发及处理
-#[no_mangle]
-pub fn rust_trap(tf: &mut TrapFrame) {
-    println!("rust_trap!");
-    // 触发中断时，硬件会将 sepc 设置为触发中断指令的地址
-    // 而中断处理结束，使用 sret 返回时也会跳转到 sepc 处
-    // 于是我们又要执行一次那条指令，触发中断，无限循环下去
-    // 而我们这里是断点中断，只想这个中断触发一次
-    // 因此我们将中断帧内的 sepc 字段设置为触发中断指令下一条指令的地址，即中断结束后跳过这条语句
-    // 由于 riscv64 的每条指令都是 32 位，4 字节，因此将地址+ 4 即可
-    // 这样在 RESTORE_ALL 时，这个修改后的 sepc 字段就会被 load 到 sepc 寄存器中
-    // 使用 sret 返回时就会跳转到 ebreak 的下一条指令了
-    tf.sepc += 4;
+impl FrameDeallocator for FrameAllocatorForPaging {
+    fn dealloc(&mut self, frame: Frame) {
+        dealloc_frame(frame)
+    }
 }
 ```
+### 实现我们自己的页表 PageTableImpl
 
-看起来很对，那我们 ``make run`` 运行一下吧！
+于是我们可以利用 ``Rv39PageTable``的实现我们自己的页表 ``PageTableImpl`` 。首先是声明及初始化：
 
-> **[danger] infinite rust_trap**
-> 
-> 结果却不尽如人意，无限循环输出 rust_trap!
-> 
+```rust
+// src/memory/paging.rs
 
-我们检查一下生成的汇编代码，看看是不是哪里出了问题：
-切换到 ``os/target/riscv64-os/debug`` 目录，我们构建之后得到了 elf 可执行文件 ``os``，我们考虑将其反汇编：
+pub struct PageTableImpl {
+    page_table: Rv39PageTable<'static>,
+    // 作为根的三级页表所在的物理页帧
+    root_frame: Frame,
+    // 在操作过程中临时使用
+    entry: Option<PageEntry>,
+}
 
-```bash
-$ riscv64-unknown-elf-objdump -d os > os.asm
+impl PageTableImpl {
+    // 新建一个空页表
+    pub fn new_bare() -> Self {
+        // 分配一个物理页帧并获取物理地址，作为根的三级页表就放在这个物理页帧中
+        let frame = alloc_frame().expect("alloc_frame failed!");
+        let paddr = frame.start_address().as_usize();
+        // 利用 access_pa_via_va 访问该物理页帧并进行页表初始化
+        let table = unsafe { &mut *(access_pa_via_va(paddr) as *mut PageTableEntryArray) };
+        table.zero();
+
+        PageTableImpl {
+            // 传入参数：三级页表的可变引用；
+            // 因为 Rv39PageTable 的思路也是将整块物理内存进行线性映射
+            // 所以我们传入物理内存的偏移量，即 va-pa，使它可以修改页表
+            page_table: Rv39PageTable::new(table, PHYSICAL_MEMORY_OFFSET),
+            // 三级页表所在物理页帧
+            root_frame: frame,
+            entry: None
+        }
+    }
+}
 ```
-
-在 ``os.asm`` 中找到我们手动触发中断的 ``ebreak`` 指令：
-
-```riscv
-...
-ffffffffc020003a:	0ee080e7          	jalr	238(ra) # ffffffffc0200124 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
-ffffffffc020003e:	a009                	j	ffffffffc0200040 <rust_main+0x12>
-ffffffffc0200040:	9002                	ebreak
-ffffffffc0200042:	c0203537          	lui	a0,0xc0203
-ffffffffc0200046:	02050513          	addi	a0,a0,32 # ffffffffc0203020
-...
+然后是页表最重要的插入、删除映射的功能：
+```rust
+impl PageTableImpl {
+	...
+    pub fn map(&mut self, va: usize, pa: usize) -> &mut PageEntry {
+    	// 为一对虚拟页与物理页帧建立映射
+    	
+    	// 这里的标志位被固定为 R|W|X，即同时允许读/写/执行
+    	// 后面我们会根据段的权限不同进行修改
+        let flags = EF::VALID | EF::READABLE | EF::WRITABLE;
+        let page = Page::of_addr(VirtAddr::new(va));
+        let frame = Frame::of_addr(PhysAddr::new(pa));
+        self.page_table
+        	// 利用 Rv39PageTable 的 map_to 接口
+        	// 传入要建立映射的虚拟页、物理页帧、映射标志位、以及提供物理页帧管理
+            .map_to(page, frame, flags, &mut FrameAllocatorForPaging)
+            .unwrap()
+            // 得到 MapperFlush(Page)
+            // flush 做的事情就是跟上面一样的 sfence_vma
+            // 即刷新与这个虚拟页相关的 TLB
+            // 所以我们修改后有按时刷新 TLB
+            .flush();
+        self.get_entry(va).expect("fail to get an entry!")
+    }
+    pub fn unmap(&mut self, va: usize) {
+    	// 删除一对映射
+    	// 我们只需输入虚拟页，因为已经可以找到页表项了
+        let page = Page::of_addr(VirtAddr::new(va));
+        // 利用 Rv39PageTable 的 unmap 接口
+        // * 注意这里没有用到物理页帧管理，所以 Rv39PageTable 并不会回收内存？
+        let (_, flush) = self.page_table.unmap(page).unwrap();
+        // 同样注意按时刷新 TLB
+        flush.flush();
+    }
+    fn get_entry(&mut self, va: usize) -> Option<&mut PageEntry> {
+    	// 获取虚拟页对应的页表项，以被我们封装起来的 PageEntry 的可变引用的形式
+    	// 于是，我们拿到了页表项，可以进行修改了！
+        let page = Page::of_addr(VirtAddr::new(va));
+        // 调用 Rv39PageTable 的 ref_entry 接口
+        if let Ok(e) = self.page_table.ref_entry(page.clone()) {
+            let e = unsafe { &mut *(e as *mut PageTableEntry) };
+            // 把返回回来的 PageTableEntry 封装起来
+            self.entry = Some(PageEntry(e, page));
+            Some(self.entry.as_mut().unwrap())
+        }
+        else {
+            None
+        }
+    }
+}
 ```
-
-不是说 riscv64 里面每条指令长度为 4 字节吗？我们发现 ``ebreak`` 这条指令仅长为 2 字节。我们将 ``ebreak`` 所在的地址 +4 ，得到的甚至不是一条合法指令的开头，而是下一条 ``lui`` 指令正中间的地址！这样当然有问题了。
-
-我们回头来看目标三元组 ``riscv64-os.json`` 中的一个设置：
-
-```json
-"features": "+m,+a,+c",
+上面我们创建页表，并可以插入、删除映射了。但是它依然一动不动的放在内存中，如何将它用起来呢？我们可以通过修改 ``satp`` 寄存器的物理页号字段来设置作为根的三级页表所在的物理页帧，也就完成了页表的切换。
+```rust
+impl PageTableImpl {
+	...
+	// 我们用 token 也就是 satp 的值来描述一个页表
+	// 返回自身的 token
+    pub fn token(&self) -> usize { self.root_frame.number() | (8 << 60) }
+    
+    // 使用内联汇编将 satp 寄存器修改为传进来的 token
+    // 这个 token 对应的页表将粉墨登场...
+    unsafe fn set_token(token: usize) {
+        asm!("csrw satp, $0" :: "r"(token) :: "volatile");
+    }
+    
+    // 查看 CPU 当前的 satp 值，就知道 CPU 目前在用哪个页表
+    fn active_token() -> usize { satp::read().bits() }
+    
+    // 修改 satp 值切换页表后，过时的不止一个虚拟页
+    // 因此必须使用 sfence_vma_all 刷新整个 TLB
+    fn flush_tlb() { unsafe { sfence_vma_all(); } }
+    
+    // 将 CPU 所用的页表切换为当前的实例
+    pub unsafe fn activate(&self) {
+        let old_token = Self::active_token();
+        let new_token = self.token();
+        println!("switch satp from {:#x} to {:#x}", old_token, new_token);
+        if new_token != old_token {
+            Self::set_token(new_token);
+            // 别忘了刷新 TLB!
+            Self::flush_tlb();
+        }
+    }
+}
 ```
-
-实际上，这表示指令集的拓展。``+m`` 表示可以使用整数乘除法指令； ``+a`` 表示可以使用原子操作指令； ``+c`` 表示开启压缩指令集，即对于一些常见指令，编译器会将其压缩到 $$16$$ 位即 $$2$$ 字节，来降低可执行文件的大小！这就出现了上面那种诡异的情况。
-
-我们去掉 ``+c`` ，删除掉 ``os/target`` 文件夹并重新构建，再来在 ``os.asm`` 中看看 ``ebreak`` 变成了什么样子：
-
-```riscv
-...
-ffffffffc020004c:	180080e7          	jalr	384(ra) # ffffffffc02001c8 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
-ffffffffc0200050:	0040006f          	j	ffffffffc0200054 <rust_main+0x1c>
-ffffffffc0200054:	00100073          	ebreak
-ffffffffc0200058:	c0204537          	lui	a0,0xc0204
-ffffffffc020005c:	02050513          	addi	a0,a0,32 # ffffffffc0204020
-...
-```
-
-现在终于每条指令都正好 $$4$$ 字节了，我们会对它很有信心。再 ``make run`` 尝试一下：
-
-> **[success] back from trap **
-> 
-> ```rust
-> ..opensbi output...
-> ++++ setup interrupt! ++++
-> rust_trap!
-> panicked at 'end of rust_main', src/init.rs:12:5
-> ```
->
-
-可以看到，我们确实手动触发中断，调用了中断处理函数，并通过上下文保存与恢复机制保护了上下文环境不受到破坏，正确在 ``ebreak`` 中断处理程序返回之后 ``panic``。

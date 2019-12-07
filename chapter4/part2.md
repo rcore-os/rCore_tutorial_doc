@@ -1,84 +1,142 @@
-## “魔法”——内核初始映射
+## 动态内存分配
 
-让我们回顾一下在相当于 bootloader 的 OpenSBI 结束后，我们要面对的是怎样一种局面：
+我们之前在 ``C/C++`` 语言中使用过 ``new, malloc`` 等动态内存分配方法，与在编译期就已完成的静态内存分配相比，动态内存分配可以根据程序运行时状态修改内存申请的时机及大小，显得更为灵活，但是这是需要操作系统的支持的，会带来一些开销。
 
-* 物理内存状态：OpenSBI 代码放在 ``[0x80000000,0x80200000)`` 中，内核代码放在以 ``0x80200000`` 开头的一块连续物理内存中。
-* CPU 状态：处于 S Mode ，寄存器 ``satp`` 的 $$\text{MODE}$$ 被设置为 ``Bare`` ，即无论取指还是访存我们通过物理地址直接访问物理内存。 $$\text{PC}=0\text{x}80200000$$ 指向内核的第一条指令。栈顶地址 $$\text{SP}$$ 处在 OpenSBI 代码内。
-* 内核代码：使用虚拟地址，代码和数据段均放在以虚拟地址 ``0xffffffffc0200000``开头的一段连续虚拟内存中。
-* 我们所要做的事情：将 $$\text{SP}$$ 从 OpenSBI 中移到我们的内核内，使得我们可以完全支配启动栈；同时需要跳转到函数 ``rust_main`` 中。
+我们的内核中也需要动态内存分配。典型的应用场景有：
 
-我们已经在 ``src/boot/entry64.asm`` 中自己分配了一块 $$16\text{KiB}$$ 的内存用来做启动栈：
+* ``Box<T>`` ，你可以理解为它和 ``new, malloc`` 有着相同的功能；
+* 引用计数 ``Rc<T>`` ， 原子引用计数 ``Arc<T>`` ，主要用于在引用计数清零，即某对象不再被引用时，对该对象进行自动回收；
+* 一些数据结构，如 ``Vec, HashMap`` 等。
 
-```riscv
-# src/boot/entry64.asm
+为了在我们的内核中支持动态内存分配，在 Rust 语言中，我们需要实现 ``Trait GlobalAlloc`` ，将这个类实例化，并使用语义项 ``#[global_allocator]`` 进行标记。这样的话，编译器就会知道如何进行动态内存分配。
 
-	.section .bss.stack
-	.align 12
-	.global bootstack
-bootstack:
-	.space 4096 * 4
-	.global bootstacktop
-bootstacktop:
+为了实现 ``Trait GlobalAlloc`` ，我们需要支持这么两个函数：
+
+```rust
+unsafe fn alloc(&self, layout: Layout) -> *mut u8;
+unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout);
+```
+可见我们要分配/回收一块虚拟内存。
+
+那么这里面的 ``Layout`` 又是什么呢？从文档中可以找到，它有两个字段： ``size`` 表示要分配的字节数，``align`` 则表示分配的虚拟地址的最小对齐要求，即分配的地址要求是 ``align`` 的倍数。这里的 ``align`` 必须是 $$2$$ 的幂次。
+
+也就表示，我们的需求是分配一块连续的、大小至少为 ``size`` 字节的虚拟内存，且对齐要求为 ``align`` 。
+
+### 连续内存分配算法
+
+假设我们已经有一整块虚拟内存用来分配，那么如何进行分配呢？
+
+我们可能会想到一些简单粗暴的方法，比如对于一个分配任务，贪心地将其分配到可行的最小地址去。这样一直分配下去的话，我们分配出去的内存都是连续的，看上去很合理的利用了内存。
+
+但是一旦涉及到回收的话，设想我们在连续分配出去的很多块内存中间突然回收掉一块，它虽然是可用的，但是由于上下两边都已经被分配出去，它就只有这么大而不能再被拓展了，这种可用的内存我们称之为**外碎片**。
+
+随着不断回收会产生越来越多的碎片，某个时刻我们可能会发现，需要分配一块较大的内存，几个碎片加起来大小是足够的，但是单个碎片是不够的。我们会想到通过**碎片整理**将几个碎片合并起来。但是这个过程的开销极大。
+
+### * buddy system 算法简介
+
+这一节将介绍连续内存分配算法 buddy system 的实现细节与讨论，不感兴趣的读者可以跳过这一节。
+
+假设这一整块虚拟内存的大小是 $$2$$ 的幂次，我们可以使用一种叫做 buddy system 的连续内存分配算法。其本质在于，每次分配的时候都恰好分配一块大小是 $$2$$ 的幂次的内存，且要保证内存的开头地址需要是对齐的，也就是内存的开头地址需要是这块内存大小的倍数。
+
+只分配大小为 $$2$$ 的幂次的内存，意味着如果需要一块大小为 $$65\text{KiB}$$ 内存，我们都只能给它分配一块 $$128\text{KiB}$$ 的内存，这其中有 $$63\text{KiB}$$ 我们没有使用但又没法再被分配出去，这种我们称之为**内碎片**。虽然也会产生一定的浪费，但是相比外碎片，它是可控且易于管理的。
+
+如[伙伴分配器的一个极简实现](https://coolshell.cn/articles/10427.html)所说，我们可以使用一颗线段树很容易地实现这个算法。我们只需在每个线段树节点上存当前区间上所能够分配的最大 $$2$$ 的幂次的内存大小 $$m$$。
+
+* 分配时，为了尽可能满足分配的对齐需求，我们先尝试右子树，再尝试左子树，直到找到一个节点满足这个区间整体未分配，且它的左右子区间都不够分配，就将这个区间整体分配出去，将当前区间的 $$m$$ 值改为 $$0$$ ；
+* 之后自下而上进行 $$m$$ 值的更新，$$\text{pa}.m\leftarrow \max\{\text{ls}.m,\text{rs}.m\}$$ 。但有一个特例，如果左右区间均完全没有被分配，则 $$\text{pa}.m\leftarrow \text{ls}.m + \text{rs}.m$$ ， 即将两个区间合并成一个更大的区间以供分配。
+* 回收时只需找到分配时的那个节点，将其 $$m$$ 值改回去，同时同样自下而上进行 $$m$$ 值更新即可。从更新逻辑可以看出，我们实现了对于回收内存进行合并。
+
+这样的实现虽然比较简单，但是内存消耗较大。为了减少内存消耗，我们不存 $$m$$ ，而用一个 ``u8`` 存 $$\log_2 m$$ ，但是整颗线段树仍需要消耗虚拟内存大小 $$2$$ 倍的内存！因此，等于要占用 $$3$$ 倍的内存，才能有一块虚拟内存用来连续分配，这会导致我们的内核及其臃肿。
+
+有些实现规定了最小分配块大小，比如说是 $$8$$ 字节 ，这样我们只需总共占用 $$1.25$$ 倍的内存就能有一块虚拟内存用于分配了！在我们 $$64$$ 位的环境下，哪怕分配一个智能指针也需要 $$8$$ 字节，看上去挺合理的。还有一些其他方法，比如把底层换成 Bitmap 等卡常数手段...
+
+简单的思考一下，实现简便与内存节约不可兼得啊...
+### 支持动态内存分配
+
+我们这里直接用学长写好的 buddy system allocator。
+
+```rust
+// Cargo.toml
+
+[dependencies]
+buddy_system_allocator = "0.3"
+
+// src/lib.rs
+// Rust 要求 global allocator 必须在 lib.rs 中定义，因此不能放在 memory 子模块里面
+#![feature(alloc_error_handler)]
+
+use buddy_system_allocator::LockedHeap;
+
+#[global_allocator]
+static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
+
+#[alloc_error_handler]
+fn alloc_error_handler(_: core::alloc::Layout) -> ! {
+    panic!("alloc_error_handler do nothing but panic!");
+}
+
+// src/consts.rs
+// 内核堆大小为8MiB
+pub const KERNEL_HEAP_SIZE: usize = 0x800000;
+
+// src/memory/mod.rs
+
+use crate::DYNAMIC_ALLOCATOR;
+use crate::consts::*;
+
+fn init_heap() {
+	// 同样是在内核中开一块静态内存供 buddy system allocator 使用
+    static mut HEAP: [u8; KERNEL_HEAP_SIZE] = [0; KERNEL_HEAP_SIZE];
+    unsafe {
+    	// 这里我们也需要先开锁，才能进行操作
+        DYNAMIC_ALLOCATOR
+            .lock()
+            .init(HEAP.as_ptr() as usize, KERNEL_HEAP_SIZE);
+    }
+}
+
+pub fn init(l: usize, r: usize) {
+    FRAME_ALLOCATOR.lock().init(l, r);
+    init_heap();
+    println!("++++ setup memory!    ++++");
+}
 ```
 
-符号 ``bootstacktop`` 就是我们需要的栈顶地址！同样符号 ``rust_main`` 也代表了我们要跳转到的地址。直接将 ``bootstacktop`` 的值给到 $$\text{SP}$$， 再跳转到 ``rust_main`` 就行了吗？
+### 动态内存分配测试
 
-问题在于，编译器和链接器认为程序在虚拟内存空间中运行，因此这两个符号都会被翻译成虚拟地址。而我们的 CPU 目前处于 ``Bare`` 模式，会将地址都当成物理地址处理。这样，我们跳转到 ``rust_main`` 就会跳转到 ``0xffffffffc0200000+`` 的一个物理地址，物理地址都没有这么多位！这显然是出问题的。
+现在我们来测试一下动态内存分配是否有效，分别动态分配一个整数和一个数组：
 
-观察可以发现，同样的一条指令，其在虚拟内存空间中的虚拟地址与其在物理内存中的物理地址有着一个固定的**偏移量**。比如内核的第一条指令，虚拟地址为 ``0xffffffffc0200000`` ，物理地址为 ``0x80200000`` ，因此，我们只要将虚拟地址减去 ``0xffffffff40000000`` ，就得到了物理地址。
+```rust
+// src/lib.rs
+extern crate alloc;
 
-使用上一节页表的知识，我们只需要做到当访问内核里面的一个虚拟地址 $$\text{va}$$ 时，我们知道 $$\text{va}$$ 处的代码或数据放在物理地址为 $$\text{pa}=\text{va}-0\text{xffffffff40000000}$$ 处的物理内存中，我们真正所要做的是要让 CPU 去访问 $$\text{pa} $$。因此，我们要通过恰当构造页表，来对于内核所属的虚拟地址，实现这种 $$\text{va}\rightarrow\text{pa}$$ 的映射。
+// src/init.rs
 
-我们先使用一种最简单的构造，还记得上一节中所讲的大页吗？那时我们提到，将一个三级页表项的标志位 $$\text{R,W,X}$$ 不设为全 $$0$$ ，可以将它变为一个叶子，从而获得大小为 $$1\text{GiB}$$ 的一个大页。
-
-我们假定内核大小不超过 $$1\text{GiB}$$，因此通过一个大页，将虚拟地址区间 ``[0xffffffffc0000000,0xffffffffffffffff]`` 映射到物理地址区间 ``[0x80000000,0xc0000000)``，而我们只需要分配一页内存用来存放三级页表，并将其最后一个页表项(这个虚拟地址区间明显对应三级页表的最后一个页表项)，进行适当设置即可。
-
-因此，汇编代码为：
-
-```riscv
-# src/boot/entry64.asm
-
-	.section .text.entry
-	.globl _start
-_start:
-	# t0 := 三级页表的虚拟地址
-	lui     t0, %hi(boot_page_table_sv39)
-	# t0 减去偏移量 0xffffffff40000000，变为三级页表的物理地址
-    li      t1, 0xffffffffc0000000 - 0x80000000
-    sub     t0, t0, t1
-    # t0 >>= 12，变为三级页表的物理页号
-    srli    t0, t0, 12
+fn dynamic_allocating_test() {
+    let heap_value = Box::new(5);
+    assert!(*heap_value == 5);
+    println!("heap_value assertion successfully!");
+    println!("heap_value is at {:p}", heap_value);
     
-    # t1 := 8 << 60，设置 satp 的 MODE 字段为 Sv39
-    li      t1, 8 << 60
-    # 将刚才计算出的预设三级页表物理页号附加到 satp 中
-    or      t0, t0, t1
-    # 将算出的 satp 覆盖到 satp 中
-    csrw    satp, t0
-    # 使用 sfence.vma 指令刷新 TLB
-    sfence.vma
-    # 从此，我们给内核搭建出了一个完美的虚拟内存空间！
-    
-    # 我们在虚拟内存空间中：随意将 sp 设置为虚拟地址！
-    lui sp, %hi(bootstacktop)
-
-	# 我们在虚拟内存空间中：随意跳转到虚拟地址！
-	# 跳转到 rust_main
-	lui t0, %hi(rust_main)
-	addi t0, t0, %lo(rust_main)
-	jr t0
-	
-    .section .data
-    # 由于我们要把这个页表放到一个页里面，因此必须 12 位对齐
-    .align 12   
-# 分配 4KiB 内存给预设的三级页表
-boot_page_table_sv39:
-    # 0xffffffff_c0000000 map to 0x80000000 (1G)
-    # 前 511 个页表项均设置为 0 ，因此 V=0 ，意味着是空的
-    .zero 8 * 511
-    # 设置最后一个页表项，PPN=0x80000，标志位 VRWXAD 均为 1
-    .quad (0x80000 << 10) | 0xcf # VRWXAD
+    let mut vec = Vec::new();
+    for i in 0..500 {
+        vec.push(i);
+    }
+    for i in 0..500 {
+        assert!(vec[i] == i);
+    }
+    println!("vec assertion successfully!");
+    println!("vec is at {:p}", vec.as_slice());
+}
 ```
-
-到现在为止我们终于理解了自己是如何做起白日梦——进入那看似虚无缥缈的虚拟内存空间的。
+我们可以看到动态内存分配测试通过！
+> **[success] 动态内存分配测试**
+>
+> ```rust
+> heap_value assertion successfully!
+> heap_value is at 0xffffffffc0a16100
+> vec assertion successfully!
+> vec is at 0xffffffffc0217000
+> ```
+>
 

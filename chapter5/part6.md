@@ -1,5 +1,40 @@
-## 总结与展望
+## 内核重映射实现之三：完结
 
-通过本章的学习，我们了解了 riscv 的中断处理机制、相关寄存器与指令。我们知道在中断前后需要恢复上下文环境，用 一个名为中断帧( TrapFrame )的结构体存储了要保存的各寄存器，并用了很大篇幅解释如何通过精巧的汇编代码实现上下文环境保存与恢复机制。最终，我们通过处理断点和时钟中断验证了我们正确实现了中断机制。
+```rust
+// src/memory/mod.rs
 
-从下章开始，我们介绍操作系统是如何管理我们的内存资源的。
+use memory_set::{
+    MemorySet,
+    attr::MemoryAttr,
+    handler::Linear
+};
+
+pub fn init(l: usize, r: usize) {
+    FRAME_ALLOCATOR.lock().init(l, r);
+    init_heap();
+    // 内核重映射
+    kernel_remap();
+    println!("++++ setup memory!    ++++");
+}
+
+pub fn kernel_remap() {
+    let mut memory_set = MemorySet::new();
+    
+    // 將启动栈 push 进来
+    extern "C" {
+        fn bootstack();
+        fn bootstacktop();
+    }
+    memory_set.push(
+        bootstack as usize,
+        bootstacktop as usize,
+        MemoryAttr::new(),
+        Linear::new(PHYSICAL_MEMORY_OFFSET),
+    );
+
+    unsafe {
+        memory_set.activate();
+    }
+}
+```
+

@@ -17,7 +17,7 @@
             "css": ["prismjs/themes/prism-tomorrow.css"]
         },
 		"localized-footer": {
-			"filename": "gitalk.html"
+			"filename": "extensions/comment/gitalk.html"
 		}
     }
 }

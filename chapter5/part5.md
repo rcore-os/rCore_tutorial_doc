@@ -1,194 +1,376 @@
-## 时钟中断
+## 内核重映射实现之二：MemorySet
 
-在本节中，我们处理一种很重要的中断：时钟中断。这种中断我们可以设定为每隔一段时间硬件自动触发一次，在其对应的中断处理程序里，我们回到内核态，并可以对用户态的程序进行调度、监控管理他们对于资源的使用情况。
+我们实现了页表，但是好像还不足以应对内核重映射的需求。我们要对多个段分别进行不同的映射，而页表只允许我们每次插入一对从虚拟页到物理页帧的映射。
 
-> **[info] riscv 中的中断寄存器**
-> 
-> S 态的中断寄存器主要有 **sie, sip** 两个，其中 s 表示 S 态，i 表示中断， e/p 表示 enable (使能)/ pending (提交申请)。
-> 处理的中断分为三种：
-> 1. SI(Software Interrupt)，软件中断
-> 2. TI(Timer Interrupt)，时钟中断
-> 3. EI(External Interrupt)，外部中断
-> 
-> 比如 ``sie`` 有一个 ``STIE`` 位， 对应 ``sip`` 有一个 ``STIP`` 位，与时钟中断 TI 有关。当硬件决定触发时钟中断时，会将 ``STIP`` 设置为 1，当一条指令执行完毕后，如果发现 ``STIP`` 为 1，此时如果使能，即 ``sie`` 的 ``STIE`` 位也为 1 ，就会进入 S 态时钟中断的处理程序。
+为此，我们另设计几种数据结构来抽象这个过程：
 
-### 时钟初始化
+![](figures/memory_set.jpg)
+
+在虚拟内存中，每个 ``MemoryArea`` 描述一个段，每个段单独映射到物理内存；
+
+而 ``MemorySet`` 中则存储所有的 ``MemoryArea`` 段，相比巨大的虚拟内存空间，由于它含有的各个段都已经映射到物理内存，它可表示一个程序独自拥有的**实际可用**的虚拟内存空间。
+
+而 ``PageTable`` 相当于一个底层接口，仅是管理映射，事实上它管理了 ``MemorySet`` 中所有 ``MemoryArea`` 的所有映射。
+
+我们刻意将不同的段分为不同的 ``MemoryArea`` ，说明它们映射到物理内存的方式一定是不同的：
+
+![](figures/memory_handler.jpg)
+
+我们则使用 ``MemoryHandler`` 来描述映射行为的不同。不同的类型的 ``MemoryArea``，会使用不同的 ``MemoryHandler`` ，而他们会用不同的方式调用 ``PageTable`` 提供的底层接口进行映射，因此导致了最终映射行为的不同。
+
+下面我们看一下这些类是如何实现的。
+
+首先是用来修改 ``PageEntry`` (我们的页表映射默认将权限设为 ``R|W|X`` ，需要修改) 的类 ``MemoryAttr``：
 
 ```rust
-// src/lib.rs
+// src/memory/memory_set/mod.rs
 
-mod timer;
+pub mod attr;
 
-// src/timer.rs
+// src/memory/memory_set/attr.rs
 
-use crate::sbi::set_timer;
-use riscv::register::{
-    time,
-    sie
-};
+use crate::memory::paging::PageEntry;
 
-// 当前已触发多少次时钟中断
-pub static mut TICKS: usize = 0;
-// 触发时钟中断时间间隔
-// 数值一般约为 cpu 频率的 1% ， 防止过多占用 cpu 资源
-static TIMEBASE: u64 = 100000;
-pub fn init() {
-    unsafe {
-        // 初始化时钟中断触发次数
-        TICKS = 0;
-        // 设置 sie 的 TI 使能 STIE 位
-        sie::set_stimer();
+#[derive(Clone,Debug)]
+pub struct MemoryAttr {
+    user : bool,    // 用户态是否可访问
+    readonly : bool,    // 是否只读
+    execute : bool,      // 是否可执行
+}
+
+impl MemoryAttr {
+    // 默认 用户态不可访问；可写；不可执行；
+    pub fn new() -> Self{
+        MemoryAttr {
+            user : false,
+            readonly : false,
+            execute : false,
+        }
     }
-    // 硬件机制问题我们不能直接设置时钟中断触发间隔
-    // 只能当每一次时钟中断触发时
-    // 设置下一次时钟中断的触发时间
-    // 设置为当前时间加上 TIMEBASE
-    // 这次调用用来预处理
-    clock_set_next_event();
-    println!("++++ setup timer!     ++++");
-}
 
-pub fn clock_set_next_event() {
-	// 调用 OpenSBI 提供的接口设置下次时钟中断触发时间
-    set_timer(get_cycle() + TIMEBASE);
-}
+    // 根据要求修改所需权限
+    pub fn set_user(mut self) -> Self {
+        self.user = true;
+        self
+    }
+    pub fn set_readonly(mut self) -> Self {
+        self.readonly = true;
+        self
+    }
+    pub fn set_execute(mut self) -> Self {
+        self.execute = true;
+        self
+    }
 
-// 获取当前时间
-fn get_cycle() -> u64 {
-    time::read() as u64
+    // 根据设置的权限要求修改页表项
+    pub fn apply(&self, entry : &mut PageEntry) {
+        entry.set_present(true);    // 设置页表项存在
+        entry.set_user(self.user);  // 设置用户态访问权限
+        entry.set_writable(!self.readonly); //设置写权限
+        entry.set_execute(self.execute); //设置可执行权限
+    }
 }
 ```
-### 开启内核态中断使能
 
-事实上寄存器 ``sstatus`` 中有一控制位 ``SIE``，表示 S 态全部中断的使能。如果没有设置这个也是不能正常接受 S 态时钟中断的。
+然后是会以不同方式调用 ``PageTable`` 接口的 ``MemoryHandler``：
+
 ```rust
-// src/interrupt.rs
+// src/memory/memory_set/mod.rs
 
-pub fn init() {
-    unsafe {
+pub mod handler;
+
+// src/memory/memory_set/handler.rs
+
+use crate::memory::paging::PageTableImpl;
+use super::attr::MemoryAttr;
+use crate::memory::alloc_frame; 
+use core::fmt::Debug;
+use alloc::boxed::Box;
+
+// 定义 MemoryHandler trait
+pub trait MemoryHandler: Debug + 'static {
+    fn box_clone(&self) -> Box<dyn MemoryHandler>;
+    // 需要实现 map, unmap 两函数
+    // 不同的接口实现者会有不同的行为
+    
+    // 注意 map 并没有 pa 作为参数，因此接口实现者要给出该虚拟页要映射到哪个物理页
+    fn map(&self, pt: &mut PageTableImpl, va: usize, attr: &MemoryAttr);
+    fn unmap(&self, pt: &mut PageTableImpl, va: usize);
+}
+
+impl Clone for Box<dyn MemoryHandler> {
+    fn clone(&self) -> Box<dyn MemoryHandler> { self.box_clone() }
+}
+
+// 下面给出两种实现 Linear, ByFrame
+
+// 线性映射 Linear: 也就是我们一直在用的带一个偏移量的形式
+// 有了偏移量，我们就知道虚拟页要映射到哪个物理页了
+#[derive(Debug, Clone)]
+pub struct Linear { offset: usize }
+
+impl Linear {
+    pub fn new(off: usize) -> Self {
+        Linear { offset: off, }
+    }
+}
+impl MemoryHandler for Linear {
+    fn box_clone(&self) -> Box<dyn MemoryHandler> { Box::new(self.clone()) }
+    fn map(&self, pt: &mut PageTableImpl, va: usize, attr: &MemoryAttr) {
+        // 映射到 pa = va - self.offset
+        // 同时还使用 attr.apply 修改了原先默认为 R|W|X 的权限
+        attr.apply(pt.map(va, va - self.offset));
+    }
+    fn unmap(&self, pt: &mut PageTableImpl, va: usize) {
+        pt.unmap(va);
+    }
+}
+
+// ByFrame: 不知道映射到哪个物理页帧
+// 那我们就分配一个新的物理页帧，可以保证不会产生冲突
+#[derive(Debug, Clone)]
+pub struct ByFrame;
+impl ByFrame {
+    pub fn new() -> Self {
+        ByFrame {}
+    }
+}
+impl MemoryHandler for ByFrame {
+    fn box_clone(&self) -> Box<dyn MemoryHandler> {
+        Box::new(self.clone())
+    }
+
+    fn map(&self, pt: &mut PageTableImpl, va: usize, attr: &MemoryAttr) {
+        // 分配一个物理页帧作为映射目标
+        let frame = alloc_frame().expect("alloc_frame failed!");
+        let pa = frame.start_address().as_usize();
+        attr.apply(pt.map(va, pa));
+    }
+
+    fn unmap(&self, pt: &mut PageTableImpl, va: usize) {
+        pt.unmap(va);
+    }
+}
+```
+
+接着，是描述一个段的 ``MemoryArea``。
+
+```rust
+// src/memory/memory_set/mod.rs
+
+pub mod area;
+
+// src/memory/memory_set/area.rs
+
+use alloc::boxed::Box;
+use crate::memory::paging::{PageTableImpl, PageRange,};
+use super::{attr::MemoryAttr, handler::MemoryHandler, };
+use crate::consts::PAGE_SIZE;
+
+// 声明中给出所在的虚拟地址区间: [start, end)
+// 使用的 MemoryHandler： handler
+// 页表项的权限： attr
+#[derive(Debug,Clone)]
+pub struct MemoryArea {
+    start : usize,
+    end : usize, 
+    handler : Box<dyn MemoryHandler>,
+    attr : MemoryAttr,
+}
+
+impl MemoryArea {
+    // 同样是插入、删除映射
+    // 遍历虚拟地址区间包含的所有虚拟页，依次利用 handler 完成映射插入/删除
+    pub fn map(&self, pt : &mut PageTableImpl) {
+        // 使用自己定义的迭代器进行遍历，实现在 src/memory/paging.rs 中
+        // 放在下面
+        for page in PageRange::new(self.start, self.end) {
+            self.handler.map(pt, page, &self.attr);
+        }
+    }
+    fn unmap(&self, pt : &mut PageTableImpl) {
+        for page in PageRange::new(self.start, self.end) {
+            self.handler.unmap(pt, page);
+        }
+    }
+
+    // 是否与另一虚拟地址区间相交
+    pub fn is_overlap_with(&self, start_addr : usize, end_addr : usize) -> bool {
+        let p1 = self.start / PAGE_SIZE;
+        let p2 = (self.end - 1) / PAGE_SIZE + 1;
+        let p3 = start_addr / PAGE_SIZE;
+        let p4 = (end_addr - 1) / PAGE_SIZE + 1;
+        !((p1 >= p4) || (p2 <= p3))
+    }
+	
+    // 初始化
+    pub fn new(start_addr : usize, end_addr : usize, handler : Box<dyn MemoryHandler>, attr : MemoryAttr) -> Self {
+        MemoryArea{
+            start : start_addr,
+            end : end_addr,
+            handler : handler,
+            attr : attr,
+        }
+    }
+}
+
+// src/memory/paging.rs
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+#[repr(C)]
+pub struct PageRange {
+    start: usize,
+    end: usize
+}
+
+// 为 PageRange 实现 Iterator trait 成为可被遍历的迭代器
+impl Iterator for PageRange {
+    type Item = usize;
+
+    fn next(&mut self) -> Option<usize> {
+        if self.start < self.end {
+            let page = self.start << 12;
+            self.start += 1;
+            Some(page)
+        }
+        else {
+            None
+        }
+    }
+}
+
+impl PageRange {
+    pub fn new(start_addr: usize, end_addr: usize) -> Self {
+        PageRange {
+            start: start_addr / PAGE_SIZE,
+            end: (end_addr - 1) / PAGE_SIZE + 1
+        }
+    }
+}
+```
+
+最后，则是最高层的 ``MemorySet`` ，它描述一个**实际可用**的虚拟地址空间以供程序使用。
+
+```rust
+// src/memory/memory_set/mod.rs
+
+use area::MemoryArea;
+use attr::MemoryAttr;
+use crate::memory::paging::PageTableImpl;
+use crate::consts::*;
+use handler::{
+    MemoryHandler,
+    Linear
+};
+use alloc::{
+    boxed::Box,
+    vec::Vec
+};
+use crate::memory::access_pa_via_va;
+
+pub struct MemorySet {
+    // 管理有哪些 MemoryArea
+    areas: Vec<MemoryArea>,
+    // 使用页表来管理其所有的映射
+    page_table: PageTableImpl,
+}
+
+impl MemorySet {
+    pub fn push(&mut self, start: usize, end: usize, attr: MemoryAttr, handler: impl MemoryHandler) {
+        // 加入一个新的给定了 handler 以及 attr 的 MemoryArea
+        println!("in push: [{:#x},{:#x})", start, end);
+        // 合法性测试
+        assert!(start <= end, "invalid memory area!");
+        // 整段虚拟地址空间均未被占据
+        assert!(self.test_free_area(start, end), "memory area overlap!");
+        // 构造 MemoryArea
+        let area = MemoryArea::new(start, end, Box::new(handler), attr);
+        // 更新本 MemorySet 的映射
+        area.map(&mut self.page_table);
+        // 更新本 MemorySet 的 MemoryArea 集合
+        self.areas.push(area);
+    } 
+    fn test_free_area(&self, start: usize, end: usize) -> bool {
+        // 迭代器的基本应用
+        self.areas
+            .iter()
+            .find(|area| area.is_overlap_with(start, end))
+            .is_none()
+    }
+    // 将 CPU 所在的虚拟地址空间切换为本 MemorySet
+    pub unsafe fn activate(&self) {
+        // 这和切换到存储其全部映射的页表是一码事
+        self.page_table.activate();
+    }
+}
+```
+
+事实上，在内核中运行的所有程序都离不开内核的支持，所以必须要能够访问内核的代码和数据；同时，为了保证任何时候我们都可以修改页表，我们需要物理内存的映射一直存在。因此，在一个 ``MemorySet`` 初始化时，我们就要将上述这些段加入进去。
+
+```rust
+// src/memory/memory_set/mod.rs
+
+impl MemorySet {
+    ...
+    pub fn new() -> Self {
+        let mut memory_set = MemorySet {
+            areas: Vec::new(),
+            page_table: PageTableImpl::new_bare(),
+        };
+        // 插入内核各段以及物理内存段
+        memory_set.map_kernel_and_physical_memory();
+        memory_set
+    }
+    pub fn map_kernel_and_physical_memory(&mut self) {
         extern "C" {
-            fn __alltraps();
+            fn stext();
+            fn etext();
+            fn srodata();
+            fn erodata();
+            fn sdata();
+            fn edata();
+            fn sbss();
+            fn ebss();
+            fn end();
         }
-        sscratch::write(0);
-        stvec::write(__alltraps as usize, stvec::TrapMode::Direct);
-        // 设置 sstatus 的 SIE 位
-        sstatus::set_sie();
+        let offset = PHYSICAL_MEMORY_OFFSET;
+        // 各段全部采用偏移量固定的线性映射
+        // .text R|X
+        self.push(
+            stext as usize,
+            etext as usize,
+            MemoryAttr::new().set_readonly().set_execute(),
+            Linear::new(offset),
+        );
+        // .rodata R
+        self.push(
+            srodata as usize,
+            erodata as usize,
+            MemoryAttr::new().set_readonly(),
+            Linear::new(offset),
+        );
+        // .data R|W
+        self.push(
+            sdata as usize,
+            edata as usize,
+            MemoryAttr::new(),
+            Linear::new(offset)
+        );
+        // .bss R|W
+        self.push(
+            sbss as usize,
+            ebss as usize,
+            MemoryAttr::new(),
+            Linear::new(offset)
+        );
+        // 物理内存 R|W
+        self.push(
+            (end as usize / PAGE_SIZE + 1) * PAGE_SIZE, 
+            access_pa_via_va(PHYSICAL_MEMORY_END),
+            MemoryAttr::new(),
+            Linear::new(offset),
+        );
     }
-    println!("++++ setup interrupt! ++++");
 }
 ```
 
-### 响应时钟中断
-让我们来更新 ``rust_trap`` 函数来让它能够处理多种不同的中断——当然事到如今也只有三种中断：
-1. 使用 ``ebreak`` 触发的断点中断；
-2. 使用 ``ecall`` 触发的系统调用中断；
-3. 时钟中断。
-
-
-```rust
-// src/interrupt.rs
-
-use riscv::register::{
-    scause::{
-        self,
-        Trap,
-        Exception,
-        Interrupt
-    },
-    sepc,
-    stvec,
-    sscratch,
-    sstatus
-};
-use crate::timer::{
-    TICKS,
-    clock_set_next_event
-};
-
-#[no_mangle]
-pub fn rust_trap(tf: &mut TrapFrame) {
-    // 根据中断原因分类讨论
-    match tf.scause.cause() {
-        // 断点中断
-        Trap::Exception(Exception::Breakpoint) => breakpoint(&mut tf.sepc),
-        // S 态时钟中断
-        Trap::Interrupt(Interrupt::SupervisorTimer) => super_timer(),
-        _ => panic!("undefined trap!")
-    }
-}
-
-// 断点中断处理：输出断点地址并改变中断返回地址防止死循环
-fn breakpoint(sepc: &mut usize) {
-    println!("a breakpoint set @0x{:x}", sepc);
-    *sepc += 4;
-}
-
-// S 态时钟中断处理
-fn super_timer() {
-    // 设置下一次时钟中断触发时间
-    clock_set_next_event();
-    unsafe {
-        // 更新时钟中断触发计数
-        // 注意由于 TICKS 是 static mut 的
-        // 后面会提到，多个线程都能访问这个变量
-        // 如果同时进行 +1 操作，会造成计数错误或更多严重bug
-        // 因此这是 unsafe 的，不过目前先不用管这个
-        TICKS += 1;
-        // 每触发 100 次时钟中断将计数清零并输出
-        if (TICKS == 100) {
-            TICKS = 0;
-            println!("* 100 ticks *");
-        }
-    }
-    // 由于一般都是在死循环内触发时钟中断
-    // 因此我们同样的指令再执行一次也无妨
-    // 因此不必修改 sepc
-}
-```
-
-同时修改主函数 ``rust_main`` ：
-
-```rust
-// src/init.rs
-
-#[no_mangle]
-pub extern "C" fn rust_main() -> ! {
-    crate::interrupt::init();
-    // 时钟初始化
-    crate::timer::init();
-    unsafe {
-        asm!("ebreak"::::"volatile");
-    }
-    panic!("end of rust_main");
-    loop {}
-}
-```
-
-我们期望能够同时处理断点中断和时钟中断。断点中断会输出断点地址并返回，接下来就是 ``panic``，我们 ``panic`` 的处理函数定义如下：
-
-```rust
-// src/lang_items.rs
-
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    println!("{}", info);
-    loop {}
-}
-```
-
-就是输出 panic 信息并死循环。我们可以在这个死循环里不断接受并处理时钟中断了。
-
-最后的结果确实如我们所想：
-
-> **[success] breakpoint & timer interrupt handling**
-> ```rust
-> ...opensbi output...
-> ++++ setup interrupt! ++++
-> ++++ setup timer!     ++++
-> a breakpoint set @0xffffffffc0200060
-> panicked at 'end of rust_main', src/init.rs:13:5
-> * 100 ticks *
-> * 100 ticks *
-> ...
-> ```
-> 
