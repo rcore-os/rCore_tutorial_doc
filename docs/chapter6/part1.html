@@ -635,7 +635,7 @@
                 <a href="part3.html">
             
                     
-                    线程初始化
+                    内核线程初始化
             
                 </a>
             
@@ -646,6 +646,19 @@
         <li class="chapter " data-level="1.7.4" data-path="part4.html">
             
                 <a href="part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="part5.html">
+            
+                <a href="part5.html">
             
                     
                     总结与展望
@@ -935,6 +948,9 @@
         <span class="token punctuation">}</span><span class="token punctuation">;</span>
         <span class="token function">KernelStack</span><span class="token punctuation">(</span>bottom<span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new_empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token function">KernelStack</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
     <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">top</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
         <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token operator">+</span> KERNEL_STACK_SIZE
     <span class="token punctuation">}</span>
@@ -942,16 +958,20 @@
 
 <span class="token keyword">impl</span> Drop <span class="token keyword">for</span> KernelStack <span class="token punctuation">{</span>
     <span class="token keyword">fn</span> <span class="token function">drop</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
-            <span class="token function">dealloc</span><span class="token punctuation">(</span>
-                <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token keyword">as</span> _<span class="token punctuation">,</span>
-                Layout<span class="token punctuation">::</span><span class="token function">from_size_align</span><span class="token punctuation">(</span>KERNEL_STACK_SIZE<span class="token punctuation">,</span> KERNEL_STACK_SIZE<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-            <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+                <span class="token function">dealloc</span><span class="token punctuation">(</span>
+                    <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token keyword">as</span> _<span class="token punctuation">,</span>
+                    Layout<span class="token punctuation">::</span><span class="token function">from_size_align</span><span class="token punctuation">(</span>KERNEL_STACK_SIZE<span class="token punctuation">,</span> KERNEL_STACK_SIZE<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
         <span class="token punctuation">}</span>
+
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x5728;&#x4F7F;&#x7528; <code>KernelStack::new</code> &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x6808;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7B2C;&#x56DB;&#x7AE0;&#x6240;&#x8BB2;&#x7684;&#x52A8;&#x6001;&#x5185;&#x5B58;&#x5206;&#x914D;&#xFF0C;&#x4ECE;&#x5806;&#x4E0A;&#x5206;&#x914D;&#x4E00;&#x5757;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x4F5C;&#x4E3A;&#x5185;&#x6838;&#x6808;&#x3002;&#x7136;&#x800C; <code>KernelStack</code> &#x672C;&#x8EAB;&#x53EA;&#x4FDD;&#x5B58;&#x8FD9;&#x5757;&#x5185;&#x5B58;&#x7684;&#x8D77;&#x59CB;&#x5730;&#x5740;&#x3002;&#x5176;&#x539F;&#x56E0;&#x5728;&#x4E8E;&#x5F53;&#x7EBF;&#x7A0B;&#x751F;&#x547D;&#x5468;&#x671F;&#x7ED3;&#x675F;&#x540E;&#xFF0C;&#x4F5C;&#x4E3A; <code>Thread</code> &#x4E00;&#x90E8;&#x5206;&#x7684; <code>KernelStack</code> &#x5B9E;&#x4F8B;&#x88AB;&#x56DE;&#x6536;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86; <code>Drop</code> Trait &#xFF0C;&#x8BE5;&#x5B9E;&#x4F8B;&#x4F1A;&#x8C03;&#x7528; <code>drop</code> &#x51FD;&#x6570;&#x5C06;&#x521B;&#x5EFA;&#x65F6;&#x5206;&#x914D;&#x7684;&#x90A3;&#x5757;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x56DE;&#x6536;&#xFF0C;&#x4ECE;&#x800C;&#x907F;&#x514D;&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#x3002;</p>
+<p>&#x5728;&#x4F7F;&#x7528; <code>KernelStack::new</code> &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x6808;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7B2C;&#x56DB;&#x7AE0;&#x6240;&#x8BB2;&#x7684;&#x52A8;&#x6001;&#x5185;&#x5B58;&#x5206;&#x914D;&#xFF0C;&#x4ECE;&#x5806;&#x4E0A;&#x5206;&#x914D;&#x4E00;&#x5757;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x4F5C;&#x4E3A;&#x5185;&#x6838;&#x6808;&#x3002;&#x7136;&#x800C; <code>KernelStack</code> &#x672C;&#x8EAB;&#x53EA;&#x4FDD;&#x5B58;&#x8FD9;&#x5757;&#x5185;&#x5B58;&#x7684;&#x8D77;&#x59CB;&#x5730;&#x5740;&#x3002;&#x5176;&#x539F;&#x56E0;&#x5728;&#x4E8E;&#x5F53;&#x7EBF;&#x7A0B;&#x751F;&#x547D;&#x5468;&#x671F;&#x7ED3;&#x675F;&#x540E;&#xFF0C;&#x4F5C;&#x4E3A; <code>Thread</code> &#x4E00;&#x90E8;&#x5206;&#x7684; <code>KernelStack</code> &#x5B9E;&#x4F8B;&#x88AB;&#x56DE;&#x6536;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86; <code>Drop</code> Trait &#xFF0C;&#x8BE5;&#x5B9E;&#x4F8B;&#x4F1A;&#x8C03;&#x7528; <code>drop</code> &#x51FD;&#x6570;&#x5C06;&#x521B;&#x5EFA;&#x65F6;&#x5206;&#x914D;&#x7684;&#x90A3;&#x5757;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x56DE;&#x6536;&#xFF0C;&#x4ECE;&#x800C;&#x907F;&#x514D;&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#x3002;&#x5F53;&#x7136;&#x3002;&#x5982;&#x679C;&#x662F;&#x7A7A;&#x7684;&#x6808;&#x5C31;&#x4E0D;&#x5FC5;&#x56DE;&#x6536;&#x4E86;&#x3002;</p>
 <p>&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x662F;&#x51FA;&#x4E8E;&#x81EA;&#x52A8;&#x56DE;&#x6536;&#x5185;&#x6838;&#x6808;&#x7684;&#x8003;&#x8651;&#x5C06; <code>KernelStack</code> &#x653E;&#x5728; <code>Thread</code> &#x4E2D;&#x3002;</p>
 <p>&#x800C; <code>top</code> &#x65B9;&#x6CD5;&#xFF0C;&#x8FD4;&#x56DE;&#x5206;&#x914D;&#x7684;&#x90A3;&#x5757;&#x5185;&#x5B58;&#x7684;&#x7ED3;&#x5C3E;&#x5730;&#x5740;&#x3002;&#x7531;&#x4E8E;&#x6808;&#x662F;&#x4ECE;&#x9AD8;&#x5730;&#x5740;&#x5230;&#x4F4E;&#x5730;&#x5740;&#x589E;&#x957F;&#xFF0C;&#x4E8B;&#x5B9E;&#x4E0A;&#x5B83;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x7A7A;&#x6808;&#x7684;&#x6808;&#x9876;&#x5730;&#x5740;&#x3002;</p>
 <p>&#x4E0B;&#x4E00;&#x8282;&#xFF0C;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x7EBF;&#x7A0B;&#x5207;&#x6362;&#x3002;</p>
@@ -1014,7 +1034,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"线程状态与保存","level":"1.7.1","depth":2,"next":{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},"previous":{"title":"第六章：内核线程","level":"1.7","depth":1,"path":"chapter6/introduction.md","ref":"chapter6/introduction.md","articles":[{"title":"线程状态与保存","level":"1.7.1","depth":2,"path":"chapter6/part1.md","ref":"chapter6/part1.md","articles":[]},{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},{"title":"线程初始化","level":"1.7.3","depth":2,"path":"chapter6/part3.md","ref":"chapter6/part3.md","articles":[]},{"title":"总结与展望","level":"1.7.4","depth":2,"path":"chapter6/part4.md","ref":"chapter6/part4.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part1.md","mtime":"2019-12-07T10:33:59.511Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T13:44:10.733Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"线程状态与保存","level":"1.7.1","depth":2,"next":{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},"previous":{"title":"第六章：内核线程","level":"1.7","depth":1,"path":"chapter6/introduction.md","ref":"chapter6/introduction.md","articles":[{"title":"线程状态与保存","level":"1.7.1","depth":2,"path":"chapter6/part1.md","ref":"chapter6/part1.md","articles":[]},{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},{"title":"内核线程初始化","level":"1.7.3","depth":2,"path":"chapter6/part3.md","ref":"chapter6/part3.md","articles":[]},{"title":"内核线程创建与切换测试","level":"1.7.4","depth":2,"path":"chapter6/part4.md","ref":"chapter6/part4.md","articles":[]},{"title":"总结与展望","level":"1.7.5","depth":2,"path":"chapter6/part5.md","ref":"chapter6/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part1.md","mtime":"2019-12-07T15:19:59.578Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T18:15:22.164Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

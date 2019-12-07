@@ -109,6 +109,9 @@ impl KernelStack {
         };
         KernelStack(bottom)
     }
+    pub fn new_empty() -> Self {
+        KernelStack(0)
+    }
     pub fn top(&self) -> usize {
         self.0 + KERNEL_STACK_SIZE
     }
@@ -116,17 +119,21 @@ impl KernelStack {
 
 impl Drop for KernelStack {
     fn drop(&mut self) {
-        unsafe {
-            dealloc(
-                self.0 as _,
-                Layout::from_size_align(KERNEL_STACK_SIZE, KERNEL_STACK_SIZE).unwrap(),
-            );
+        if self.0 != 0 {
+            unsafe {
+                dealloc(
+                    self.0 as _,
+                    Layout::from_size_align(KERNEL_STACK_SIZE, KERNEL_STACK_SIZE).unwrap(),
+                );
+            }
+        
         }
+        
     }
 }
 ```
 
-在使用 ``KernelStack::new`` 新建一个内核栈时，我们使用第四章所讲的动态内存分配，从堆上分配一块虚拟内存作为内核栈。然而 ``KernelStack`` 本身只保存这块内存的起始地址。其原因在于当线程生命周期结束后，作为 ``Thread`` 一部分的 ``KernelStack`` 实例被回收时，由于我们实现了 ``Drop`` Trait ，该实例会调用 ``drop`` 函数将创建时分配的那块虚拟内存回收，从而避免内存溢出。
+在使用 ``KernelStack::new`` 新建一个内核栈时，我们使用第四章所讲的动态内存分配，从堆上分配一块虚拟内存作为内核栈。然而 ``KernelStack`` 本身只保存这块内存的起始地址。其原因在于当线程生命周期结束后，作为 ``Thread`` 一部分的 ``KernelStack`` 实例被回收时，由于我们实现了 ``Drop`` Trait ，该实例会调用 ``drop`` 函数将创建时分配的那块虚拟内存回收，从而避免内存溢出。当然。如果是空的栈就不必回收了。
 
 因此，我们是出于自动回收内核栈的考虑将 ``KernelStack`` 放在 ``Thread`` 中。
 

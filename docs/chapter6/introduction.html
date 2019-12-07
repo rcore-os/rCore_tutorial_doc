@@ -635,7 +635,7 @@
                 <a href="part3.html">
             
                     
-                    线程初始化
+                    内核线程初始化
             
                 </a>
             
@@ -646,6 +646,19 @@
         <li class="chapter " data-level="1.7.4" data-path="part4.html">
             
                 <a href="part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="part5.html">
+            
+                <a href="part5.html">
             
                     
                     总结与展望
@@ -848,7 +861,7 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x4E0E;&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;">&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x4E0E;&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;</h1>
+                                <h1 id="&#x7B2C;&#x516D;&#x7AE0;&#xFF1A;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x4E0E;&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;">&#x7B2C;&#x516D;&#x7AE0;&#xFF1A;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x4E0E;&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;</h1>
 <blockquote>
 <p><strong>[info]&#x7EBF;&#x7A0B;&#x4E0E;&#x8FDB;&#x7A0B;</strong></p>
 <p>&#x4ECE;<strong>&#x6E90;&#x4EE3;&#x7801;</strong>&#x7ECF;&#x8FC7;&#x7F16;&#x8BD1;&#x5668;&#x4E00;&#x7CFB;&#x5217;&#x5904;&#x7406;&#xFF08;&#x7F16;&#x8BD1;&#x3001;&#x94FE;&#x63A5;&#x3001;&#x4F18;&#x5316;&#x7B49;&#xFF09;&#x5F97;&#x5230;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#xFF0C;&#x6211;&#x4EEC;&#x79F0;&#x4E3A;<strong>&#x7A0B;&#x5E8F;</strong>&#x3002;</p>
@@ -862,8 +875,8 @@
 &#x672C;&#x7AE0;&#x4F60;&#x5C06;&#x4F1A;&#x5B66;&#x5230;&#xFF1A;</p>
 <ul>
 <li>&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x7684;&#x6982;&#x5FF5;</li>
-<li>&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x7EBF;&#x7A0B;&#x5207;&#x6362;</li>
-<li>&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;</li>
+<li>&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x7684;&#x72B6;&#x6001;&#x8868;&#x793A;&#x4E0E;&#x4FDD;&#x5B58;</li>
+<li>&#x7EBF;&#x7A0B;&#x5207;&#x6362;</li>
 </ul>
 <p>&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;
 <div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
@@ -925,7 +938,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第六章：内核线程","level":"1.7","depth":1,"next":{"title":"线程状态与保存","level":"1.7.1","depth":2,"path":"chapter6/part1.md","ref":"chapter6/part1.md","articles":[]},"previous":{"title":"总结与展望","level":"1.6.7","depth":2,"path":"chapter5/part7.md","ref":"chapter5/part7.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/introduction.md","mtime":"2019-12-07T06:15:01.554Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T13:44:10.733Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"第六章：内核线程","level":"1.7","depth":1,"next":{"title":"线程状态与保存","level":"1.7.1","depth":2,"path":"chapter6/part1.md","ref":"chapter6/part1.md","articles":[]},"previous":{"title":"总结与展望","level":"1.6.7","depth":2,"path":"chapter5/part7.md","ref":"chapter5/part7.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/introduction.md","mtime":"2019-12-07T16:08:58.086Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T18:15:22.164Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

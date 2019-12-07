@@ -635,7 +635,7 @@
                 <a href="../chapter6/part3.html">
             
                     
-                    线程初始化
+                    内核线程初始化
             
                 </a>
             
@@ -646,6 +646,19 @@
         <li class="chapter " data-level="1.7.4" data-path="../chapter6/part4.html">
             
                 <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
             
                     
                     总结与展望
@@ -848,7 +861,29 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+                                <h3 id="&#x7EBF;&#x7A0B;&#x72B6;&#x6001;">&#x7EBF;&#x7A0B;&#x72B6;&#x6001;</h3>
+<p>&#x4ECE;&#x8C03;&#x5EA6;&#x5668;&#x7684;&#x89D2;&#x5EA6;&#x6765;&#x770B;&#xFF0C;&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x72EC;&#x4E00;&#x65E0;&#x4E8C;&#x7684; Tid &#x6765;&#x533A;&#x5206;&#x5B83;&#x548C;&#x5176;&#x4ED6;&#x7EBF;&#x7A0B;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// in process/mod.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">type</span> Tid <span class="token operator">=</span> usize<span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">type</span> ExitCode <span class="token operator">=</span> usize<span class="token punctuation">;</span>
+</code></pre>
+<p>&#x540C;&#x65F6;&#xFF0C;&#x7EBF;&#x7A0B;&#x7684;&#x72B6;&#x6001;&#x6709;&#x4E0B;&#x9762;&#x51E0;&#x79CD;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/struct.rs</span>
+
+<span class="token attribute attr-name">#[derive(Clone)]</span>
+<span class="token keyword">pub</span> <span class="token keyword">enum</span> Status <span class="token punctuation">{</span>
+    <span class="token comment">// &#x5C31;&#x7EEA;&#xFF1A;&#x53EF;&#x4EE5;&#x8FD0;&#x884C;&#xFF0C;&#x4F46;&#x662F;&#x8981;&#x7B49;&#x5230; CPU &#x7684;&#x8D44;&#x6E90;&#x5206;&#x914D;&#x7ED9;&#x5B83;</span>
+    Ready<span class="token punctuation">,</span>
+    <span class="token comment">// &#x6B63;&#x5728;&#x8FD0;&#x884C;</span>
+    <span class="token function">Running</span><span class="token punctuation">(</span>Tid<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment">// &#x7761;&#x7720;&#xFF1A;&#x5F53;&#x524D;&#x88AB;&#x963B;&#x585E;&#xFF0C;&#x8981;&#x6EE1;&#x8DB3;&#x67D0;&#x4E9B;&#x6761;&#x4EF6;&#x624D;&#x80FD;&#x7EE7;&#x7EED;&#x8FD0;&#x884C;</span>
+    Sleeping<span class="token punctuation">,</span>
+    <span class="token comment">// &#x9000;&#x51FA;&#xFF1A;&#x8BE5;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x5E76;&#x9000;&#x51FA;</span>
+    <span class="token function">Exited</span><span class="token punctuation">(</span>ExitCode<span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
 <script>
@@ -907,7 +942,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"线程池与线程管理","level":"1.8.1","depth":2,"next":{"title":"线程调度算法的 Round Robin算法","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"previous":{"title":"第七章：线程调度","level":"1.8","depth":1,"path":"chapter7/introduction.md","ref":"chapter7/introduction.md","articles":[{"title":"线程池与线程管理","level":"1.8.1","depth":2,"path":"chapter7/part1.md","ref":"chapter7/part1.md","articles":[]},{"title":"线程调度算法的 Round Robin算法","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},{"title":"内核调度线程 idle","level":"1.8.3","depth":2,"path":"chapter7/part3.md","ref":"chapter7/part3.md","articles":[]},{"title":"总结与展望","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]}]},"dir":"neutral"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part1.md","mtime":"2019-12-04T15:21:42.398Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T13:44:10.733Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"线程池与线程管理","level":"1.8.1","depth":2,"next":{"title":"线程调度算法的 Round Robin算法","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"previous":{"title":"第七章：线程调度","level":"1.8","depth":1,"path":"chapter7/introduction.md","ref":"chapter7/introduction.md","articles":[{"title":"线程池与线程管理","level":"1.8.1","depth":2,"path":"chapter7/part1.md","ref":"chapter7/part1.md","articles":[]},{"title":"线程调度算法的 Round Robin算法","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},{"title":"内核调度线程 idle","level":"1.8.3","depth":2,"path":"chapter7/part3.md","ref":"chapter7/part3.md","articles":[]},{"title":"总结与展望","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part1.md","mtime":"2019-12-07T18:14:50.462Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T18:15:22.164Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
