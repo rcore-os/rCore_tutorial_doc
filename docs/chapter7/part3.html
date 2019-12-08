@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>内核调度线程 idle · GitBook</title>
+        <title>线程调度之 Round Robin算法 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -73,7 +73,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="part4.md" />
+    <link rel="next" href="part4.html" />
     
     
     <link rel="prev" href="part2.html" />
@@ -706,7 +706,7 @@
                 <a href="part2.html">
             
                     
-                    线程调度算法的 Round Robin算法
+                    内核调度线程 idle
             
                 </a>
             
@@ -719,7 +719,7 @@
                 <a href="part3.html">
             
                     
-                    内核调度线程 idle
+                    线程调度之 Round Robin算法
             
                 </a>
             
@@ -727,9 +727,22 @@
             
         </li>
     
-        <li class="chapter " data-level="1.8.4" data-path="part4.md">
+        <li class="chapter " data-level="1.8.4" data-path="part4.html">
             
-                <span>
+                <a href="part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="part5.html">
+            
+                <a href="part5.html">
             
                     
                     总结与展望
@@ -745,9 +758,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9" data-path="../chapter8/introduction.md">
+        <li class="chapter " data-level="1.9" data-path="../chapter8/introduction.html">
             
-                <span>
+                <a href="../chapter8/introduction.html">
             
                     
                     第八章：用户线程
@@ -759,12 +772,12 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.9.1" data-path="../chapter8/part1.md">
+        <li class="chapter " data-level="1.9.1" data-path="../chapter8/part1.html">
             
-                <span>
+                <a href="../chapter8/part1.html">
             
                     
-                    系统调用与用户程序
+                    编写用户程序
             
                 </a>
             
@@ -772,12 +785,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9.2" data-path="../chapter8/part2.md">
+        <li class="chapter " data-level="1.9.2" data-path="../chapter8/part2.html">
             
-                <span>
+                <a href="../chapter8/part2.html">
             
                     
-                    用户进程
+                    创建虚拟内存空间
             
                 </a>
             
@@ -785,9 +798,22 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9.3" data-path="../chapter8/part3.md">
+        <li class="chapter " data-level="1.9.3" data-path="../chapter8/part3.html">
             
-                <span>
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建用户线程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
             
                     
                     总结与展望
@@ -803,9 +829,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.10" data-path="../chapter9/introduction.md">
+        <li class="chapter " data-level="1.10" data-path="../chapter9/introduction.html">
             
-                <span>
+                <a href="../chapter9/introduction.html">
             
                     
                     第九章：文件系统
@@ -813,6 +839,64 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter9/part1.html">
+            
+                <a href="../chapter9/part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter9/part2.html">
+            
+                <a href="../chapter9/part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter9/part3.html">
+            
+                <a href="../chapter9/part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter9/part4.html">
+            
+                <a href="../chapter9/part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -846,7 +930,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >内核调度线程 idle</a>
+        <a href=".." >线程调度之 Round Robin算法</a>
     </h1>
 </div>
 
@@ -861,7 +945,103 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+                                <h2 id="&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;&#x4E4B;-round-robin-&#x7B97;&#x6CD5;">&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;&#x4E4B; Round Robin &#x7B97;&#x6CD5;</h2>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x7ED9;&#x51FA;&#x4EE3;&#x7801;&#xFF0C;&#x6709;&#x5174;&#x8DA3;&#x8005;&#x53EF;&#x81EA;&#x884C;&#x53BB;&#x7814;&#x7A76;&#x7B97;&#x6CD5;&#x7EC6;&#x8282;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/scheduler.rs</span>
+
+<span class="token attribute attr-name">#[derive(Default)]</span>
+<span class="token keyword">struct</span> RRInfo <span class="token punctuation">{</span>
+    valid<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+    time<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+    prev<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+    next<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> RRScheduler <span class="token punctuation">{</span>
+    threads<span class="token punctuation">:</span> Vec<span class="token operator">&lt;</span>RRInfo<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+    max_time<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+    current<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> RRScheduler <span class="token punctuation">{</span>
+    <span class="token comment">// &#x8BBE;&#x7F6E;&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x8FDE;&#x7EED;&#x8FD0;&#x884C;&#x7684;&#x6700;&#x5927; tick &#x6570;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>max_time_slice<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> rr <span class="token operator">=</span> RRScheduler <span class="token punctuation">{</span>
+            threads<span class="token punctuation">:</span> Vec<span class="token punctuation">::</span><span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            max_time<span class="token punctuation">:</span> max_time_slice<span class="token punctuation">,</span>
+            current<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        rr<span class="token punctuation">.</span>threads<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>
+            RRInfo <span class="token punctuation">{</span>
+                valid<span class="token punctuation">:</span> <span class="token keyword">false</span><span class="token punctuation">,</span>
+                time<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                prev<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                next<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        rr
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">impl</span> Scheduler <span class="token keyword">for</span> RRScheduler <span class="token punctuation">{</span>
+    <span class="token comment">// &#x5206;&#x4E3A; 1. &#x65B0;&#x7EBF;&#x7A0B; 2. &#x65F6;&#x95F4;&#x7247;&#x8017;&#x5C3D;&#x88AB;&#x5207;&#x6362;&#x51FA;&#x7684;&#x7EBF;&#x7A0B; &#x4E24;&#x79CD;&#x60C5;&#x51B5;</span>
+    <span class="token keyword">fn</span> <span class="token function">push</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> tid <span class="token punctuation">:</span> Tid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> tid <span class="token operator">=</span> tid <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> tid <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">&gt;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">.</span><span class="token function">resize_with</span><span class="token punctuation">(</span>tid <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> Default<span class="token punctuation">::</span>default<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>time <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>time <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>max_time<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">let</span> prev <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>prev<span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>valid <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>prev<span class="token punctuation">]</span><span class="token punctuation">.</span>next <span class="token operator">=</span> tid<span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>prev <span class="token operator">=</span> prev<span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>prev <span class="token operator">=</span> tid<span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>next <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fn</span> <span class="token function">pop</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Option<span class="token operator">&lt;</span>Tid<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> ret <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> ret <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> next <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>ret<span class="token punctuation">]</span><span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+            <span class="token keyword">let</span> prev <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>ret<span class="token punctuation">]</span><span class="token punctuation">.</span>prev<span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>next<span class="token punctuation">]</span><span class="token punctuation">.</span>prev <span class="token operator">=</span> prev<span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>prev<span class="token punctuation">]</span><span class="token punctuation">.</span>next <span class="token operator">=</span> next<span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>ret<span class="token punctuation">]</span><span class="token punctuation">.</span>prev <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>ret<span class="token punctuation">]</span><span class="token punctuation">.</span>next <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>ret<span class="token punctuation">]</span><span class="token punctuation">.</span>valid <span class="token operator">=</span> <span class="token keyword">false</span><span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">=</span> ret<span class="token punctuation">;</span>
+            <span class="token function">Some</span><span class="token punctuation">(</span>ret<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+            None
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// &#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x7684;&#x53EF;&#x7528;&#x65F6;&#x95F4;&#x7247; -= 1</span>
+    <span class="token keyword">fn</span> <span class="token function">tick</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool<span class="token punctuation">{</span>
+        <span class="token keyword">let</span> tid <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> tid <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>time <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">.</span>time <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token keyword">false</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fn</span> <span class="token function">exit</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> tid <span class="token punctuation">:</span> Tid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> tid <span class="token operator">=</span> tid <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">==</span> tid <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
 <script>
@@ -904,12 +1084,12 @@ gitalk.render("gitalk-container");
 
             
                 
-                <a href="part2.html" class="navigation navigation-prev " aria-label="Previous page: 线程调度算法的 Round Robin算法">
+                <a href="part2.html" class="navigation navigation-prev " aria-label="Previous page: 内核调度线程 idle">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="part4.md" class="navigation navigation-next " aria-label="Next page: 总结与展望">
+                <a href="part4.html" class="navigation navigation-next " aria-label="Next page: 线程调度测试">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -920,7 +1100,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核调度线程 idle","level":"1.8.3","depth":2,"next":{"title":"总结与展望","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]},"previous":{"title":"线程调度算法的 Round Robin算法","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"dir":"neutral"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part3.md","mtime":"2019-12-04T15:21:42.403Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-07T18:15:22.164Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"线程调度之 Round Robin算法","level":"1.8.3","depth":2,"next":{"title":"线程调度测试","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]},"previous":{"title":"内核调度线程 idle","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part3.md","mtime":"2019-12-08T07:04:43.751Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-08T12:05:56.293Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
