@@ -191,4 +191,3 @@ fn panic(info: &PanicInfo) -> ! {
 > * 100 ticks *
 > ...
 > ```
-> 
