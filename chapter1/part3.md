@@ -3,7 +3,8 @@
 项目默认是链接 rust 标准库 std 的，它依赖于操作系统，因此我们需要显式将其禁用：
 
 ```rust
-// main.rs
+// src/main.rs
+// 之后出现的所有代码块内的路径都放在 os 文件夹下
 
 #![no_std]
 fn main() {
@@ -36,7 +37,7 @@ fn main() {
 第二个错误是说需要一个函数作为 ``panic_handler`` ，这个函数负责在程序 ``panic`` 时调用。它默认使用标准库 std 中实现的函数，由于我们禁用了标准库，因此只能自己实现它：
 
 ```rust
-// main.rs
+// src/main.rs
 
 use core::panic::PanicInfo;
 // This function is called on panic.
@@ -74,7 +75,7 @@ fn panic(_info: &PanicInfo) -> ! {
 因此，我们在项目配置文件中直接将 dev (use for `cargo build`) 和 release (use for `cargo build --release`) 的 panic 的处理策略设为 abort。
 
 ```rust
-// in Cargo.toml
+// Cargo.toml
 
 [profile.dev]
 panic = "abort"

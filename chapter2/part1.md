@@ -7,6 +7,7 @@ cargo 在编译项目时，可以附加目标参数 `--target <target triple>` �
 ``rustc --version --verbose``来查看rust的默认目标三元组：
 
 ```bash
+$ rustc --version --verbose
 rustc 1.40.0-nightly (fae75cd21 2019-10-26)
 binary: rustc
 commit-hash: fae75cd216c481de048e4951697c8f8525669c65
@@ -60,7 +61,7 @@ LLVM version: 9.0
 可以看到里面描述了架构、 CPU 、操作系统、 ABI 、端序、字长等信息。而我们想基于 $$64$$ 位 ``riscv`` 架构开发内核，确切的说，是基于 ``RV64I`` 指令集，再加上若干拓展。我们直接给出我们所使用的目标三元组：
 
 ```json
-// os/riscv64-os.json
+// riscv64-os.json
 
 {
   "llvm-target": "riscv64",
@@ -103,7 +104,7 @@ LLVM version: 9.0
 我们来看两个与默认的目标三元组有着些许不同的地方：
 
 ```json
-// os/riscv64-os.json
+// riscv64-os.json
 
 "panic-strategy": "abort",
 ```
@@ -123,7 +124,7 @@ extern "C" fn abort() -> ! {
 你可能觉得这种在 ``abort`` 中再次 ``panic`` 会引起某种死循环，不过事实上这个函数压根不会被调用，所以我们想写什么都可以。当然，前提是要能够通过编译。
 
 ```json
-// os/riscv64-os.json
+// riscv64-os.json
 
 "pre-link-args": {
     "ld.lld": [

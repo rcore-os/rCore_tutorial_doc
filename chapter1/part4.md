@@ -9,7 +9,7 @@
 C runtime 和 rust runtime 都需要标准库支持，我们的程序无法访问。如果覆盖了 ``start`` 语义项，仍然需要 ``crt0``，并不能解决问题。所以需要重写覆盖 ``crt0`` 入口点：
 
 ```rust
-// main.rs
+// src/main.rs
 
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
@@ -62,3 +62,4 @@ pub extern "C" fn _start() -> ! {
 
 构建得到的可执行文件位置放在 ``os/target/debug/os`` 中。
 
+迄今为止的代码可以在[这里]()找到，构建出现问题的话可以参考。

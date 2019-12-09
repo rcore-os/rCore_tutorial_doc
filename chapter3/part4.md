@@ -20,6 +20,8 @@ __trapret
 
 随后，我们通过 ``jal`` 调用 ``rust_trap`` 函数并在返回之后跳转到调用语句的下一条指令。实际上调用返回之后进入 ``__trapret`` 函数，这里我们通过 ``RESTORE_ALL`` 恢复中断之前的上下文环境，并最终通过一条 ``sret`` 指令跳转到 ``sepc``，回到触发中断的那条指令所在地址。这会导致触发中断的那条指令又被执行一次。
 
+注意，由于这部分用到了 ``SAVE_ALL`` 和 ``RESTORE_ALL`` 两个宏，所以这部分必须写在最下面。
+
 我们定义几个宏：
 
 ```riscv
@@ -196,7 +198,7 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 
 > **[danger] infinite rust_trap**
 > 
-> 结果却不尽如人意，无限循环输出 rust_trap!
+> 结果却不尽如人意，输出了一大堆乱码！
 > 
 
 我们检查一下生成的汇编代码，看看是不是哪里出了问题：
@@ -248,8 +250,10 @@ ffffffffc020005c:	02050513          	addi	a0,a0,32 # ffffffffc0204020
 > ..opensbi output...
 > ++++ setup interrupt! ++++
 > rust_trap!
-> panicked at 'end of rust_main', src/init.rs:12:5
+> panicked at 'end of rust_main', src/init.rs:9:5
 > ```
 >
 
 可以看到，我们确实手动触发中断，调用了中断处理函数，并通过上下文保存与恢复机制保护了上下文环境不受到破坏，正确在 ``ebreak`` 中断处理程序返回之后 ``panic``。
+
+迄今为止的代码可以在[这里]()找到。如果出现了问题的话就来检查一下吧。

@@ -15,11 +15,10 @@ pub const PHYSICAL_MEMORY_OFFSET: usize = 0xffffffff40000000;
 
 // src/memory/mod.rs
 
-use crate::consts::*;
 // 将物理地址转化为对应的虚拟地址
 pub fn access_pa_via_va(pa: usize) -> usize {
     pa + PHYSICAL_MEMORY_OFFSET
-
+}
 ```
 
 在 rust 的 riscv crate 中，已经为页表机制提供了如下支持：

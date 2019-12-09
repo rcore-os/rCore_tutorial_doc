@@ -28,7 +28,7 @@ pub const PHYSICAL_MEMORY_END: usize = 0x88000000;
 * 物理地址空间 ``[0x80200000,KernelEnd)`` 被内核各代码与数据段占用；
 * 其实设备树扫描结果 DTB 还占用了一部分物理内存，不过由于我们不打算使用它，所以可以将它所占用的空间用来存别的东西。
 
-于是，我们可以用来存别的东西的物理内存的物理地址范围是：``[KernelEnd, 0x88000000)`` 。这里的 $$\text{KernelEnd}$$ 为内核代码结尾的物理地址。在 ``linker64.ld`` 中定义的 ``end`` 符号为内核代码结尾的虚拟地址，我们需要通过偏移量来将其转化为物理地址。
+于是，我们可以用来存别的东西的物理内存的物理地址范围是：``[KernelEnd, 0x88000000)`` 。这里的 ``KernelEnd​`` 为内核代码结尾的物理地址。在 ``linker64.ld`` 中定义的 ``end`` 符号为内核代码结尾的虚拟地址，我们需要通过偏移量来将其转化为物理地址。
 
 我们来将可用的物理内存地址范围打印出来：
 
@@ -54,17 +54,13 @@ pub extern "C" fn rust_main() -> ! {
     );
     crate::interrupt::init();
     crate::timer::init();
-    unsafe {
-        asm!("ebreak"::::"volatile");
-    }
-    panic!("end of rust_main");
     loop {}
 }
 ```
 
 > **[success] 可用物理内存地址 **
 > 
-> ``free physical memory paddr = [0x8020c000, 0x88000000)``
+> ``free physical memory paddr = [0x8020b000, 0x88000000)``
 
 ### 物理页帧与物理页号
 
@@ -86,7 +82,7 @@ println!(
 
 > **[success] 可用物理页号区间**
 > 
-> ``free physical memory ppn = [0x8020d, 0x88000)``
+> ``free physical memory ppn = [0x8020c, 0x88000)``
 
 ### 物理内存页式管理
 
@@ -102,6 +98,14 @@ println!(
 
 pub const MAX_PHYSICAL_MEMORY: usize = 0x8000000;
 pub const MAX_PHYSICAL_PAGES: usize = MAX_PHYSICAL_MEMORY >> 12;
+
+// src/lib.rs
+
+mod memory;
+
+// src/memory/mod.rs
+
+mod frame_allocator;
 
 // src/memory/frame_allocator.rs
 
@@ -227,10 +231,6 @@ pub fn dealloc_frame(f: Frame) {
 现在我们来测试一下它是否能够很好的完成物理页分配与回收：
 
 ```rust
-// src/lib.rs
-
-mod memory;
-
 // src/init.rs
 
 use crate::memory::{
@@ -280,59 +280,60 @@ fn frame_allocating_test() {
 > **[success] 物理页分配与回收测试**
 >
 > ```rust
-> ...opensbi output...
-> kernel end vaddr = 0xffffffffc0223020
-> free physical memory ppn = [0x80224, 0x88000)
+> free physical memory paddr = [0x80222020, 0x88000000)
+> free physical memory ppn = [0x80223, 0x88000)
 > ++++ setup interrupt! ++++
+> ++++ setup timer!     ++++
 > ++++ setup memory!    ++++
 > alloc Some(
->     Frame(
->         PhysAddr(
->             0x80224000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80223000,
+>            ),
+>        ),
 > )
 > alloc Some(
->     Frame(
->         PhysAddr(
->             0x80225000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80224000,
+>            ),
+>        ),
 > )
 > alloc Some(
->    Frame(
->        PhysAddr(
->             0x80226000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80225000,
+>            ),
+>        ),
 > )
 > dealloc Some(
->     Frame(
->         PhysAddr(
->             0x80225000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80224000,
+>            ),
+>        ),
 > )
 > alloc Some(
->     Frame(
->         PhysAddr(
->             0x80225000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80224000,
+>            ),
+>        ),
 > )
 > alloc Some(
->     Frame(
->         PhysAddr(
->             0x80227000,
->         ),
->     ),
+>        Frame(
+>            PhysAddr(
+>                0x80226000,
+>            ),
+>        ),
 > )
-> ++++ setup timer!     ++++
-> a breakpoint set @0xffffffffc0200330
-> panicked at 'end of rust_main', src/init.rs:35:5
+> * 100 ticks *
 > * 100 ticks *
 > ...
 > ```
->
+
+我们回收的页面接下来马上就又被分配出去了。
+
+如果结果有问题的话，在[这里]()能找到现有的代码。
 
 不过，这种物理内存分配给人一种过家家的感觉。无论表面上分配、回收做得怎样井井有条，实际上都并没有对物理内存产生任何影响！不要着急，我们之后会使用它们的。

@@ -1002,6 +1002,8 @@
 <p>&#x4E8E;&#x662F;&#x4EE3;&#x7801;&#x4E3A;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/io.rs</span>
 
+<span class="token keyword">use</span> core<span class="token punctuation">::</span>fmt<span class="token punctuation">::</span><span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">,</span> Write <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
 <span class="token keyword">struct</span> Stdout<span class="token punctuation">;</span>
 
 <span class="token keyword">impl</span> fmt<span class="token punctuation">::</span>Write <span class="token keyword">for</span> Stdout <span class="token punctuation">{</span>
@@ -1057,6 +1059,16 @@
     <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<p><code>make run</code> &#x4E00;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x8F93;&#x51FA;&#x4E3A;&#xFF1A;</p>
+<blockquote>
+<p><strong>[success] &#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;&#x901A;&#x8FC7;</strong></p>
+<pre class="language-"><code class="lang-rust">_start vaddr <span class="token operator">=</span> <span class="token number">0xffffffffc0200000</span>
+bootstacktop vaddr <span class="token operator">=</span> <span class="token number">0xffffffffc020a000</span>
+hello <span class="token macro-rules function">world!</span>
+panicked at <span class="token lifetime-annotation symbol">&apos;you</span> want to <span class="token keyword">do</span> <span class="token macro-rules function">nothing!</span><span class="token lifetime-annotation symbol">&apos;,</span> src<span class="token operator">/</span>init<span class="token punctuation">.</span>rs<span class="token punctuation">:</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">5</span>
+</code></pre>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x770B;&#x5230;&#x5165;&#x53E3;&#x70B9;&#x7684;&#x5730;&#x5740;&#x786E;&#x5B9E;&#x4E3A;&#x6211;&#x4EEC;&#x5B89;&#x6392;&#x7684; <code>0xffffffffc0200000</code> &#xFF0C;&#x540C;&#x65F6;&#x6808;&#x7684;&#x5730;&#x5740;&#x4E5F;&#x4E0E;&#x6211;&#x4EEC;&#x5728;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x4E2D;&#x770B;&#x5230;&#x7684;&#x4E00;&#x6837;&#x3002;&#x66F4;&#x91CD;&#x8981;&#x7684;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x80FD;&#x770B;&#x5230;&#x5185;&#x6838; <code>panic</code> &#x7684;&#x4F4D;&#x7F6E;&#x4E86;&#xFF01;&#x8FD9;&#x5C06;&#x5927;&#x5927;&#x6709;&#x5229;&#x4E8E;&#x8C03;&#x8BD5;&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1116,7 +1128,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"实现格式化输出","level":"1.3.7","depth":2,"next":{"title":"总结与展望","level":"1.3.8","depth":2,"path":"chapter2/part8.md","ref":"chapter2/part8.md","articles":[]},"previous":{"title":"封装 OpenSBI 接口","level":"1.3.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part7.md","mtime":"2019-12-04T16:52:24.788Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T02:27:07.167Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"实现格式化输出","level":"1.3.7","depth":2,"next":{"title":"总结与展望","level":"1.3.8","depth":2,"path":"chapter2/part8.md","ref":"chapter2/part8.md","articles":[]},"previous":{"title":"封装 OpenSBI 接口","level":"1.3.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part7.md","mtime":"2019-12-09T03:34:19.793Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T08:07:31.483Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
