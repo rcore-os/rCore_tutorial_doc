@@ -1,16 +1,15 @@
-## 使用包管理器cargo创建rust binary项目
+## 使用包管理器 cargo 创建 Rust binary 项目
 
-使用 ``cargo new`` 创建一个新的rust binary项目，命令如下：
+使用 ``cargo new`` 创建一个新的 Rust binary 项目，命令如下：
 
 ```bash
-$ cargo new os --bin --edition 2018
+$ cargo new os --bin
 ```
 
 | ``cargo new`` 的参数 | 含义                                      |
 | ------------------ | ----------------------------------------- |
 | ``os``               | 项目的名称                                |
 | ``--bin``            | 可执行项目，和其相对的是库项目 ``--lib``    |
-| ``--edition 2018``   | 使用新版 Rust 2018 而不是老旧的 Rust 2015 |
 
 创建完成后，整个项目的文件结构如下：
 
