@@ -154,6 +154,8 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
+// 这里是程序入口
+// 调用 main 函数，并利用 sys_exit 系统调用退出
 #[no_mangle]
 pub extern "C" fn _start(_args: isize, _argv: *const u8) -> ! {
     init_heap();

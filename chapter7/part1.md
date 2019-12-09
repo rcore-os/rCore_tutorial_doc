@@ -11,6 +11,8 @@ pub type ExitCode = usize;
 ```rust
 // src/process/struct.rs
 
+use super::{ Tid, ExitCode };
+
 #[derive(Clone)]
 pub enum Status {
 	// 就绪：可以运行，但是要等到 CPU 的资源分配给它
@@ -131,8 +133,8 @@ impl ThreadPool {
             }
         );
         // 将线程的 Tid 加入调度器
+        // 提醒调度器给这个线程分配 CPU 资源
         self.scheduler.push(tid);
-        println!("tid to alloc: {}", tid);
     }
 
 	// 从线程池中取一个线程开始运行
@@ -151,16 +153,29 @@ impl ThreadPool {
         }
     }
 
-	// 这个线程已运行了太长时间，需要将 CPU 资源交出去
-	// 线程状态 Running -> Ready
+	// 这个线程已运行了太长时间或者已运行结束，需要将 CPU 资源交出去
+    // 但是要提醒线程池它仍需要分配 CPU 资源
     pub fn retrieve(&mut self, tid: Tid, thread: Box<Thread>) {
+        // 线程池位置为空，表明这个线程刚刚通过 exit 退出
+        if self.threads[tid].is_none() {
+            // 不需要 CPU 资源了，退出
+            return;
+        }
     	// 获取并修改线程池对应位置的信息
         let mut thread_info = self.threads[tid].as_mut().expect("thread not exist!");       
         thread_info.thread = Some(thread);
-        // 将线程状态改为 Ready
-        thread_info.status = Status::Ready;
-        // 告诉调度器该线程要继续运行
-        self.scheduler.push(tid);
+        // 此时状态可能是 Status::Sleeping
+        // 后面会提到线程可能会自动放弃 CPU 资源，进入睡眠状态
+        // 直到被唤醒之前都不必给它分配
+        // 而如果此时状态时 Running
+        // 就说明只是单纯的耗尽了这次分配 CPU 资源
+        // 但还要占用 CPU 资源继续执行
+        if let Status::Running(_) = thread_info.status {
+            // Running -> Ready
+            thread_info.status = Status::Ready;
+            // 通知线程池继续给此线程分配资源
+            self.scheduler.push(tid);
+        }
     }
 
 	// Scheduler 的简单包装

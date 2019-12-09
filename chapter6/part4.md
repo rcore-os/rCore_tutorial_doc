@@ -7,6 +7,8 @@
 ```rust
 // src/process/mod.rs
 
+use structs::Thread;
+
 #[no_mangle]
 pub extern "C" fn temp_thread(from_thread: &mut Thread, current_thread: &mut Thread) {
     println!("I'm leaving soon, but I still want to say: Hello world!");
@@ -61,10 +63,20 @@ pub fn init() {
 
 // src/init.rs
 
+#[no_mangle]
 pub extern "C" fn rust_main() -> ! {
-	...
+    crate::interrupt::init();
+
+	extern "C" {
+		fn end();
+	}
+	crate::memory::init(
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+    );
 	crate::process::init();
-	...
+    crate::timer::init();
+    loop {}
 }
 ```
 
@@ -79,3 +91,5 @@ pub extern "C" fn rust_main() -> ! {
 > 
 
 可见我们切换到了临时线程，又切换了回来！测试成功！
+
+截至目前所有的代码可以在[这里]()找到以供参考。

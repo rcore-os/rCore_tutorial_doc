@@ -17,6 +17,10 @@ impl Thread {
 通过调用 ``switch_to`` 函数将当前正在执行的线程切换为另一个线程。实现方法是两个 ``Context`` 的切换。
 
 ```rust
+// src/lib.rs
+
+#![feature(naked_functions)]
+
 // src/context.rs
 
 impl Context {

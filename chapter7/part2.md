@@ -48,6 +48,7 @@ unsafe impl Sync for Processor {}
 
 // src/process/mod.rs
 
+use processor::Processor;
 static CPU: Processor = Processor::new();
 ```
 
@@ -142,7 +143,7 @@ pub fn enable_and_wfi() {
 // src/process/processor.rs
 
 impl Processor {
-    pub fn run(&self) -> ! {
+    pub fn idle_main(&self) -> ! {
         let inner = self.inner();
         // 在 idle 线程刚进来时禁用异步中断
         disable_and_store();
@@ -187,6 +188,7 @@ impl Processor {
 // src/interrupt.rs
 
 use crate::process::tick;
+
 // 时钟中断
 fn super_timer(tf: &mut TrapFrame) {
     clock_set_next_event();

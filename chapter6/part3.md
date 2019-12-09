@@ -9,6 +9,13 @@
 ```rust
 // src/context.rs
 
+use riscv::register::sstatus;
+use core::mem::zeroed;
+
+extern "C" {
+    fn __trapret();
+}
+
 impl ContextContent {
     // 为一个新内核线程构造栈上的初始状态信息
     // 其入口点地址为 entry ，其内核栈栈顶地址为 kstack_top ，其页表为 satp
@@ -84,6 +91,9 @@ impl ContextContent {
 
 ```rust
 // src/process/structs.rs
+
+use riscv::register::satp;
+use alloc::boxed::Box;
 
 impl Thread {
     // 创建一个新线程，放在堆上

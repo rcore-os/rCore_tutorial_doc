@@ -75,9 +75,9 @@ mod process;
 
 // src/process/mod.rs
 
-pub mod struct;
+pub mod structs;
 
-// src/process/struct.rs
+// src/process/structs.rs
 
 use crate::context::Context;
 
@@ -92,7 +92,11 @@ pub struct Thread {
 里面用到了内核栈 ``KernelStack`` ：
 
 ```rust
-// src/process/struct.rs
+// src/consts.rs
+
+pub const KERNEL_STACK_SIZE: usize = 0x80000;
+
+// src/process/structs.rs
 
 use crate::alloc::alloc::{
     alloc,

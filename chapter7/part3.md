@@ -5,6 +5,8 @@
 ```rust
 // src/process/scheduler.rs
 
+use alloc::vec::Vec;
+
 #[derive(Default)]
 struct RRInfo {
     valid: bool,
