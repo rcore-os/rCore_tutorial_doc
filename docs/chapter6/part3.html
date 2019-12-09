@@ -964,6 +964,13 @@
 <p>&#x9996;&#x5148;&#x662F;&#x8981;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x6808;&#xFF0C;&#x7136;&#x540E;&#x5728;&#x6808;&#x4E0A;&#x538B;&#x5165;&#x6211;&#x4EEC;&#x7CBE;&#x5FC3;&#x6784;&#x9020;&#x7684;&#x7EBF;&#x7A0B;&#x72B6;&#x6001;&#x4FE1;&#x606F;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/context.rs</span>
 
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span>sstatus<span class="token punctuation">;</span>
+<span class="token keyword">use</span> core<span class="token punctuation">::</span>mem<span class="token punctuation">::</span>zeroed<span class="token punctuation">;</span>
+
+<span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">__trapret</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
 <span class="token keyword">impl</span> ContextContent <span class="token punctuation">{</span>
     <span class="token comment">// &#x4E3A;&#x4E00;&#x4E2A;&#x65B0;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x6784;&#x9020;&#x6808;&#x4E0A;&#x7684;&#x521D;&#x59CB;&#x72B6;&#x6001;&#x4FE1;&#x606F;</span>
     <span class="token comment">// &#x5176;&#x5165;&#x53E3;&#x70B9;&#x5730;&#x5740;&#x4E3A; entry &#xFF0C;&#x5176;&#x5185;&#x6838;&#x6808;&#x6808;&#x9876;&#x5730;&#x5740;&#x4E3A; kstack_top &#xFF0C;&#x5176;&#x9875;&#x8868;&#x4E3A; satp</span>
@@ -1032,6 +1039,9 @@
 <p>&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x662F;&#x7EBF;&#x7A0B;&#x7684;&#x521B;&#x5EFA;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/structs.rs</span>
 
+<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span>satp<span class="token punctuation">;</span>
+<span class="token keyword">use</span> alloc<span class="token punctuation">::</span>boxed<span class="token punctuation">::</span>Box<span class="token punctuation">;</span>
+
 <span class="token keyword">impl</span> Thread <span class="token punctuation">{</span>
     <span class="token comment">// &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7EBF;&#x7A0B;&#xFF0C;&#x653E;&#x5728;&#x5806;&#x4E0A;</span>
     <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new_kernel</span><span class="token punctuation">(</span>entry<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Box<span class="token operator">&lt;</span>Thread<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
@@ -1059,11 +1069,11 @@
 <div id="gitalk-container"></div>
 <script>
 var gitalk = new Gitalk({
-  "clientID": "c3b20e343ac397f1b67c",
-  "clientSecret": "be4dd3f990da0c80c9592f38327ac4eb4854a31b",
+  "clientID": "ab871063a9fa7f1da571",
+  "clientSecret": "4760b384e3e452d2241d859cfa6a7da21a8729ec",
   "repo": "rCore_tutorial_doc",
-  "owner": "wyfcyx",
-  "admin": ["wyfcyx"],
+  "owner": "rcore-os",
+  "admin": ["wyfcyx","chyyuu","equation314","wangrunji0408","PanQL","xy-plus"],
   "id": location.pathname,      
   "distractionFreeMode": false  
 });
@@ -1113,7 +1123,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核线程初始化","level":"1.7.3","depth":2,"next":{"title":"内核线程创建与切换测试","level":"1.7.4","depth":2,"path":"chapter6/part4.md","ref":"chapter6/part4.md","articles":[]},"previous":{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part3.md","mtime":"2019-12-07T16:01:44.030Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T08:07:31.483Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"内核线程初始化","level":"1.7.3","depth":2,"next":{"title":"内核线程创建与切换测试","level":"1.7.4","depth":2,"path":"chapter6/part4.md","ref":"chapter6/part4.md","articles":[]},"previous":{"title":"线程切换","level":"1.7.2","depth":2,"path":"chapter6/part2.md","ref":"chapter6/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part3.md","mtime":"2019-12-09T08:46:30.265Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T14:21:19.155Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

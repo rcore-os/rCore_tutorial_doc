@@ -1001,6 +1001,7 @@
 
 <span class="token comment">// src/process/mod.rs</span>
 
+<span class="token keyword">use</span> processor<span class="token punctuation">::</span>Processor<span class="token punctuation">;</span>
 <span class="token keyword">static</span> CPU<span class="token punctuation">:</span> Processor <span class="token operator">=</span> Processor<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>&#x8FD9;&#x91CC;&#x9762;&#x6211;&#x4EEC;&#x5C06;&#x5B9E;&#x4F8B; <code>CPU</code> &#x58F0;&#x660E;&#x4E3A; <code>static</code> &#x3002;&#x7F16;&#x8BD1;&#x5668;&#x8BA4;&#x4E3A; <code>Processor</code> &#x4E0D;&#x4E00;&#x5B9A;&#x80FD;&#x591F;&#x5B89;&#x5168;&#x5730;&#x5141;&#x8BB8;&#x591A;&#x7EBF;&#x7A0B;&#x8BBF;&#x95EE;&#xFF0C;&#x4E8E;&#x662F;&#x58F0;&#x660E;&#x4E00;&#x4E2A; <code>static</code> &#x5B9E;&#x4F8B;&#x662F;&#x4F1A;&#x62A5;&#x9519;&#x7684;&#x3002;</p>
@@ -1081,7 +1082,7 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/processor.rs</span>
 
 <span class="token keyword">impl</span> Processor <span class="token punctuation">{</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">idle_main</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
         <span class="token keyword">let</span> inner <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">inner</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">// &#x5728; idle &#x7EBF;&#x7A0B;&#x521A;&#x8FDB;&#x6765;&#x65F6;&#x7981;&#x7528;&#x5F02;&#x6B65;&#x4E2D;&#x65AD;</span>
         <span class="token function">disable_and_store</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1121,6 +1122,7 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/interrupt.rs</span>
 
 <span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>process<span class="token punctuation">::</span>tick<span class="token punctuation">;</span>
+
 <span class="token comment">// &#x65F6;&#x949F;&#x4E2D;&#x65AD;</span>
 <span class="token keyword">fn</span> <span class="token function">super_timer</span><span class="token punctuation">(</span>tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> TrapFrame<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">clock_set_next_event</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1203,11 +1205,11 @@
 <div id="gitalk-container"></div>
 <script>
 var gitalk = new Gitalk({
-  "clientID": "c3b20e343ac397f1b67c",
-  "clientSecret": "be4dd3f990da0c80c9592f38327ac4eb4854a31b",
+  "clientID": "ab871063a9fa7f1da571",
+  "clientSecret": "4760b384e3e452d2241d859cfa6a7da21a8729ec",
   "repo": "rCore_tutorial_doc",
-  "owner": "wyfcyx",
-  "admin": ["wyfcyx"],
+  "owner": "rcore-os",
+  "admin": ["wyfcyx","chyyuu","equation314","wangrunji0408","PanQL","xy-plus"],
   "id": location.pathname,      
   "distractionFreeMode": false  
 });
@@ -1257,7 +1259,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核调度线程 idle","level":"1.8.2","depth":2,"next":{"title":"线程调度之 Round Robin算法","level":"1.8.3","depth":2,"path":"chapter7/part3.md","ref":"chapter7/part3.md","articles":[]},"previous":{"title":"线程池与线程管理","level":"1.8.1","depth":2,"path":"chapter7/part1.md","ref":"chapter7/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part2.md","mtime":"2019-12-08T07:12:52.839Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T08:07:31.483Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"内核调度线程 idle","level":"1.8.2","depth":2,"next":{"title":"线程调度之 Round Robin算法","level":"1.8.3","depth":2,"path":"chapter7/part3.md","ref":"chapter7/part3.md","articles":[]},"previous":{"title":"线程池与线程管理","level":"1.8.1","depth":2,"path":"chapter7/part1.md","ref":"chapter7/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part2.md","mtime":"2019-12-09T10:14:29.285Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T14:21:19.155Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

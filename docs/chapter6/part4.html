@@ -963,6 +963,8 @@
 <p>&#x4E34;&#x65F6;&#x7EBF;&#x7A0B;&#x5165;&#x53E3;&#x70B9;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/mod.rs</span>
 
+<span class="token keyword">use</span> structs<span class="token punctuation">::</span>Thread<span class="token punctuation">;</span>
+
 <span class="token attribute attr-name">#[no_mangle]</span>
 <span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">temp_thread</span><span class="token punctuation">(</span>from_thread<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> Thread<span class="token punctuation">,</span> current_thread<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> Thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;I&apos;m leaving soon, but I still want to say: Hello world!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1010,10 +1012,20 @@
 
 <span class="token comment">// src/init.rs</span>
 
+<span class="token attribute attr-name">#[no_mangle]</span>
 <span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">rust_main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
-    <span class="token punctuation">...</span>
+    <span class="token keyword">crate</span><span class="token punctuation">::</span>interrupt<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">fn</span> <span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">crate</span><span class="token punctuation">::</span>memory<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span>
+        <span class="token punctuation">(</span><span class="token punctuation">(</span>end <span class="token keyword">as</span> usize <span class="token operator">-</span> KERNEL_BEGIN_VADDR <span class="token operator">+</span> KERNEL_BEGIN_PADDR<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;</span> <span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        PHYSICAL_MEMORY_END <span class="token operator">&gt;&gt;</span> <span class="token number">12</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">crate</span><span class="token punctuation">::</span>process<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">...</span>
+    <span class="token keyword">crate</span><span class="token punctuation">::</span>timer<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>&#x7EC8;&#x4E8E;&#x80FD;&#x591F; <code>make run</code> &#x770B;&#x4E00;&#x4E0B;&#x7ED3;&#x679C;&#x5566;&#xFF01;</p>
@@ -1022,17 +1034,18 @@
 <pre class="language-"><code>I&apos;m leaving soon, but I still want to say: Hello world!
 switched back from temp_thread!
 </code></pre></blockquote>
-<p>&#x53EF;&#x89C1;&#x6211;&#x4EEC;&#x5207;&#x6362;&#x5230;&#x4E86;&#x4E34;&#x65F6;&#x7EBF;&#x7A0B;&#xFF0C;&#x53C8;&#x5207;&#x6362;&#x4E86;&#x56DE;&#x6765;&#xFF01;&#x6D4B;&#x8BD5;&#x6210;&#x529F;&#xFF01;
+<p>&#x53EF;&#x89C1;&#x6211;&#x4EEC;&#x5207;&#x6362;&#x5230;&#x4E86;&#x4E34;&#x65F6;&#x7EBF;&#x7A0B;&#xFF0C;&#x53C8;&#x5207;&#x6362;&#x4E86;&#x56DE;&#x6765;&#xFF01;&#x6D4B;&#x8BD5;&#x6210;&#x529F;&#xFF01;</p>
+<p>&#x622A;&#x81F3;&#x76EE;&#x524D;&#x6240;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x4EE5;&#x4F9B;&#x53C2;&#x8003;&#x3002;
 <div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
 <script>
 var gitalk = new Gitalk({
-  "clientID": "c3b20e343ac397f1b67c",
-  "clientSecret": "be4dd3f990da0c80c9592f38327ac4eb4854a31b",
+  "clientID": "ab871063a9fa7f1da571",
+  "clientSecret": "4760b384e3e452d2241d859cfa6a7da21a8729ec",
   "repo": "rCore_tutorial_doc",
-  "owner": "wyfcyx",
-  "admin": ["wyfcyx"],
+  "owner": "rcore-os",
+  "admin": ["wyfcyx","chyyuu","equation314","wangrunji0408","PanQL","xy-plus"],
   "id": location.pathname,      
   "distractionFreeMode": false  
 });
@@ -1082,7 +1095,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核线程创建与切换测试","level":"1.7.4","depth":2,"next":{"title":"总结与展望","level":"1.7.5","depth":2,"path":"chapter6/part5.md","ref":"chapter6/part5.md","articles":[]},"previous":{"title":"内核线程初始化","level":"1.7.3","depth":2,"path":"chapter6/part3.md","ref":"chapter6/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part4.md","mtime":"2019-12-07T16:07:16.746Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T08:07:31.483Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"内核线程创建与切换测试","level":"1.7.4","depth":2,"next":{"title":"总结与展望","level":"1.7.5","depth":2,"path":"chapter6/part5.md","ref":"chapter6/part5.md","articles":[]},"previous":{"title":"内核线程初始化","level":"1.7.3","depth":2,"path":"chapter6/part3.md","ref":"chapter6/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter6/part4.md","mtime":"2019-12-09T08:53:01.273Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T14:21:19.155Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
