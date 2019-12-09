@@ -108,16 +108,30 @@ pub fn init(l: usize, r: usize) {
 
 ```rust
 // src/lib.rs
+
 extern crate alloc;
 
 // src/init.rs
 
 fn dynamic_allocating_test() {
+	use alloc::vec::Vec;
+	use alloc::boxed::Box;
+
+	extern "C" {
+		fn sbss();
+		fn ebss();
+	}
+	let lbss = sbss as usize;
+	let rbss = ebss as usize;
+
     let heap_value = Box::new(5);
     assert!(*heap_value == 5);
     println!("heap_value assertion successfully!");
     println!("heap_value is at {:p}", heap_value);
-    
+	let heap_value_addr = &*heap_value as *const _ as usize;
+	assert!(heap_value_addr >= lbss && heap_value_addr < rbss);
+	println!("heap_value is in section .bss!");
+
     let mut vec = Vec::new();
     for i in 0..500 {
         vec.push(i);
@@ -127,16 +141,24 @@ fn dynamic_allocating_test() {
     }
     println!("vec assertion successfully!");
     println!("vec is at {:p}", vec.as_slice());
+	let vec_addr = vec.as_ptr() as usize;
+	assert!(vec_addr >= lbss && vec_addr < rbss);
+	println!("vec is in section .bss!");
 }
 ```
-我们可以看到动态内存分配测试通过！
+``make run`` 看一下结果：
+
 > **[success] 动态内存分配测试**
 >
 > ```rust
 > heap_value assertion successfully!
-> heap_value is at 0xffffffffc0a16100
+> heap_value is at 0xffffffffc0a15100
+> heap_value is in section .bss!
 > vec assertion successfully!
-> vec is at 0xffffffffc0217000
+> vec is at 0xffffffffc0a14000
+> vec is in section .bss!
 > ```
->
 
+我们可以发现这些动态分配的变量可以使用了。而且通过查看它们的地址我们发现它们都在 $$\text{.bss}$$ 段里面。这是因为提供给动态内存分配器的那块内存就在 $$\text{.bss}$$ 段里面啊。
+
+如果结果不太对劲，可以在[这里]()查看现有的代码。

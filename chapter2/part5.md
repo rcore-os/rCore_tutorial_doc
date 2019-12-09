@@ -55,6 +55,10 @@ PMP1: 0x0000000000000000-0xffffffffffffffff (A,R,W,X)
 为了确信我们已经跑起来了内核里面的代码，我们最好在  ``rust_main`` 里面加一点东西。
 
 ```rust
+// src/main.rs
+
+#![feature(asm)]
+
 // 在屏幕上输出一个字符，目前我们先不用了解其实现原理
 pub fn console_putchar(ch: u8) {
     let ret: usize;
@@ -87,7 +91,7 @@ extern "C" fn rust_main() -> ! {
 现在我们生成内核镜像要通过多条命令来完成，我们通过 ``Makefile`` 来简化这一过程。
 
 ```makefile
-# os/Makefile
+# Makefile
 
 target := riscv64-os
 mode := debug
@@ -105,10 +109,10 @@ clean:
 	@rm -r target/
 qemu: build
 	@qemu-system-riscv64 \
-		--machine virt \
-		--nographic \
-		--bios opensbi/opensbi_rv64.elf \
-		--device loader,file=$(bin),addr=0x80200000
+        --machine virt \
+        --nographic \
+        --bios opensbi/opensbi_rv64.elf \
+        --device loader,file=$(bin),addr=0x80200000
 run: qemu
 ```
 
@@ -116,4 +120,5 @@ run: qemu
 
 于是，我们可以使用 ``make run`` 来用 Qemu 加载内核镜像并运行。匆匆翻过一串长长的 OpenSBI 输出，我们看到了 ``OK`` ！于是历经了千辛万苦我们终于将我们的内核跑起来了！
 
+没有看到 OK ？迄今为止的代码可以在[这里]()找到，请参考。
 下一节我们实现格式化输出来使得我们后续能够更加方便的通过输出来进行内核调试。

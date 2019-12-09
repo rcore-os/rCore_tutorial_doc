@@ -3,7 +3,7 @@
 使用 ``cargo new`` 创建一个新的rust binary项目，命令如下：
 
 ```bash
-$cargo new os --bin --edition 2018
+$ cargo new os --bin --edition 2018
 ```
 
 | ``cargo new`` 的参数 | 含义                                      |
@@ -24,7 +24,7 @@ os
 接下来我们进入 ``os`` 项目文件夹，并尝试构建、运行项目：
 
 ```bash
-$cargo run
+$ cargo run
    ...
 Hello, world!
 ```

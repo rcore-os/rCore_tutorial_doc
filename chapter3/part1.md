@@ -4,7 +4,7 @@
 > 
 > 当我们触发中断进入S态进行处理时，以下寄存器会被硬件自动设置：
 > 
-> **sepc**(exception program counter)，它会记录触发中断的那条指令的**虚拟地址**；
+> **sepc**(exception program counter)，它会记录触发中断的那条指令的地址；
 > 
 > **scause**，它会记录中断发生的原因，还会记录该中断是不是一个外部中断；
 > 

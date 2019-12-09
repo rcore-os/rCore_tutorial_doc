@@ -23,6 +23,10 @@
 首先是用来修改 ``PageEntry`` (我们的页表映射默认将权限设为 ``R|W|X`` ，需要修改) 的类 ``MemoryAttr``：
 
 ```rust
+// src/memory/mod.rs
+
+pub mod memory_set;
+
 // src/memory/memory_set/mod.rs
 
 pub mod attr;
@@ -214,6 +218,10 @@ impl MemoryArea {
     }
 }
 
+// src/consts.rs
+
+pub const PAGE_SIZE: usize = 4096;
+
 // src/memory/paging.rs
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -278,7 +286,7 @@ pub struct MemorySet {
 impl MemorySet {
     pub fn push(&mut self, start: usize, end: usize, attr: MemoryAttr, handler: impl MemoryHandler) {
         // 加入一个新的给定了 handler 以及 attr 的 MemoryArea
-        println!("in push: [{:#x},{:#x})", start, end);
+
         // 合法性测试
         assert!(start <= end, "invalid memory area!");
         // 整段虚拟地址空间均未被占据
