@@ -2,26 +2,40 @@
 
 cargo 在编译项目时，可以附加目标参数 `--target <target triple>` 设置项目的目标平台。平台包括硬件和软件支持，事实上， **目标三元组(target triple)** 包含：cpu 架构、供应商、操作系统和 [ABI](https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi/2456882#2456882) 。
 
-安装 rust 时，默认编译后的可执行文件要在本平台上执行，我们可以使用
+安装 Rust 时，默认编译后的可执行文件要在本平台上执行，我们可以使用
 
-``rustc --version --verbose``来查看rust的默认目标三元组：
+``rustc --version --verbose``来查看 Rust 的默认目标三元组：
 
 ```bash
 $ rustc --version --verbose
-rustc 1.40.0-nightly (fae75cd21 2019-10-26)
+rustc 1.41.0-nightly (5c5c8eb86 2019-12-07)
 binary: rustc
-commit-hash: fae75cd216c481de048e4951697c8f8525669c65
-commit-date: 2019-10-26
+commit-hash: 5c5c8eb864e56ce905742b8e97df5506bba6aeef
+commit-date: 2019-12-07
 host: x86_64-unknown-linux-gnu
-release: 1.40.0-nightly
+release: 1.41.0-nightly
 LLVM version: 9.0
 ```
 
-在 ``host`` 处可以看到默认的目标三元组， cpu 架构为 ``x86_64`` ，供应商为 ``unknown`` ，操作系统为 ``linux`` ，ABI 为 ``gnu`` 。由于我们是在 64 位 ubuntu 上安装的 rust ，这个默认目标三元组的确描述了本平台。
+在 ``host`` 处可以看到默认的目标三元组， cpu 架构为 ``x86_64`` ，供应商为 ``unknown`` ，操作系统为 ``linux`` ，ABI 为 ``gnu`` 。由于我们是在 64 位 ubuntu 上安装的 Rust ，这个默认目标三元组的确描述了本平台。
 
-官方对一些平台提供了默认的目标三元组。但由于我们在编写自己的新操作系统，所以所有官方提供的目标三元组都不适用。幸运的是，rust 允许我们用 JSON 文件定义自己的目标三元组。
+官方对一些平台提供了默认的目标三元组，我们可以通过以下命令来查看完整列表：
 
-首先我们来看一下默认的目标三元组 **x86_64-unknown-linux-gnu** 的 **JSON** 文件描述：
+```sh
+rustc --print target-list
+```
+
+### 目标三元组 JSON 描述文件
+
+除了默认提供的以外，Rust 也允许我们用 JSON 文件定义自己的目标三元组。
+
+首先我们来看一下默认的目标三元组 **x86_64-unknown-linux-gnu** 的 **JSON** 文件描述，输入以下命令：
+
+```sh
+rustc -Z unstable-options --print target-spec-json --target x86_64-unknown-linux-gnu
+```
+
+可以得到如下输出：
 
 ```json
 // x86_64-unknown-linux-gnu.json
@@ -58,32 +72,19 @@ LLVM version: 9.0
 }
 ```
 
-可以看到里面描述了架构、 CPU 、操作系统、 ABI 、端序、字长等信息。而我们想基于 $$64$$ 位 ``riscv`` 架构开发内核，确切的说，是基于 ``RV64I`` 指令集，再加上若干拓展。我们直接给出我们所使用的目标三元组：
+可以看到里面描述了架构、 CPU 、操作系统、 ABI 、端序、字长等信息。
+
+我们现在想基于 64 位 RISCV 架构开发内核，就需要一份 `riscv64` 的目标三元组。幸运的是，目前 Rust 编译器已经内置了一个可用的目标：`riscv64imac-unknown-none-elf`。
+
+我们查看一下它的 JSON 描述文件：
+
+```sh
+rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-none-elf
+```
 
 ```json
-// riscv64-os.json
-
+// riscv64imac-unknown-none-elf.json
 {
-  "llvm-target": "riscv64",
-  "data-layout": "e-m:e-p:64:64-i64:64-n64-S128",
-  "target-endian": "little",
-  "target-pointer-width": "64",
-  "target-c-int-width": "32",
-  "os": "none",
-  "arch": "riscv64",
-  "cpu": "generic-rv64",
-  "features": "+m,+a,+c",
-  "max-atomic-width": "64",
-  "linker": "rust-lld",
-  "linker-flavor": "ld.lld",
-  "pre-link-args": {
-    "ld.lld": [
-      "-Tsrc/boot/linker64.ld"
-    ]
-  },
-  "executables": true,
-  "panic-strategy": "abort",
-  "relocation-model": "static",
   "abi-blacklist": [
     "cdecl",
     "stdcall",
@@ -95,42 +96,91 @@ LLVM version: 9.0
     "sysv64",
     "ptx-kernel",
     "msp430-interrupt",
-    "x86-interrupt"
+    "x86-interrupt",
+    "amdgpu-kernel"
   ],
-  "eliminate-frame-pointer": false
+  "arch": "riscv64",
+  "code-model": "medium",
+  "cpu": "generic-rv64",
+  "data-layout": "e-m:e-p:64:64-i64:64-i128:128-n64-S128",
+  "eliminate-frame-pointer": false,
+  "emit-debug-gdb-scripts": false,
+  "env": "",
+  "executables": true,
+  "features": "+m,+a,+c",
+  "is-builtin": true,
+  "linker": "rust-lld",
+  "linker-flavor": "ld.lld",
+  "llvm-target": "riscv64",
+  "max-atomic-width": 64,
+  "os": "none",
+  "panic-strategy": "abort",
+  "relocation-model": "static",
+  "target-c-int-width": "32",
+  "target-endian": "little",
+  "target-pointer-width": "64",
+  "vendor": "unknown"
 }
 ```
 
-我们来看两个与默认的目标三元组有着些许不同的地方：
+我们来看它与默认的目标三元组有着些许不同的地方：
 
 ```json
-// riscv64-os.json
-
 "panic-strategy": "abort",
 ```
 
-第一个不同的地方是 ``panic`` 时采取的策略。回忆上一章中，我们在 ``Cargo.toml`` 中设置程序在 ``panic`` 时直接 ``abort`` ，从而不必调用堆栈展开处理函数。
+这个描述了 ``panic`` 时采取的策略。回忆上一章中，我们在 ``Cargo.toml`` 中设置程序在 ``panic`` 时直接 ``abort`` ，从而不必调用堆栈展开处理函数。由于目标三元组中已经包含了这个参数，我们可以将 ``Cargo.toml`` 中的设置删除了：
 
-我们可以将设置移到目标三元组中，从而可以将 ``Cargo.toml`` 中的设置删除了。但是同样的设置，这里设置为 ``abort`` 的含义却是在程序 ``panic`` 时调用 ``abort`` 函数。所以要把这个 ``abort`` 函数写出来：
-
-```rust
-// src/main.rs
-#[no_mangle]
-extern "C" fn abort() -> ! {
-    panic!("abort!");
-}
+```diff
+-[profile.dev]
+-panic = "abort"
+-
+-[profile.release]
+-panic = "abort"
 ```
 
-你可能觉得这种在 ``abort`` 中再次 ``panic`` 会引起某种死循环，不过事实上这个函数压根不会被调用，所以我们想写什么都可以。当然，前提是要能够通过编译。
+### 使用 riscv64 目标编译项目
 
-```json
-// riscv64-os.json
+现在我们尝试用 riscv64 的目标来编译这个项目：
 
-"pre-link-args": {
-    "ld.lld": [
-      "-Tsrc/boot/linker64.ld"
-    ]
-}
+```sh
+cargo build --target riscv64imac-unknown-none-elf
 ```
 
-第二个不同的地方则是通过**链接脚本**指定了程序的**内存布局**。我们将在下一节中详细说明。
+结果出现了以下错误：
+
+```
+error[E0463]: can't find crate for `core`
+  |
+  = note: the `riscv64imac-unknown-none-elf` target may not be installed
+```
+
+原因是 Rust 工具链默认没有内置核心库 core 在这个目标下的预编译版本，我们可以使用以下命令手动安装它：
+
+```sh
+rustup target add riscv64imac-unknown-none-elf
+```
+
+很快下载安装好后，我们重试一下，发现就可以成功编译了。
+
+编译出的结果被放在了 `target/riscv64imac-unknown-none-elf/debug` 文件夹中。可以看到其中有一个名为 `os` 的可执行文件。不过由于它的目标平台是 riscv64，我们暂时还不能执行它。
+
+### 为项目设置默认目标三元组
+
+由于我们之后都会使用 riscv64 作为编译目标，为了避免每次都要加 `--target` 参数，我们可以为项目配置默认的编译选项。
+
+在 `os` 文件夹中创建一个 `.cargo` 文件夹，并在其中创建一个名为 `config` 的文件：
+
+```sh
+mkdir .cargo
+touch .cargo/config
+```
+
+在其中填入以下内容：
+
+```
+[build]
+target = "riscv64imac-unknown-none-elf"
+```
+
+这指定了此项目编译时默认的目标。以后我们就可以直接使用 `cargo build` 来编译了。
