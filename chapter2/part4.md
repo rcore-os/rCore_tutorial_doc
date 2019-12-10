@@ -10,7 +10,7 @@
 > 
 > 所以 CPU 所执行的第一条指令是指 bootloader 的第一条指令。
 
-幸运的是， 我们已经有现成的 bootloader 实现 [OpenSBI](https://github.com/riscv/opensbi) 。我们下载最新的  [预编译版本](https://github.com/riscv/opensbi/releases/download/v0.4/opensbi-0.4-rv64-bin.tar.xz) ，解压后将其中的 `platform/qemu/virt/firmware/fw_jump.elf` 复制为我们自己的 ``os/opensbi/opensbi_rv64.elf`` 作为 bootloader 。
+幸运的是， 我们已经有现成的 bootloader 实现 [OpenSBI](https://github.com/riscv/opensbi) 。
 
 > **[info] riscv64的特权级**
 >
@@ -22,57 +22,34 @@
 
 其中 OpenSBI 运行在 M Mode (CPU 加电后也就运行在 M Mode) ，我们的内核运行在 S Mode ， 而我们要支持的用户程序运行在 U Mode 。所以在开发过程中我们只需关注 S Mode 。
 
-所以 OpenSBI 所做的一件事情就是把 CPU 从 M Mode 切换到 S Mode ，将我们的代码 load 到内存中，接着跳转到内核入口 ``_start`` 。
+所以 OpenSBI 所做的一件事情就是把 CPU 从 M Mode 切换到 S Mode ，接着跳转到一个固定地址 0x80200000，开始执行内核代码。（这就是为什么在上一节中我们将程序放在了这个地址上）
 
 接着我们要在 ``_start`` 中设置内核的运行环境了，我们直接来看代码：
 
-```riscv
+```asm
 # src/boot/entry64.asm
 
-	.section .text.entry
-	.globl _start
+    .section .text.entry
+    .globl _start
 _start:
-	# 迷之代码
-	lui     t0, %hi(boot_page_table_sv39)
-    li      t1, 0xffffffffc0000000 - 0x80000000
-    sub     t0, t0, t1
-    srli    t0, t0, 12
-    li      t1, 8 << 60
-    or      t0, t0, t1
-    csrw    satp, t0
-    sfence.vma
-	# 迷之代码
-	
-	lui sp, %hi(bootstacktop)
+    la sp, bootstacktop
+    call rust_main
 
-	lui t0, %hi(rust_main)
-	addi t0, t0, %lo(rust_main)
-	jr t0
-
-	.section .bss.stack
-	.align 12
-	.global bootstack
+    .section .bss.stack
+    .align 12
+    .global bootstack
 bootstack:
-	.space 4096 * 4
-	.global bootstacktop
+    .space 4096 * 4
+    .global bootstacktop
 bootstacktop:
-	
-	# 迷之代码
-	.section .data
-    .align 12   # page align
-boot_page_table_sv39:
-    # 0xffffffff_c0000000 -> 0x80000000 (1G)
-    .zero 8 * 511
-    .quad (0x80000 << 10) | 0xcf # VRWXAD
-    # 迷之代码
 ```
 
-可以看到之前未被定义的 $$\text{.bss.stack}$$ 段出现了，我们只是在这里分配了一块 $$4096\times{4}\text{Bytes}=\text{16KiB}$$ 的内存作为内核的栈段。之前的 $$\text{.text.entry}$$ 也出现了：我们将 ``_start`` 函数放在了 $$\text{.text}$$ 段的开头。
+可以看到之前未被定义的 $$\text{.bss.stack}$$ 段出现了，我们只是在这里分配了一块 $$4096\times{4}\text{Bytes}=\text{16KiB}$$ 的内存作为内核的栈。之前的 $$\text{.text.entry}$$ 也出现了：我们将 ``_start`` 函数放在了 $$\text{.text}$$ 段的开头。
 
-我们先不管两段迷之代码，看看 ``_start`` 里面做了什么：
+我们看看 ``_start`` 里面做了什么：
 
 1. 修改栈指针寄存器 $$\text{sp}$$ 为 $$\text{.bss.stack}$$ 段的结束地址，由于栈是从高地址往低地址增长，所以高地址是栈顶；
-2. 获取 ``rust_main`` 的地址，并使用 ``jr`` 指令跳转到 ``rust_main`` 。这意味着我们的内核运行环境设置完成了，正式进入内核。
+2. 使用 ``call`` 指令跳转到 ``rust_main`` 。这意味着我们的内核运行环境设置完成了，正式进入内核。
 
 我们将 ``src/main.rs`` 里面的 ``_start`` 函数删除，并换成 ``rust_main`` ：
 
@@ -88,4 +65,4 @@ pub extern "C" fn rust_main() -> ! {
     loop {}
 }
 ```
-到现在为止我们终于将一切都准备好了。现在我们尝试编译并生成内核镜像。
+到现在为止我们终于将一切都准备好了，接下来就要配合 OpenSBI 运行我们的内核！
