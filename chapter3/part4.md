@@ -26,7 +26,7 @@ __trapret
 
 我们定义几个宏：
 
-```asm
+```riscv
 # src/trap/trap.asm
 
 # 表示每个寄存器占的字节数，由于是64位，都是8字节
@@ -45,7 +45,7 @@ __trapret
 
 ``SAVE_ALL`` 的原理是：将一整个 ``TrapFrame`` 保存在**内核栈**上。我们现在就处在内核态(S 态)，因此现在的栈顶地址 ``sp`` 就指向内核栈地址。但是，之后我们还要支持运行**用户态程序**，顾名思义，要在用户态(U 态)上运行，在中断时栈顶地址 ``sp`` 将指向用户栈顶地址，这种情况下我们要从用户栈切换到内核栈。
 
-```asm
+```riscv
 # src/trap/trap.asm
 
 # 规定若在中断之前处于 U 态(用户态)
@@ -107,7 +107,7 @@ trap_from_user:
 
 而 ``RESTORE_ALL`` 正好是一个反过来的过程：
 
-```asm
+```riscv
 # src/trap/trap.asm
 
 .macro RESTORE_ALL
