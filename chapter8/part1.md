@@ -1,6 +1,6 @@
 ## 编写用户程序
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85)
+* [代码][CODE]
 
 ### 系统调用
 
@@ -278,4 +278,6 @@ $ cargo build
 
 我们将能够在 ``usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world`` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
 
-目前的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85)找到。
+目前的代码可以在[这里][CODE]找到。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/99fa0b58

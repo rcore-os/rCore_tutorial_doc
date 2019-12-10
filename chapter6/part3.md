@@ -1,6 +1,6 @@
 ## 内核线程初始化
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+* [代码][CODE]
 
 回忆一下我们如何进行启动线程的初始化？无非两步：设置栈顶地址、跳转到内核入口地址。从而变为启动线程的初始状态，并准备开始运行。
 
@@ -120,3 +120,5 @@ impl Thread {
 ```
 
 下一节我们终于能拨云见日，写一个测试看看我们的线程实现究竟有无问题了！
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be

@@ -1,6 +1,6 @@
 ## 实现上下文环境保存与恢复
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/837b3cbf0603b642f2e2d47ffcbdf7dda58d3a0e)
+* [代码][CODE]
 
 ```riscv
 # src/trap/trap.asm
@@ -252,4 +252,6 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 
 可以看到，我们确实手动触发中断，调用了中断处理函数，并通过上下文保存与恢复机制保护了上下文环境不受到破坏，正确在 ``ebreak`` 中断处理程序返回之后 ``panic``。
 
-迄今为止的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/837b3cbf0603b642f2e2d47ffcbdf7dda58d3a0e)找到。如果出现了问题的话就来检查一下吧。
+迄今为止的代码可以在[这里][CODE]找到。如果出现了问题的话就来检查一下吧。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/5d09d5eb

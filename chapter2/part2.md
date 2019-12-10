@@ -1,6 +1,6 @@
 ## 编译、生成内核镜像
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+* [代码][CODE]
 
 ### 使用 riscv64 目标编译项目
 
@@ -177,3 +177,5 @@ $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binar
 这里 ``--strip-all`` 表明丢弃所有符号表及调试信息，``-O binary`` 表示输出为二进制文件。
 
 至此，我们编译并生成了内核镜像 ``kernel.bin`` 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：调整内存布局 和 重写入口函数。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79

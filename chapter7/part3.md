@@ -1,6 +1,6 @@
 ## 线程调度之 Round Robin 算法
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+* [代码][CODE]
 
 这里我们直接给出代码，有兴趣者可自行去研究算法细节。
 
@@ -102,3 +102,4 @@ impl Scheduler for RRScheduler {
 }
 ```
 
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97

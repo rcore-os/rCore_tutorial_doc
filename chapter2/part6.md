@@ -1,6 +1,6 @@
 ## 封装 SBI 接口
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/8b1cfc9c84490b1a73817adb5bbcbb716453adb7)
+* [代码][CODE]
 
 ### 代码整理
 
@@ -215,3 +215,4 @@ const SBI_SHUTDOWN: usize = 8;
 
 现在我们比较深入的理解了 ``console_putchar`` 到底是怎么一回事。下一节我们将使用 ``console_putchar`` 实现格式化输出，为后面的调试提供方便。
 
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ad57b607

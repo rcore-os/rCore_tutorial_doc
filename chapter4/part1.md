@@ -1,6 +1,6 @@
 ## 物理内存探测与管理
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/0c11e42a2174f0cc76a275bfe8815b7aa47d8bec)
+* [代码][CODE]
 
 我们知道，物理内存通常是一片 RAM ，我们可以把它看成一个以字节为单位的大数组，通过物理地址找到对应的位置进行读写。但是，物理地址**并不仅仅**只能访问物理内存，也可以用来访问其他的外设，因此你也可以认为物理内存也算是一种外设。
 
@@ -300,7 +300,8 @@ fn frame_allocating_test() {
 
 我们回收的页面接下来马上就又被分配出去了。
 
-如果结果有问题的话，在[这里](https://github.com/rcore-os/rCore_tutorial/tree/0c11e42a2174f0cc76a275bfe8815b7aa47d8bec)能找到现有的代码。
+如果结果有问题的话，在[这里][CODE]能找到现有的代码。
 
 不过，这种物理内存分配给人一种过家家的感觉。无论表面上分配、回收做得怎样井井有条，实际上都并没有对物理内存产生任何影响！不要着急，我们之后会使用它们的。
 
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/695d8a2c

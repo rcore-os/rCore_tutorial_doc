@@ -1,6 +1,6 @@
 ## 创建虚拟内存空间
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1)
+* [代码][CODE]
 
 ### 内核链接
 
@@ -278,3 +278,5 @@ impl PageTableImpl {
 由于 ``MemorySet::push`` 的接口发生的变化，我们要将 ``ElfExt::make_memory_set`` 之外的所有 ``push`` 调用最后均加上一个 ``None`` 参数。
 
 现在我们就可以从 ``ElfFile`` 创建用户程序的虚拟内存空间了。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/86abde4d
