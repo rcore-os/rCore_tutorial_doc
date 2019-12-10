@@ -1,5 +1,7 @@
 ## 实现记事本
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/793c5715ee2a2d11d1210d2c45b0411660e0b22f)
+
 为了实现上节中交互式终端的目标，先不管运行程序，我们首先要能够通过键盘向终端程序中输入。也就是说，我们要实现一个用户程序，它能够接受键盘的输入，并将键盘输入的字符显示在屏幕上。这不能叫一个终端，姑且叫它记事本吧。
 
 这个用户程序需要的功能是：接受键盘输入（可以被称为“标准输入”）的一个字符。
@@ -79,7 +81,7 @@ pub fn main() {
 
 很简单，就是将接受到的字符打印到屏幕上。
 
-看一下 ``getc`` 的实现，我们满怀信心 ``sys_read`` 的返回值是 $$1$$ ，也就是确保一定能够读到字符。
+看一下 ``getc`` 的实现，我们满怀信心 ``sys_read`` 的返回值是 $$1$$ ，也就是确保一定能够读到字符。不过真的是这样吗？
 
 ### 缓冲区
 
@@ -163,6 +165,19 @@ impl Processor {
 
 // src/process/thread_pool.rs
 
+// 改成 public
+pub struct ThreadInfo {
+    // 改成 public
+    pub status: Status,
+    pub thread: Option<Box<Thread>>,
+}
+
+pub struct ThreadPool {
+    // 改成 public
+    pub threads: Vec<Option<ThreadInfo>>,
+    scheduler: Box<dyn Scheduler>,
+}
+
 impl ThreadPool {
     ...
     pub fn wakeup(&mut self, tid: Tid) {
@@ -175,6 +190,10 @@ impl ThreadPool {
 
 下面我们用这几种线程调度机制来实现条件变量。
 ```rust
+// src/lib.rs
+
+mod sync;
+
 // src/sync/mod.rs
 
 pub mod condvar;
@@ -213,9 +232,7 @@ impl Condvar {
         let tid = self.wait_queue.lock().pop_front();
         if let Some(tid) = tid {
         	// 唤醒该线程
-            wait_up(tid);
-            // 当前线程放弃 CPU 资源
-            yield_now();
+            wake_up(tid);
         }
     }
 }
@@ -301,6 +318,9 @@ lazy_static! {
 ```rust
 // src/interrupt.rs
 
+use crate::memory::access_pa_via_va;
+use riscv::register::sie;
+
 pub fn init() {
     ...
     
@@ -323,6 +343,69 @@ pub unsafe fn enable_serial_interrupt() {
     let UART16550: *mut u8 = access_pa_via_va(0x10000000) as *mut u8;
     UART16550.add(4).write_volatile(0x0B);
     UART16550.add(1).write_volatile(0x01);
+}
+```
+
+这里的内存尚未被映射，我们在内存模块初始化时完成映射：
+
+```rust
+// src/memory/mod.rs
+
+pub fn kernel_remap() {
+    let mut memory_set = MemorySet::new();
+    
+    extern "C" {
+        fn bootstack();
+        fn bootstacktop();
+    }
+    memory_set.push(
+        bootstack as usize,
+        bootstacktop as usize,
+        MemoryAttr::new(),
+        Linear::new(PHYSICAL_MEMORY_OFFSET),
+		None,
+    );
+	memory_set.push(
+        access_pa_via_va(0x0c00_2000),
+        access_pa_via_va(0x0c00_3000),
+        MemoryAttr::new(),
+        Linear::new(PHYSICAL_MEMORY_OFFSET),
+        None
+    );
+    memory_set.push(
+        access_pa_via_va(0x1000_0000),
+        access_pa_via_va(0x1000_1000),
+        MemoryAttr::new(),
+        Linear::new(PHYSICAL_MEMORY_OFFSET),
+        None
+    );
+
+    unsafe {
+        memory_set.activate();
+    }
+}
+```
+
+也因此，内存模块要比中断模块先初始化。
+
+```rust
+// src/init.rs
+
+#[no_mangle]
+pub extern "C" fn rust_main() -> ! {
+    extern "C" {
+        fn end();
+    }
+    crate::memory::init(
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+    );
+	crate::interrupt::init();
+	crate::fs::init();
+    crate::process::init();
+    crate::timer::init();
+    crate::process::run();
+    loop {}
 }
 ```
 
@@ -408,4 +491,29 @@ fn sys_read(fd: usize, base: *mut u8, len: usize) -> isize {
 }
 ```
 
-现在我们可以将要运行的程序从 ``rust/hello_world`` 改成 ``rust/notebook`` 了！运行一下，我们已经实现了字符的输入及显示了！
+这里我们要写入用户态内存，但是 CPU 默认并不允许在内核态访问用户态内存，因此我们要在内存初始化的时候将开关打开：
+
+```rust
+// src/memory/mod.rs
+
+use riscv::register::sstatus;
+
+pub fn init(l: usize, r: usize) {
+	unsafe {
+		sstatus::set_sum();
+	}
+    // 以下不变
+    FRAME_ALLOCATOR.lock().init(l, r);
+    init_heap();
+
+	kernel_remap();
+
+    println!("++++ setup memory!    ++++");
+}
+```
+
+现在我们可以将要运行的程序从 ``rust/hello_world`` 改成 ``rust/notebook`` 了！
+
+将多余的线程换入换出提示信息删掉，运行一下，我们已经实现了字符的输入及显示了！可以享受输入带来的乐趣了！（大雾
+
+如果记事本不能正常工作，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/793c5715ee2a2d11d1210d2c45b0411660e0b22f)找到已有的代码。

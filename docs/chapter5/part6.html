@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>内核重映射实现之三：完结 · GitBook</title>
+        <title>[内核重映射实现之三：完结] · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -176,7 +176,7 @@
                 <a href="../chapter1/part4.html">
             
                     
-                    移除 runtime 依赖
+                    [移除 runtime 依赖]
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    编译、生成内核镜像
+                    [编译、生成内核镜像]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    使用 Qemu 加载内核镜像
+                    [使用 Qemu 加载内核镜像]
             
                 </a>
             
@@ -299,7 +299,7 @@
                 <a href="../chapter2/part7.html">
             
                     
-                    实现格式化输出
+                    [实现格式化输出]
             
                 </a>
             
@@ -357,7 +357,7 @@
                 <a href="../chapter3/part2.html">
             
                     
-                    手动触发断点中断
+                    [手动触发断点中断]
             
                 </a>
             
@@ -383,7 +383,7 @@
                 <a href="../chapter3/part4.html">
             
                     
-                    实现上下文环境保存与恢复
+                    [实现上下文环境保存与恢复]
             
                 </a>
             
@@ -396,7 +396,7 @@
                 <a href="../chapter3/part5.html">
             
                     
-                    时钟中断
+                    [时钟中断]
             
                 </a>
             
@@ -441,7 +441,7 @@
                 <a href="../chapter4/part1.html">
             
                     
-                    物理内存探测与管理
+                    [物理内存探测与管理]
             
                 </a>
             
@@ -454,7 +454,7 @@
                 <a href="../chapter4/part2.html">
             
                     
-                    动态内存分配
+                    [动态内存分配]
             
                 </a>
             
@@ -564,7 +564,7 @@
                 <a href="part6.html">
             
                     
-                    内核重映射实现之三：完结
+                    [内核重映射实现之三：完结]
             
                 </a>
             
@@ -648,7 +648,7 @@
                 <a href="../chapter6/part4.html">
             
                     
-                    内核线程创建与切换测试
+                    [内核线程创建与切换测试]
             
                 </a>
             
@@ -732,7 +732,7 @@
                 <a href="../chapter7/part4.html">
             
                     
-                    线程调度测试
+                    [线程调度测试]
             
                 </a>
             
@@ -777,7 +777,7 @@
                 <a href="../chapter8/part1.html">
             
                     
-                    编写用户程序
+                    [编写用户程序]
             
                 </a>
             
@@ -816,7 +816,7 @@
                 <a href="../chapter8/part4.html">
             
                     
-                    创建用户线程
+                    [创建用户线程]
             
                 </a>
             
@@ -861,7 +861,7 @@
                 <a href="../chapter9/part1.html">
             
                     
-                    使用文件系统
+                    [使用文件系统]
             
                 </a>
             
@@ -874,7 +874,7 @@
                 <a href="../chapter9/part2.html">
             
                     
-                    实现记事本
+                    [实现记事本]
             
                 </a>
             
@@ -887,7 +887,7 @@
                 <a href="../chapter9/part3.html">
             
                     
-                    实现终端
+                    [实现终端]
             
                 </a>
             
@@ -943,7 +943,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >内核重映射实现之三：完结</a>
+        <a href=".." >[内核重映射实现之三：完结]</a>
     </h1>
 </div>
 
@@ -959,6 +959,9 @@
                                 <section class="normal markdown-section">
                                 
                                 <h2 id="&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E09;&#xFF1A;&#x5B8C;&#x7ED3;">&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E09;&#xFF1A;&#x5B8C;&#x7ED3;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
 <p>&#x5728;&#x5185;&#x5B58;&#x6A21;&#x5757;&#x521D;&#x59CB;&#x5316;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x7CBE;&#x7EC6;&#x6620;&#x5C04;&#x7684; <code>MemorySet</code> &#x5E76;&#x5207;&#x6362;&#x8FC7;&#x53BB;&#x4F9B;&#x5185;&#x6838;&#x4F7F;&#x7528;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/memory/mod.rs</span>
 
@@ -1087,7 +1090,7 @@ panicked at <span class="token lifetime-annotation symbol">&apos;page</span> <sp
 </code></pre>
 </blockquote>
 <p>&#x4ECE;&#x4E2D;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6E05;&#x695A;&#x7684;&#x770B;&#x51FA;&#x5185;&#x6838;&#x6210;&#x529F;&#x7684;&#x627E;&#x5230;&#x4E86;&#x9519;&#x8BEF;&#x7684;&#x539F;&#x56E0;&#xFF0C;&#x5185;&#x6838;&#x5404;&#x6BB5;&#x88AB;&#x6210;&#x529F;&#x7684;&#x8BBE;&#x7F6E;&#x4E86;&#x4E0D;&#x540C;&#x7684;&#x6743;&#x9650;&#x3002;&#x6211;&#x4EEC;&#x8FBE;&#x5230;&#x4E86;&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x7684;&#x76EE;&#x7684;&#xFF01;
-&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x80FD;&#x5728;<a href="">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;
+&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x80FD;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;
 <div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1147,7 +1150,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核重映射实现之三：完结","level":"1.6.6","depth":2,"next":{"title":"总结与展望","level":"1.6.7","depth":2,"path":"chapter5/part7.md","ref":"chapter5/part7.md","articles":[]},"previous":{"title":"内核重映射实现之二：MemorySet","level":"1.6.5","depth":2,"path":"chapter5/part5.md","ref":"chapter5/part5.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part6.md","mtime":"2019-12-09T08:06:42.417Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T14:31:56.559Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[内核重映射实现之三：完结]","level":"1.6.6","depth":2,"next":{"title":"总结与展望","level":"1.6.7","depth":2,"path":"chapter5/part7.md","ref":"chapter5/part7.md","articles":[]},"previous":{"title":"内核重映射实现之二：MemorySet","level":"1.6.5","depth":2,"path":"chapter5/part5.md","ref":"chapter5/part5.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part6.md","mtime":"2019-12-10T02:45:25.116Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

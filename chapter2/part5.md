@@ -1,5 +1,7 @@
 ## 使用 Qemu 运行内核
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/3b1500685e14d7fe509d8b08e1e5eca4a299b022)
+
 ### 安装模拟器 Qemu
 
 如果你在使用 Linux (Ubuntu) ，需要到 Qemu 官方网站下载源码并自行编译，因为 Ubuntu 自带的软件包管理器 ``apt`` 中的 Qemu 的版本过低无法使用。参考命令如下：
@@ -153,6 +155,6 @@ run: build qemu
 
 于是，我们可以使用 ``make run`` 来用 Qemu 加载内核镜像并运行。匆匆翻过一串长长的 OpenSBI 输出，我们看到了 ``OK`` ！于是历经了千辛万苦我们终于将我们的内核跑起来了！
 
-没有看到 OK ？迄今为止的代码可以在[这里]()找到，请参考。
+没有看到 OK ？迄今为止的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/3b1500685e14d7fe509d8b08e1e5eca4a299b022)找到，请参考。
 下一节我们实现格式化输出来使得我们后续能够更加方便的通过输出来进行内核调试。
 

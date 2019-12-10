@@ -176,7 +176,7 @@
                 <a href="../chapter1/part4.html">
             
                     
-                    移除 runtime 依赖
+                    [移除 runtime 依赖]
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    编译、生成内核镜像
+                    [编译、生成内核镜像]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    使用 Qemu 加载内核镜像
+                    [使用 Qemu 加载内核镜像]
             
                 </a>
             
@@ -299,7 +299,7 @@
                 <a href="../chapter2/part7.html">
             
                     
-                    实现格式化输出
+                    [实现格式化输出]
             
                 </a>
             
@@ -357,7 +357,7 @@
                 <a href="../chapter3/part2.html">
             
                     
-                    手动触发断点中断
+                    [手动触发断点中断]
             
                 </a>
             
@@ -383,7 +383,7 @@
                 <a href="../chapter3/part4.html">
             
                     
-                    实现上下文环境保存与恢复
+                    [实现上下文环境保存与恢复]
             
                 </a>
             
@@ -396,7 +396,7 @@
                 <a href="../chapter3/part5.html">
             
                     
-                    时钟中断
+                    [时钟中断]
             
                 </a>
             
@@ -441,7 +441,7 @@
                 <a href="../chapter4/part1.html">
             
                     
-                    物理内存探测与管理
+                    [物理内存探测与管理]
             
                 </a>
             
@@ -454,7 +454,7 @@
                 <a href="../chapter4/part2.html">
             
                     
-                    动态内存分配
+                    [动态内存分配]
             
                 </a>
             
@@ -564,7 +564,7 @@
                 <a href="../chapter5/part6.html">
             
                     
-                    内核重映射实现之三：完结
+                    [内核重映射实现之三：完结]
             
                 </a>
             
@@ -648,7 +648,7 @@
                 <a href="../chapter6/part4.html">
             
                     
-                    内核线程创建与切换测试
+                    [内核线程创建与切换测试]
             
                 </a>
             
@@ -732,7 +732,7 @@
                 <a href="../chapter7/part4.html">
             
                     
-                    线程调度测试
+                    [线程调度测试]
             
                 </a>
             
@@ -777,7 +777,7 @@
                 <a href="part1.html">
             
                     
-                    编写用户程序
+                    [编写用户程序]
             
                 </a>
             
@@ -816,7 +816,7 @@
                 <a href="part4.html">
             
                     
-                    创建用户线程
+                    [创建用户线程]
             
                 </a>
             
@@ -861,7 +861,7 @@
                 <a href="../chapter9/part1.html">
             
                     
-                    使用文件系统
+                    [使用文件系统]
             
                 </a>
             
@@ -874,7 +874,7 @@
                 <a href="../chapter9/part2.html">
             
                     
-                    实现记事本
+                    [实现记事本]
             
                 </a>
             
@@ -887,7 +887,7 @@
                 <a href="../chapter9/part3.html">
             
                     
-                    实现终端
+                    [实现终端]
             
                 </a>
             
@@ -959,6 +959,9 @@
                                 <section class="normal markdown-section">
                                 
                                 <h2 id="&#x521B;&#x5EFA;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;">&#x521B;&#x5EFA;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
 <h3 id="&#x5185;&#x6838;&#x94FE;&#x63A5;">&#x5185;&#x6838;&#x94FE;&#x63A5;</h3>
 <p>&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x5C06;&#x6700;&#x7EC8;&#x5F97;&#x5230;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x76F4;&#x63A5;&#x94FE;&#x63A5;&#x5230;&#x5185;&#x6838;&#x4E2D;&#x5373;&#x53EF;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/init.rs</span>
@@ -981,7 +984,12 @@ _user_img_end<span class="token punctuation">:</span>
 <h3 id="elf-&#x6587;&#x4EF6;&#x89E3;&#x6790;&#x4E0E;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x521B;&#x5EFA;">elf &#x6587;&#x4EF6;&#x89E3;&#x6790;&#x4E0E;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x521B;&#x5EFA;</h3>
 <p>&#x4E3A;&#x4E86;&#x80FD;&#x8BA9;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x8D77;&#x6765;&#xFF0C;&#x5185;&#x6838;&#x9996;&#x5148;&#x8981;&#x7ED9;&#x5B83;&#x5206;&#x914D;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#xFF0C;&#x5373;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4F9B;&#x5B83;&#x4F7F;&#x7528;&#x3002;&#x7531;&#x4E8E;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x8981;&#x901A;&#x8FC7;&#x4E2D;&#x65AD;&#x8BBF;&#x95EE;&#x5185;&#x6838;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x56E0;&#x6B64;&#x5B83;&#x6240;&#x5728;&#x7684;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x5FC5;&#x987B;&#x4E5F;&#x5305;&#x542B;&#x5185;&#x6838;&#x7684;&#x5404;&#x4EE3;&#x7801;&#x6BB5;&#x548C;&#x6570;&#x636E;&#x6BB5;&#x3002;</p>
 <p>elf &#x6587;&#x4EF6;&#x4E0E;&#x53EA;&#x542B;&#x6709;&#x4EE3;&#x7801;&#x548C;&#x6570;&#x636E;&#x7684;&#x7EAF;&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x4E0D;&#x540C;&#xFF0C;&#x9700;&#x8981;&#x6211;&#x4EEC;&#x624B;&#x52A8;&#x53BB;&#x89E3;&#x6790;&#x5B83;&#x7684;&#x6587;&#x4EF6;&#x7ED3;&#x6784;&#x6765;&#x83B7;&#x5F97;&#x5404;&#x6BB5;&#x7684;&#x4FE1;&#x606F;&#x3002;&#x6240;&#x5E78;&#x7684;&#x662F;&#xFF0C; rust &#x5DF2;&#x7ECF;&#x6709; crate &#x5E2E;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x8FD9;&#x4E00;&#x70B9;&#x3002;</p>
-<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/mod.rs</span>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// Cargo.toml</span>
+
+<span class="token punctuation">[</span>dependencies<span class="token punctuation">]</span>
+xmas<span class="token operator">-</span>elf <span class="token operator">=</span> <span class="token string">&quot;0.6&quot;</span>
+
+<span class="token comment">// src/process/structs.rs</span>
 
 <span class="token keyword">use</span> xmas_elf<span class="token punctuation">::</span><span class="token punctuation">{</span>
     header<span class="token punctuation">,</span>
@@ -1064,7 +1072,10 @@ _user_img_end<span class="token punctuation">:</span>
         <span class="token punctuation">}</span>
         <span class="token keyword">self</span><span class="token punctuation">.</span>areas<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>area<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">token</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>page_table<span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// src/memory/memory_set/area.rs</span>
@@ -1089,6 +1100,9 @@ _user_img_end<span class="token punctuation">:</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// src/memory/memory_set/handler.rs</span>
+
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>memory<span class="token punctuation">::</span>access_pa_via_va<span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>consts<span class="token punctuation">::</span>PAGE_SIZE<span class="token punctuation">;</span>
 
 <span class="token keyword">pub</span> <span class="token keyword">trait</span> MemoryHandler<span class="token punctuation">:</span> Debug <span class="token operator">+</span> <span class="token lifetime-annotation symbol">&apos;static</span> <span class="token punctuation">{</span>
     <span class="token punctuation">...</span>
@@ -1146,6 +1160,27 @@ _user_img_end<span class="token punctuation">:</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
+
+<span class="token comment">// src/memory/paging.rs</span>
+<span class="token comment">// &#x8FD9;&#x91CC;&#x6709;&#x4E24;&#x5904;&#x8981;&#x6539;&#x6210; pub &#xFF0C;&#x5176;&#x4ED6;&#x4E0D;&#x5FC5;&#x505A;&#x6539;&#x52A8;</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token function">PageEntry</span><span class="token punctuation">(</span><span class="token keyword">pub</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;static</span> <span class="token keyword">mut</span> PageTableEntry<span class="token punctuation">,</span> Page<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">impl</span> PageTableImpl <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_entry</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> va<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Option<span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> PageEntry<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> page <span class="token operator">=</span> Page<span class="token punctuation">::</span><span class="token function">of_addr</span><span class="token punctuation">(</span>VirtAddr<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Ok</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>page_table<span class="token punctuation">.</span><span class="token function">ref_entry</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> e <span class="token operator">=</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token punctuation">(</span>e <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">mut</span> PageTableEntry<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>entry <span class="token operator">=</span> <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">PageEntry</span><span class="token punctuation">(</span>e<span class="token punctuation">,</span> page<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">Some</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>entry<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            None
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">...</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>&#x7531;&#x4E8E; <code>MemorySet::push</code> &#x7684;&#x63A5;&#x53E3;&#x53D1;&#x751F;&#x7684;&#x53D8;&#x5316;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x5C06; <code>ElfExt::make_memory_set</code> &#x4E4B;&#x5916;&#x7684;&#x6240;&#x6709; <code>push</code> &#x8C03;&#x7528;&#x6700;&#x540E;&#x5747;&#x52A0;&#x4E0A;&#x4E00;&#x4E2A; <code>None</code> &#x53C2;&#x6570;&#x3002;</p>
 <p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x4ECE; <code>ElfFile</code> &#x521B;&#x5EFA;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x7684;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E86;&#x3002;
@@ -1197,7 +1232,7 @@ gitalk.render("gitalk-container");
                 </a>
                 
                 
-                <a href="part4.html" class="navigation navigation-next " aria-label="Next page: 创建用户线程">
+                <a href="part4.html" class="navigation navigation-next " aria-label="Next page: [创建用户线程]">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1208,7 +1243,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"创建虚拟内存空间","level":"1.9.3","depth":2,"next":{"title":"创建用户线程","level":"1.9.4","depth":2,"path":"chapter8/part4.md","ref":"chapter8/part4.md","articles":[]},"previous":{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter8/part3.md","mtime":"2019-12-08T10:10:12.380Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-09T14:31:56.559Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"创建虚拟内存空间","level":"1.9.3","depth":2,"next":{"title":"[创建用户线程]","level":"1.9.4","depth":2,"path":"chapter8/part4.md","ref":"chapter8/part4.md","articles":[]},"previous":{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter8/part3.md","mtime":"2019-12-10T02:49:02.584Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
