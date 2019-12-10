@@ -1,4 +1,4 @@
-## 封装 OpenSBI 接口
+## 封装 SBI 接口
 
 ### 代码整理
 
@@ -64,13 +64,15 @@ use os;
 
 ### 使用 OpenSBI 提供的服务
 
-OpenSBI 实际上不仅起到了 bootloader 的作用，还为我们提供了一些服务供我们在编写内核时使用。我们查看[文档](https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc)的 Legacy SBI Extension 部分，里面包含了一些以 C 函数格式给出的我们可以调用的接口。上一节中我们的 ``console_putchar`` 函数实际上就是用调用下面的接口来实现的：
+OpenSBI 实际上不仅起到了 bootloader 的作用，还为我们提供了一些服务供我们在编写内核时使用。这层接口称为 SBI (Supervisor Binary Interface)，是 S-Mode 的 kernel 和 M-Mode 执行环境之间的标准接口。
+
+我们查看[文档](https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc)的 Legacy SBI Extension 部分，里面包含了一些以 C 函数格式给出的我们可以调用的接口。上一节中我们的 ``console_putchar`` 函数实际上就是用调用下面的接口来实现的：
 
 ```c
 void sbi_console_putchar(int ch)
 ```
 
-然而实际上并不存在一个同名的函数，我们只能通过 ``ecall`` 指令，并在执行指令之前将寄存器 $$a_7$$ 设置为该接口对应的 ``SBI Extension ID`` 来达到在 rust 中直接调用 ``sbi_console_putchar()`` 的效果。但是，参数 ``ch`` 应如何传递呢？
+然而实际上并不存在一个同名的函数，我们只能通过 ``ecall`` 指令，并在执行指令之前将寄存器 $$a_7$$ 设置为该接口对应的 ``SBI Extension ID`` 来达到在 Rust 中直接调用 ``sbi_console_putchar()`` 的效果。但是，参数 ``ch`` 应如何传递呢？
 
 > **[info] 函数调用与 calling convention **
 >
@@ -86,12 +88,12 @@ void sbi_console_putchar(int ch)
 
 找到 [riscv calling convention](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，里面可以看到对于参数比较少且是基本数据类型的时候，我们从左到右使用寄存器 $$a_0\sim a_7$$就可以完成参数的传递了。
 
-然而，如这种情况一样，设置寄存器并执行汇编指令，这超出了 rust 语言的描述能力。然而又与之前 ``global_asm!`` 大段插入汇编代码不同，我们要把 ``u8`` 类型的单个字符传给 $$a_0$$ 作为输入参数，这种情况较为强调 rust 与汇编代码的交互。此时我们通常使用**内联汇编（inline assembly）**。
+然而，如这种情况一样，设置寄存器并执行汇编指令，这超出了 Rust 语言的描述能力。然而又与之前 ``global_asm!`` 大段插入汇编代码不同，我们要把 ``u8`` 类型的单个字符传给 $$a_0$$ 作为输入参数，这种情况较为强调 Rust 与汇编代码的交互。此时我们通常使用**内联汇编（inline assembly）**。
 
 
 > **[info] 拓展内联汇编**
 > 
-> rust 中拓展内联汇编的格式如下：
+> Rust 中拓展内联汇编的格式如下：
 > ```rust
 > asm!(assembler template
 >	: /* output operands */
@@ -102,9 +104,9 @@ void sbi_console_putchar(int ch)
 > ```
 > 其中：
 > * ``assembler template`` 给出字符串形式的汇编代码；
-> * ``output operands`` 以及 ``input operands`` 分别表示输出和输入，体现着汇编代码与 rust 代码的交互。每个输出和输入都是用 ``“constraint”(expr)`` 的形式给出的，其中 ``expr`` 部分是一个 rust 表达式作为汇编代码的输入、输出，通常为了简单起见仅用一个变量。而 ``constraint`` 则是你用来告诉编译器如何进行参数传递；
+> * ``output operands`` 以及 ``input operands`` 分别表示输出和输入，体现着汇编代码与 Rust 代码的交互。每个输出和输入都是用 ``“constraint”(expr)`` 的形式给出的，其中 ``expr`` 部分是一个 Rust 表达式作为汇编代码的输入、输出，通常为了简单起见仅用一个变量。而 ``constraint`` 则是你用来告诉编译器如何进行参数传递；
 > * ``clobbered registers list`` 需要给出你在整段汇编代码中，除了用来作为输入、输出的寄存器之外，还曾经显式/隐式的修改过哪些寄存器。由于编译器对于汇编指令所知有限，你必须手动告诉它“我可能会修改这个寄存器”，这样它在使用这个寄存器时就会更加小心；
-> * ``option`` 是 rust 语言内联汇编**特有**的(相对于 C 语言)，用来对内联汇编整体进行配置。
+> * ``option`` 是 Rust 语言内联汇编**特有**的(相对于 C 语言)，用来对内联汇编整体进行配置。
 > 
 
 现在我们使用内联汇编将 ``ecall`` 指令的使用封装起来：
@@ -113,7 +115,9 @@ void sbi_console_putchar(int ch)
 // src/lib.rs
 
 mod sbi;
+```
 
+```rust
 // src/sbi.rs
 
 //! Port from sbi.h
@@ -208,3 +212,4 @@ const SBI_SHUTDOWN: usize = 8;
 ```
 
 现在我们比较深入的理解了 ``console_putchar`` 到底是怎么一回事。下一节我们将使用 ``console_putchar`` 实现格式化输出，为后面的调试提供方便。
+

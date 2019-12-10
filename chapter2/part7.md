@@ -121,11 +121,11 @@ pub extern "C" fn rust_main() -> ! {
 > **[success] 格式化输出通过**
 >
 > ```rust
-> _start vaddr = 0xffffffffc0200000
-> bootstacktop vaddr = 0xffffffffc020a000
+> _start vaddr = 0x80200000
+> bootstacktop vaddr = 0x80208000
 > hello world!
 > panicked at 'you want to do nothing!', src/init.rs:15:5
 > ```
 >
 
-我们看到入口点的地址确实为我们安排的 ``0xffffffffc0200000`` ，同时栈的地址也与我们在内存布局中看到的一样。更重要的是，我们现在能看到内核 ``panic`` 的位置了！这将大大有利于调试。
+我们看到入口点的地址确实为我们安排的 ``0x80200000`` ，同时栈的地址也与我们在内存布局中看到的一样。更重要的是，我们现在能看到内核 ``panic`` 的位置了！这将大大有利于调试。
