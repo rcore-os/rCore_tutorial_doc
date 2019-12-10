@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;&#x4E4B;-round-robin-&#x7B97;&#x6CD5;">&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;&#x4E4B; Round Robin &#x7B97;&#x6CD5;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x7ED9;&#x51FA;&#x4EE3;&#x7801;&#xFF0C;&#x6709;&#x5174;&#x8DA3;&#x8005;&#x53EF;&#x81EA;&#x884C;&#x53BB;&#x7814;&#x7A76;&#x7B97;&#x6CD5;&#x7EC6;&#x8282;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/scheduler.rs</span>
@@ -1118,7 +1118,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"线程调度之 Round Robin算法","level":"1.8.3","depth":2,"next":{"title":"[线程调度测试]","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]},"previous":{"title":"内核调度线程 idle","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part3.md","mtime":"2019-12-10T02:47:35.428Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"线程调度之 Round Robin算法","level":"1.8.3","depth":2,"next":{"title":"[线程调度测试]","level":"1.8.4","depth":2,"path":"chapter7/part4.md","ref":"chapter7/part4.md","articles":[]},"previous":{"title":"内核调度线程 idle","level":"1.8.2","depth":2,"path":"chapter7/part2.md","ref":"chapter7/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter7/part3.md","mtime":"2019-12-10T13:43:37.807Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

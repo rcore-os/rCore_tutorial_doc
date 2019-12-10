@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E8C;&#xFF1A;memoryset">&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x5B9E;&#x73B0;&#x4E4B;&#x4E8C;&#xFF1A;MemorySet</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/e54dce49" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <p>&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x9875;&#x8868;&#xFF0C;&#x4F46;&#x662F;&#x597D;&#x50CF;&#x8FD8;&#x4E0D;&#x8DB3;&#x4EE5;&#x5E94;&#x5BF9;&#x5185;&#x6838;&#x91CD;&#x6620;&#x5C04;&#x7684;&#x9700;&#x6C42;&#x3002;&#x6211;&#x4EEC;&#x8981;&#x5BF9;&#x591A;&#x4E2A;&#x6BB5;&#x5206;&#x522B;&#x8FDB;&#x884C;&#x4E0D;&#x540C;&#x7684;&#x6620;&#x5C04;&#xFF0C;&#x800C;&#x9875;&#x8868;&#x53EA;&#x5141;&#x8BB8;&#x6211;&#x4EEC;&#x6BCF;&#x6B21;&#x63D2;&#x5165;&#x4E00;&#x5BF9;&#x4ECE;&#x865A;&#x62DF;&#x9875;&#x5230;&#x7269;&#x7406;&#x9875;&#x5E27;&#x7684;&#x6620;&#x5C04;&#x3002;</p>
 <p>&#x4E3A;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x53E6;&#x8BBE;&#x8BA1;&#x51E0;&#x79CD;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x6765;&#x62BD;&#x8C61;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#xFF1A;</p>
@@ -1378,7 +1378,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"内核重映射实现之二：MemorySet","level":"1.6.5","depth":2,"next":{"title":"[内核重映射实现之三：完结]","level":"1.6.6","depth":2,"path":"chapter5/part6.md","ref":"chapter5/part6.md","articles":[]},"previous":{"title":"内核重映射实现之一：页表","level":"1.6.4","depth":2,"path":"chapter5/part4.md","ref":"chapter5/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part5.md","mtime":"2019-12-10T02:45:09.248Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"内核重映射实现之二：MemorySet","level":"1.6.5","depth":2,"next":{"title":"[内核重映射实现之三：完结]","level":"1.6.6","depth":2,"path":"chapter5/part6.md","ref":"chapter5/part6.md","articles":[]},"previous":{"title":"内核重映射实现之一：页表","level":"1.6.4","depth":2,"path":"chapter5/part4.md","ref":"chapter5/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part5.md","mtime":"2019-12-10T13:43:37.771Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
