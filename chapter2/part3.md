@@ -1,16 +1,20 @@
 ## 使用链接脚本指定程序内存布局
 
-上一节中我们在目标三元组中进行了这样的配置：
+上一节中我们看到，编译出的程序默认被放到了从 0x10000 开始的位置上：
 
-```json
-"pre-link-args": {
-    "ld.lld": [
-      "-Tsrc/boot/linker64.ld"
-    ]
-}
+```
+start address: 0x0000000000011000
+...
+Program Header:
+    PHDR off    0x0000000000000040 vaddr 0x0000000000010040 ...
+    LOAD off    0x0000000000000000 vaddr 0x0000000000010000 ...
+    LOAD off    0x0000000000001000 vaddr 0x0000000000011000 ...
+   STACK off    0x0000000000000000 vaddr 0x0000000000000000 ...
 ```
 
-``ld.lld`` 是一个链接工具，可以用来指定程序的内存布局。我们可以配置参数 ``-T`` 来指定链接工具使用的链接脚本。这里，我们将链接脚本放在 ``src/boot/linker64.ld`` 中。
+这是因为对于普通用户程序来说，数据是放在低地址空间上的。
+
+但是对于OS内核，它一般都在高地址空间上。并且在 RISCV 中，内存（RAM）的物理地址也是从 0x80000000 开始的。因此接下来我们需要调整程序的内存布局，改变它的链接地址。
 
 > **[info] 程序的内存布局**
 >
@@ -27,20 +31,17 @@
 > 
 > <img src="figures/program_memory_layout.png" style="height:400px">
 
-我们如果不指定链接工具使用的链接脚本，则它会使用默认的链接脚本指定内存布局，将各段放在低地址。事实上我们要求内核的段放在高地址，所以使用自己的链接脚本则不能使用默认的：
+### 编写链接脚本
+
+我们使用 **链接脚本（linker script）**来指定程序的内存布局。创建一个文件 `src/boot/linker64.ld`：
 
 ```clike
 // src/boot/linker64.ld
 
-/* Copy from bbl-ucore : https://ring00.github.io/bbl-ucore      */
-
-/* Simple linker script for the ucore kernel.
-   See the GNU ld 'info' manual ("info ld") to learn the syntax. */
-
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
 
-BASE_ADDRESS = 0xffffffffc0200000;
+BASE_ADDRESS = 0x80200000;
 
 SECTIONS
 {
@@ -93,8 +94,58 @@ SECTIONS
 
 单独的一个 ``.`` 为**当前地址 (Location Counter)**，可以对其赋值来从设置的地址继续向高地址放置各个段。如果不进行赋值的话，则默认各个段会紧挨着向高地址放置。将一个**符号**赋值为 ``.`` 则会记录下这个符号的地址。
 
-到这里我们大概看懂了这个链接脚本在做些什么事情。首先是从 ``BASE_ADDRESS`` 即 ``0xffffffffc0200000`` (这确实是个高地址！) 开始向下放置各个段，依次是 $$\text{.text, .rodata, .data, .stack, .bss}$$ 。同时我们还记录下了每个段的开头和结尾地址，如 $$\text{.text}$$ 段的开头、结尾地址分别就是符号 $$\text{stext, etext}$$ 的地址，我们接下来会用到。
+到这里我们大概看懂了这个链接脚本在做些什么事情。首先是从 ``BASE_ADDRESS`` 即 ``0x80200000`` (这确实是个高地址！) 开始向下放置各个段，依次是 $$\text{.text, .rodata, .data, .stack, .bss}$$ 。同时我们还记录下了每个段的开头和结尾地址，如 $$\text{.text}$$ 段的开头、结尾地址分别就是符号 $$\text{stext, etext}$$ 的地址，我们接下来会用到。
 
 这里面有两个输入段与其他长的不太一样，即 $$\text{.text.entry,.bss.stack}$$ ，似乎编译器不会自动生成这样名字的段。事实上，它们是我们在后面自己定义的。
+
+### 使用链接脚本
+
+为了在编译时使用上面自定义的链接脚本，我们在 `.cargo/config` 文件中加入以下配置：
+
+```toml
+[target.riscv64imac-unknown-none-elf]
+rustflags = [
+    "-C", "link-arg=-Tsrc/boot/linker64.ld",
+]
+```
+
+它的作用是在链接时传入一个参数 `-T` 来指定使用哪个链接脚本。
+
+我们重新编译一下，然后再次查看生成的可执行文件：
+
+```sh
+$ cargo build
+...
+    Finished dev [unoptimized + debuginfo] target(s) in 0.23s
+$ rust-objdump target/riscv64imac-unknown-none-elf/debug/os -h --arch-name=riscv64
+
+target/riscv64imac-unknown-none-elf/debug/os:	file format ELF64-riscv
+
+Sections:
+Idx Name          Size     VMA          Type
+  0               00000000 0000000000000000 
+  1 .text         00001000 0000000080200000 TEXT 
+  2 .rodata       00000000 0000000080201000 TEXT 
+  3 .data         00000000 0000000080201000 TEXT 
+  4 .bss          00000000 0000000080201000 BSS
+...
+$ rust-objdump target/riscv64imac-unknown-none-elf/debug/os -d --arch-name=riscv64
+
+target/riscv64imac-unknown-none-elf/debug/os:	file format ELF64-riscv
+
+
+Disassembly of section .text:
+
+0000000080200000 stext:
+80200000: 41 11                        	addi	sp, sp, -16
+80200002: 06 e4                        	sd	ra, 8(sp)
+80200004: 22 e0                        	sd	s0, 0(sp)
+80200006: 00 08                        	addi	s0, sp, 16
+80200008: 09 a0                        	j	2
+8020000a: 01 a0                        	j	0
+		...
+```
+
+程序已经被正确地放在了指定的地址上。
 
 到这里，我们清楚了最终程序的内存布局会长成什么样子。下一节我们来补充这个链接脚本中未定义的段，并完成编译。
