@@ -60,29 +60,34 @@ unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout);
 
 [dependencies]
 buddy_system_allocator = "0.3"
+```
 
+```rust
 // src/lib.rs
-// Rust 要求 global allocator 必须在 lib.rs 中定义，因此不能放在 memory 子模块里面
+
 #![feature(alloc_error_handler)]
 
-use buddy_system_allocator::LockedHeap;
+extern crate alloc;
+```
 
-#[global_allocator]
-static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
-
-#[alloc_error_handler]
-fn alloc_error_handler(_: core::alloc::Layout) -> ! {
-    panic!("alloc_error_handler do nothing but panic!");
-}
-
+```rust
 // src/consts.rs
+
 // 内核堆大小为8MiB
 pub const KERNEL_HEAP_SIZE: usize = 0x800000;
+```
 
+```rust
 // src/memory/mod.rs
 
-use crate::DYNAMIC_ALLOCATOR;
 use crate::consts::*;
+use buddy_system_allocator::LockedHeap;
+
+pub fn init(l: usize, r: usize) {
+    FRAME_ALLOCATOR.lock().init(l, r);
+    init_heap();
+    println!("++++ setup memory!    ++++");
+}
 
 fn init_heap() {
 	// 同样是在内核中开一块静态内存供 buddy system allocator 使用
@@ -95,10 +100,12 @@ fn init_heap() {
     }
 }
 
-pub fn init(l: usize, r: usize) {
-    FRAME_ALLOCATOR.lock().init(l, r);
-    init_heap();
-    println!("++++ setup memory!    ++++");
+#[global_allocator]
+static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
+
+#[alloc_error_handler]
+fn alloc_error_handler(_: core::alloc::Layout) -> ! {
+    panic!("alloc_error_handler do nothing but panic!");
 }
 ```
 
@@ -107,10 +114,6 @@ pub fn init(l: usize, r: usize) {
 现在我们来测试一下动态内存分配是否有效，分别动态分配一个整数和一个数组：
 
 ```rust
-// src/lib.rs
-
-extern crate alloc;
-
 // src/init.rs
 
 fn dynamic_allocating_test() {
@@ -152,10 +155,10 @@ fn dynamic_allocating_test() {
 >
 > ```rust
 > heap_value assertion successfully!
-> heap_value is at 0xffffffffc0a15100
+> heap_value is at 0x80a10000
 > heap_value is in section .bss!
 > vec assertion successfully!
-> vec is at 0xffffffffc0a14000
+> vec is at 0x80211000
 > vec is in section .bss!
 > ```
 
