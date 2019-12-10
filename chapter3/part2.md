@@ -1,5 +1,7 @@
 ## 手动触发断点中断
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/e40df6d48101f53a06e46e266372820ed8e17f33)
+
 我们引入一个对寄存器进行操作的库，这样就可以不用自己写了。
 ```rust
 // Cargo.toml
@@ -68,5 +70,5 @@ pub extern "C" fn rust_main() -> ! {
 
 可见在进入中断处理程序之前，硬件为我们正确的设置好了 ``scause,sepc`` 寄存器；随后我们正确的进入了设定的中断处理程序。
 
-如果输出与预期不一致的话，可以在[这里]()找到目前的代码进行参考。
+如果输出与预期不一致的话，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/e40df6d48101f53a06e46e266372820ed8e17f33)找到目前的代码进行参考。
 

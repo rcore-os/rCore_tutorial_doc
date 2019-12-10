@@ -1,5 +1,7 @@
 ## 安装 nightly Rust
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+
 我们首先使用如下命令安装 Rust 工具链管理器 rustup 和 Rust 包管理器 cargo：
 
 ```bash

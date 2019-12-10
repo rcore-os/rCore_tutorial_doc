@@ -1,5 +1,7 @@
 ## 使用链接脚本指定程序内存布局
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+
 上一节中我们看到，编译出的程序默认被放到了从 0x10000 开始的位置上：
 
 ```

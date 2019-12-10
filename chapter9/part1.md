@@ -1,5 +1,7 @@
 ## 使用文件系统
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/173b4de8c18b9ac00c2820bcb493107a035c9c03)
+
 ### 打包磁盘文件
 
 首先我们将所有编译出来的用户程序放在 ``usr/build/riscv64/rust`` 文件夹下，并将 ``usr/build/riscv64`` 文件夹里面的内容使用 ``rcore-fs-fuse`` 工具打包成一个磁盘文件，由于选用不同的文件系统磁盘文件的布局会不同，我们这里选用一个简单的文件系统 ``SimpleFileSystem`` 。
@@ -46,6 +48,16 @@ clean:
 
 我们使用 ``make sfsimg`` 即可将磁盘打包到 ``usr/build/riscv64.img`` 。
 
+随后，将内核的 Makefile 中链接的文件从原来的可执行改为现在的磁盘镜像。
+
+```makefile
+# Makefile
+
+# export USER_IMG = usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world
+# 改成：
+export USER_IMG = usr/build/riscv64.img
+```
+
 ### 实现设备驱动
 
 首先引入 rust 文件系统的 crate ：
@@ -60,6 +72,10 @@ rcore-fs-sfs = { git = "https://github.com/rcore-os/rcore-fs", rev = "d8d61190" 
 我们知道文件系统需要用到设备驱动来控制底层的设备。但是这里我们还是简单暴力的将磁盘直接链接到内核中，因此这里的设备其实就是一段内存。这可比实现磁盘的驱动要简单多了！但是，我们还是需要按照接口去实现。
 
 ```rust
+// src/lib.rs
+
+mod fs;
+
 // src/fs/mod.rs
 
 mod device;
@@ -113,6 +129,12 @@ impl Device for MemBuf {
 ### 文件系统初始化
 
 ```rust
+// Cargo.toml
+
+[dependencies.lazy_static]
+version = "1.0"
+features = ["spin_no_std"]
+
 // src/fs/mod.rs
 
 use lazy_static::*;
@@ -194,7 +216,6 @@ pub fn init() {
         .unwrap()
         .read_as_vec()
         .unwrap();
-    println!("size of program {:#x}", data.len());
     let user_thread = unsafe { Thread::new_user(data.as_slice()) };
     CPU.add_thread(user_thread);
     ...
@@ -208,11 +229,37 @@ pub fn init() {
 
 #[no_mangle]
 pub extern "C" fn rust_main() -> ! {
-    ...
-    crate::fs::init();
-    ...
+    crate::interrupt::init();
+
+    extern "C" {
+        fn end();
+    }
+    crate::memory::init(
+        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
+        PHYSICAL_MEMORY_END >> 12
+    );
+	crate::fs::init();
+    crate::process::init();
+    crate::timer::init();
+    crate::process::run();
+    loop {}
 }
 ```
 
-程序的运行结果仍与上一节一致，但我们已经用上了文件系统！但是现在问题在于我们运行什么程序是硬编码到内核中的。我们能不能实现一个交互式的终端，告诉内核我们想要运行哪个程序呢？接下来我们就来做这件事情！
+我们使用 ``make run`` 运行一下，可以发现程序的运行结果与上一节一致。
 
+如果运行有问题的话，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/173b4de8c18b9ac00c2820bcb493107a035c9c03)找到代码。
+
+只不过，我们从文件系统解析出要执行的程序。我们可以看到 ``rust`` 文件夹下打包了哪些用户程序：
+
+> **[success] 磁盘打包与解析**
+>
+> ```rust
+> available programs in rust/ are:
+>   .
+>   ..
+>   model
+>   hello_world
+> ```
+
+但是现在问题在于我们运行什么程序是硬编码到内核中的。我们能不能实现一个交互式的终端，告诉内核我们想要运行哪个程序呢？接下来我们就来做这件事情！

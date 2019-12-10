@@ -1,5 +1,7 @@
 ## 编译、生成内核镜像
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+
 ### 使用 riscv64 目标编译项目
 
 现在我们尝试用 riscv64 的目标来编译这个项目：

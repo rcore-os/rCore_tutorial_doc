@@ -1,6 +1,8 @@
 ## 移除标准库依赖
 
-项目默认是链接 Rust 标准库 std 的，它依赖于操作系统，因此我们需要显式将其禁用：
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+
+项目默认是链接 rust 标准库 std 的，它依赖于操作系统，因此我们需要显式将其禁用：
 
 ```rust
 // src/main.rs

@@ -1,5 +1,7 @@
 ## 使用包管理器 cargo 创建 Rust binary 项目
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+
 使用 ``cargo new`` 创建一个新的 Rust binary 项目，命令如下：
 
 ```bash

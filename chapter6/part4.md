@@ -1,5 +1,7 @@
 ## 内核线程创建与切换测试
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+
 我们想做的事情是：新建一个临时线程，从启动线程切换到临时线程，再切换回来。
 
 临时线程入口点：
@@ -92,4 +94,4 @@ pub extern "C" fn rust_main() -> ! {
 
 可见我们切换到了临时线程，又切换了回来！测试成功！
 
-截至目前所有的代码可以在[这里]()找到以供参考。
+截至目前所有的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)找到以供参考。
