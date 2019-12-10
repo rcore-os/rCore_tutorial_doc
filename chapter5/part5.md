@@ -1,6 +1,6 @@
 ## 内核重映射实现之二：MemorySet
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+* [代码][CODE]
 
 我们实现了页表，但是好像还不足以应对内核重映射的需求。我们要对多个段分别进行不同的映射，而页表只允许我们每次插入一对从虚拟页到物理页帧的映射。
 
@@ -384,3 +384,4 @@ impl MemorySet {
 }
 ```
 
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/e54dce49

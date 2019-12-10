@@ -1,6 +1,6 @@
 ## 线程管理器
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+* [代码][CODE]
 
 ### 线程状态
 从调度器的角度来看，每个线程都有一个独一无二的 Tid 来区分它和其他线程。
@@ -200,4 +200,4 @@ impl ThreadPool {
 ```
 现在我们有了一个线程池 ``ThreadPool`` ，它内含调度器，是一个优秀的线程管理器。下一节我们将介绍调度线程 ``idle`` 以及调度单元 ``Processor``。
 
-
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97

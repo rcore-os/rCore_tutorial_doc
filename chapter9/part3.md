@@ -1,6 +1,6 @@
 ## 实现终端
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c)
+* [代码][CODE]
 
 我们的终端也很简单：其功能为你输入想要执行的用户程序如 ``rust/hello_world`` ，随后按下回车，内核就会帮你执行这个程序。
 
@@ -20,7 +20,7 @@
 extern crate alloc;
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 const LF: u8 = 0x0au8;
 const CR: u8 = 0x0du8;
@@ -242,5 +242,6 @@ pub fn init() {
 
 试一试运行 ``rust/hello_world`` ，它工作的很好；``rust/notebook`` 也不赖，但是我们没有实现 ``Ctrl+c`` 的功能，因此就无法从记事本中退出了。随便输入一个不存在的程序，终端也不会崩溃，而是会提示程序不存在！
 
-所有的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c)找到。
+所有的代码可以在[这里][CODE]找到。
 
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/f408f075

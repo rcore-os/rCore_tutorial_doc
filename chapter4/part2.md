@@ -1,6 +1,6 @@
 ## 动态内存分配
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/e0d003d70879db6b72f05142fe611ea7c19b551b)
+* [代码][CODE]
 
 我们之前在 ``C/C++`` 语言中使用过 ``new, malloc`` 等动态内存分配方法，与在编译期就已完成的静态内存分配相比，动态内存分配可以根据程序运行时状态修改内存申请的时机及大小，显得更为灵活，但是这是需要操作系统的支持的，会带来一些开销。
 
@@ -62,29 +62,34 @@ unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout);
 
 [dependencies]
 buddy_system_allocator = "0.3"
+```
 
+```rust
 // src/lib.rs
-// Rust 要求 global allocator 必须在 lib.rs 中定义，因此不能放在 memory 子模块里面
+
 #![feature(alloc_error_handler)]
 
-use buddy_system_allocator::LockedHeap;
+extern crate alloc;
+```
 
-#[global_allocator]
-static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
-
-#[alloc_error_handler]
-fn alloc_error_handler(_: core::alloc::Layout) -> ! {
-    panic!("alloc_error_handler do nothing but panic!");
-}
-
+```rust
 // src/consts.rs
+
 // 内核堆大小为8MiB
 pub const KERNEL_HEAP_SIZE: usize = 0x800000;
+```
 
+```rust
 // src/memory/mod.rs
 
-use crate::DYNAMIC_ALLOCATOR;
 use crate::consts::*;
+use buddy_system_allocator::LockedHeap;
+
+pub fn init(l: usize, r: usize) {
+    FRAME_ALLOCATOR.lock().init(l, r);
+    init_heap();
+    println!("++++ setup memory!    ++++");
+}
 
 fn init_heap() {
 	// 同样是在内核中开一块静态内存供 buddy system allocator 使用
@@ -97,10 +102,12 @@ fn init_heap() {
     }
 }
 
-pub fn init(l: usize, r: usize) {
-    FRAME_ALLOCATOR.lock().init(l, r);
-    init_heap();
-    println!("++++ setup memory!    ++++");
+#[global_allocator]
+static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
+
+#[alloc_error_handler]
+fn alloc_error_handler(_: core::alloc::Layout) -> ! {
+    panic!("alloc_error_handler do nothing but panic!");
 }
 ```
 
@@ -109,10 +116,6 @@ pub fn init(l: usize, r: usize) {
 现在我们来测试一下动态内存分配是否有效，分别动态分配一个整数和一个数组：
 
 ```rust
-// src/lib.rs
-
-extern crate alloc;
-
 // src/init.rs
 
 fn dynamic_allocating_test() {
@@ -154,13 +157,15 @@ fn dynamic_allocating_test() {
 >
 > ```rust
 > heap_value assertion successfully!
-> heap_value is at 0xffffffffc0a15100
+> heap_value is at 0x80a10000
 > heap_value is in section .bss!
 > vec assertion successfully!
-> vec is at 0xffffffffc0a14000
+> vec is at 0x80211000
 > vec is in section .bss!
 > ```
 
 我们可以发现这些动态分配的变量可以使用了。而且通过查看它们的地址我们发现它们都在 $$\text{.bss}$$ 段里面。这是因为提供给动态内存分配器的那块内存就在 $$\text{.bss}$$ 段里面啊。
 
-如果结果不太对劲，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/e0d003d70879db6b72f05142fe611ea7c19b551b)查看现有的代码。
+如果结果不太对劲，可以在[这里][CODE]查看现有的代码。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/345dc90b

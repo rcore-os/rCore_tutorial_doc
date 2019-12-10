@@ -1,14 +1,14 @@
-## 移除runtime依赖
+## 移除 runtime 依赖
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+* [代码][CODE]
 
 对于大多数语言，他们都使用了 **运行时系统(runtime system)** ，这导致 main 并不是他们执行的第一个函数。
 
-以 rust 语言为例：一个典型的链接了标准库的 rust 程序会首先跳转到 C runtime library 中的 **crt0(C runtime zero)** 进入C runtime 设置 C 程序运行所需要的环境(比如：创建堆栈，设置寄存器参数等)。
+以 Rust 语言为例：一个典型的链接了标准库的 Rust 程序会首先跳转到 C runtime library 中的 **crt0(C runtime zero)** 进入C runtime 设置 C 程序运行所需要的环境(比如：创建堆栈，设置寄存器参数等)。
 
-然后 C runtime 会跳转到 rust runtime 的 **入口点(entry point)** 进入 rust runtime 继续设置 rust 运行环境，而这个入口点就是被 ``start`` 语义项标记的。rust runtime 结束之后才会调用 main 进入主程序。
+然后 C runtime 会跳转到 Rust runtime 的 **入口点(entry point)** 进入 Rust runtime 继续设置 Rust 运行环境，而这个入口点就是被 ``start`` 语义项标记的。Rust runtime 结束之后才会调用 main 进入主程序。
 
-C runtime 和 rust runtime 都需要标准库支持，我们的程序无法访问。如果覆盖了 ``start`` 语义项，仍然需要 ``crt0``，并不能解决问题。所以需要重写覆盖 ``crt0`` 入口点：
+C runtime 和 Rust runtime 都需要标准库支持，我们的程序无法访问。如果覆盖了 ``start`` 语义项，仍然需要 ``crt0``，并不能解决问题。所以需要重写覆盖 ``crt0`` 入口点：
 
 ```rust
 // src/main.rs
@@ -34,7 +34,7 @@ pub extern "C" fn _start() -> ! {
 
 同时我们实现一个 ``_start`` 函数，并加上 ``#[no_mangle]`` 告诉编译器对于此函数禁用 name mangling ，确保编译器生成一个名为 ``_start`` 的函数，而非为了保证函数名字唯一性而生成的形如 `` _ZN3blog_os4_start7hb173fedf945531caE `` 乱码般的名字。由于 ``_start`` 是大多数系统的默认入口点名字，所以我们要确保它不会发生变化。
 
-接着，我们使用 ``extern "C"`` 描述 ``_start`` 函数，这是 rust 中的 ``FFI, Foreign Function Interface`` 语法，表示此函数是一个 C 函数而非 rust 函数。由于 ``_start`` 是作为 C runtime 的入口点，看起来合情合理。
+接着，我们使用 ``extern "C"`` 描述 ``_start`` 函数，这是 Rust 中的 FFI (Foreign Function Interface, 语言交互接口) 语法，表示此函数是一个 C 函数而非 Rust 函数。由于 ``_start`` 是作为 C runtime 的入口点，看起来合情合理。
 
 返回值类型为``!``表明这个函数是发散的，不允许返回。由于这个函数被操作系统或 bootloader 直接调用，这样做是必须的。为了从入口点函数退出，我们需要通过 ``exit`` 系统调用，但我们目前还没法做到这一步，因此就让它在原地转圈吧。
 
@@ -64,4 +64,6 @@ pub extern "C" fn _start() -> ! {
 
 构建得到的可执行文件位置放在 ``os/target/debug/os`` 中。
 
-迄今为止的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)找到，构建出现问题的话可以参考。
+迄今为止的代码可以在[这里][CODE]找到，构建出现问题的话可以参考。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8

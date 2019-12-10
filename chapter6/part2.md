@@ -1,6 +1,6 @@
 ## 线程切换
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+* [代码][CODE]
 
 我们要用这个函数完成线程切换：
 
@@ -119,3 +119,5 @@ impl Context {
    因此这是一个函数调用，由 calling convention ，编译器会自动生成代码在调用前后帮我们保存、恢复所有的 caller-saved 寄存器。于是乎我们需要手动保存所有的 callee-saved 寄存器 $$\text{s}_0\sim\text{s}_{11}$$ 。这样所有的寄存器都被保存了。
 
 下面一节我们来研究如何进行线程初始化。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be

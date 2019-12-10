@@ -1,6 +1,6 @@
 ## 实现记事本
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/793c5715ee2a2d11d1210d2c45b0411660e0b22f)
+* [代码][CODE]
 
 为了实现上节中交互式终端的目标，先不管运行程序，我们首先要能够通过键盘向终端程序中输入。也就是说，我们要实现一个用户程序，它能够接受键盘的输入，并将键盘输入的字符显示在屏幕上。这不能叫一个终端，姑且叫它记事本吧。
 
@@ -56,7 +56,7 @@ pub fn getc() -> u8 {
 #![no_main]
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 use rust::io::getc;
 
@@ -516,4 +516,6 @@ pub fn init(l: usize, r: usize) {
 
 将多余的线程换入换出提示信息删掉，运行一下，我们已经实现了字符的输入及显示了！可以享受输入带来的乐趣了！（大雾
 
-如果记事本不能正常工作，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/793c5715ee2a2d11d1210d2c45b0411660e0b22f)找到已有的代码。
+如果记事本不能正常工作，可以在[这里][CODE]找到已有的代码。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ea2acb44

@@ -1,102 +1,181 @@
-## 使用链接脚本指定程序内存布局
+## 编译、生成内核镜像
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+* [代码][CODE]
 
-上一节中我们在目标三元组中进行了这样的配置：
+### 使用 riscv64 目标编译项目
 
-```json
-"pre-link-args": {
-    "ld.lld": [
-      "-Tsrc/boot/linker64.ld"
-    ]
-}
+现在我们尝试用 riscv64 的目标来编译这个项目：
+
+```sh
+$ cargo build --target riscv64imac-unknown-none-elf
 ```
 
-``ld.lld`` 是一个链接工具，可以用来指定程序的内存布局。我们可以配置参数 ``-T`` 来指定链接工具使用的链接脚本。这里，我们将链接脚本放在 ``src/boot/linker64.ld`` 中。
+结果出现了以下错误：
 
-> **[info] 程序的内存布局**
->
-> 一般来说，一个程序按照功能不同会分为下面这些段：
->
-> * $$\text{.text}$$ 段，即代码段，存放汇编代码；
-> * $$\text{.rodata}$$ 段，即只读数据段，顾名思义里面存放只读数据，通常是程序中的常量；
-> * $$\text{.data}$$ 段，存放被初始化的可读写数据，通常保存程序中的全局变量；
-> * $$\text{.bss}$$ 段，存放被初始化为 $$0$$ 的可读写数据，与 $$\text{.data}$$ 段的不同之处在于我们知道它要被初始化为 $$0$$ ，因此在可执行文件中只需记录这个段的大小以及所在位置即可，而不用记录里面的数据。
-> * $$\text{stack}$$ ，即栈，用来存储程序运行过程中的局部变量，以及负责函数调用时的各种机制。它从高地址向低地址增长；
-> * $$\text{heap}$$ ，即堆，用来支持程序**运行过程中**内存的**动态分配**，比如说你要读进来一个字符串，在你写程序的时候你也不知道它的长度究竟为多少，于是你只能在运行过程中，知道了字符串的长度之后，再在堆中给这个字符串分配内存。
-> 
-> 内存布局，也就是指这些段各自所放的位置。一种典型的内存布局如下：
-> 
-> <img src="figures/program_memory_layout.png" style="height:400px">
-
-我们如果不指定链接工具使用的链接脚本，则它会使用默认的链接脚本指定内存布局，将各段放在低地址。事实上我们要求内核的段放在高地址，所以使用自己的链接脚本则不能使用默认的：
-
-```clike
-// src/boot/linker64.ld
-
-/* Copy from bbl-ucore : https://ring00.github.io/bbl-ucore      */
-
-/* Simple linker script for the ucore kernel.
-   See the GNU ld 'info' manual ("info ld") to learn the syntax. */
-
-OUTPUT_ARCH(riscv)
-ENTRY(_start)
-
-BASE_ADDRESS = 0xffffffffc0200000;
-
-SECTIONS
-{
-    /* Load the kernel at this address: "." means the current address */
-    . = BASE_ADDRESS;
-    start = .;
-
-    .text : {
-        stext = .;
-        *(.text.entry)
-        *(.text .text.*)
-        . = ALIGN(4K);
-        etext = .;
-    }
-
-    .rodata : {
-        srodata = .;
-        *(.rodata .rodata.*)
-        . = ALIGN(4K);
-        erodata = .;
-    }
-
-    .data : {
-        sdata = .;
-        *(.data .data.*)
-        edata = .;
-    }
-
-    .stack : {
-        *(.bss.stack)
-    }
-
-    .bss : {
-        sbss = .;
-        *(.bss .bss.*)
-        ebss = .;
-    }
-
-    PROVIDE(end = .);
-}
+```sh
+error[E0463]: can't find crate for `core`
+  |
+  = note: the `riscv64imac-unknown-none-elf` target may not be installed
 ```
 
-时至今日我们已经不太可能将所有代码都写在一个文件里面。在编译过程中，我们的编译器和链接器已经给每个文件都自动生成了一个内存布局。这里，我们的链接工具所要做的是最终将各个文件的内存布局装配起来生成整个程序的内存布局。
+原因是 Rust 工具链默认没有内置核心库 core 在这个目标下的预编译版本，我们可以使用以下命令手动安装它：
 
-我们首先使用 ``OUTPUT_ARCH`` 指定了架构，随后使用 ``ENTRY_POINT`` 指定了**入口点**为 ``_start`` ，即程序第一条被执行的指令所在之处。在这个链接脚本中我们并未看到 ``_start`` ，回忆上一章，我们为了移除运行时环境依赖，重写了 C runtime 的入口 ``_start`` 。所以，链接脚本宣布整个程序会从那里开始运行。
+```sh
+$ rustup target add riscv64imac-unknown-none-elf
+```
 
-链接脚本的整体写在 ``SECTION{ }`` 中，里面有多个形如 $$\text{output section: \{ input section list \}}$$ 的语句，每个都描述了一个整个程序内存布局中的一个输出段 $$\text{output section}$$ 是由各个文件中的哪些输入段 $$\text{input section}$$ 组成的。
+很快下载安装好后，我们重试一下，发现就可以成功编译了。
 
-我们可以用 $$*()$$ 来表示将各个文件中所有符合括号内要求的输入段放在当前的位置。而括号内，你可以直接使用段的名字，也可以包含通配符 $$*$$ 。
+编译出的结果被放在了 `target/riscv64imac-unknown-none-elf/debug` 文件夹中。可以看到其中有一个名为 `os` 的可执行文件。不过由于它的目标平台是 riscv64，我们暂时还不能执行它。
 
-单独的一个 ``.`` 为**当前地址 (Location Counter)**，可以对其赋值来从设置的地址继续向高地址放置各个段。如果不进行赋值的话，则默认各个段会紧挨着向高地址放置。将一个**符号**赋值为 ``.`` 则会记录下这个符号的地址。
+### 为项目设置默认目标三元组
 
-到这里我们大概看懂了这个链接脚本在做些什么事情。首先是从 ``BASE_ADDRESS`` 即 ``0xffffffffc0200000`` (这确实是个高地址！) 开始向下放置各个段，依次是 $$\text{.text, .rodata, .data, .stack, .bss}$$ 。同时我们还记录下了每个段的开头和结尾地址，如 $$\text{.text}$$ 段的开头、结尾地址分别就是符号 $$\text{stext, etext}$$ 的地址，我们接下来会用到。
+由于我们之后都会使用 riscv64 作为编译目标，为了避免每次都要加 `--target` 参数，我们可以使用 [Cargo 配置文件](https://doc.rust-lang.org/cargo/reference/config.html) 为项目配置默认的编译选项。
 
-这里面有两个输入段与其他长的不太一样，即 $$\text{.text.entry,.bss.stack}$$ ，似乎编译器不会自动生成这样名字的段。事实上，它们是我们在后面自己定义的。
+在 `os` 文件夹中创建一个 `.cargo` 文件夹，并在其中创建一个名为 `config` 的文件，在其中填入以下内容：
 
-到这里，我们清楚了最终程序的内存布局会长成什么样子。下一节我们来补充这个链接脚本中未定义的段，并完成编译。
+```toml
+# .cargo/config
+
+[build]
+target = "riscv64imac-unknown-none-elf"
+```
+
+这指定了此项目编译时默认的目标。以后我们就可以直接使用 `cargo build` 来编译了。
+
+### 安装 binutils 工具集
+
+为了查看和分析生成的可执行文件，我们首先需要安装一套名为 binutils 的命令行工具集，其中包含了 objdump、objcopy 等常用工具。
+
+Rust 社区提供了一个 [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) 项目，可以帮助我们方便地调用 Rust 内置的 LLVM binutils。我们用以下命令安装它：
+
+```sh
+$ cargo install cargo-binutils
+$ rustup component add llvm-tools-preview
+```
+
+之后尝试使用 `rust-objdump` 看看是否安装成功。
+
+> **[info] 其它选择：GNU 工具链**
+>
+> 除了内置的 LLVM 工具链以外，我们也可以使用 GNU 工具链，其中还包含了 GCC 等 C 语言工具链。
+>
+> 我们可以下载最新的预编译版本 ([Linux](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz)/[Mac](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz)) 并安装，如果该链接过期的话可以在[这里](https://www.sifive.com/boards#software)自己找。
+
+### 查看生成的可执行文件
+
+我们编译之后的产物为 ``target/riscv64imac-unknown-none-elf/debug/os`` ，让我们先看看它的文件类型：
+
+```bash
+$ file target/riscv64imac-unknown-none-elf/debug/os
+target/riscv64imac-unknown-none-elf/debug/os: ELF 64-bit LSB executable, UCB RISC-V, version 1 (SYSV), statically linked, with debug_info, not stripped
+```
+
+从中，我们可以看出它是一个 64 位的 ``elf`` 可执行文件，架构是 ``RISC-V`` ；链接方式为**静态链接**；``not stripped`` 指的是里面符号表的信息未被剔除，而这些信息在调试程序时会用到，程序正常执行时通常不会使用。
+
+接下来使用刚刚安装的工具链中的 ``objdump`` 工具看看它的具体信息：
+
+```bash
+$ rust-objdump target/riscv64imac-unknown-none-elf/debug/os -x --arch-name=riscv64
+
+target/riscv64imac-unknown-none-elf/debug/os:	file format ELF64-riscv
+
+architecture: riscv64
+start address: 0x0000000000011000
+
+Sections:
+Idx Name          Size     VMA          Type
+  0               00000000 0000000000000000 
+  1 .text         0000000c 0000000000011000 TEXT 
+  2 .debug_str    000004f6 0000000000000000 
+  3 .debug_abbrev 0000010e 0000000000000000 
+  4 .debug_info   00000633 0000000000000000 
+  5 .debug_aranges 00000040 0000000000000000 
+  6 .debug_ranges 00000030 0000000000000000 
+  7 .debug_macinfo 00000001 0000000000000000 
+  8 .debug_pubnames 000000ce 0000000000000000 
+  9 .debug_pubtypes 000003a2 0000000000000000 
+ 10 .debug_frame  00000068 0000000000000000 
+ 11 .debug_line   00000059 0000000000000000 
+ 12 .comment      00000012 0000000000000000 
+ 13 .symtab       00000108 0000000000000000 
+ 14 .shstrtab     000000b4 0000000000000000 
+ 15 .strtab       0000002d 0000000000000000 
+
+SYMBOL TABLE:
+0000000000000000 l    df *ABS*	00000000 3k1zkxjipadm3tm5
+0000000000000000         .debug_frame	00000000 
+0000000000011000         .text	00000000 
+0000000000011000         .text	00000000 
+0000000000011000         .text	00000000 
+000000000001100c         .text	00000000 
+0000000000000000         .debug_ranges	00000000 
+0000000000000000         .debug_info	00000000 
+0000000000000000         .debug_line	00000000 .Lline_table_start0
+0000000000011000 g     F .text	0000000c _start
+Program Header:
+    PHDR off    0x0000000000000040 vaddr 0x0000000000010040 paddr 0x0000000000010040 align 2**3
+         filesz 0x00000000000000e0 memsz 0x00000000000000e0 flags r--
+    LOAD off    0x0000000000000000 vaddr 0x0000000000010000 paddr 0x0000000000010000 align 2**12
+         filesz 0x0000000000000120 memsz 0x0000000000000120 flags r--
+    LOAD off    0x0000000000001000 vaddr 0x0000000000011000 paddr 0x0000000000011000 align 2**12
+         filesz 0x0000000000001000 memsz 0x0000000000001000 flags r-x
+   STACK off    0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**64
+         filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-
+
+Dynamic Section:
+
+```
+
+我们按顺序逐个查看：
+
+* ``start address`` 是程序的入口地址。
+*  ``Sections``，从这里我们可以看到程序各段的各种信息。后面以 ``debug`` 开头的段是调试信息。
+
+* ``SYMBOL TABLE`` 即符号表，从中我们可以看到程序中所有符号的地址。例如 `_start` 就位于入口地址上。
+
+* ``Program Header`` 是程序加载时所需的段信息。
+
+  其中 `off` 是它在文件中的位置，`vaddr` 和 `paddr` 是要加载到的虚拟地址和物理地址，`align` 规定了地址的对齐，`filesz` 和 `memsz` 分别表示它在文件和内存中的大小，`flags` 描述了相关权限（r：可读，w：可写，x：可执行）
+
+在这里我们使用的是 ``-x`` 来查看程序的元信息，下面我们用 ``-d`` 来对代码进行反汇编：
+
+```sh
+$ rust-objdump target/riscv64imac-unknown-none-elf/debug/os -d --arch-name=riscv64
+
+target/riscv64imac-unknown-none-elf/debug/os:	file format ELF64-riscv
+
+
+Disassembly of section .text:
+
+0000000000011000 _start:
+   11000: 41 11                        	addi	sp, sp, -16
+   11002: 06 e4                        	sd	ra, 8(sp)
+   11004: 22 e0                        	sd	s0, 0(sp)
+   11006: 00 08                        	addi	s0, sp, 16
+   11008: 09 a0                        	j	2
+   1100a: 01 a0                        	j	0
+```
+
+可以看到其中只有一个 `_start` 函数，里面什么都不做，就一个死循环。
+
+### 生成内核镜像
+
+我们之前生成的 ``elf`` 格式可执行文件有以下特点：
+
+* 含有冗余的调试信息，使得程序体积较大；
+* 需要对 ``program header`` 部分进行手动解析才能知道各段的信息，而这需要我们了解 ``program header`` 的二进制格式，并以字节为单位进行解析。
+
+我们目前没有调试的手段，因此不需要调试信息；同时也不想在现在就进行复杂的 ``elf`` 格式解析，而是简单粗暴的将  $$\text{.text,.rodata,.data,.stack,.bss}$$ 各段从文件开头开始按顺序接连放在一起即可。而它们在 ``elf`` 可执行文件中确实是按顺序放在一起的。
+
+我们可以使用工具 ``objcopy`` 从 ``elf`` 格式可执行文件生成内核镜像：
+
+```bash
+$ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binary target/riscv64imac-unknown-none-elf/debug/kernel.bin
+```
+
+这里 ``--strip-all`` 表明丢弃所有符号表及调试信息，``-O binary`` 表示输出为二进制文件。
+
+至此，我们编译并生成了内核镜像 ``kernel.bin`` 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：调整内存布局 和 重写入口函数。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79

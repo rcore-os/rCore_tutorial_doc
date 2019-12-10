@@ -1,18 +1,17 @@
-## 使用包管理器cargo创建rust binary项目
+## 使用包管理器 cargo 创建 Rust binary 项目
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+* [代码][CODE]
 
-使用 ``cargo new`` 创建一个新的rust binary项目，命令如下：
+使用 ``cargo new`` 创建一个新的 Rust binary 项目，命令如下：
 
 ```bash
-$ cargo new os --bin --edition 2018
+$ cargo new os --bin
 ```
 
 | ``cargo new`` 的参数 | 含义                                      |
 | ------------------ | ----------------------------------------- |
 | ``os``               | 项目的名称                                |
 | ``--bin``            | 可执行项目，和其相对的是库项目 ``--lib``    |
-| ``--edition 2018``   | 使用新版 Rust 2018 而不是老旧的 Rust 2015 |
 
 创建完成后，整个项目的文件结构如下：
 
@@ -32,3 +31,5 @@ Hello, world!
 ```
 
 打开 ``main.rs`` 发现里面确实只是输出了一行Hello, world!这个应用已经可以正常运行了，但是即使只是这么一个简单的功能，也离不开所在操作系统(Ubuntu)的帮助。我们既然要写一个新的操作系统，就不能依赖于任何已有操作系统！接下来我们尝试移除该应用对于操作系统的依赖。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8
