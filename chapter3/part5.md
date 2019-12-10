@@ -120,7 +120,7 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 // 断点中断处理：输出断点地址并改变中断返回地址防止死循环
 fn breakpoint(sepc: &mut usize) {
     println!("a breakpoint set @0x{:x}", sepc);
-    *sepc += 4;
+    *sepc += 2;
 }
 
 // S 态时钟中断处理
@@ -182,11 +182,10 @@ fn panic(info: &PanicInfo) -> ! {
 
 > **[success] breakpoint & timer interrupt handling**
 > ```rust
-> ...opensbi output...
 > ++++ setup interrupt! ++++
 > ++++ setup timer!     ++++
-> a breakpoint set @0xffffffffc0200060
-> panicked at 'end of rust_main', src/init.rs:13:5
+> a breakpoint set @0x8020002c
+> panicked at 'end of rust_main', src/init.rs:11:5
 > * 100 ticks *
 > * 100 ticks *
 > ...
