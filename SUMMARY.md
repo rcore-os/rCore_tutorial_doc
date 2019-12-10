@@ -12,7 +12,7 @@
 	* [编译、生成内核镜像](chapter2/part2.md)
 	* [使用链接脚本指定内存布局](chapter2/part3.md)
 	* [重写程序入口点 _start](chapter2/part4.md)
-	* [使用 Qemu 加载内核镜像](chapter2/part5.md)
+	* [使用 Qemu 运行内核](chapter2/part5.md)
 	* [封装 OpenSBI 接口](chapter2/part6.md)
 	* [实现格式化输出](chapter2/part7.md)
 	* [总结与展望](chapter2/part8.md)
