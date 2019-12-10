@@ -1,6 +1,6 @@
 ## 时钟中断
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/da7ee0906a43681acf81d6d90fd2c1d372b39d06)
+* [代码][CODE]
 
 在本节中，我们处理一种很重要的中断：时钟中断。这种中断我们可以设定为每隔一段时间硬件自动触发一次，在其对应的中断处理程序里，我们回到内核态，并可以对用户态的程序进行调度、监控管理他们对于资源的使用情况。
 
@@ -193,4 +193,6 @@ fn panic(info: &PanicInfo) -> ! {
 > ...
 > ```
 
-如果出现问题的话，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/da7ee0906a43681acf81d6d90fd2c1d372b39d06)找到目前的代码。
+如果出现问题的话，可以在[这里][CODE]找到目前的代码。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/57734e33

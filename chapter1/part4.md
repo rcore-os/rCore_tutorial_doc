@@ -1,6 +1,6 @@
 ## 移除 runtime 依赖
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+* [代码][CODE]
 
 对于大多数语言，他们都使用了 **运行时系统(runtime system)** ，这导致 main 并不是他们执行的第一个函数。
 
@@ -64,4 +64,6 @@ pub extern "C" fn _start() -> ! {
 
 构建得到的可执行文件位置放在 ``os/target/debug/os`` 中。
 
-迄今为止的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)找到，构建出现问题的话可以参考。
+迄今为止的代码可以在[这里][CODE]找到，构建出现问题的话可以参考。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8

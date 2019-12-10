@@ -1,6 +1,6 @@
 ## 内核重映射实现之三：完结
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+* [代码][CODE]
 
 在内存模块初始化时，我们新建一个精细映射的 ``MemorySet`` 并切换过去供内核使用。
 ```rust
@@ -136,4 +136,6 @@ panicked at 'page fault!', src/interrupt.rs:65:5
 > ```
 
 从中我们可以清楚的看出内核成功的找到了错误的原因，内核各段被成功的设置了不同的权限。我们达到了内核重映射的目的！
-目前的代码能在[这里](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)找到。
+目前的代码能在[这里][CODE]找到。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/e54dce49

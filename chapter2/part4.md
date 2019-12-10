@@ -1,6 +1,6 @@
 ## 重写程序入口点 _start
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+* [代码][CODE]
 
 我们在第一章中，曾自己重写了一个 C runtime 的入口点 ``_start`` ，在那里我们仅仅只是让它死循环。但是现在，类似 C runtime ，我们希望这个函数可以为我们设置内核的运行环境(不妨称为 kernel runtime ) 。随后，我们才真正开始执行内核的代码。
 
@@ -68,3 +68,5 @@ pub extern "C" fn rust_main() -> ! {
 }
 ```
 到现在为止我们终于将一切都准备好了，接下来就要配合 OpenSBI 运行我们的内核！
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79

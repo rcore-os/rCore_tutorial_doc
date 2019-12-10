@@ -1,6 +1,6 @@
 ## 使用文件系统
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/173b4de8c18b9ac00c2820bcb493107a035c9c03)
+* [代码][CODE]
 
 ### 打包磁盘文件
 
@@ -248,7 +248,7 @@ pub extern "C" fn rust_main() -> ! {
 
 我们使用 ``make run`` 运行一下，可以发现程序的运行结果与上一节一致。
 
-如果运行有问题的话，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/173b4de8c18b9ac00c2820bcb493107a035c9c03)找到代码。
+如果运行有问题的话，可以在[这里][CODE]找到代码。
 
 只不过，我们从文件系统解析出要执行的程序。我们可以看到 ``rust`` 文件夹下打包了哪些用户程序：
 
@@ -263,3 +263,5 @@ pub extern "C" fn rust_main() -> ! {
 > ```
 
 但是现在问题在于我们运行什么程序是硬编码到内核中的。我们能不能实现一个交互式的终端，告诉内核我们想要运行哪个程序呢？接下来我们就来做这件事情！
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/443465c1

@@ -1,6 +1,6 @@
 ## 内核调度线程 idle
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+* [代码][CODE]
 
 调度线程 idle 是一个内核线程，它的作用是
 
@@ -274,3 +274,5 @@ pub fn exit(code: usize) {
 ```
 
 至此我们说明了调度线程 idle 以及调度单元 Processor 。但我们之前还挖了一个坑，也就是上一节中，调度算法我们只提供了一个接口但并未提供具体实现。下一节我们就来介绍一种最简单的调度算法实现。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97

@@ -1,6 +1,6 @@
 ## 动态内存分配
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/e0d003d70879db6b72f05142fe611ea7c19b551b)
+* [代码][CODE]
 
 我们之前在 ``C/C++`` 语言中使用过 ``new, malloc`` 等动态内存分配方法，与在编译期就已完成的静态内存分配相比，动态内存分配可以根据程序运行时状态修改内存申请的时机及大小，显得更为灵活，但是这是需要操作系统的支持的，会带来一些开销。
 
@@ -166,4 +166,6 @@ fn dynamic_allocating_test() {
 
 我们可以发现这些动态分配的变量可以使用了。而且通过查看它们的地址我们发现它们都在 $$\text{.bss}$$ 段里面。这是因为提供给动态内存分配器的那块内存就在 $$\text{.bss}$$ 段里面啊。
 
-如果结果不太对劲，可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/e0d003d70879db6b72f05142fe611ea7c19b551b)查看现有的代码。
+如果结果不太对劲，可以在[这里][CODE]查看现有的代码。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/345dc90b

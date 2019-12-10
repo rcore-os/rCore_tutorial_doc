@@ -1,6 +1,6 @@
 ## 实现格式化输出
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/8b1cfc9c84490b1a73817adb5bbcbb716453adb7)
+* [代码][CODE]
 
 只能使用 ``console_putchar`` 这种苍白无力的输出手段让人头皮发麻。如果我们能使用 ``print!`` 宏的话该有多好啊！于是我们就来实现自己的 ``print!`` 宏！
 
@@ -132,4 +132,6 @@ pub extern "C" fn rust_main() -> ! {
 
 我们看到入口点的地址确实为我们安排的 ``0x80200000`` ，同时栈的地址也与我们在内存布局中看到的一样。更重要的是，我们现在能看到内核 ``panic`` 的位置了！这将大大有利于调试。
 
-目前所有的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/8b1cfc9c84490b1a73817adb5bbcbb716453adb7)找到。
+目前所有的代码可以在[这里][CODE]找到。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ad57b607

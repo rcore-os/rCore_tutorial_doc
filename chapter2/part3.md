@@ -1,6 +1,6 @@
 ## 使用链接脚本指定程序内存布局
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+* [代码][CODE]
 
 上一节中我们看到，编译出的程序默认被放到了从 0x10000 开始的位置上：
 
@@ -151,3 +151,5 @@ Disassembly of section .text:
 程序已经被正确地放在了指定的地址上。
 
 到这里，我们清楚了最终程序的内存布局会长成什么样子。下一节我们来补充这个链接脚本中未定义的段，并完成编译。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79
