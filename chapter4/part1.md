@@ -36,7 +36,7 @@ pub const PHYSICAL_MEMORY_END: usize = 0x88000000;
 // src/consts.rs
 
 pub const KERNEL_BEGIN_PADDR: usize = 0x80200000;
-pub const KERNEL_BEGIN_VADDR: usize = 0xffffffffc0200000;
+pub const KERNEL_BEGIN_VADDR: usize = 0x80200000;
 
 // src/init.rs
 
@@ -48,7 +48,7 @@ pub extern "C" fn rust_main() -> ! {
         fn end();
     }
     println!(
-        "free physical memory paddr = [0x{:x}, 0x{:x})",
+        "free physical memory paddr = [{:#x}, {:#x})",
         end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR,
         PHYSICAL_MEMORY_END
     );
@@ -74,7 +74,7 @@ pub extern "C" fn rust_main() -> ! {
 // src/init.rs
 
 println!(
-        "free physical memory ppn = [0x{:x}, 0x{:x})",
+        "free physical memory ppn = [{:#x}, {:#x})",
         ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
         PHYSICAL_MEMORY_END >> 12
 );
@@ -243,9 +243,9 @@ pub extern "C" fn rust_main() -> ! {
     extern "C" {
         fn end();
     }
-    println!("kernel end vaddr = 0x{:x}", end as usize);
+    println!("kernel end vaddr = {:#x}", end as usize);
     println!(
-        "free physical memory ppn = [0x{:x}, 0x{:x})",
+        "free physical memory ppn = [{:#x}, {:#x})",
         ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
         PHYSICAL_MEMORY_END >> 12
     );
@@ -266,67 +266,31 @@ pub extern "C" fn rust_main() -> ! {
 }
 
 fn frame_allocating_test() {
-    println!("alloc {:#x?}", alloc_frame());
+    println!("alloc {:x?}", alloc_frame());
     let f = alloc_frame();
-    println!("alloc {:#x?}", f);
-    println!("alloc {:#x?}", alloc_frame());
-    println!("dealloc {:#x?}", f);
+    println!("alloc {:x?}", f);
+    println!("alloc {:x?}", alloc_frame());
+    println!("dealloc {:x?}", f);
     dealloc_frame(f.unwrap());
-    println!("alloc {:#x?}", alloc_frame());
-    println!("alloc {:#x?}", alloc_frame());
+    println!("alloc {:x?}", alloc_frame());
+    println!("alloc {:x?}", alloc_frame());
 }
 ```
 我们尝试在分配的过程中回收，之后再进行分配，结果如何呢？
 > **[success] 物理页分配与回收测试**
 >
 > ```rust
-> free physical memory paddr = [0x80222020, 0x88000000)
-> free physical memory ppn = [0x80223, 0x88000)
+> free physical memory paddr = [0x8021f020, 0x88000000)
+> free physical memory ppn = [0x80220, 0x88000)
 > ++++ setup interrupt! ++++
 > ++++ setup timer!     ++++
 > ++++ setup memory!    ++++
-> alloc Some(
->        Frame(
->            PhysAddr(
->                0x80223000,
->            ),
->        ),
-> )
-> alloc Some(
->        Frame(
->            PhysAddr(
->                0x80224000,
->            ),
->        ),
-> )
-> alloc Some(
->        Frame(
->            PhysAddr(
->                0x80225000,
->            ),
->        ),
-> )
-> dealloc Some(
->        Frame(
->            PhysAddr(
->                0x80224000,
->            ),
->        ),
-> )
-> alloc Some(
->        Frame(
->            PhysAddr(
->                0x80224000,
->            ),
->        ),
-> )
-> alloc Some(
->        Frame(
->            PhysAddr(
->                0x80226000,
->            ),
->        ),
-> )
+> alloc Some(Frame(PhysAddr(80220000)))
+> alloc Some(Frame(PhysAddr(80221000)))
+> alloc Some(Frame(PhysAddr(80222000)))
+> dealloc Some(Frame(PhysAddr(80221000)))
+> alloc Some(Frame(PhysAddr(80221000)))
+> alloc Some(Frame(PhysAddr(80223000)))
 > * 100 ticks *
 > * 100 ticks *
 > ...
@@ -337,3 +301,4 @@ fn frame_allocating_test() {
 如果结果有问题的话，在[这里]()能找到现有的代码。
 
 不过，这种物理内存分配给人一种过家家的感觉。无论表面上分配、回收做得怎样井井有条，实际上都并没有对物理内存产生任何影响！不要着急，我们之后会使用它们的。
+
