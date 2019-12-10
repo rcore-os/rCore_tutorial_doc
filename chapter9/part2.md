@@ -54,7 +54,7 @@ pub fn getc() -> u8 {
 #![no_main]
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 use rust::io::getc;
 

@@ -18,7 +18,7 @@
 extern crate alloc;
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 const LF: u8 = 0x0au8;
 const CR: u8 = 0x0du8;

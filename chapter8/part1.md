@@ -15,10 +15,11 @@
 
 所以我们的用户程序基本还是要使用前两章的方法，不同的则是要把系统调用加入进去。
 
-在 ``os/usr`` 目录下使用 Cargo 新建一个二进制项目
+在 ``usr`` 目录下使用 Cargo 新建一个二进制项目，然后给文件夹改个名字：
 
 ```bash
-$ cargo new rust --bin --edition 2018
+$ cargo new user --bin
+$ mv user rust
 ```
 
 我们先来看系统调用：
@@ -198,7 +199,7 @@ use buddy_system_allocator::LockedHeap;
 static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
 ```
 
-现在我们可以将每一个含有 ``main`` 函数的 rust 源代码放在 ``usr/rust/src/bin`` 目录下。它们每一个都会被编译成一个独立的可执行文件。
+现在我们可以将每一个含有 ``main`` 函数的 Rust 源代码放在 ``usr/rust/src/bin`` 目录下。它们每一个都会被编译成一个独立的可执行文件。
 
 其模板为：
 
@@ -207,12 +208,11 @@ static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
 
 #![no_std]
 #![no_main]
-#![feature(alloc)]
 
 extern crate alloc;
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 #[no_mangle]
 pub fn main() -> usize {
@@ -229,12 +229,11 @@ pub fn main() -> usize {
 
 #![no_std]
 #![no_main]
-#![feature(alloc)]
 
 extern crate alloc;
 
 #[macro_use]
-extern crate rust;
+extern crate user;
 
 #[no_mangle]
 pub fn main() -> usize {
@@ -245,48 +244,19 @@ pub fn main() -> usize {
 }
 ```
 
-为了能够编译，我们还需要一个目标三元组，只不过这里，我们不需要再通过链接脚本手动执行内存布局了！
+和内核项目一样，这里也创建一个 `.cargo/config` 文件指定默认的目标三元组。但这次我们就不用自定义链接脚本了，用默认的即可。
 
-```json
-// usr/rust/riscv64-rust.json
+```toml
+# .cargo/config
 
-{
-  "llvm-target": "riscv64",
-  "data-layout": "e-m:e-p:64:64-i64:64-n64-S128",
-  "target-endian": "little",
-  "target-pointer-width": "64",
-  "target-c-int-width": "32",
-  "os": "none",
-  "arch": "riscv64",
-  "cpu": "generic-rv64",
-  "features": "+m,+a",
-  "max-atomic-width": "64",
-  "linker": "rust-lld",
-  "linker-flavor": "ld.lld",
-  "executables": true,
-  "panic-strategy": "abort",
-  "relocation-model": "static",
-  "abi-blacklist": [
-    "cdecl",
-    "stdcall",
-    "fastcall",
-    "vectorcall",
-    "thiscall",
-    "aapcs",
-    "win64",
-    "sysv64",
-    "ptx-kernel",
-    "msp430-interrupt",
-    "x86-interrupt"
-  ],
-  "eliminate-frame-pointer": false
-}
+[build]
+target = "riscv64imac-unknown-none-elf"
 ```
 
 切换到 ``usr/rust`` 目录，就可以进行交叉编译：
 
 ```bash
-$ cargo xbuild --target riscv64-rust.json
+$ cargo build
 ```
 
-我们将能够在 ``usr/rust/target/riscv64-rust/debug/hello_world`` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
+我们将能够在 ``usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world`` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
