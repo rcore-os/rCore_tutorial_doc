@@ -1,5 +1,7 @@
 ## 实现终端
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c)
+
 我们的终端也很简单：其功能为你输入想要执行的用户程序如 ``rust/hello_world`` ，随后按下回车，内核就会帮你执行这个程序。
 
 所以，我们需要实现一个新的系统调用：
@@ -130,6 +132,23 @@ impl Processor {
 // src/process/structs.rs
 
 impl Thread {
+    pub fn new_kernel(entry: usize) -> Box<Thread> {
+        unsafe {
+            let kstack_ = KernelStack::new();
+            Box::new(Thread {
+                context: Context::new_kernel_thread(entry, kstack_.top(), satp::read().bits()),
+                kstack: kstack_,
+				wait: None
+            })
+        }
+    }
+    pub fn get_boot_thread() -> Box<Thread> {
+        Box::new(Thread {
+            context: Context::null(),
+            kstack: KernelStack::new_empty(),
+			wait: None
+        })
+    }
     pub unsafe fn new_user(data: &[u8], wait_thread: Option<Tid>) -> Box<Thread> {
         ...
         Box::new(
@@ -220,3 +239,8 @@ pub fn init() {
 ```
 
 这里虽然还是将 ``rust/user_shell`` 硬编码到内核中，但是好歹它可以交互式运行其他程序了！
+
+试一试运行 ``rust/hello_world`` ，它工作的很好；``rust/notebook`` 也不赖，但是我们没有实现 ``Ctrl+c`` 的功能，因此就无法从记事本中退出了。随便输入一个不存在的程序，终端也不会崩溃，而是会提示程序不存在！
+
+所有的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c)找到。
+

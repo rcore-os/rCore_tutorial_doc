@@ -1,4 +1,7 @@
 ## 线程管理器
+
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+
 ### 线程状态
 从调度器的角度来看，每个线程都有一个独一无二的 Tid 来区分它和其他线程。
 ```rust

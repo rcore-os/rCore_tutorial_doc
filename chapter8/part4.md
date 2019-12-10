@@ -1,7 +1,19 @@
 ## 创建用户线程
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1)
+
 ```rust
-// src/process/struct.rs
+// src/process/structs.rs
+
+use xmas_elf::{
+    header,
+    ElfFile,
+};
+use crate::memory::memory_set::{
+	MemorySet,
+	handler::ByFrame,
+	attr::MemoryAttr
+};
 
 impl Thread {
     // 新建内核线程
@@ -53,6 +65,11 @@ impl Thread {
         )
     }
 }
+
+// src/consts.rs
+
+pub const USER_STACK_SIZE: usize = 0x80000;
+pub const USER_STACK_OFFSET: usize = 0xffffffff00000000;
 ```
 
 现在大概可以理解用户线程为何在中断时要从用户栈切换到内核栈了。如果不切换，内核的处理过程会留在用户栈上，使用用户程序可能访问到，这显然是很危险的。
@@ -104,10 +121,13 @@ impl ContextContent {
 }
 ```
 
-现在我们的用户线程就创建完毕了。我们赶快把它跟我们之前创建的那些内核线程一起运行一下吧：
+现在我们的用户线程就创建完毕了。我们赶快把它跟我们之前创建的那些内核线程一起运行一下吧。
+
+在创建完 $$5$$ 个内核线程之后，我们创建自己的用户线程：
 
 ```rust
 // src/process/mod.rs
+
 pub fn init() {
     ...
     extern "C" {
@@ -126,3 +146,20 @@ pub fn init() {
 }
 ```
 
+同时，我们要修改一下构建内核的 Makefile ，将用户程序链接进去，用之前提到的方法：
+
+```makefile
+# Makefile
+...
+.PHONY: kernel build clean qemu run
+
+# 新增
+export USER_IMG = usr/rust/target/riscv64-rust/debug/hello_world
+
+kernel:
+	@cargo xbuild --target $(target).json
+...
+```
+
+现在我们 ``make run`` 运行一下试试看，发现内核线程与用户线程能够在一起很好的工作了！
+至今为止的所有代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1)找到。

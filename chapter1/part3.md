@@ -1,5 +1,15 @@
 ## 移除标准库依赖
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+
+在我们正式开始写代码之前，由于我们使用的 ``nightly-rust`` 是不稳定的，后续版本可能不会兼容之前版本的代码，因此我们决定固定编译器的版本：
+
+```rust
+// rust-toolchain
+
+nightly-2019-12-08
+```
+
 项目默认是链接 rust 标准库 std 的，它依赖于操作系统，因此我们需要显式将其禁用：
 
 ```rust

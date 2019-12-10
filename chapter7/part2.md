@@ -1,5 +1,7 @@
 ## 内核调度线程 idle
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+
 调度线程 idle 是一个内核线程，它的作用是
 
 * 当没有任何其他线程时，idle 线程运行并循环检测是否能从线程池中找到一个可运行的线程，如果能找到的话就切换过去；
