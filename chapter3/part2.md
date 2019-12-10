@@ -61,9 +61,8 @@ pub extern "C" fn rust_main() -> ! {
 
 > **[success] trap handled**
 > ```rust
-> ...opensbi output...
 > ++++ setup interrupt! ++++
-> trap: cause: Exception(Breakpoint), epc: 0x0xffffffffc0200040
+> trap: cause: Exception(Breakpoint), epc: 0x0x80200022
 > panicked at 'trap handled!', src/interrupt.rs:20:5
 > ```
 
