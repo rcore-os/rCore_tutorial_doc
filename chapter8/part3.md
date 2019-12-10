@@ -1,5 +1,7 @@
 ## 创建虚拟内存空间
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1)
+
 ### 内核链接
 
 我们只需将最终得到的可执行文件直接链接到内核中即可。
@@ -32,7 +34,12 @@ _user_img_end:
 elf 文件与只含有代码和数据的纯二进制文件不同，需要我们手动去解析它的文件结构来获得各段的信息。所幸的是， rust 已经有 crate 帮我们实现了这一点。
 
 ```rust
-// src/process/mod.rs
+// Cargo.toml
+
+[dependencies]
+xmas-elf = "0.6"
+
+// src/process/structs.rs
 
 use xmas_elf::{
     header,
@@ -118,7 +125,10 @@ impl MemorySet {
         }
         self.areas.push(area);
         
-    } 
+    }
+    pub fn token(&self) -> usize {
+        self.page_table.token()
+    }
 }
 
 // src/memory/memory_set/area.rs
@@ -143,6 +153,9 @@ impl MemoryArea {
 }
 
 // src/memory/memory_set/handler.rs
+
+use crate::memory::access_pa_via_va;
+use crate::consts::PAGE_SIZE;
 
 pub trait MemoryHandler: Debug + 'static {
     ...
@@ -200,6 +213,28 @@ impl MemoryHandler for ByFrame {
         }
     }
 }
+
+// src/memory/paging.rs
+// 这里有两处要改成 pub ，其他不必做改动
+
+pub struct PageEntry(pub &'static mut PageTableEntry, Page);
+
+impl PageTableImpl {
+    ...
+    pub fn get_entry(&mut self, va: usize) -> Option<&mut PageEntry> {
+        let page = Page::of_addr(VirtAddr::new(va));
+        if let Ok(e) = self.page_table.ref_entry(page.clone()) {
+            let e = unsafe { &mut *(e as *mut PageTableEntry) };
+            self.entry = Some(PageEntry(e, page));
+            Some(self.entry.as_mut().unwrap())
+        }
+        else {
+            None
+        }
+    }
+	...
+}
+
 ```
 
 由于 ``MemorySet::push`` 的接口发生的变化，我们要将 ``ElfExt::make_memory_set`` 之外的所有 ``push`` 调用最后均加上一个 ``None`` 参数。

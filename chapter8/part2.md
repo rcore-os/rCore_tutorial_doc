@@ -1,5 +1,7 @@
 ## 在内核中实现系统调用
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/6880114bb5d4370bb7ce8133f94cf084f0f4d7c1)
+
 上一节中，我们需要实现两个系统调用：
 
 1. 在屏幕上输出一个字符

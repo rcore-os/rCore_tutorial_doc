@@ -1,5 +1,7 @@
 ## 线程调度测试
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)
+
 我们终于可以来测试一下这一章的代码实现的有没有问题了！
 
 ```rust
@@ -231,7 +233,7 @@ pub extern "C" fn rust_main() -> ! {
 
 我们可以清楚的看到在每一个时间片内每个线程所做的事情。
 
-如果结果不对的话，[这里]()可以看到至今的所有代码。
+如果结果不对的话，[这里](https://github.com/rcore-os/rCore_tutorial/tree/83ed61332bc1807fcaf016b3e8d932df1291ade5)可以看到至今的所有代码。
 
 
 

@@ -1,5 +1,7 @@
 ## 编写用户程序
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85)
+
 ### 系统调用
 
 我们的用户程序一般在 CPU 的用户态 (U Mode) 下执行，而它只能通过执行 ``ecall`` 指令，触发 ``Environment call from U-mode`` 异常，并进入内核态 (S Mode) ，执行内核的中断服务例程，获取内核服务。
@@ -19,6 +21,16 @@
 
 ```bash
 $ cargo new rust --bin --edition 2018
+```
+
+首先删除掉默认生成的 ``usr/rust/src/main.rs`` 。
+
+加上工具链
+
+```rust
+// usr/rust/rust-toolchain
+
+nightly-2019-12-08
 ```
 
 我们先来看系统调用：
@@ -176,6 +188,11 @@ fn oom(_: Layout) -> ! {
 还有 ``lib.rs``：
 
 ```rust
+// usr/rust/Cargo.toml
+
+[dependencies]
+buddy_system_allocator = "0.3"
+
 // usr/rust/src/lib.rs
 
 #![no_std]
@@ -290,3 +307,5 @@ $ cargo xbuild --target riscv64-rust.json
 ```
 
 我们将能够在 ``usr/rust/target/riscv64-rust/debug/hello_world`` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
+
+目前的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85)找到。

@@ -1,5 +1,7 @@
 ## 使用包管理器cargo创建rust binary项目
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/9900fd9c751761d262594053576ace8590610261)
+
 使用 ``cargo new`` 创建一个新的rust binary项目，命令如下：
 
 ```bash

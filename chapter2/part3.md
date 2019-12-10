@@ -1,5 +1,7 @@
 ## 重写程序入口点 _start
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+
 我们在第一章中，曾自己重写了一个 C runtime 的入口点 ``_start`` ，在那里我们仅仅只是让它死循环。但是现在，类似 C runtime ，我们希望这个函数可以为我们设置内核的运行环境(不妨称为 kernel runtime ) 。随后，我们才真正开始执行内核的代码。
 
 但是具体而言我们需要设置怎样的运行环境呢？

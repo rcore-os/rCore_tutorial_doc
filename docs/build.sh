@@ -1,3 +1,4 @@
+gitbook install
 \cp extensions/highlight/prism-riscv.js node_modules/prismjs/components/
 python3 extensions/highlight/add_riscv_component.py
 rm -r docs/

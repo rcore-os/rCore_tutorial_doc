@@ -1,5 +1,7 @@
 ## 使用目标三元组描述目标平台
 
+* [代码](https://github.com/rcore-os/rCore_tutorial/tree/1ba5fd7a1d7fc8794583ca1588a262916a20d707)
+
 cargo 在编译项目时，可以附加目标参数 `--target <target triple>` 设置项目的目标平台。平台包括硬件和软件支持，事实上， **目标三元组(target triple)** 包含：cpu 架构、供应商、操作系统和 [ABI](https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi/2456882#2456882) 。
 
 安装 rust 时，默认编译后的可执行文件要在本平台上执行，我们可以使用
