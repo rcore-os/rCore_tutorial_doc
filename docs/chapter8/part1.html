@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x7F16;&#x5199;&#x7528;&#x6237;&#x7A0B;&#x5E8F;">&#x7F16;&#x5199;&#x7528;&#x6237;&#x7A0B;&#x5E8F;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/99fa0b58" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <h3 id="&#x7CFB;&#x7EDF;&#x8C03;&#x7528;">&#x7CFB;&#x7EDF;&#x8C03;&#x7528;</h3>
 <p>&#x6211;&#x4EEC;&#x7684;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x4E00;&#x822C;&#x5728; CPU &#x7684;&#x7528;&#x6237;&#x6001; (U Mode) &#x4E0B;&#x6267;&#x884C;&#xFF0C;&#x800C;&#x5B83;&#x53EA;&#x80FD;&#x901A;&#x8FC7;&#x6267;&#x884C; <code>ecall</code> &#x6307;&#x4EE4;&#xFF0C;&#x89E6;&#x53D1; <code>Environment call from U-mode</code> &#x5F02;&#x5E38;&#xFF0C;&#x5E76;&#x8FDB;&#x5165;&#x5185;&#x6838;&#x6001; (S Mode) &#xFF0C;&#x6267;&#x884C;&#x5185;&#x6838;&#x7684;&#x4E2D;&#x65AD;&#x670D;&#x52A1;&#x4F8B;&#x7A0B;&#xFF0C;&#x83B7;&#x53D6;&#x5185;&#x6838;&#x670D;&#x52A1;&#x3002;</p>
@@ -972,8 +972,9 @@
 <h3 id="&#x521B;&#x5EFA;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x6A21;&#x677F;">&#x521B;&#x5EFA;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x6A21;&#x677F;</h3>
 <p>&#x6211;&#x4EEC;&#x7684;&#x5185;&#x6838;&#x80FD;&#x7ED9;&#x7A0B;&#x5E8F;&#x63D0;&#x4F9B;&#x7684;&#x552F;&#x4E00;&#x652F;&#x6301;&#x5C31;&#x662F;&#x4E24;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x3002;</p>
 <p>&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x7684;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x57FA;&#x672C;&#x8FD8;&#x662F;&#x8981;&#x4F7F;&#x7528;&#x524D;&#x4E24;&#x7AE0;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4E0D;&#x540C;&#x7684;&#x5219;&#x662F;&#x8981;&#x628A;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x52A0;&#x5165;&#x8FDB;&#x53BB;&#x3002;</p>
-<p>&#x5728; <code>os/usr</code> &#x76EE;&#x5F55;&#x4E0B;&#x4F7F;&#x7528; Cargo &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x4E8C;&#x8FDB;&#x5236;&#x9879;&#x76EE;</p>
-<pre class="language-"><code class="lang-bash">$ cargo new rust --bin --edition <span class="token number">2018</span>
+<p>&#x5728; <code>usr</code> &#x76EE;&#x5F55;&#x4E0B;&#x4F7F;&#x7528; Cargo &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x4E8C;&#x8FDB;&#x5236;&#x9879;&#x76EE;&#xFF0C;&#x7136;&#x540E;&#x7ED9;&#x6587;&#x4EF6;&#x5939;&#x6539;&#x4E2A;&#x540D;&#x5B57;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ cargo new user --bin
+$ <span class="token function">mv</span> user rust
 </code></pre>
 <p>&#x9996;&#x5148;&#x5220;&#x9664;&#x6389;&#x9ED8;&#x8BA4;&#x751F;&#x6210;&#x7684; <code>usr/rust/src/main.rs</code> &#x3002;</p>
 <p>&#x52A0;&#x4E0A;&#x5DE5;&#x5177;&#x94FE;</p>
@@ -1148,18 +1149,17 @@ buddy_system_allocator <span class="token operator">=</span> <span class="token 
 <span class="token attribute attr-name">#[global_allocator]</span>
 <span class="token keyword">static</span> DYNAMIC_ALLOCATOR<span class="token punctuation">:</span> LockedHeap <span class="token operator">=</span> LockedHeap<span class="token punctuation">::</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x6BCF;&#x4E00;&#x4E2A;&#x542B;&#x6709; <code>main</code> &#x51FD;&#x6570;&#x7684; rust &#x6E90;&#x4EE3;&#x7801;&#x653E;&#x5728; <code>usr/rust/src/bin</code> &#x76EE;&#x5F55;&#x4E0B;&#x3002;&#x5B83;&#x4EEC;&#x6BCF;&#x4E00;&#x4E2A;&#x90FD;&#x4F1A;&#x88AB;&#x7F16;&#x8BD1;&#x6210;&#x4E00;&#x4E2A;&#x72EC;&#x7ACB;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x3002;</p>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x6BCF;&#x4E00;&#x4E2A;&#x542B;&#x6709; <code>main</code> &#x51FD;&#x6570;&#x7684; Rust &#x6E90;&#x4EE3;&#x7801;&#x653E;&#x5728; <code>usr/rust/src/bin</code> &#x76EE;&#x5F55;&#x4E0B;&#x3002;&#x5B83;&#x4EEC;&#x6BCF;&#x4E00;&#x4E2A;&#x90FD;&#x4F1A;&#x88AB;&#x7F16;&#x8BD1;&#x6210;&#x4E00;&#x4E2A;&#x72EC;&#x7ACB;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x3002;</p>
 <p>&#x5176;&#x6A21;&#x677F;&#x4E3A;&#xFF1A;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/bin/model.rs</span>
 
 <span class="token attribute attr-name">#![no_std]</span>
 <span class="token attribute attr-name">#![no_main]</span>
-<span class="token attribute attr-name">#![feature(alloc)]</span>
 
 <span class="token keyword">extern</span> <span class="token keyword">crate</span> alloc<span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[macro_use]</span>
-<span class="token keyword">extern</span> <span class="token keyword">crate</span> rust<span class="token punctuation">;</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[no_mangle]</span>
 <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
@@ -1172,12 +1172,11 @@ buddy_system_allocator <span class="token operator">=</span> <span class="token 
 
 <span class="token attribute attr-name">#![no_std]</span>
 <span class="token attribute attr-name">#![no_main]</span>
-<span class="token attribute attr-name">#![feature(alloc)]</span>
 
 <span class="token keyword">extern</span> <span class="token keyword">crate</span> alloc<span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[macro_use]</span>
-<span class="token keyword">extern</span> <span class="token keyword">crate</span> rust<span class="token punctuation">;</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[no_mangle]</span>
 <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
@@ -1187,47 +1186,18 @@ buddy_system_allocator <span class="token operator">=</span> <span class="token 
     <span class="token number">0</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x7F16;&#x8BD1;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#xFF0C;&#x53EA;&#x4E0D;&#x8FC7;&#x8FD9;&#x91CC;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x901A;&#x8FC7;&#x94FE;&#x63A5;&#x811A;&#x672C;&#x624B;&#x52A8;&#x6267;&#x884C;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x4E86;&#xFF01;</p>
-<pre class="language-"><code class="lang-json"><span class="token comment">// usr/rust/riscv64-rust.json</span>
+<p>&#x548C;&#x5185;&#x6838;&#x9879;&#x76EE;&#x4E00;&#x6837;&#xFF0C;&#x8FD9;&#x91CC;&#x4E5F;&#x521B;&#x5EFA;&#x4E00;&#x4E2A; <code>.cargo/config</code> &#x6587;&#x4EF6;&#x6307;&#x5B9A;&#x9ED8;&#x8BA4;&#x7684;&#x76EE;&#x6807;&#x4E09;&#x5143;&#x7EC4;&#x3002;&#x4F46;&#x8FD9;&#x6B21;&#x6211;&#x4EEC;&#x5C31;&#x4E0D;&#x7528;&#x81EA;&#x5B9A;&#x4E49;&#x94FE;&#x63A5;&#x811A;&#x672C;&#x4E86;&#xFF0C;&#x7528;&#x9ED8;&#x8BA4;&#x7684;&#x5373;&#x53EF;&#x3002;</p>
+<pre class="language-"><code class="lang-toml"><span class="token comment"># .cargo/config</span>
 
-<span class="token punctuation">{</span>
-  <span class="token property">&quot;llvm-target&quot;</span><span class="token operator">:</span> <span class="token string">&quot;riscv64&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;data-layout&quot;</span><span class="token operator">:</span> <span class="token string">&quot;e-m:e-p:64:64-i64:64-n64-S128&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;target-endian&quot;</span><span class="token operator">:</span> <span class="token string">&quot;little&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;target-pointer-width&quot;</span><span class="token operator">:</span> <span class="token string">&quot;64&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;target-c-int-width&quot;</span><span class="token operator">:</span> <span class="token string">&quot;32&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;os&quot;</span><span class="token operator">:</span> <span class="token string">&quot;none&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;arch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;riscv64&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;cpu&quot;</span><span class="token operator">:</span> <span class="token string">&quot;generic-rv64&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;features&quot;</span><span class="token operator">:</span> <span class="token string">&quot;+m,+a&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;max-atomic-width&quot;</span><span class="token operator">:</span> <span class="token string">&quot;64&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;linker&quot;</span><span class="token operator">:</span> <span class="token string">&quot;rust-lld&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;linker-flavor&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ld.lld&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;executables&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;panic-strategy&quot;</span><span class="token operator">:</span> <span class="token string">&quot;abort&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;relocation-model&quot;</span><span class="token operator">:</span> <span class="token string">&quot;static&quot;</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;abi-blacklist&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">&quot;cdecl&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;stdcall&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;fastcall&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;vectorcall&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;thiscall&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;aapcs&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;win64&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;sysv64&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;ptx-kernel&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;msp430-interrupt&quot;</span><span class="token punctuation">,</span>
-    <span class="token string">&quot;x86-interrupt&quot;</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">&quot;eliminate-frame-pointer&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
-<span class="token punctuation">}</span>
+<span class="token punctuation">[</span><span class="token table class-name">build</span><span class="token punctuation">]</span>
+<span class="token key property">target</span> <span class="token punctuation">=</span> <span class="token string">&quot;riscv64imac-unknown-none-elf&quot;</span>
 </code></pre>
 <p>&#x5207;&#x6362;&#x5230; <code>usr/rust</code> &#x76EE;&#x5F55;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x4EA4;&#x53C9;&#x7F16;&#x8BD1;&#xFF1A;</p>
-<pre class="language-"><code class="lang-bash">$ cargo xbuild --target riscv64-rust.json
+<pre class="language-"><code class="lang-bash">$ cargo build
 </code></pre>
-<p>&#x6211;&#x4EEC;&#x5C06;&#x80FD;&#x591F;&#x5728; <code>usr/rust/target/riscv64-rust/debug/hello_world</code> &#x770B;&#x5230;&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x51FA;&#x6765;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#xFF0C;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x95EE;&#x9898;&#x5C31;&#x662F;&#x5982;&#x4F55;&#x628A;&#x5B83;&#x52A0;&#x8F7D;&#x5230;&#x5185;&#x6838;&#x4E2D;&#x6267;&#x884C;&#x4E86;&#xFF01;</p>
-<p>&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/d4608fc1def1514dda3c3b66a477fd6e2f6a0e85" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;
-<div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<p>&#x6211;&#x4EEC;&#x5C06;&#x80FD;&#x591F;&#x5728; <code>usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world</code> &#x770B;&#x5230;&#x6211;&#x4EEC;&#x7F16;&#x8BD1;&#x51FA;&#x6765;&#x7684;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#xFF0C;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x95EE;&#x9898;&#x5C31;&#x662F;&#x5982;&#x4F55;&#x628A;&#x5B83;&#x52A0;&#x8F7D;&#x5230;&#x5185;&#x6838;&#x4E2D;&#x6267;&#x884C;&#x4E86;&#xFF01;</p>
+<p>&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/99fa0b58" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
 <script>
@@ -1286,7 +1256,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[编写用户程序]","level":"1.9.1","depth":2,"next":{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},"previous":{"title":"第八章：用户线程","level":"1.9","depth":1,"path":"chapter8/introduction.md","ref":"chapter8/introduction.md","articles":[{"title":"[编写用户程序]","level":"1.9.1","depth":2,"path":"chapter8/part1.md","ref":"chapter8/part1.md","articles":[]},{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},{"title":"创建虚拟内存空间","level":"1.9.3","depth":2,"path":"chapter8/part3.md","ref":"chapter8/part3.md","articles":[]},{"title":"[创建用户线程]","level":"1.9.4","depth":2,"path":"chapter8/part4.md","ref":"chapter8/part4.md","articles":[]},{"title":"总结与展望","level":"1.9.5","depth":2,"path":"chapter8/part5.md","ref":"chapter8/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter8/part1.md","mtime":"2019-12-10T02:48:21.424Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[编写用户程序]","level":"1.9.1","depth":2,"next":{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},"previous":{"title":"第八章：用户线程","level":"1.9","depth":1,"path":"chapter8/introduction.md","ref":"chapter8/introduction.md","articles":[{"title":"[编写用户程序]","level":"1.9.1","depth":2,"path":"chapter8/part1.md","ref":"chapter8/part1.md","articles":[]},{"title":"在内核中实现系统调用","level":"1.9.2","depth":2,"path":"chapter8/part2.md","ref":"chapter8/part2.md","articles":[]},{"title":"创建虚拟内存空间","level":"1.9.3","depth":2,"path":"chapter8/part3.md","ref":"chapter8/part3.md","articles":[]},{"title":"[创建用户线程]","level":"1.9.4","depth":2,"path":"chapter8/part4.md","ref":"chapter8/part4.md","articles":[]},{"title":"总结与展望","level":"1.9.5","depth":2,"path":"chapter8/part5.md","ref":"chapter8/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter8/part1.md","mtime":"2019-12-10T13:43:37.817Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

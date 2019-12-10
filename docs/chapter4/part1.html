@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x7269;&#x7406;&#x5185;&#x5B58;&#x63A2;&#x6D4B;&#x4E0E;&#x7BA1;&#x7406;">&#x7269;&#x7406;&#x5185;&#x5B58;&#x63A2;&#x6D4B;&#x4E0E;&#x7BA1;&#x7406;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/0c11e42a2174f0cc76a275bfe8815b7aa47d8bec" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/695d8a2c" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x7269;&#x7406;&#x5185;&#x5B58;&#x901A;&#x5E38;&#x662F;&#x4E00;&#x7247; RAM &#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x628A;&#x5B83;&#x770B;&#x6210;&#x4E00;&#x4E2A;&#x4EE5;&#x5B57;&#x8282;&#x4E3A;&#x5355;&#x4F4D;&#x7684;&#x5927;&#x6570;&#x7EC4;&#xFF0C;&#x901A;&#x8FC7;&#x7269;&#x7406;&#x5730;&#x5740;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x4F4D;&#x7F6E;&#x8FDB;&#x884C;&#x8BFB;&#x5199;&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x7269;&#x7406;&#x5730;&#x5740;<strong>&#x5E76;&#x4E0D;&#x4EC5;&#x4EC5;</strong>&#x53EA;&#x80FD;&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x6765;&#x8BBF;&#x95EE;&#x5176;&#x4ED6;&#x7684;&#x5916;&#x8BBE;&#xFF0C;&#x56E0;&#x6B64;&#x4F60;&#x4E5F;&#x53EF;&#x4EE5;&#x8BA4;&#x4E3A;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E5F;&#x7B97;&#x662F;&#x4E00;&#x79CD;&#x5916;&#x8BBE;&#x3002;</p>
 <p>&#x8FD9;&#x6837;&#x8BBE;&#x8BA1;&#x662F;&#x56E0;&#x4E3A;&#xFF1A;&#x4E00;&#x5F00;&#x59CB;&#x8BBF;&#x95EE;&#x5176;&#x4ED6;&#x5916;&#x8BBE;&#x4E0E;&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;&#x8981;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x6307;&#x4EE4;&#xFF0C;&#x4F1A;&#x5E26;&#x6765;&#x5F88;&#x591A;&#x9EBB;&#x70E6;&#xFF0C;&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x901A;&#x8FC7; MMIO(Memory Mapped I/O) &#x6280;&#x672F;&#x5C06;&#x5916;&#x8BBE;&#x6620;&#x5C04;&#x5230;&#x4E00;&#x6BB5;&#x7269;&#x7406;&#x5730;&#x5740;&#xFF0C;&#x8FD9;&#x6837;&#x6211;&#x4EEC;&#x8BBF;&#x95EE;&#x5176;&#x4ED6;&#x5916;&#x8BBE;&#x5C31;&#x548C;&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E00;&#x6837;&#x5566;&#xFF01;</p>
@@ -987,7 +987,7 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/consts.rs</span>
 
 <span class="token keyword">pub</span> <span class="token keyword">const</span> KERNEL_BEGIN_PADDR<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0x80200000</span><span class="token punctuation">;</span>
-<span class="token keyword">pub</span> <span class="token keyword">const</span> KERNEL_BEGIN_VADDR<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0xffffffffc0200000</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> KERNEL_BEGIN_VADDR<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0x80200000</span><span class="token punctuation">;</span>
 
 <span class="token comment">// src/init.rs</span>
 
@@ -999,7 +999,7 @@
         <span class="token keyword">fn</span> <span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token function">println!</span><span class="token punctuation">(</span>
-        <span class="token string">&quot;free physical memory paddr = [0x{:x}, 0x{:x})&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;free physical memory paddr = [{:#x}, {:#x})&quot;</span><span class="token punctuation">,</span>
         end <span class="token keyword">as</span> usize <span class="token operator">-</span> KERNEL_BEGIN_VADDR <span class="token operator">+</span> KERNEL_BEGIN_PADDR<span class="token punctuation">,</span>
         PHYSICAL_MEMORY_END
     <span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1019,7 +1019,7 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/init.rs</span>
 
 <span class="token function">println!</span><span class="token punctuation">(</span>
-        <span class="token string">&quot;free physical memory ppn = [0x{:x}, 0x{:x})&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;free physical memory ppn = [{:#x}, {:#x})&quot;</span><span class="token punctuation">,</span>
         <span class="token punctuation">(</span><span class="token punctuation">(</span>end <span class="token keyword">as</span> usize <span class="token operator">-</span> KERNEL_BEGIN_VADDR <span class="token operator">+</span> KERNEL_BEGIN_PADDR<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;</span> <span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
         PHYSICAL_MEMORY_END <span class="token operator">&gt;&gt;</span> <span class="token number">12</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1170,9 +1170,9 @@ spin <span class="token operator">=</span> <span class="token string">&quot;0.5.
     <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token punctuation">{</span>
         <span class="token keyword">fn</span> <span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;kernel end vaddr = 0x{:x}&quot;</span><span class="token punctuation">,</span> end <span class="token keyword">as</span> usize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;kernel end vaddr = {:#x}&quot;</span><span class="token punctuation">,</span> end <span class="token keyword">as</span> usize<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">println!</span><span class="token punctuation">(</span>
-        <span class="token string">&quot;free physical memory ppn = [0x{:x}, 0x{:x})&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;free physical memory ppn = [{:#x}, {:#x})&quot;</span><span class="token punctuation">,</span>
         <span class="token punctuation">(</span><span class="token punctuation">(</span>end <span class="token keyword">as</span> usize <span class="token operator">-</span> KERNEL_BEGIN_VADDR <span class="token operator">+</span> KERNEL_BEGIN_PADDR<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;</span> <span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
         PHYSICAL_MEMORY_END <span class="token operator">&gt;&gt;</span> <span class="token number">12</span>
     <span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1193,75 +1193,39 @@ spin <span class="token operator">=</span> <span class="token string">&quot;0.5.
 <span class="token punctuation">}</span>
 
 <span class="token keyword">fn</span> <span class="token function">frame_allocating_test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:#x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">let</span> f <span class="token operator">=</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:#x?}&quot;</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:#x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;dealloc {:#x?}&quot;</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:x?}&quot;</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;dealloc {:x?}&quot;</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">dealloc_frame</span><span class="token punctuation">(</span>f<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:#x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:#x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;alloc {:x?}&quot;</span><span class="token punctuation">,</span> <span class="token function">alloc_frame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>&#x6211;&#x4EEC;&#x5C1D;&#x8BD5;&#x5728;&#x5206;&#x914D;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x56DE;&#x6536;&#xFF0C;&#x4E4B;&#x540E;&#x518D;&#x8FDB;&#x884C;&#x5206;&#x914D;&#xFF0C;&#x7ED3;&#x679C;&#x5982;&#x4F55;&#x5462;&#xFF1F;</p>
 <blockquote>
 <p><strong>[success] &#x7269;&#x7406;&#x9875;&#x5206;&#x914D;&#x4E0E;&#x56DE;&#x6536;&#x6D4B;&#x8BD5;</strong></p>
-<pre class="language-"><code class="lang-rust">free physical memory paddr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x80222020</span><span class="token punctuation">,</span> <span class="token number">0x88000000</span><span class="token punctuation">)</span>
-free physical memory ppn <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x80223</span><span class="token punctuation">,</span> <span class="token number">0x88000</span><span class="token punctuation">)</span>
+<pre class="language-"><code class="lang-rust">free physical memory paddr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x8021f020</span><span class="token punctuation">,</span> <span class="token number">0x88000000</span><span class="token punctuation">)</span>
+free physical memory ppn <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x80220</span><span class="token punctuation">,</span> <span class="token number">0x88000</span><span class="token punctuation">)</span>
 <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
 <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">timer!</span>     <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
 <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">memory!</span>    <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
-alloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80223000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-alloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80224000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-alloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80225000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-dealloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80224000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-alloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80224000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-alloc <span class="token function">Some</span><span class="token punctuation">(</span>
-       <span class="token function">Frame</span><span class="token punctuation">(</span>
-           <span class="token function">PhysAddr</span><span class="token punctuation">(</span>
-               <span class="token number">0x80226000</span><span class="token punctuation">,</span>
-           <span class="token punctuation">)</span><span class="token punctuation">,</span>
-       <span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
+alloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80220000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+alloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80221000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+alloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80222000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+dealloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80221000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+alloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80221000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+alloc <span class="token function">Some</span><span class="token punctuation">(</span><span class="token function">Frame</span><span class="token punctuation">(</span><span class="token function">PhysAddr</span><span class="token punctuation">(</span><span class="token number">80223000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token operator">*</span> <span class="token number">100</span> ticks <span class="token operator">*</span>
 <span class="token operator">*</span> <span class="token number">100</span> ticks <span class="token operator">*</span>
 <span class="token punctuation">...</span>
 </code></pre>
 </blockquote>
 <p>&#x6211;&#x4EEC;&#x56DE;&#x6536;&#x7684;&#x9875;&#x9762;&#x63A5;&#x4E0B;&#x6765;&#x9A6C;&#x4E0A;&#x5C31;&#x53C8;&#x88AB;&#x5206;&#x914D;&#x51FA;&#x53BB;&#x4E86;&#x3002;</p>
-<p>&#x5982;&#x679C;&#x7ED3;&#x679C;&#x6709;&#x95EE;&#x9898;&#x7684;&#x8BDD;&#xFF0C;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/0c11e42a2174f0cc76a275bfe8815b7aa47d8bec" target="_blank">&#x8FD9;&#x91CC;</a>&#x80FD;&#x627E;&#x5230;&#x73B0;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
-<p>&#x4E0D;&#x8FC7;&#xFF0C;&#x8FD9;&#x79CD;&#x7269;&#x7406;&#x5185;&#x5B58;&#x5206;&#x914D;&#x7ED9;&#x4EBA;&#x4E00;&#x79CD;&#x8FC7;&#x5BB6;&#x5BB6;&#x7684;&#x611F;&#x89C9;&#x3002;&#x65E0;&#x8BBA;&#x8868;&#x9762;&#x4E0A;&#x5206;&#x914D;&#x3001;&#x56DE;&#x6536;&#x505A;&#x5F97;&#x600E;&#x6837;&#x4E95;&#x4E95;&#x6709;&#x6761;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x90FD;&#x5E76;&#x6CA1;&#x6709;&#x5BF9;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4EA7;&#x751F;&#x4EFB;&#x4F55;&#x5F71;&#x54CD;&#xFF01;&#x4E0D;&#x8981;&#x7740;&#x6025;&#xFF0C;&#x6211;&#x4EEC;&#x4E4B;&#x540E;&#x4F1A;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x7684;&#x3002;
-<div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<p>&#x5982;&#x679C;&#x7ED3;&#x679C;&#x6709;&#x95EE;&#x9898;&#x7684;&#x8BDD;&#xFF0C;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/695d8a2c" target="_blank">&#x8FD9;&#x91CC;</a>&#x80FD;&#x627E;&#x5230;&#x73B0;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
+<p>&#x4E0D;&#x8FC7;&#xFF0C;&#x8FD9;&#x79CD;&#x7269;&#x7406;&#x5185;&#x5B58;&#x5206;&#x914D;&#x7ED9;&#x4EBA;&#x4E00;&#x79CD;&#x8FC7;&#x5BB6;&#x5BB6;&#x7684;&#x611F;&#x89C9;&#x3002;&#x65E0;&#x8BBA;&#x8868;&#x9762;&#x4E0A;&#x5206;&#x914D;&#x3001;&#x56DE;&#x6536;&#x505A;&#x5F97;&#x600E;&#x6837;&#x4E95;&#x4E95;&#x6709;&#x6761;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x90FD;&#x5E76;&#x6CA1;&#x6709;&#x5BF9;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4EA7;&#x751F;&#x4EFB;&#x4F55;&#x5F71;&#x54CD;&#xFF01;&#x4E0D;&#x8981;&#x7740;&#x6025;&#xFF0C;&#x6211;&#x4EEC;&#x4E4B;&#x540E;&#x4F1A;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x7684;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
 <script>
@@ -1320,7 +1284,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[物理内存探测与管理]","level":"1.5.1","depth":2,"next":{"title":"[动态内存分配]","level":"1.5.2","depth":2,"path":"chapter4/part2.md","ref":"chapter4/part2.md","articles":[]},"previous":{"title":"第四章：内存管理","level":"1.5","depth":1,"path":"chapter4/introduction.md","ref":"chapter4/introduction.md","articles":[{"title":"[物理内存探测与管理]","level":"1.5.1","depth":2,"path":"chapter4/part1.md","ref":"chapter4/part1.md","articles":[]},{"title":"[动态内存分配]","level":"1.5.2","depth":2,"path":"chapter4/part2.md","ref":"chapter4/part2.md","articles":[]},{"title":"总结与展望","level":"1.5.3","depth":2,"path":"chapter4/part3.md","ref":"chapter4/part3.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter4/part1.md","mtime":"2019-12-10T02:44:11.672Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[物理内存探测与管理]","level":"1.5.1","depth":2,"next":{"title":"[动态内存分配]","level":"1.5.2","depth":2,"path":"chapter4/part2.md","ref":"chapter4/part2.md","articles":[]},"previous":{"title":"第四章：内存管理","level":"1.5","depth":1,"path":"chapter4/introduction.md","ref":"chapter4/introduction.md","articles":[{"title":"[物理内存探测与管理]","level":"1.5.1","depth":2,"path":"chapter4/part1.md","ref":"chapter4/part1.md","articles":[]},{"title":"[动态内存分配]","level":"1.5.2","depth":2,"path":"chapter4/part2.md","ref":"chapter4/part2.md","articles":[]},{"title":"总结与展望","level":"1.5.3","depth":2,"path":"chapter4/part3.md","ref":"chapter4/part3.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter4/part1.md","mtime":"2019-12-10T13:43:37.751Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

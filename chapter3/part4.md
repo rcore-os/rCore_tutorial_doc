@@ -1,6 +1,6 @@
 ## 实现上下文环境保存与恢复
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/837b3cbf0603b642f2e2d47ffcbdf7dda58d3a0e)
+* [代码][CODE]
 
 ```riscv
 # src/trap/trap.asm
@@ -203,28 +203,28 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 > 结果却不尽如人意，输出了一大堆乱码！
 > 
 
-我们检查一下生成的汇编代码，看看是不是哪里出了问题：
-切换到 ``os/target/riscv64-os/debug`` 目录，我们构建之后得到了 elf 可执行文件 ``os``，我们考虑将其反汇编：
-
-```bash
-$ riscv64-unknown-elf-objdump -d os > os.asm
-```
-
-在 ``os.asm`` 中找到我们手动触发中断的 ``ebreak`` 指令：
+我们使用 `make asm` 检查一下生成的汇编代码，看看是不是哪里出了问题。找到我们手动触发中断的 ``ebreak`` 指令：
 
 ```riscv
 ...
-ffffffffc020003a:	0ee080e7          	jalr	238(ra) # ffffffffc0200124 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
-ffffffffc020003e:	a009                	j	ffffffffc0200040 <rust_main+0x12>
-ffffffffc0200040:	9002                	ebreak
-ffffffffc0200042:	c0203537          	lui	a0,0xc0203
-ffffffffc0200046:	02050513          	addi	a0,a0,32 # ffffffffc0203020
+0000000080200010 rust_main:
+80200010: 01 11                         addi    sp, sp, -32
+80200012: 06 ec                         sd      ra, 24(sp)
+80200014: 22 e8                         sd      s0, 16(sp)
+80200016: 00 10                         addi    s0, sp, 32
+80200018: 97 00 00 00                   auipc   ra, 0
+8020001c: e7 80 40 10                   jalr    260(ra)
+80200020: 09 a0                         j       2
+80200022: 02 90                         ebreak
+
+0000000080200024 .LBB0_3:
+80200024: 17 35 00 00                   auipc   a0, 3
 ...
 ```
 
-不是说 riscv64 里面每条指令长度为 4 字节吗？我们发现 ``ebreak`` 这条指令仅长为 2 字节。我们将 ``ebreak`` 所在的地址 +4 ，得到的甚至不是一条合法指令的开头，而是下一条 ``lui`` 指令正中间的地址！这样当然有问题了。
+不是说 riscv64 里面每条指令长度为 4 字节吗？我们发现 ``ebreak`` 这条指令仅长为 2 字节。我们将 ``ebreak`` 所在的地址 +4 ，得到的甚至不是一条合法指令的开头，而是下一条指令正中间的地址！这样当然有问题了。
 
-我们回头来看目标三元组 ``riscv64-os.json`` 中的一个设置：
+我们回头来看 riscv64 目标三元组中的一个设置：
 
 ```json
 "features": "+m,+a,+c",
@@ -232,30 +232,26 @@ ffffffffc0200046:	02050513          	addi	a0,a0,32 # ffffffffc0203020
 
 实际上，这表示指令集的拓展。``+m`` 表示可以使用整数乘除法指令； ``+a`` 表示可以使用原子操作指令； ``+c`` 表示开启压缩指令集，即对于一些常见指令，编译器会将其压缩到 $$16$$ 位即 $$2$$ 字节，来降低可执行文件的大小！这就出现了上面那种诡异的情况。
 
-我们去掉 ``+c`` ，删除掉 ``os/target`` 文件夹并重新构建，再来在 ``os.asm`` 中看看 ``ebreak`` 变成了什么样子：
+所以我们只需将 sepc 修正为 +2：
 
-```riscv
-...
-ffffffffc020004c:	180080e7          	jalr	384(ra) # ffffffffc02001c8 <_ZN2os9interrupt4init17h8bc66cc409cbce91E>
-ffffffffc0200050:	0040006f          	j	ffffffffc0200054 <rust_main+0x1c>
-ffffffffc0200054:	00100073          	ebreak
-ffffffffc0200058:	c0204537          	lui	a0,0xc0204
-ffffffffc020005c:	02050513          	addi	a0,a0,32 # ffffffffc0204020
-...
+```diff
+-    tf.sepc += 4;
++    tf.sepc += 2;
 ```
 
-现在终于每条指令都正好 $$4$$ 字节了，我们会对它很有信心。再 ``make run`` 尝试一下：
+再 ``make run`` 尝试一下：
 
 > **[success] back from trap **
 > 
-> ```rust
-> ..opensbi output...
+> ```
 > ++++ setup interrupt! ++++
 > rust_trap!
 > panicked at 'end of rust_main', src/init.rs:9:5
 > ```
->
+> 
 
 可以看到，我们确实手动触发中断，调用了中断处理函数，并通过上下文保存与恢复机制保护了上下文环境不受到破坏，正确在 ``ebreak`` 中断处理程序返回之后 ``panic``。
 
-迄今为止的代码可以在[这里](https://github.com/rcore-os/rCore_tutorial/tree/837b3cbf0603b642f2e2d47ffcbdf7dda58d3a0e)找到。如果出现了问题的话就来检查一下吧。
+迄今为止的代码可以在[这里][CODE]找到。如果出现了问题的话就来检查一下吧。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/5d09d5eb

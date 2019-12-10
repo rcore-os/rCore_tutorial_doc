@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;">&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x4E2D;&#x65AD;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/e40df6d48101f53a06e46e266372820ed8e17f33" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/952e1f1c" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <p>&#x6211;&#x4EEC;&#x5F15;&#x5165;&#x4E00;&#x4E2A;&#x5BF9;&#x5BC4;&#x5B58;&#x5668;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x7684;&#x5E93;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x4E0D;&#x7528;&#x81EA;&#x5DF1;&#x5199;&#x4E86;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// Cargo.toml</span>
@@ -1013,14 +1013,13 @@ riscv <span class="token operator">=</span> <span class="token punctuation">{</s
 <p>&#x4F7F;&#x7528; <code>make run</code>&#x6784;&#x5EFA;&#x5E76;&#x8FD0;&#x884C;&#xFF0C;&#x7ED3;&#x679C;&#x5982;&#x4E0B;&#xFF1A;</p>
 <blockquote>
 <p><strong>[success] trap handled</strong></p>
-<pre class="language-"><code class="lang-rust"><span class="token punctuation">...</span>opensbi output<span class="token punctuation">...</span>
-<span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
-trap<span class="token punctuation">:</span> cause<span class="token punctuation">:</span> <span class="token function">Exception</span><span class="token punctuation">(</span>Breakpoint<span class="token punctuation">)</span><span class="token punctuation">,</span> epc<span class="token punctuation">:</span> 0x0xffffffffc0200040
+<pre class="language-"><code class="lang-rust"><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
+trap<span class="token punctuation">:</span> cause<span class="token punctuation">:</span> <span class="token function">Exception</span><span class="token punctuation">(</span>Breakpoint<span class="token punctuation">)</span><span class="token punctuation">,</span> epc<span class="token punctuation">:</span> 0x0x80200022
 panicked at <span class="token lifetime-annotation symbol">&apos;trap</span> <span class="token macro-rules function">handled!</span><span class="token lifetime-annotation symbol">&apos;,</span> src<span class="token operator">/</span>interrupt<span class="token punctuation">.</span>rs<span class="token punctuation">:</span><span class="token number">20</span><span class="token punctuation">:</span><span class="token number">5</span>
 </code></pre>
 </blockquote>
 <p>&#x53EF;&#x89C1;&#x5728;&#x8FDB;&#x5165;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x4E4B;&#x524D;&#xFF0C;&#x786C;&#x4EF6;&#x4E3A;&#x6211;&#x4EEC;&#x6B63;&#x786E;&#x7684;&#x8BBE;&#x7F6E;&#x597D;&#x4E86; <code>scause,sepc</code> &#x5BC4;&#x5B58;&#x5668;&#xFF1B;&#x968F;&#x540E;&#x6211;&#x4EEC;&#x6B63;&#x786E;&#x7684;&#x8FDB;&#x5165;&#x4E86;&#x8BBE;&#x5B9A;&#x7684;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x3002;</p>
-<p>&#x5982;&#x679C;&#x8F93;&#x51FA;&#x4E0E;&#x9884;&#x671F;&#x4E0D;&#x4E00;&#x81F4;&#x7684;&#x8BDD;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/e40df6d48101f53a06e46e266372820ed8e17f33" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x8FDB;&#x884C;&#x53C2;&#x8003;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x8F93;&#x51FA;&#x4E0E;&#x9884;&#x671F;&#x4E0D;&#x4E00;&#x81F4;&#x7684;&#x8BDD;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/952e1f1c" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x76EE;&#x524D;&#x7684;&#x4EE3;&#x7801;&#x8FDB;&#x884C;&#x53C2;&#x8003;&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1080,7 +1079,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[手动触发断点中断]","level":"1.4.2","depth":2,"next":{"title":"程序运行上下文环境","level":"1.4.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},"previous":{"title":"rv64中断介绍","level":"1.4.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part2.md","mtime":"2019-12-10T02:43:02.824Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[手动触发断点中断]","level":"1.4.2","depth":2,"next":{"title":"程序运行上下文环境","level":"1.4.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},"previous":{"title":"rv64中断介绍","level":"1.4.1","depth":2,"path":"chapter3/part1.md","ref":"chapter3/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part2.md","mtime":"2019-12-10T13:43:37.731Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

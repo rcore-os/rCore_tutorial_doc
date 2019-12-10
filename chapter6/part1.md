@@ -1,6 +1,6 @@
 ## 线程状态与保存
 
-* [代码](https://github.com/rcore-os/rCore_tutorial/tree/ac0b0f2f658a9ae777356fb5151b08ccfeb30d57)
+* [代码][CODE]
 
 如果将整个运行中的内核看作一个**内核进程**，那么一个**内核线程**只负责内核进程中**执行**的部分。虽然我们之前从未提到过内核线程的概念，但是在我们设置完启动栈，并跳转到 ``rust_main`` 之后，我们的第一个内核线程——**内核启动线程**就已经在运行了！
 
@@ -146,3 +146,5 @@ impl Drop for KernelStack {
 而 ``top`` 方法，返回分配的那块内存的结尾地址。由于栈是从高地址到低地址增长，事实上它表示一个空栈的栈顶地址。
 
 下一节，我们来看如何进行线程切换。
+
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be

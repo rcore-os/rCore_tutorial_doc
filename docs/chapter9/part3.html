@@ -234,7 +234,7 @@
                 <a href="../chapter2/part2.html">
             
                     
-                    使用链接脚本指定内存布局
+                    编译、生成内核镜像
             
                 </a>
             
@@ -247,7 +247,7 @@
                 <a href="../chapter2/part3.html">
             
                     
-                    重写程序入口点 _start
+                    使用链接脚本指定内存布局
             
                 </a>
             
@@ -260,7 +260,7 @@
                 <a href="../chapter2/part4.html">
             
                     
-                    [编译、生成内核镜像]
+                    [重写程序入口点 _start]
             
                 </a>
             
@@ -273,7 +273,7 @@
                 <a href="../chapter2/part5.html">
             
                     
-                    [使用 Qemu 加载内核镜像]
+                    [使用 Qemu 运行内核]
             
                 </a>
             
@@ -286,7 +286,7 @@
                 <a href="../chapter2/part6.html">
             
                     
-                    封装 OpenSBI 接口
+                    封装 SBI 接口
             
                 </a>
             
@@ -960,7 +960,7 @@
                                 
                                 <h2 id="&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;">&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c" target="_blank">&#x4EE3;&#x7801;</a></li>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/f408f075" target="_blank">&#x4EE3;&#x7801;</a></li>
 </ul>
 <p>&#x6211;&#x4EEC;&#x7684;&#x7EC8;&#x7AEF;&#x4E5F;&#x5F88;&#x7B80;&#x5355;&#xFF1A;&#x5176;&#x529F;&#x80FD;&#x4E3A;&#x4F60;&#x8F93;&#x5165;&#x60F3;&#x8981;&#x6267;&#x884C;&#x7684;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x5982; <code>rust/hello_world</code> &#xFF0C;&#x968F;&#x540E;&#x6309;&#x4E0B;&#x56DE;&#x8F66;&#xFF0C;&#x5185;&#x6838;&#x5C31;&#x4F1A;&#x5E2E;&#x4F60;&#x6267;&#x884C;&#x8FD9;&#x4E2A;&#x7A0B;&#x5E8F;&#x3002;</p>
 <p>&#x6240;&#x4EE5;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;</p>
@@ -977,7 +977,7 @@
 <span class="token keyword">extern</span> <span class="token keyword">crate</span> alloc<span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[macro_use]</span>
-<span class="token keyword">extern</span> <span class="token keyword">crate</span> rust<span class="token punctuation">;</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> LF<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0au8</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> CR<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0du8</span><span class="token punctuation">;</span>
@@ -1175,7 +1175,7 @@
 </code></pre>
 <p>&#x8FD9;&#x91CC;&#x867D;&#x7136;&#x8FD8;&#x662F;&#x5C06; <code>rust/user_shell</code> &#x786C;&#x7F16;&#x7801;&#x5230;&#x5185;&#x6838;&#x4E2D;&#xFF0C;&#x4F46;&#x662F;&#x597D;&#x6B79;&#x5B83;&#x53EF;&#x4EE5;&#x4EA4;&#x4E92;&#x5F0F;&#x8FD0;&#x884C;&#x5176;&#x4ED6;&#x7A0B;&#x5E8F;&#x4E86;&#xFF01;</p>
 <p>&#x8BD5;&#x4E00;&#x8BD5;&#x8FD0;&#x884C; <code>rust/hello_world</code> &#xFF0C;&#x5B83;&#x5DE5;&#x4F5C;&#x7684;&#x5F88;&#x597D;&#xFF1B;<code>rust/notebook</code> &#x4E5F;&#x4E0D;&#x8D56;&#xFF0C;&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x6CA1;&#x6709;&#x5B9E;&#x73B0; <code>Ctrl+c</code> &#x7684;&#x529F;&#x80FD;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x65E0;&#x6CD5;&#x4ECE;&#x8BB0;&#x4E8B;&#x672C;&#x4E2D;&#x9000;&#x51FA;&#x4E86;&#x3002;&#x968F;&#x4FBF;&#x8F93;&#x5165;&#x4E00;&#x4E2A;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x7EC8;&#x7AEF;&#x4E5F;&#x4E0D;&#x4F1A;&#x5D29;&#x6E83;&#xFF0C;&#x800C;&#x662F;&#x4F1A;&#x63D0;&#x793A;&#x7A0B;&#x5E8F;&#x4E0D;&#x5B58;&#x5728;&#xFF01;</p>
-<p>&#x6240;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/8d655654ec2f3529623ad76377b18c7d8c70303c" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;</p>
+<p>&#x6240;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/f408f075" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1235,7 +1235,7 @@ gitalk.render("gitalk-container");
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[实现终端]","level":"1.10.3","depth":2,"next":{"title":"总结与展望","level":"1.10.4","depth":2,"path":"chapter9/part4.md","ref":"chapter9/part4.md","articles":[]},"previous":{"title":"[实现记事本]","level":"1.10.2","depth":2,"path":"chapter9/part2.md","ref":"chapter9/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part3.md","mtime":"2019-12-10T02:50:27.024Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T03:09:49.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[实现终端]","level":"1.10.3","depth":2,"next":{"title":"总结与展望","level":"1.10.4","depth":2,"path":"chapter9/part4.md","ref":"chapter9/part4.md","articles":[]},"previous":{"title":"[实现记事本]","level":"1.10.2","depth":2,"path":"chapter9/part2.md","ref":"chapter9/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part3.md","mtime":"2019-12-10T13:43:37.848Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-10T13:51:06.775Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
