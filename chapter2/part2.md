@@ -73,7 +73,7 @@ target/riscv64imac-unknown-none-elf/debug/os: ELF 64-bit LSB executable, UCB RIS
 
 从中，我们可以看出它是一个 64 位的 ``elf`` 可执行文件，架构是 ``RISC-V`` ；链接方式为**静态链接**；``not stripped`` 指的是里面符号表的信息未被剔除，而这些信息在调试程序时会用到，程序正常执行时通常不会使用。
 
-接下来使用刚刚安装的工具链中的 ``objdump`` 工具看看它的具体信息：
+接下来使用刚刚安装的工具链中的 ``rust-objdump`` 工具看看它的具体信息：
 
 ```bash
 $ rust-objdump target/riscv64imac-unknown-none-elf/debug/os -x --arch-name=riscv64
@@ -168,7 +168,7 @@ Disassembly of section .text:
 
 我们目前没有调试的手段，因此不需要调试信息；同时也不想在现在就进行复杂的 ``elf`` 格式解析，而是简单粗暴的将  $$\text{.text,.rodata,.data,.stack,.bss}$$ 各段从文件开头开始按顺序接连放在一起即可。而它们在 ``elf`` 可执行文件中确实是按顺序放在一起的。
 
-我们可以使用工具 ``objcopy`` 从 ``elf`` 格式可执行文件生成内核镜像：
+我们可以使用工具 ``rust-objcopy`` 从 ``elf`` 格式可执行文件生成内核镜像：
 
 ```bash
 $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binary target/riscv64imac-unknown-none-elf/debug/kernel.bin
