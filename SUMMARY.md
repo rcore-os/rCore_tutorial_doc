@@ -1,6 +1,8 @@
 # Summary
 
 * [Introduction](README.md)
+* [第零章：实验环境说明](chapter0/introduction.md)
+	* [docker环境说明](chapter0/part1.md)
 * [第一章：独立式可执行程序](chapter1/introduction.md)
 	* [安装 nightly rust](chapter1/part1.md)
 	* [使用包管理器 cargo 创建 rust binary 项目](chapter1/part2.md)
