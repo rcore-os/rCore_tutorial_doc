@@ -20,8 +20,8 @@ page_number: true
 3. 中断（20min）
 4. 物理内存管理（10min）
 5. 虚拟内存管理（30min）
-6. 内核线程（20min）
-7. 线程调度
+6. 内核线程（10min）
+7. 线程调度（10min）
 8. 用户进程（20min）
 9. 文件系统
 
@@ -1251,8 +1251,6 @@ Sv39三级页表
 
 * 页表大小为一个标准页，可容纳512(2^9)个8Byte大小的页表项
 
-TODO：图
-
 ---
 
 ### 虚实地址
@@ -1457,6 +1455,7 @@ pub struct ContextContent {
     ra: usize,          // PC
     satp: usize,        // 页表地址
     s: [usize; 12],     // callee-saved 寄存器
+    tf: TrapFrame,      // 用于构造新线程
 }
 
 pub struct Context {
@@ -1493,26 +1492,340 @@ current.context.switch_to(&mut target.context);
 
 ### 剖开函数内部：魔法汇编！
 
+保存上下文：
+
 ```
+# switch_to(&mut current.sp, &mut target.sp)
+switch_to:
+    # 在当前栈上分配空间
+    addi sp, sp, -14*XLENB
+    # 更新 current.sp
+    sd sp, 0(a0)
+    # 依次保存 s0-s11
+    sd ra, 0*8(sp)
+    sd s0, 2*8(sp)
+    ...
+    sd s11, 13*8(sp)
+    # 保存 satp
+    csrr s11, satp
+    sd s11, 1*8(sp)
+    # 当前线程状态保存完毕
+```
+
+---
+
+恢复上下文（完全相反）：
+
+```
+    # 读取 target.sp
+    ld sp, 0(a1)
+    # 恢复页表寄存器 satp，别忘了使用屏障指令 sfence.vma 刷新 TLB
+    ld s11, 1*8(sp)
+    csrw satp, s11
+    sfence.vma
+    # 依序恢复各寄存器
+    ld ra, 0*8(sp)
+    ld s0, 2*8(sp)
+    ...
+    ld s11, 13*8(sp)
+    # 回收当前栈上的空间
+    addi sp, sp, 14*XLENB
+    # 将 target.sp 置为 0（标记正在运行）
+    sd zero, 0(a1)
+    # 回到切换线程前的位置继续执行
+    ret
+```
+
+---
+
+## 6.3 构造新的线程
+
+设想新的线程是从运行状态切换下来的，
+它的栈上会有哪些内容？
+
+我们可以在栈上精心构造一个上下文结构体，
+使得经过 `switch_to` 操作后恢复出一个新线程。
+
+
+---
+
+### 在栈上构造初始内容
+
+```rust
+impl ContextContent {
+    /// 为一个新内核线程构造栈上的初始状态信息
+    fn new_kernel_thread(
+        entry: usize,       // 入口点 
+        kstack_top: usize,  // 内核栈指针
+        satp: usize,        // 页表
+    ) -> ContextContent {
+        ContextContent {
+            ra: __trapret as usize, // 其实入口点
+            satp,
+            s: [0; 12],
+            tf: {
+                let mut tf: TrapFrame = unsafe { zeroed() };
+                tf.x[2] = kstack_top;
+                tf.sepc = entry;
+                tf.sstatus = sstatus::read();
+                tf.sstatus.set_spp(sstatus::SPP::Supervisor);
+                tf.sstatus.set_spie(true);
+                tf.sstatus.set_sie(false);
+                tf
+            }
+        }
+    }
+}
+```
+
+---
+
+### 在栈上构造初始内容
+
+```rust
+impl ContextContent {
+    /// 将自身压到栈上，并返回 Context
+    unsafe fn push_at(self, stack_top: usize) -> Context {
+        let ptr = (stack_top as *mut ContextContent).sub(1);
+        *ptr = self;
+        Context { content_addr: ptr as usize }
+    }
+}
+
+impl Context {
+    pub unsafe fn new_kernel_thread(
+        entry: usize,
+        kstack_top: usize,
+        satp: usize
+    ) -> Context {
+        ContextContent::new_kernel_thread(
+            entry, kstack_top, satp
+        ).push_at(kstack_top)
+    }
+}
+```
+
+---
+
+### 线程对象的构造函数
+
+```rust
+impl Thread {
+    // 创建一个新线程，放在堆上
+    pub fn new_kernel(entry: usize) -> Box<Thread> {
+        let kstack = KernelStack::new();
+        Box::new(Thread {
+            context: unsafe { Context::new_kernel_thread(...) },
+            kstack,
+        })
+    }
+}
+```
+
+---
+
+### 测试代码
+
+TODO
+
+---
+
+## 第六章小结：Demo
+
+```sh
+I'm leaving soon, but I still want to say: Hello world!
+switched back from temp_thread!
 ```
 
 ---
 
 # 第七章：线程调度
 
-不讲了
+目标：支持多线程管理和调度
+
+步骤：
+* 线程相关对象
+* 实现调度线程
+* 调度算法
+
+---
+
+## 7.1 线程相关对象的设计
+
+![](./figures/thread-arch.png)
+
+* `ThreadPool`：管理所有线程的容器
+* `Processor`：线程执行器，对应一个 CPU 核
+* `Scheduler`：调度器，决定接下来执行哪一个
+
+---
+
+## 7.2 调度线程
+
+作为 `Processor` 的主循环：
+
+* 从 `ThreadPool` 取出一个线程
+* 切换上下文到目标线程
+* 线程执行
+* 线程调用 `yield` 函数，切换回调度线程
+* 将线程放回 `ThreadPool`
+
+如果此时没有可执行线程：
+* 打开中断并停机 （`wfi`）
+* 等待下一个中断到来，恢复执行
+
+---
+
+```rust
+impl Processor {
+    pub fn schedule_main(&self) -> ! {
+        loop {
+            // 如果从线程池中获取到一个可运行线程
+            if let Some(thread) = inner.pool.acquire() {
+                // 将自身的正在运行线程设置为刚刚获取到的线程
+                inner.current = Some(thread);
+                inner.idle.switch_to(
+                    &mut *inner.current.as_mut().unwrap().1
+                );
+                // 此时 current 还保存着上个线程
+                let (tid, thread) = inner.current.take().unwrap();
+                // 通知线程池这个线程需要将资源交还出去
+                inner.pool.retrieve(tid, thread);
+            }
+            // 如果现在并无任何可运行线程
+            else {
+                // 打开异步中断，并等待异步中断的到来
+                enable_and_wfi();
+                // 异步中断处理返回后，关闭异步中断
+                disable_and_store();
+            }
+        }
+    }
+}
+```
+
+---
+
+## 7.3 调度算法
+
+也就是 **就绪队列**。
+
+保存所有可执行的线程，询问下一个执行哪个线程？
+
+具体算法：
+* FIFO：先来的先执行
+* Round Robin：时间片轮转
+* Stride：依据优先级计算步长
+* ……
+
+---
+
+### 调度器接口
+
+```rust
+pub trait Scheduler {
+    // 如果 tid 不存在，表明将一个新线程加入线程调度
+    // 否则表明一个已有的线程要继续运行
+    fn push(&mut self, tid: Tid);
+
+    // 从若干可运行线程中选择一个运行
+    fn pop(&mut self) -> Option<Tid>;
+
+    // 时钟中断中，提醒调度算法当前线程又运行了一个 tick
+    // 返回的 bool 表示调度算法认为当前线程是否需要被切换出去
+    fn tick(&mut self) -> bool;
+
+    // 告诉调度算法一个线程已经结束
+    fn exit(&mut self, tid: Tid);
+}
+```
+
+---
+
+## 7.4 测试多线程调度
+
+新线程执行函数：
+```rust
+#[no_mangle]
+pub extern "C" fn hello_thread(arg: usize) -> ! {
+    println!("begin of thread {}", arg);
+    // 输出足够多次，使得有机会发生线程切换
+    for i in 0..800 {
+        print!("{}", arg);
+    }
+    println!("\nend  of thread {}", arg);
+    // 通知 CPU 结束当前线程
+    CPU.exit(0);
+    unreachable!()
+}
+```
+
+---
+
+初始化：
+
+```rust
+pub fn init() {
+    // 使用 Round Robin Scheduler
+    let scheduler = RRScheduler::new(1);
+    // 新建线程池
+    let thread_pool = ThreadPool::new(100, Box::new(scheduler));
+    // 新建 idle 线程
+    let idle = Thread::new_kernel(Processor::idle_main as usize);
+    // 我们需要传入 CPU 的地址作为参数
+    idle.append_initial_arguments([&CPU as *const Processor as usize, 0, 0]);
+    // 初始化 CPU
+    CPU.init(idle, Box::new(thread_pool));
+
+    // 依次新建 5 个内核线程并加入调度单元
+    for i in 0..5 {
+        CPU.add_thread({
+            let thread = Thread::new_kernel(hello_thread as usize);
+            // 传入一个编号作为参数
+            thread.append_initial_arguments([i, 0, 0]);
+            thread
+        });
+    }
+    println!("++++ setup process!   ++++");
+}
+```
+
+---
+
+运行结果示例：
+
+```
+>>>> will switch_to thread 0 in idie_main!
+begin of thread 0
+0000000000000000000000000000000000000...
+<<<< switch_back to idle in idle_main!
+
+>>>> will switch_to thread 1 in idie_main!
+begin of thread 1
+1111111111111111111111111111111111111...
+<<<< switch_back to idle in idle_main!
+
+...
+
+>>>> will switch_to thread 0 in idie_main!
+000000000000000000
+end  of thread 0
+thread 0 exited, exit code = 0
+
+<<<< switch_back to idle in idle_main!
+```
 
 ---
 
 # 第八章：用户进程
 
-## 实现系统调用
+目标：从 ELF 加载用户程序并运行，能够输出字符串
 
-## 保存用户程序
-
-## 管理用户程序资源
-
-## 创建用户进程
+步骤：
+* Rust 用户程序框架
+* 实现系统调用
+* 解析 ELF 文件并创建虚拟内存
+* 创建用户进程
 
 ---
 
@@ -1528,16 +1841,14 @@ current.context.switch_to(&mut target.context);
 
 ### 实现系统调用
 
-#### ecall语句将U态用户的调用请求传递给S态内核
+类似在内核中 `ecall` 调用 SBI 函数：
 
 ```rust
 #[inline(always)]
 fn sys_call(
     syscall_id: SyscallId,
-    arg0: usize,
-    arg1: usize,
-    arg2: usize,
-    arg3: usize,
+    arg0: usize, arg1: usize,
+    arg2: usize, arg3: usize,
 ) -> i64 {
     let id = syscall_id as usize;
     let mut ret: i64;
@@ -1545,7 +1856,8 @@ fn sys_call(
         asm!(
             "ecall"
             : "={x10}"(ret)
-            : "{x17}"(id), "{x10}"(arg0), "{x11}"(arg1), "{x12}"(arg2), "{x13}"(arg3)
+            : "{x17}"(id), "{x10}"(arg0), 
+              "{x11}"(arg1), "{x12}"(arg2), "{x13}"(arg3)
             : "memory"
             : "volatile"
         );
@@ -1556,7 +1868,7 @@ fn sys_call(
 
 ---
 
-### 保存用户程序
+### 链接用户程序
 
 #### 还未实现文件系统，无法将用户程序保存在磁盘中
 
@@ -1566,7 +1878,7 @@ fn sys_call(
 
 ---
 
-### 保存用户程序
+### 链接用户程序
 
 ```rust
 fn main() {
@@ -1597,7 +1909,7 @@ _user_img_end:
 
 ---
 
-### 保存用户程序
+### 链接用户程序
 
 ```rust
 // init.rs
