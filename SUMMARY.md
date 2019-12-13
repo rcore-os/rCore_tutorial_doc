@@ -47,7 +47,7 @@
 	* [线程调度之 Round Robin算法](chapter7/part3.md)
 	* [[线程调度测试]](chapter7/part4.md)
 	* [总结与展望](chapter7/part5.md)
-* [第八章：用户线程](chapter8/introduction.md)
+* [第八章：用户进程](chapter8/introduction.md)
 	* [[编写用户程序]](chapter8/part1.md)
 	* [在内核中实现系统调用](chapter8/part2.md)
 	* [创建虚拟内存空间](chapter8/part3.md)
