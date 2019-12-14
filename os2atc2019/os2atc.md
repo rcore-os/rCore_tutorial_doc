@@ -35,6 +35,26 @@ http://os.cs.tsinghua.edu.cn/oscourse/OS2019spring/projects
 
 ---
 
+# rCore 贡献者名单
+
+### 指导教师
+
+陈渝，向勇
+
+### rCore Tutorial
+
+刘丰源，潘庆霖，吴一凡，王润基
+
+### rCore OS
+
+王润基，陈嘉杰，贾越凯，陈晟祺，周聿浩，
+刘丰源，潘庆霖，郭敬哲，陶东来，苏明贤，霍江浩，
+高天宇，王晓智，孙桢波，黄冰鉴，康鸿博，石雨松，
+张译仁，吴一凡，戴臻旸，王纪霆，寇明阳，孔彦，
+刘辰屹，陈秋昊，朱书聪
+
+---
+
 ## 为什么用 Rust？
 
 C 语言的两大问题：
@@ -48,17 +68,42 @@ Rust 的主要特性：
 * 友好的工具链
 * 蓬勃发展的社区生态
 
+---
+
 C++？
 * 坑不比 C 少
 
+Go？
+* GC
+* TODO
+
 ---
 
-## 相关工作
+## Rust OS 相关工作
 
 * Redox OS：完成度最高的微内核 OS
 
 * CS140e：Stanford 实验性课程，Rust OS for Raspi3
+* Tock OS：Stanford 嵌入式操作系统，充分利用 Rust 特性
+* RVirt：MIT RISC-V Hypervisor
 * Writing an OS in Rust：非常详尽的 Rust OS 教程
+
+---
+
+## Rust 在产业界的应用情况
+
+* 蚂蚁金服：Occlum（SGX LibOS）
+
+* 百度：Rust SGX SDK
+* 字节跳动：高性能服务端
+* PingCAP：TiKV 高性能分布式数据库
+* Facebook：Libra
+
+---
+
+## 尝试：代码复用
+
+* 模块化：可重用性
 
 ---
 
@@ -80,7 +125,16 @@ C++？
 
 * 简单！没有历史包袱
 
+* 降低了 OS 开发难度
+
 * 促进软硬件协同设计
+
+---
+
+## 最终目标
+
+* 充分利用 Rust 生态
+* 
 
 ---
 
@@ -114,14 +168,14 @@ thread 1 exited, exit code = 0
 
 # rCore Tutorial 提纲
 
-1. 独立可执行程序（10min）
-2. 最小化内核（20min）
-3. 中断（20min）
-4. 物理内存管理（10min）
-5. 虚拟内存管理（10min）
-6. 内核线程（10min）
-7. 线程调度（10min）
-8. 用户进程（10min）
+1. 独立可执行程序
+2. 最小化内核
+3. 中断
+4. 物理内存管理
+5. 虚拟内存管理
+6. 内核线程
+7. 线程调度
+8. 用户进程
 9. 文件系统
 
 ---
@@ -238,11 +292,13 @@ Rust 内置的几个重要的库：
 #![no_std]
 ```
 
-出现若干编译错误，依次修复：
-1. `println!`：删除之
-2. `panic_handler`：补充 panic 处理函数
-3. `eh_personality`：panic 策略改为 abort
-4. `start`：移除 crt0，直接实现 `_start` 函数
+出现若干编译错误：（为什么？）
+1. `println!`：输出需要 syscall 支持
+2. `panic_handler`：panic 处理函数
+3. `eh_personality`：panic 后 unwind 栈
+4. `start`：crt0 中的 `_start` 入口点
+
+依次修复……
 
 ---
 
@@ -276,8 +332,6 @@ Rust 使用 **目标三元组（target triple）** 描述目标平台
 * `x86_64-unknown-linux-gnu`
 * `x86_64-apple-darwin`
 * **`riscv64imac-unknown-none-elf`**
-
-> TODO：解释
 
 Rust 自带了一些配置，可以使用以下命令查看：
 ```sh
@@ -1217,7 +1271,7 @@ panicked at 'end of rust_main', src/init.rs:9:5
 
 ### RISC-V 中断相关寄存器
 
-TODO：图
+![](figures/sie.png)
 
 * `sie`：不同类型中断的开启状态（Enable）
 * `sip`：不同类型中断的等待状态（Pending）
@@ -1300,7 +1354,7 @@ panicked at 'end of rust_main', src/init.rs:11:5
 * 能够进行动态内存分配，使用 alloc 库中的容器
   例如：`Box`, `Vec`, `BTreeMap`...
 
---- 
+---
 
 ## 4.1 物理内存探测
 
@@ -1590,8 +1644,6 @@ Q：为何不用保存 caller-saved 寄存器？
 * 保存当前线程寄存器（到当前线程栈上）
 * 恢复目标线程寄存器（从目标线程栈上）
 
-TODO：图？？
-
 ---
 
 ### 如何实现上下文切换
@@ -1668,59 +1720,7 @@ switch_to:
 
 ### 在栈上构造初始内容
 
-```rust
-impl ContextContent {
-    /// 为一个新内核线程构造栈上的初始状态信息
-    fn new_kernel_thread(
-        entry: usize,       // 入口点 
-        kstack_top: usize,  // 内核栈指针
-        satp: usize,        // 页表
-    ) -> ContextContent {
-        ContextContent {
-            ra: __trapret as usize, // 其实入口点
-            satp,
-            s: [0; 12],
-            tf: {
-                let mut tf: TrapFrame = unsafe { zeroed() };
-                tf.x[2] = kstack_top;
-                tf.sepc = entry;
-                tf.sstatus = sstatus::read();
-                tf.sstatus.set_spp(sstatus::SPP::Supervisor);
-                tf.sstatus.set_spie(true);
-                tf.sstatus.set_sie(false);
-                tf
-            }
-        }
-    }
-}
-```
-
----
-
-### 在栈上构造初始内容
-
-```rust
-impl ContextContent {
-    /// 将自身压到栈上，并返回 Context
-    unsafe fn push_at(self, stack_top: usize) -> Context {
-        let ptr = (stack_top as *mut ContextContent).sub(1);
-        *ptr = self;
-        Context { content_addr: ptr as usize }
-    }
-}
-
-impl Context {
-    pub unsafe fn new_kernel_thread(
-        entry: usize,
-        kstack_top: usize,
-        satp: usize
-    ) -> Context {
-        ContextContent::new_kernel_thread(
-            entry, kstack_top, satp
-        ).push_at(kstack_top)
-    }
-}
-```
+![](figures/init_stack.png)
 
 ---
 
@@ -2045,12 +2045,3 @@ global_asm!(include_str!("link_user.S"));
 ---
 
 #### 管理CPU资源：进程分时调度
-
----
-
-# 第九章：文件系统
-
----
-
-# 总结
-
