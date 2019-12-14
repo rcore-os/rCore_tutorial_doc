@@ -35,50 +35,6 @@ http://os.cs.tsinghua.edu.cn/oscourse/OS2019spring/projects
 
 ---
 
-# rCore 贡献者名单
-
-### 指导教师
-
-陈渝，向勇
-
-### rCore Tutorial
-
-刘丰源，潘庆霖，吴一凡，王润基
-
-### rCore OS
-
-王润基，陈嘉杰，贾越凯，陈晟祺，周聿浩，
-刘丰源，潘庆霖，郭敬哲，陶东来，苏明贤，霍江浩，
-高天宇，王晓智，孙桢波，黄冰鉴，康鸿博，石雨松，
-张译仁，吴一凡，戴臻旸，王纪霆，寇明阳，孔彦，
-刘辰屹，陈秋昊，朱书聪
-
----
-
-## 为什么用 Rust？
-
-C 语言的两大问题：
-
-* 内存不安全
-* 缺少现代语言特性和好用的工具链
-
-Rust 的主要特性：
-* 内存+线程安全
-* 高层语言特性
-* 友好的工具链
-* 蓬勃发展的社区生态
-
----
-
-C++？
-* 坑不比 C 少
-
-Go？
-* GC
-* TODO
-
----
-
 ## Rust OS 相关工作
 
 * Redox OS：完成度最高的微内核 OS
@@ -101,9 +57,40 @@ Go？
 
 ---
 
-## 尝试：代码复用
+## 为什么用 Rust？
 
-* 模块化：可重用性
+C 语言的两大问题：
+
+* 内存不安全
+* 缺少现代语言特性和好用的工具链
+
+C++？
+* 功能强大但难以驾驭
+* 坑比 C 更多！
+
+Go？
+* 运行时比较重
+* GC！
+
+---
+
+### Rust 的主要特性
+
+* 内存+线程安全
+
+* 高层语言特性
+* 友好的工具链
+* 蓬勃发展的社区生态
+
+---
+
+## Rust 开发内核的优势
+
+* 内存安全，无畏并发
+
+* 充分利用 Rust 生态
+
+* 实现可复用的内核模块，可以灵活组合出不同 OS
 
 ---
 
@@ -128,13 +115,6 @@ Go？
 * 降低了 OS 开发难度
 
 * 促进软硬件协同设计
-
----
-
-## 最终目标
-
-* 充分利用 Rust 生态
-* 
 
 ---
 
@@ -302,9 +282,19 @@ Rust 内置的几个重要的库：
 
 ---
 
-## 1.4 小结 & Demo
+## 1.4 小结
 
-TODO：objdump 查看生成的裸机程序
+用 `objdump` 查看生成的裸机程序：
+
+```
+target/debug/os：     文件格式 elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000310 <_start>:
+ 310:	eb 00                	jmp    312 <_start+0x2>
+ 312:	eb fe                	jmp    312 <_start+0x2>
+```
 
 ---
 
@@ -600,7 +590,7 @@ $ rust-objdump os -d --arch-name=riscv64
 
 ---
 
-### RISC-V 的特权集 和 QEMU 启动过程
+### RISC-V 的特权级 和 QEMU 启动过程
 
 ![](../chapter2/figures/privilege_levels.png)
 
@@ -656,7 +646,21 @@ pub extern "C" fn rust_main() -> ! {
 
 ### 看看现在程序的样子
 
-TODO：反汇编结果
+```
+0000000080200000 stext:
+80200000: 17 51 00 00       auipc   sp, 5
+80200004: 13 01 01 00       mv      sp, sp
+80200008: 97 00 00 00       auipc   ra, 0
+8020000c: e7 80 80 00       jalr    8(ra)
+
+0000000080200010 rust_main:
+80200010: 41 11             addi    sp, sp, -16
+80200012: 06 e4             sd      ra, 8(sp)
+80200014: 22 e0             sd      s0, 0(sp)
+80200016: 00 08             addi    s0, sp, 16
+80200018: 09 a0             j       2
+8020001a: 01 a0             j       0
+```
 
 ---
 
@@ -1383,7 +1387,7 @@ panicked at 'end of rust_main', src/init.rs:11:5
 
 * 探测得到的物理内存交给物理页帧分配器统一进行页式内存管理
 
-* rCore Tutorial 给出简单的非递归线段树实现
+* rCore Tutorial 给出了一个简单的实现（线段树）
 
 * 读者能够自行尝试其他连续内存分配算法
 
@@ -1396,6 +1400,13 @@ panicked at 'end of rust_main', src/init.rs:11:5
 * 编译时静态分配堆所需内存，运行时堆存在于bss段
 
 * 引入buddy system算法的实现，来管理堆内存分配
+
+```rust
+use buddy_system_allocator::LockedHeap;
+
+#[global_allocator]
+static ALLOCATOR: LockedHeap = LockedHeap::empty();
+```
 
 --- 
 
@@ -1979,6 +1990,33 @@ fn sys_call(
 
 ---
 
+内核中的系统调用实现：
+
+```rust
+// src/interrupt.rs
+
+fn syscall(tf: &mut TrapFrame) {
+    // 返回后跳转到 ecall 下一条指令
+    tf.sepc += 4;
+    let ret = crate::syscall::syscall(
+        tf.x[17],
+        [tf.x[10], tf.x[11], tf.x[12]],
+        tf
+    );
+    tf.x[10] = ret as usize;
+}
+
+pub fn syscall(id: usize, args: [usize; 3], tf: &mut TrapFrame) -> isize {
+    match id {
+        SYS_WRITE => { print!("{}", args[0] as u8 as char); 0 },
+        SYS_EXIT => { sys_exit(args[0]); 0 },
+        _ => panic!("unknown syscall id {}", id),
+    }
+}
+```
+
+---
+
 ### 如何链接用户程序
 
 * 还未实现文件系统，无法将用户程序保存在磁盘中
@@ -2045,3 +2083,27 @@ global_asm!(include_str!("link_user.S"));
 ---
 
 #### 管理CPU资源：进程分时调度
+
+---
+
+# 总结 & Demo
+
+---
+
+# rCore 贡献者名单
+
+### 指导教师
+
+陈渝，向勇
+
+### rCore Tutorial
+
+刘丰源，潘庆霖，吴一凡，王润基
+
+### rCore OS
+
+王润基，陈嘉杰，贾越凯，陈晟祺，周聿浩，
+刘丰源，潘庆霖，郭敬哲，陶东来，苏明贤，霍江浩，
+高天宇，王晓智，孙桢波，黄冰鉴，康鸿博，石雨松，
+张译仁，吴一凡，戴臻旸，王纪霆，寇明阳，孔彦，
+刘辰屹，陈秋昊，朱书聪
