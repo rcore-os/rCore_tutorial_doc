@@ -3,6 +3,7 @@ marp: true
 size: 4:3
 piginate: true
 ---
+<!-- paginate: true -->
 
 # rCore Tutorial
 
