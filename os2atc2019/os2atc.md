@@ -1,7 +1,7 @@
 ---
 marp: true
 size: 4:3
-page_number: true
+piginate: true
 ---
 
 # rCore Tutorial
