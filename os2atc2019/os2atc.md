@@ -13,21 +13,139 @@ page_number: true
 
 ---
 
+# rCore 项目介绍
+
+* 始于：清华大学操作系统课 课程设计（2018春）
+
+* 初衷：尝试用 Rust 语言写 OS
+* 发展：在 OS 课大实验中普及推广（20+ 贡献者）
+* 现状：
+    * 兼容 Alpine Linux (musl libc)：Busybox, GCC, Nginx
+    * 支持四种指令集：x86_64, ARM64, RISC-V, MIPS32
+
+---
+
+## 开源开放
+
+![h:400](figures/github.png)
+
+https://github.com/rcore-os
+http://os.cs.tsinghua.edu.cn/oscourse/OS2019spring/projects
+
+---
+
+## 为什么用 Rust？
+
+C 语言的两大问题：
+
+* 内存不安全
+* 缺少现代语言特性和好用的工具链
+
+Rust 的主要特性：
+* 内存+线程安全
+* 高层语言特性
+* 友好的工具链
+* 蓬勃发展的社区生态
+
+C++？
+* 坑不比 C 少
+
+---
+
+## 相关工作
+
+* Redox OS：完成度最高的微内核 OS
+
+* CS140e：Stanford 实验性课程，Rust OS for Raspi3
+* Writing an OS in Rust：非常详尽的 Rust OS 教程
+
+---
+
+# rCore Tutorial (step by step)
+
+从零开始，一步一步带你用 Rust 在 RISC-V 平台上写 OS
+
+* 始于：操作系统课（2019春）
+
+* 初衷：降低初学者门槛，普及 Rust，推广 rCore
+* 作者：清华计算机系本科生
+* 目标：「写 OS 不难！」
+
+---
+
+## 为什么用 RISC-V？
+
+* 开源开放的指令集
+
+* 简单！没有历史包袱
+
+* 促进软硬件协同设计
+
+---
+
+## 最终达到什么效果？
+
+**用一个 shell 运行简单的用户程序！**
+
+```
+$ make run
+...
+Rust user shell
+>> rust/hello_world
+searching for program rust/hello_world
+Hello world! from user mode program!
+thread 1 exited, exit code = 0
+>> 
+```
+
+---
+
+## 需要实现哪些功能？
+
+* 基础执行环境：Bootloader
+
+* 基本输入输出：串口驱动，中断处理
+* 管理内存：物理内存分配，虚拟内存映射（页表）
+* 管理任务：线程切换，进程资源管理
+* 从文件加载程序：简单文件系统
+
+---
+
 # rCore Tutorial 提纲
 
 1. 独立可执行程序（10min）
-2. 最小化内核（30min）
+2. 最小化内核（20min）
 3. 中断（20min）
 4. 物理内存管理（10min）
-5. 虚拟内存管理（30min）
+5. 虚拟内存管理（10min）
 6. 内核线程（10min）
 7. 线程调度（10min）
-8. 用户进程（20min）
+8. 用户进程（10min）
 9. 文件系统
 
 ---
 
-TODO: +Story
+## 实验环境
+
+* 【本地】Docker
+    ```sh
+    git clone https://github.com/rcore-os/rCore_tutorial
+    cd rCore_tutorial
+    make docker
+    ```
+
+* 【在线】实验楼
+    https://www.shiyanlou.com/courses/1481
+    验证码：wfkblCQp
+
+---
+
+## 先修要求
+
+* 具有 计算机组成原理 和 操作系统 基础知识
+* 了解 RISC-V 指令集
+* 初步 Rust 语言基础
+* 对原理的好奇心 和 造轮子的热情！
 
 ---
 
@@ -1170,8 +1288,6 @@ panicked at 'end of rust_main', src/init.rs:11:5
 ...
 ```
 
----
-
 --- 
 
 # 第四章：内存管理
@@ -1624,12 +1740,6 @@ impl Thread {
 
 ---
 
-### 测试代码
-
-TODO
-
----
-
 ## 第六章小结：Demo
 
 ```sh
@@ -1938,3 +2048,8 @@ global_asm!(include_str!("link_user.S"));
 ---
 
 # 第九章：文件系统
+
+---
+
+# 总结
+
