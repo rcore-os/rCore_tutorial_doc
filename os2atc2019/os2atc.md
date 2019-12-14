@@ -16,9 +16,9 @@ piginate: true
 
 # rCore 项目介绍
 
-* 始于：清华大学操作系统课 课程设计（2018春）
-
 * 初衷：尝试用 Rust 语言写 OS
+
+* 始于：清华大学操作系统课 课程设计（2018春）
 * 发展：在 OS 课大实验中普及推广（20+ 贡献者）
 * 现状：
     * 兼容 Alpine Linux (musl libc)：Busybox, GCC, Nginx
@@ -86,7 +86,7 @@ Go？
 * CS140e：Stanford 实验性课程，Rust OS for Raspi3
 * Tock OS：Stanford 嵌入式操作系统，充分利用 Rust 特性
 * RVirt：MIT RISC-V Hypervisor
-* Writing an OS in Rust：非常详尽的 Rust OS 教程
+* Writing an OS in Rust —— BlogOS：详尽的 Rust OS 教程
 
 ---
 
@@ -111,9 +111,9 @@ Go？
 
 从零开始，一步一步带你用 Rust 在 RISC-V 平台上写 OS
 
-* 始于：操作系统课（2019春）
-
 * 初衷：降低初学者门槛，普及 Rust，推广 rCore
+
+* 始于：操作系统课（2019春）
 * 作者：清华计算机系本科生
 * 目标：「写 OS 不难！」
 
@@ -138,7 +138,7 @@ Go？
 
 ---
 
-## 最终达到什么效果？
+## rCore_tutorial的最终成果？
 
 **用一个 shell 运行简单的用户程序！**
 
