@@ -24,7 +24,7 @@ nightly-2019-12-08
 
 ```bash
 $ rustc --version
-rustc 1.41.0-nightly (5c5c8eb86 2019-12-07)
+rustc 1.42.0-nightly (859764425 2020-01-07)
 ```
 
 [CODE]: https://github.com/rcore-os/rCore_tutorial/tree/d2a80549

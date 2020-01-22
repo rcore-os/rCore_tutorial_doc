@@ -10,12 +10,12 @@ cargo 在编译项目时，可以附加目标参数 `--target <target triple>` �
 
 ```bash
 $ rustc --version --verbose
-rustc 1.41.0-nightly (5c5c8eb86 2019-12-07)
+rustc 1.42.0-nightly (859764425 2020-01-07)
 binary: rustc
-commit-hash: 5c5c8eb864e56ce905742b8e97df5506bba6aeef
-commit-date: 2019-12-07
+commit-hash: 85976442558bf2d09cec3aa49c9c9ba86fb15c1f
+commit-date: 2020-01-07
 host: x86_64-unknown-linux-gnu
-release: 1.41.0-nightly
+release: 1.42.0-nightly
 LLVM version: 9.0
 ```
 
