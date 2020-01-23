@@ -104,7 +104,7 @@ extern "C" fn rust_main() -> ! {
 }
 ```
 
-这样，如果我们将内核镜像加载完成后，屏幕上出现了 OK ，就说明我们之前做的事情没有问题。
+这样，如果我们将内核镜像加载完成后，屏幕上出现了 OK ，就说明我们之前做的事情没有问题。如果对上面例子中的内链汇编(**"asm!"**)不够不够了解，请参考[附录：内链汇编](../appendix/inline_asm.md)。
 
 现在我们生成内核镜像要通过多条命令来完成，我们通过 ``Makefile`` 来简化这一过程。
 
@@ -140,7 +140,7 @@ build: $(bin)
 clean:
 	cargo clean
 
-qemu:
+qemu: build
 	qemu-system-riscv64 \
 		-machine virt \
 		-nographic \

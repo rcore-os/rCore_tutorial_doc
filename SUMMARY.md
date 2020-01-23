@@ -60,6 +60,7 @@
 	* [[实现记事本]](chapter9/part2.md)
 	* [[实现终端]](chapter9/part3.md)
 	* [总结与展望](chapter9/part4.md)
-
+* [附录]
+    * [内链汇编](appendix/inline_asm.md)
 
 
