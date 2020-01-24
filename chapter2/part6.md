@@ -8,7 +8,7 @@
 
 我们先将 ``console_putchar`` 函数删掉，并将 ``rust_main`` 中调用 ``console_putchar`` 的部分也删除。
 
-随后将 ``rust_main`` 抽取出来：
+随后将 ``rust_main`` 抽取到`init.rs`中：
 
 ```rust
 // src/init.rs
@@ -21,7 +21,7 @@ extern "C" fn rust_main() -> ! {
 }
 ```
 
-将语义项们抽取出来：
+将语义项们抽取到`lang_items.rs`中：
 
 ```rust
 // src/lang_items.rs
@@ -39,7 +39,7 @@ extern "C" fn abort() -> ! {
 }
 ```
 
-在 ``lib.rs`` 中引用这两个子模块：
+并在代表`os crate`的 ``lib.rs`` 中引用这两个子模块：
 
 ```rust
 // src/lib.rs
@@ -52,7 +52,7 @@ mod init;
 mod lang_items;
 ```
 
-以及最终剩下的孤零零的 ``main.rs``。
+以及只需使用`os crate`的孤零零的 ``main.rs``。
 
 ```rust
 // src/main.rs
@@ -94,14 +94,14 @@ void sbi_console_putchar(int ch)
 
 
 > **[info] 拓展内联汇编**
-> 
+>
 > Rust 中拓展内联汇编的格式如下：
 > ```rust
 > asm!(assembler template
->	: /* output operands */
->	: /* input operands */
+> 	: /* output operands */
+> 	: /* input operands */
 > 	: /* clobbered registers list */
->	: /* option */
+> 	: /* option */
 > );
 > ```
 > 其中：
@@ -109,7 +109,8 @@ void sbi_console_putchar(int ch)
 > * ``output operands`` 以及 ``input operands`` 分别表示输出和输入，体现着汇编代码与 Rust 代码的交互。每个输出和输入都是用 ``“constraint”(expr)`` 的形式给出的，其中 ``expr`` 部分是一个 Rust 表达式作为汇编代码的输入、输出，通常为了简单起见仅用一个变量。而 ``constraint`` 则是你用来告诉编译器如何进行参数传递；
 > * ``clobbered registers list`` 需要给出你在整段汇编代码中，除了用来作为输入、输出的寄存器之外，还曾经显式/隐式的修改过哪些寄存器。由于编译器对于汇编指令所知有限，你必须手动告诉它“我可能会修改这个寄存器”，这样它在使用这个寄存器时就会更加小心；
 > * ``option`` 是 Rust 语言内联汇编**特有**的(相对于 C 语言)，用来对内联汇编整体进行配置。
-> 
+> * 如果想进一步了解上面例子中的内联汇编(**"asm!"**)，请参考[附录：内联汇编](../appendix/inline_asm.md)。
+>
 
 现在我们使用内联汇编将 ``ecall`` 指令的使用封装起来：
 
@@ -141,7 +142,7 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
 
 输出部分，我们将结果保存到变量 ``ret`` 中，限制条件 ``{x10}`` 告诉编译器使用寄存器 $$x_{10}(a_0)$$ ，前面的 ``=`` 表明汇编代码会修改该寄存器并作为最后的返回值。一般情况下 ``output operands`` 的 constraint 部分前面都要加上 ``=`` 。
 
-输入部分，我们分别通过寄存器 $$x_{10}(a_0),x_{11}(a_1),x_{12}(a_2),x_{17}(a_7)$$ 传入参数 ``arg0,arg1,arg2,which`` ，他们分别代表接口可能所需的三个输入参数，以及用来区分我们调用的是哪个接口的 ``SBI Extension ID`` 。这里之所以提供三个输入参数是为了将所有接口囊括进去，对于某些接口有的输入参数是冗余的，比如 ``sbi_console_putchar`` 由于只需一个输入参数，它就只关心寄存器 $$a_0$$ 的值。
+输入部分，我们分别通过寄存器 $$x_{10}(a_0),x_{11}(a_1),x_{12}(a_2),x_{17}(a_7)$$ 传入参数 ``arg0,arg1,arg2,which`` ，它们分别代表接口可能所需的三个输入参数（``arg0,arg1,arg2``），以及用来区分我们调用的是哪个接口的 ``SBI Extension ID(``which``) 。这里之所以提供三个输入参数是为了将所有接口囊括进去，对于某些接口有的输入参数是冗余的，比如 ``sbi_console_putchar`` 由于只需一个输入参数，它就只关心寄存器 $$a_0$$ 的值。
 
 在 clobbered registers list 中，出现了一个 ``"memory"`` ，这用来告诉编译器汇编代码隐式的修改了在汇编代码中未曾出现的某些寄存器。所以，它也不能认为汇编代码中未出现的寄存器就会在内联汇编前后保持不变了。
 
@@ -160,47 +161,7 @@ pub fn console_getchar() -> usize {
     sbi_call(SBI_CONSOLE_GETCHAR, 0, 0, 0)
 }
 
-pub fn shutdown() -> ! {
-    sbi_call(SBI_SHUTDOWN, 0, 0, 0);
-    unreachable!()
-}
-
-pub fn set_timer(stime_value: u64) {
-    #[cfg(target_pointer_width = "32")]
-    sbi_call(
-        SBI_SET_TIMER,
-        stime_value as usize,
-        (stime_value >> 32) as usize,
-        0,
-    );
-    #[cfg(target_pointer_width = "64")]
-    sbi_call(SBI_SET_TIMER, stime_value as usize, 0, 0);
-}
-
-pub fn clear_ipi() {
-    sbi_call(SBI_CLEAR_IPI, 0, 0, 0);
-}
-
-pub fn send_ipi(hart_mask: usize) {
-    sbi_call(SBI_SEND_IPI, &hart_mask as *const _ as usize, 0, 0);
-}
-
-pub fn remote_fence_i(hart_mask: usize) {
-    sbi_call(SBI_REMOTE_FENCE_I, &hart_mask as *const _ as usize, 0, 0);
-}
-
-pub fn remote_sfence_vma(hart_mask: usize, _start: usize, _size: usize) {
-    sbi_call(SBI_REMOTE_SFENCE_VMA, &hart_mask as *const _ as usize, 0, 0);
-}
-
-pub fn remote_sfence_vma_asid(hart_mask: usize, _start: usize, _size: usize, _asid: usize) {
-    sbi_call(
-        SBI_REMOTE_SFENCE_VMA_ASID,
-        &hart_mask as *const _ as usize,
-        0,
-        0,
-    );
-}
+...
 
 const SBI_SET_TIMER: usize = 0;
 const SBI_CONSOLE_PUTCHAR: usize = 1;

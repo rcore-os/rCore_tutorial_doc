@@ -2,7 +2,7 @@
 
 * [代码][CODE]
 
-只能使用 ``console_putchar`` 这种苍白无力的输出手段让人头皮发麻。如果我们能使用 ``print!`` 宏的话该有多好啊！于是我们就来实现自己的 ``print!`` 宏！
+只能使用 ``console_putchar`` 这种苍白无力的输出手段让人头皮发麻。如果我们能使用 ``print!`` 宏的话该有多好啊！于是我们就来实现自己的 ``print!``宏！
 
 我们将这一部分放在 ``src/io.rs`` 中，先用 ``console_putchar`` 实现两个基础函数：
 
@@ -10,7 +10,7 @@
 // src/lib.rs
 
 // 由于使用到了宏，需要进行设置
-// 同时，这个 mod 还必须放在其他 mod 前
+// 同时，这个 module 还必须放在其他 module 前
 #[macro_use]
 mod io;
 
@@ -35,26 +35,25 @@ pub fn puts(s: &str) {
 
 ```rust
 // required
-fn write_str(&mut self, s: &str) -> Result;
+fn write_str(&mut self, s: &str) -> Result
 ```
 
-随后你就可以调用这个接口利用 ``write_str`` 实现的函数
+随后你就可以调用如下函数（会进一步调用``write_str`` 实现函数）来进行显示。
 
 ````rust
 // provided
-fn write_format(&mut self, args: core::fmt::Arguments) -> Result;
+fn write_fmt(mut self: &mut Self, args: Arguments<'_>) -> Result
 ````
 
-你可以用 ``write_format`` 函数来输出 ``Arguments`` 类。而我们已经有一个 ``format_args!`` 宏，它可以将模式字符串+参数列表的输入转化为 ``Arguments`` 类！比如 ``format_args!("{} {}", 1, 2)`` 。
+``write_fmt``函数需要处理``Arguments`` 类封装的输出字符串。而我们已经有现成的 ``format_args!`` 宏，它可以将模式字符串+参数列表的输入转化为 ``Arguments`` 类！比如 ``format_args!("{} {}", 1, 2)`` 。
 
 因此，我们的 ``print!`` 宏的实现思路便为：
 
-1. 解析传入参数，转化为 ``format_args!`` 可接受的输入（事实上原封不动就行了），并通过 ``format_args!`` 得到 ``Arguments`` 类；
-2. 调用 ``write_format`` 函数输出这个类；
+1. 解析传入参数，转化为 ``format_args!`` 可接受的输入（事实上原封不动就行了），并通过 ``format_args!`` 宏得到 ``Arguments`` 类；
+2. 调用 ``write_fmt`` 函数输出这个类；
 
-而为了调用 ``write_format`` 函数，我们必须实现 ``write_str`` 函数，而它可用 ``puts`` 函数来实现。
+而为了调用 ``write_fmt`` 函数，我们必须实现 ``write_str`` 函数，而它可用 ``puts`` 函数来实现。支持``print!``宏的代码片段如下：
 
-于是代码为：
 ```rust
 // src/io.rs
 
@@ -88,6 +87,7 @@ macro_rules! println {
 ```
 由于并不是重点就不在这里赘述宏的语法细节了（实际上我也没弄懂），总之我们实现了 ``print!, println!`` 两个宏，现在是时候看看效果了！
 首先，我们在 ``panic`` 时也可以看看到底发生了什么事情了！
+
 ```rust
 // src/lang_items.rs
 
