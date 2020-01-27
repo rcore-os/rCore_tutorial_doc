@@ -138,4 +138,4 @@ panicked at 'page fault!', src/interrupt.rs:65:5
 从中我们可以清楚的看出内核成功的找到了错误的原因，内核各段被成功的设置了不同的权限。我们达到了内核重映射的目的！
 目前的代码能在[这里][CODE]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/e54dce49
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6

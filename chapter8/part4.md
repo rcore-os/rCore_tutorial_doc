@@ -164,4 +164,4 @@ kernel:
 现在我们 ``make run`` 运行一下试试看，发现内核线程与用户线程能够在一起很好的工作了！
 至今为止的所有代码可以在[这里][CODE]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/86abde4d
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

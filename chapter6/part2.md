@@ -120,4 +120,4 @@ impl Context {
 
 下面一节我们来研究如何进行线程初始化。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

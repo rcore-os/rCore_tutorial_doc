@@ -32,4 +32,4 @@ Hello, world!
 
 打开 ``main.rs`` 发现里面确实只是输出了一行Hello, world!这个应用已经可以正常运行了，但是即使只是这么一个简单的功能，也离不开所在操作系统(Ubuntu)的帮助。我们既然要写一个新的操作系统，就不能依赖于任何已有操作系统！接下来我们尝试移除该应用对于操作系统的依赖。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4

@@ -384,4 +384,4 @@ impl MemorySet {
 }
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/e54dce49
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6

@@ -141,4 +141,4 @@ rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-
 -panic = "abort"
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4

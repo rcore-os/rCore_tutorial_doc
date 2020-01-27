@@ -264,4 +264,4 @@ pub extern "C" fn rust_main() -> ! {
 
 但是现在问题在于我们运行什么程序是硬编码到内核中的。我们能不能实现一个交互式的终端，告诉内核我们想要运行哪个程序呢？接下来我们就来做这件事情！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/443465c1
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa1

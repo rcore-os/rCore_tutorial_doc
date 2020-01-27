@@ -2,6 +2,8 @@
 
 * [代码][CODE]
 
+OS在正确完成中断初始化（设置中断处理程序的起始地址，并使能中断）后，还需为被中断的程序保存和恢复当时程序运行时的上下文（实际上就是一堆寄存器的值，具体内容在[part3中描述的**中断帧(TrapFrame)**结构体][part3.md]中有详细定义）
+
 ```riscv
 # src/trap/trap.asm
 
@@ -18,21 +20,21 @@ __trapret
 	sret
 ```
 
-我们首先定义 ``__alltraps`` 函数作为所有中断处理程序的入口，这里我们首先通过 ``SAVE_ALL`` 来保存上下文环境，随后将当前栈顶地址 ``sp`` 的值给到寄存器 ``a0`` ，这是因为在risc-v calling convention 中，规定 ``a0`` 保存函数输入的第一个参数，于是我们相当于将栈顶地址传给函数 ``rust_trap`` 作为第一个参数。
+我们首先定义 ``__alltraps`` 函数作为所有中断处理程序的入口，这里我们首先通过 ``SAVE_ALL`` （汇编宏）来保存上下文环境，随后将当前栈顶地址 ``sp`` 的值给到寄存器 ``a0`` ，这是因为在risc-v calling convention 中，规定 ``a0`` 保存函数输入的第一个参数，于是就相当于将栈顶地址传给函数 ``rust_trap`` 作为第一个参数。
 
-随后，我们通过 ``jal`` 调用 ``rust_trap`` 函数并在返回之后跳转到调用语句的下一条指令。实际上调用返回之后进入 ``__trapret`` 函数，这里我们通过 ``RESTORE_ALL`` 恢复中断之前的上下文环境，并最终通过一条 ``sret`` 指令跳转到 ``sepc``，回到触发中断的那条指令所在地址。这会导致触发中断的那条指令又被执行一次。
+随后，我们通过 ``jal`` 调用 ``rust_trap`` 函数并在返回之后跳转到调用语句的下一条指令。实际上调用返回之后进入 ``__trapret`` 函数，这里我们通过 ``RESTORE_ALL`` （汇编宏）恢复中断之前的上下文环境，并最终通过一条 ``sret`` 指令跳转到 ``sepc``指向的地址，即回到触发中断的那条指令所在地址。这会导致触发中断的那条指令又被执行一次。
 
-注意，由于这部分用到了 ``SAVE_ALL`` 和 ``RESTORE_ALL`` 两个宏，所以这部分必须写在最下面。
+注意，由于这部分用到了 ``SAVE_ALL`` 和 ``RESTORE_ALL`` 两个汇编宏，所以这部分必须写在最下面。
 
-我们定义几个宏：
+我们定义几个常量和宏：
 
 ```riscv
 # src/trap/trap.asm
 
-# 表示每个寄存器占的字节数，由于是64位，都是8字节
+# 常量：表示每个寄存器占的字节数，由于是64位，都是8字节
 .equ XLENB 8
 
-# 将地址 sp+8×a2 处的值 load 到寄存器 a1 内
+# 将地址 sp+8*a2 处的值 load 到寄存器 a1 内
 .macro LOAD a1, a2
 	ld \a1, \a2*XLENB(sp)
 .endm
@@ -42,6 +44,8 @@ __trapret
 	sd \a1, \a2*XLENB(sp)
 .endm
 ```
+
+### 保存上下文环境
 
 ``SAVE_ALL`` 的原理是：将一整个 ``TrapFrame`` 保存在**内核栈**上。我们现在就处在内核态(S 态)，因此现在的栈顶地址 ``sp`` 就指向内核栈地址。但是，之后我们还要支持运行**用户态程序**，顾名思义，要在用户态(U 态)上运行，在中断时栈顶地址 ``sp`` 将指向用户栈顶地址，这种情况下我们要从用户栈切换到内核栈。
 
@@ -56,15 +60,16 @@ __trapret
 	# 实际上是将右侧寄存器的值写入中间 csr
 	# 并将中间 csr 的值写入左侧寄存器
 	csrrw sp, sscratch, sp
+
 	# 如果 sp=0 ，说明交换前 sscratch=0
-	# 说明从内核态进入中断，不用切换栈
-	# 因此不跳转，继续执行 csrr 再将 sscratch 的值读回 sp
-	# 此时 sp,sscratch 均保存内核栈
+	#   则说明从内核态进入中断，不用切换栈
+	#   因此不跳转，继续执行 csrr 再将 sscratch 的值读回 sp
+	#   此时 sp,sscratch 均保存内核栈
 	
-	# 否则 sp!=0，说明从用户态进入中断，要切换栈
-	# 由于 sscratch 规定，二者交换后
-	# 此时 sp 为内核栈， sscratch 为用户栈
-	# 略过 csrr 指令
+	#   否则 说明sp!=0，说明从用户态进入中断，要切换栈
+	#   由于 sscratch 规定，二者交换后
+	#   此时 sp 为内核栈， sscratch 为用户栈
+	#   略过 csrr 指令
 	
 	# 两种情况接下来都是在内核栈上保存上下文环境
 	bnez sp, trap_from_user
@@ -104,6 +109,8 @@ trap_from_user:
 ```
 
 在 ``SAVE_ALL`` 之后，我们将一整个 ``TrapFrame`` 存在了内核栈上，且在地址区间$$[\text{sp},\text{sp}+36\times8)$$上按照顺序存放了 ``TrapFrame`` 的各个字段。这样，``rust_trap`` 可以通过栈顶地址正确访问 ``TrapFrame`` 了。
+
+### 恢复上下文环境
 
 而 ``RESTORE_ALL`` 正好是一个反过来的过程：
 
@@ -174,6 +181,8 @@ pub fn init() {
         // 仍使用 Direct 模式
         // 将中断处理总入口设置为 __alltraps
         stvec::write(__alltraps as usize, stvec::TrapMode::Direct);
+        // 设置 sstatus 的 SIE 位
+        sstatus::set_sie();
     }
     println!("++++ setup interrupt! ++++");
 }
@@ -254,4 +263,4 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 
 迄今为止的代码可以在[这里][CODE]找到。如果出现了问题的话就来检查一下吧。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/5d09d5eb
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch3-pa4

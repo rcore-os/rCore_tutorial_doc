@@ -79,4 +79,4 @@ fn sys_exit(code: usize) {
 
 不必花太多功夫，我们就在内核中支持了两个系统调用！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/86abde4d
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

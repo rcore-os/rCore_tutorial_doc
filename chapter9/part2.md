@@ -518,4 +518,4 @@ pub fn init(l: usize, r: usize) {
 
 如果记事本不能正常工作，可以在[这里][CODE]找到已有的代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ea2acb44
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa2

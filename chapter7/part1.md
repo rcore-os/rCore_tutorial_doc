@@ -200,4 +200,4 @@ impl ThreadPool {
 ```
 现在我们有了一个线程池 ``ThreadPool`` ，它内含调度器，是一个优秀的线程管理器。下一节我们将介绍调度线程 ``idle`` 以及调度单元 ``Processor``。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

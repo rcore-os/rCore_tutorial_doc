@@ -99,4 +99,4 @@ panic = "abort"
 > ``error: requires `start` lang_item``
 > 
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4

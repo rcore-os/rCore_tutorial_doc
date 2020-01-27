@@ -244,4 +244,4 @@ pub fn init() {
 
 所有的代码可以在[这里][CODE]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/f408f075
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa3

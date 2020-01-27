@@ -2,17 +2,18 @@
 
 * [代码][CODE]
 
-在本节中，我们处理一种很重要的中断：时钟中断。这种中断我们可以设定为每隔一段时间硬件自动触发一次，在其对应的中断处理程序里，我们回到内核态，并可以对用户态的程序进行调度、监控管理他们对于资源的使用情况。
+在本节中，我们处理一种很重要的中断：时钟中断。这种中断我们可以设定为每隔一段时间硬件自动触发一次，在其对应的中断处理程序里，我们回到内核态，并可以强制对用户态或内核态的程序进行打断、调度、监控，并进一步管理它们对于资源的使用情况。
 
 > **[info] riscv 中的中断寄存器**
-> 
-> S 态的中断寄存器主要有 **sie, sip** 两个，其中 s 表示 S 态，i 表示中断， e/p 表示 enable (使能)/ pending (提交申请)。
+>
+> S 态的中断寄存器主要有 **sie**（Supervisor Interrupt Enable，监管中断使能）, **sip** （Supervisor Interrupt Pending，监管中断待处理）两个，其中 s 表示 S 态，i 表示中断， e/p 表示 enable (使能)/ pending (提交申请)。
 > 处理的中断分为三种：
+>
 > 1. SI(Software Interrupt)，软件中断
 > 2. TI(Timer Interrupt)，时钟中断
 > 3. EI(External Interrupt)，外部中断
-> 
-> 比如 ``sie`` 有一个 ``STIE`` 位， 对应 ``sip`` 有一个 ``STIP`` 位，与时钟中断 TI 有关。当硬件决定触发时钟中断时，会将 ``STIP`` 设置为 1，当一条指令执行完毕后，如果发现 ``STIP`` 为 1，此时如果使能，即 ``sie`` 的 ``STIE`` 位也为 1 ，就会进入 S 态时钟中断的处理程序。
+>
+> 比如 ``sie`` 有一个 ``STIE`` 位， 对应 ``sip`` 有一个 ``STIP`` 位，与时钟中断 TI 有关。当硬件决定触发时钟中断时，会将 ``STIP`` 设置为 1，当一条指令执行完毕后，如果发现 ``STIP`` 为 1，此时如果时钟中断使能，即 ``sie`` 的 ``STIE`` 位也为 1 ，就会进入 S 态时钟中断的处理程序。
 
 ### 时钟初始化
 
@@ -62,7 +63,7 @@ fn get_cycle() -> u64 {
 ```
 ### 开启内核态中断使能
 
-事实上寄存器 ``sstatus`` 中有一控制位 ``SIE``，表示 S 态全部中断的使能。如果没有设置这个也是不能正常接受 S 态时钟中断的。
+事实上寄存器 ``sstatus`` 中有一控制位 ``SIE``，表示 S 态全部中断的使能。如果没有设置这个``SIE``控制位，那在S 态是不能正常接受时钟中断的。
 ```rust
 // src/interrupt.rs
 
@@ -113,7 +114,7 @@ pub fn rust_trap(tf: &mut TrapFrame) {
     match tf.scause.cause() {
         // 断点中断
         Trap::Exception(Exception::Breakpoint) => breakpoint(&mut tf.sepc),
-        // S 态时钟中断
+        // S态时钟中断
         Trap::Interrupt(Interrupt::SupervisorTimer) => super_timer(),
         _ => panic!("undefined trap!")
     }
@@ -125,7 +126,7 @@ fn breakpoint(sepc: &mut usize) {
     *sepc += 2;
 }
 
-// S 态时钟中断处理
+// S态时钟中断处理
 fn super_timer() {
     // 设置下一次时钟中断触发时间
     clock_set_next_event();
@@ -195,4 +196,4 @@ fn panic(info: &PanicInfo) -> ! {
 
 如果出现问题的话，可以在[这里][CODE]找到目前的代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/57734e33
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch3-pa5

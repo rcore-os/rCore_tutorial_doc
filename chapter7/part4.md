@@ -235,4 +235,4 @@ pub extern "C" fn rust_main() -> ! {
 
 如果结果不对的话，[这里][CODE]可以看到至今的所有代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

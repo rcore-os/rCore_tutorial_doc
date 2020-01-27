@@ -84,4 +84,4 @@ pub extern "C" fn rust_main() -> ! {
 ```
 到现在为止我们终于将一切都准备好了，接下来就要配合 OpenSBI 运行我们的内核！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4

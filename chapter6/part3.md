@@ -121,4 +121,4 @@ impl Thread {
 
 下一节我们终于能拨云见日，写一个测试看看我们的线程实现究竟有无问题了！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

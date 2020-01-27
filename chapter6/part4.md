@@ -96,4 +96,4 @@ pub extern "C" fn rust_main() -> ! {
 
 截至目前所有的代码可以在[这里][CODE]找到以供参考。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

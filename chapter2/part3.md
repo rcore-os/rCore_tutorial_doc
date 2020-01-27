@@ -152,4 +152,4 @@ Disassembly of section .text:
 
 到这里，我们清楚了最终程序的内存布局会长成什么样子。下一节我们来补充这个链接脚本中未定义的段，并完成编译。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/08991c79
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4

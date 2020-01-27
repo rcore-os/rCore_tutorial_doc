@@ -304,4 +304,4 @@ fn frame_allocating_test() {
 
 不过，这种物理内存分配给人一种过家家的感觉。无论表面上分配、回收做得怎样井井有条，实际上都并没有对物理内存产生任何影响！不要着急，我们之后会使用它们的。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/695d8a2c
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch4-pa1

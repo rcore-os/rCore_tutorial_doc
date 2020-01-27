@@ -275,4 +275,4 @@ pub fn exit(code: usize) {
 
 至此我们说明了调度线程 idle 以及调度单元 Processor 。但我们之前还挖了一个坑，也就是上一节中，调度算法我们只提供了一个接口但并未提供具体实现。下一节我们就来介绍一种最简单的调度算法实现。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

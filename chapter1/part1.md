@@ -27,4 +27,4 @@ $ rustc --version
 rustc 1.42.0-nightly (859764425 2020-01-07)
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/d2a80549
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4

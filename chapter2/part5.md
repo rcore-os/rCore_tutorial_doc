@@ -177,7 +177,7 @@ $ more riscv64-virt.dts #显示virt machine计算机的硬件配置信息
 
 下一节我们实现格式化输出来使得我们后续能够更加方便的通过输出来进行内核调试。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/9387bd50
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa5
 
 [riscv-qemu]: https://github.com/riscv/riscv-qemu/wiki
 [opensbi]: https://github.com/riscv/opensbi

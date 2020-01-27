@@ -45,7 +45,6 @@ pub extern "C" fn _start() -> ! {
 > **[danger] cargo build error**
 > 
 > ``linking with `cc` failed: exit code: 1``
-> 
 
 这个错误同样与 C runtime 有关，尽管 C runtime 的入口点已经被我们覆盖掉了，我们的项目仍默认链接 C runtime，因此需要一些 C 标准库 (libc) 的内容，由于我们禁用了标准库，我们也同样需要禁用常规的 C 启动例程。
 
@@ -66,4 +65,4 @@ pub extern "C" fn _start() -> ! {
 
 迄今为止的代码可以在[这里][CODE]找到，构建出现问题的话可以参考。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/77ecc4e8
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4

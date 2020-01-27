@@ -168,4 +168,4 @@ fn dynamic_allocating_test() {
 
 如果结果不太对劲，可以在[这里][CODE]查看现有的代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/345dc90b
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch4-pa2

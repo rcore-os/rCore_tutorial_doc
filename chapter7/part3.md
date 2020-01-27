@@ -102,4 +102,4 @@ impl Scheduler for RRScheduler {
 }
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/75d4ed97
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

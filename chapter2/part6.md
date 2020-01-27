@@ -176,4 +176,4 @@ const SBI_SHUTDOWN: usize = 8;
 
 现在我们比较深入的理解了 ``console_putchar`` 到底是怎么一回事。下一节我们将使用 ``console_putchar`` 实现格式化输出，为后面的调试提供方便。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ad57b607
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa7

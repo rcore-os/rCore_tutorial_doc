@@ -279,4 +279,4 @@ impl PageTableImpl {
 
 现在我们就可以从 ``ElfFile`` 创建用户程序的虚拟内存空间了。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/86abde4d
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

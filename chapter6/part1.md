@@ -147,4 +147,4 @@ impl Drop for KernelStack {
 
 下一节，我们来看如何进行线程切换。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/8cb1a4be
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

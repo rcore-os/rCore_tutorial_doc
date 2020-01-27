@@ -280,4 +280,4 @@ $ cargo build
 
 目前的代码可以在[这里][CODE]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/99fa0b58
+[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa1
