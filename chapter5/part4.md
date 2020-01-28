@@ -8,7 +8,7 @@
 
 简单起见，无论是初始映射还是重映射，无论是内核各段还是物理内存，我们都采用同样的偏移量进行映射，具体而言：``va -> pa = va - 0xffffffff40000000`` 。
 
-于是我们可以通过在内核中访问对应的虚拟内存来访问物理内存。
+于是我们可以通过在内核中访问对应的虚拟内存来访问物理内存。相关常量定义在[consts.rs](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/consts.rs#L11)中。
 
 ```rust
 // src/consts.rs
@@ -23,89 +23,40 @@ pub fn access_pa_via_va(pa: usize) -> usize {
 }
 ```
 
-在 rust 的 riscv crate 中，已经为页表机制提供了如下支持：
+在 [riscv crate](https://github.com/rcore-os/riscv) 和内核实现中，需要为页表机制提供了如下支持：
 
-* 基于偏移量(也即线性映射)的 Sv39 三级页表 ``Rv39PageTable`` 
-* 页表项 ``PageTableEntry`` 
-* 页表项数组 ``PageTable`` 
-* 页表项中的标志位 ``PageTableFlags``
+* 基于偏移量(也即线性映射)的 [Sv39 三级页表 ``Rv39PageTable``](https://github.com/rcore-os/riscv/blob/master/src/paging/multi_level.rs#L85) 和[页表映射操作``PageTableImpl``](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L81)
+* [页表项 ``PageTableEntry``](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L56)和[页项 ``PageEntry``](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L24)
+* [页表项数组 ``PageTable`` ](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L5)
+* [页表项中的标志位 ``PageTableFlags``](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L103)
 
-### 页表项
+### 页表项和页项
 
 首先来看一下页表项：
 
 ```rust
-// src/memory/mod.rs
-
-pub mod paging;
-
+// riscv: src/paging/page_table.rs
+pub struct PageTableEntry(usize);
+impl PageTableEntry {
+    pub fn is_unused(&self) -> bool { self.0 == 0 }
+    pub fn set_unused(&mut self) { self.0 = 0; }
+    ......
+}
+```
+再来看一下页项：
+```rust
 // src/paging.rs
-
-use crate::consts::*;
-use riscv::addr::*;
-use riscv::paging::{
-    PageTableEntry,
-    Mapper,
-    Rv39PageTable,
-    PageTable as PageTableEntryArray,
-    PageTableFlags as EF,
-    FrameAllocator,
-    FrameDeallocator
-    
-};
-use riscv::asm::{
-    sfence_vma,
-    sfence_vma_all,
-};
-use riscv::register::satp;
-use crate::memory::{
-    alloc_frame,
-    dealloc_frame,
-    access_pa_via_va
-};
+......
 pub struct PageEntry(&'static mut PageTableEntry, Page);
 
 impl PageEntry {
     pub fn update(&mut self) {
-        unsafe {
-            sfence_vma(0, self.1.start_address().as_usize());
-        }
+        unsafe { sfence_vma(0, self.1.start_address().as_usize()); }
     }
-	
     // 一系列的标志位读写
     pub fn accessed(&self) -> bool { self.0.flags().contains(EF::ACCESSED) }
     pub fn clear_accessed(&mut self) { self.0.flags_mut().remove(EF::ACCESSED); }
-
-    pub fn dirty(&self) -> bool { self.0.flags().contains(EF::DIRTY) }
-    pub fn clear_dirty(&mut self) { self.0.flags_mut().remove(EF::DIRTY); }
-
-    pub fn writable(&self) -> bool { self.0.flags().contains(EF::WRITABLE) }
-    pub fn set_writable(&mut self, value: bool) {
-        self.0.flags_mut().set(EF::WRITABLE, value); 
-    }
-
-    pub fn present(&self) -> bool { self.0.flags().contains(EF::VALID | EF::READABLE) }
-    pub fn set_present(&mut self, value: bool) {
-        self.0.flags_mut().set(EF::VALID | EF::READABLE, value);
-    }
-
-    pub fn user(&self) -> bool { self.0.flags().contains(EF::USER) }
-    pub fn set_user(&mut self, value: bool) { self.0.flags_mut().set(EF::USER, value); }
-
-    pub fn execute(&self) -> bool { self.0.flags().contains(EF::EXECUTABLE) }
-    pub fn set_execute(&mut self, value: bool) {
-        self.0.flags_mut().set(EF::EXECUTABLE, value);
-    }
-
-    // 最终映射到的物理页号的读写
-    pub fn target(&self) -> usize {
-        self.0.addr().as_usize()
-    }
-    pub fn set_target(&mut self, target: usize) {
-        let flags = self.0.flags();
-        let frame = Frame::of_addr(PhysAddr::new(target));
-        self.0.set(frame, flags);
-    }
+    ......
 }
 ```
 
@@ -115,7 +66,7 @@ impl PageEntry {
 
 ### 为 Rv39PageTable 提供物理页帧管理
 
-在实现页表之前，我们回忆多级页表的修改会隐式的调用物理页帧分配与回收。比如在 Sv39 中，插入一对映射就可能新建一个二级页表和一个一个一级页表，而这需要分配两个物理页帧。因此，我们需要告诉 ``Rv39PageTable`` 如何进行物理页帧分配与回收。
+在实现页表之前，我们回忆多级页表的修改会隐式的调用物理页帧分配与回收。比如在 Sv39 中，插入一对映射就可能新建一个二级页表和一个一级页表，而这需要分配两个物理页帧。因此，我们需要告诉 ``Rv39PageTable`` 如何进行物理页帧分配与回收。
 
 ```rust
 // src/memory/paging.rs
@@ -136,9 +87,9 @@ impl FrameDeallocator for FrameAllocatorForPaging {
     }
 }
 ```
-### 实现我们自己的页表 PageTableImpl
+### 实现我们自己的页表 映射操作PageTableImpl
 
-于是我们可以利用 ``Rv39PageTable``的实现我们自己的页表 ``PageTableImpl`` 。首先是声明及初始化：
+于是我们可以利用 ``Rv39PageTable``的实现我们自己的页表映射操作 ``PageTableImpl`` 。首先是声明及初始化：
 
 ```rust
 // src/memory/paging.rs
@@ -193,7 +144,7 @@ impl PageTableImpl {
             // 得到 MapperFlush(Page)
             // flush 做的事情就是跟上面一样的 sfence_vma
             // 即刷新与这个虚拟页相关的 TLB
-            // 所以我们修改后有按时刷新 TLB
+            // 所以我们修改后要按时刷新 TLB
             .flush();
         self.get_entry(va).expect("fail to get an entry!")
     }
@@ -214,7 +165,7 @@ impl PageTableImpl {
         // 调用 Rv39PageTable 的 ref_entry 接口
         if let Ok(e) = self.page_table.ref_entry(page.clone()) {
             let e = unsafe { &mut *(e as *mut PageTableEntry) };
-            // 把返回回来的 PageTableEntry 封装起来
+            // 把返回的 PageTableEntry 封装起来
             self.entry = Some(PageEntry(e, page));
             Some(self.entry.as_mut().unwrap())
         }

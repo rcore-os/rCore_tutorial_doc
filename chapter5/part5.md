@@ -4,15 +4,17 @@
 
 我们实现了页表，但是好像还不足以应对内核重映射的需求。我们要对多个段分别进行不同的映射，而页表只允许我们每次插入一对从虚拟页到物理页帧的映射。
 
+### 总体抽象
+
 为此，我们另设计几种数据结构来抽象这个过程：
 
 ![](figures/memory_set.jpg)
 
-在虚拟内存中，每个 ``MemoryArea`` 描述一个段，每个段单独映射到物理内存；
 
-而 ``MemorySet`` 中则存储所有的 ``MemoryArea`` 段，相比巨大的虚拟内存空间，由于它含有的各个段都已经映射到物理内存，它可表示一个程序独自拥有的**实际可用**的虚拟内存空间。
 
-而 ``PageTable`` 相当于一个底层接口，仅是管理映射，事实上它管理了 ``MemorySet`` 中所有 ``MemoryArea`` 的所有映射。
+在虚拟内存中，每个 ``MemoryArea`` 描述一个段，每个段单独映射到物理内存；``MemorySet`` 中则存储所有的 ``MemoryArea`` 段，相比巨大的虚拟内存空间，由于它含有的各个段都已经映射到物理内存，它可表示一个程序独自拥有的**实际可用**的虚拟内存空间。``PageTable`` 相当于一个底层接口，仅是管理映射，事实上它管理了 ``MemorySet`` 中所有 ``MemoryArea`` 的所有映射。
+
+### MemoryArea
 
 我们刻意将不同的段分为不同的 ``MemoryArea`` ，说明它们映射到物理内存的方式一定是不同的：
 
@@ -22,22 +24,13 @@
 
 下面我们看一下这些类是如何实现的。
 
+#### MemoryAttr
+
 首先是用来修改 ``PageEntry`` (我们的页表映射默认将权限设为 ``R|W|X`` ，需要修改) 的类 ``MemoryAttr``：
 
 ```rust
-// src/memory/mod.rs
-
-pub mod memory_set;
-
-// src/memory/memory_set/mod.rs
-
-pub mod attr;
-
 // src/memory/memory_set/attr.rs
-
-use crate::memory::paging::PageEntry;
-
-#[derive(Clone,Debug)]
+......
 pub struct MemoryAttr {
     user : bool,    // 用户态是否可访问
     readonly : bool,    // 是否只读
@@ -53,21 +46,16 @@ impl MemoryAttr {
             execute : false,
         }
     }
-
     // 根据要求修改所需权限
     pub fn set_user(mut self) -> Self {
-        self.user = true;
-        self
+        self.user = true;  self
     }
     pub fn set_readonly(mut self) -> Self {
-        self.readonly = true;
-        self
+        self.readonly = true;  self
     }
     pub fn set_execute(mut self) -> Self {
-        self.execute = true;
-        self
+        self.execute = true;   self
     }
-
     // 根据设置的权限要求修改页表项
     pub fn apply(&self, entry : &mut PageEntry) {
         entry.set_present(true);    // 设置页表项存在
@@ -78,47 +66,28 @@ impl MemoryAttr {
 }
 ```
 
+#### MemoryHandler
+
 然后是会以不同方式调用 ``PageTable`` 接口的 ``MemoryHandler``：
 
 ```rust
-// src/memory/memory_set/mod.rs
-
-pub mod handler;
-
 // src/memory/memory_set/handler.rs
-
-use crate::memory::paging::PageTableImpl;
-use super::attr::MemoryAttr;
-use crate::memory::alloc_frame; 
-use core::fmt::Debug;
-use alloc::boxed::Box;
-
+......
 // 定义 MemoryHandler trait
 pub trait MemoryHandler: Debug + 'static {
     fn box_clone(&self) -> Box<dyn MemoryHandler>;
-    // 需要实现 map, unmap 两函数
-    // 不同的接口实现者会有不同的行为
-    
+    // 需要实现 map, unmap 两函数,不同的接口实现者会有不同的行为
     // 注意 map 并没有 pa 作为参数，因此接口实现者要给出该虚拟页要映射到哪个物理页
     fn map(&self, pt: &mut PageTableImpl, va: usize, attr: &MemoryAttr);
     fn unmap(&self, pt: &mut PageTableImpl, va: usize);
 }
-
-impl Clone for Box<dyn MemoryHandler> {
-    fn clone(&self) -> Box<dyn MemoryHandler> { self.box_clone() }
-}
-
+......
 // 下面给出两种实现 Linear, ByFrame
-
 // 线性映射 Linear: 也就是我们一直在用的带一个偏移量的形式
 // 有了偏移量，我们就知道虚拟页要映射到哪个物理页了
-#[derive(Debug, Clone)]
 pub struct Linear { offset: usize }
-
 impl Linear {
-    pub fn new(off: usize) -> Self {
-        Linear { offset: off, }
-    }
+    pub fn new(off: usize) -> Self { Linear { offset: off, }  }
 }
 impl MemoryHandler for Linear {
     fn box_clone(&self) -> Box<dyn MemoryHandler> { Box::new(self.clone()) }
@@ -127,32 +96,24 @@ impl MemoryHandler for Linear {
         // 同时还使用 attr.apply 修改了原先默认为 R|W|X 的权限
         attr.apply(pt.map(va, va - self.offset));
     }
-    fn unmap(&self, pt: &mut PageTableImpl, va: usize) {
-        pt.unmap(va);
-    }
+    fn unmap(&self, pt: &mut PageTableImpl, va: usize) { pt.unmap(va); }
 }
-
 // ByFrame: 不知道映射到哪个物理页帧
 // 那我们就分配一个新的物理页帧，可以保证不会产生冲突
-#[derive(Debug, Clone)]
 pub struct ByFrame;
 impl ByFrame {
-    pub fn new() -> Self {
-        ByFrame {}
-    }
+    pub fn new() -> Self { ByFrame {} }
 }
 impl MemoryHandler for ByFrame {
     fn box_clone(&self) -> Box<dyn MemoryHandler> {
         Box::new(self.clone())
     }
-
     fn map(&self, pt: &mut PageTableImpl, va: usize, attr: &MemoryAttr) {
         // 分配一个物理页帧作为映射目标
         let frame = alloc_frame().expect("alloc_frame failed!");
         let pa = frame.start_address().as_usize();
         attr.apply(pt.map(va, pa));
     }
-
     fn unmap(&self, pt: &mut PageTableImpl, va: usize) {
         pt.unmap(va);
     }
@@ -162,21 +123,11 @@ impl MemoryHandler for ByFrame {
 接着，是描述一个段的 ``MemoryArea``。
 
 ```rust
-// src/memory/memory_set/mod.rs
-
-pub mod area;
-
 // src/memory/memory_set/area.rs
-
-use alloc::boxed::Box;
-use crate::memory::paging::{PageTableImpl, PageRange,};
-use super::{attr::MemoryAttr, handler::MemoryHandler, };
-use crate::consts::PAGE_SIZE;
 
 // 声明中给出所在的虚拟地址区间: [start, end)
 // 使用的 MemoryHandler： handler
 // 页表项的权限： attr
-#[derive(Debug,Clone)]
 pub struct MemoryArea {
     start : usize,
     end : usize, 
@@ -199,7 +150,6 @@ impl MemoryArea {
             self.handler.unmap(pt, page);
         }
     }
-
     // 是否与另一虚拟地址区间相交
     pub fn is_overlap_with(&self, start_addr : usize, end_addr : usize) -> bool {
         let p1 = self.start / PAGE_SIZE;
@@ -208,7 +158,6 @@ impl MemoryArea {
         let p4 = (end_addr - 1) / PAGE_SIZE + 1;
         !((p1 >= p4) || (p2 <= p3))
     }
-	
     // 初始化
     pub fn new(start_addr : usize, end_addr : usize, handler : Box<dyn MemoryHandler>, attr : MemoryAttr) -> Self {
         MemoryArea{
@@ -220,64 +169,15 @@ impl MemoryArea {
     }
 }
 
-// src/consts.rs
 
-pub const PAGE_SIZE: usize = 4096;
-
-// src/memory/paging.rs
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-#[repr(C)]
-pub struct PageRange {
-    start: usize,
-    end: usize
-}
-
-// 为 PageRange 实现 Iterator trait 成为可被遍历的迭代器
-impl Iterator for PageRange {
-    type Item = usize;
-
-    fn next(&mut self) -> Option<usize> {
-        if self.start < self.end {
-            let page = self.start << 12;
-            self.start += 1;
-            Some(page)
-        }
-        else {
-            None
-        }
-    }
-}
-
-impl PageRange {
-    pub fn new(start_addr: usize, end_addr: usize) -> Self {
-        PageRange {
-            start: start_addr / PAGE_SIZE,
-            end: (end_addr - 1) / PAGE_SIZE + 1
-        }
-    }
-}
 ```
+
+### MemorySet
 
 最后，则是最高层的 ``MemorySet`` ，它描述一个**实际可用**的虚拟地址空间以供程序使用。
 
 ```rust
 // src/memory/memory_set/mod.rs
-
-use area::MemoryArea;
-use attr::MemoryAttr;
-use crate::memory::paging::PageTableImpl;
-use crate::consts::*;
-use handler::{
-    MemoryHandler,
-    Linear
-};
-use alloc::{
-    boxed::Box,
-    vec::Vec
-};
-use crate::memory::access_pa_via_va;
-
 pub struct MemorySet {
     // 管理有哪些 MemoryArea
     areas: Vec<MemoryArea>,
@@ -383,5 +283,6 @@ impl MemorySet {
     }
 }
 ```
+这样，有了上面的抽象和对应实现，我们就可以根据OS kernel这个程序中不同段的属性建立不同属性的页表项，更加精确地体系了OS kernel各个部分的被访问特征。具体如何建立，请看下一节。
 
 [CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6
