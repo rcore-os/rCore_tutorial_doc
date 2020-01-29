@@ -6,16 +6,12 @@
 从调度器的角度来看，每个线程都有一个独一无二的 Tid 来区分它和其他线程。
 ```rust
 // in process/mod.rs
-
 pub type Tid = usize;
 pub type ExitCode = usize;
 ```
 同时，线程的状态有下面几种：
 ```rust
 // src/process/struct.rs
-
-use super::{ Tid, ExitCode };
-
 #[derive(Clone)]
 pub enum Status {
 	// 就绪：可以运行，但是要等到 CPU 的资源分配给它
@@ -36,14 +32,7 @@ pub enum Status {
 因此，调度算法的接口 ``Scheduler`` 如下：
 
 ```rust
-// src/process/mod.rs
-
-pub mod scheduler;
-
 // src/process/scheduler.rs
-
-use super::Tid;
-
 pub trait Scheduler {
 	// 如果 tid 不存在，表明将一个新线程加入线程调度
 	// 否则表明一个已有的线程要继续运行
@@ -58,24 +47,11 @@ pub trait Scheduler {
 }
 ```
 ### 线程池接口设计
-调度算法 ``Scheduler`` 只管理 Tid ，和线程并没有关系。因此，我们使用线程池 ``Thread`` 来给线程和 Tid 建立联系，将 ``Scheduler`` 的 Tid 调度变成线程调度。
+调度算法 ``Scheduler`` 只管理 Tid ，和线程并没有关系。因此，我们使用线程池 ``ThreadPool`` 来给线程和 Tid 建立联系，将 ``Scheduler`` 的 Tid 调度变成线程调度。
 事实上，每个线程刚被创建时并没有一个 Tid ，这是线程池给线程分配的。
 
 ```rust
-// src/process/mod.rs
-
-pub mod thread_pool;
-
 // src/process/thread_pool.rs
-
-use crate::process::scheduler::Scheduler;
-use crate::process::structs::*;
-use crate::alloc::{
-    vec::Vec,
-    boxed::Box,
-};
-use crate::process::Tid;
-
 // 线程池每个位置的信息
 struct ThreadInfo {
 	// 占据这个位置的线程当前运行状态
@@ -94,7 +70,19 @@ pub struct ThreadPool {
     scheduler: Box<dyn Scheduler>,
 }
 ```
+### 线程池的方法
+
+作为一个线程池，需要实现调度相关的一系列操作：
+
+- alloc_tid：为新线程分配一个新的Tid
+- add：添加一个可立即开始运行的线程
+- acquire：从线程池中取一个线程开始运行
+- retrieve：让当前线程交出CPU资源
+- tick：时钟中断时查看当前所运行线程是否要切换出去
+- exit：退出线程
+
 下面，我们依次来看看线程池的方法：
+
 ```rust
 // src/process/thread_pool.rs
 
@@ -122,7 +110,7 @@ impl ThreadPool {
     }
     
     // 加入一个可立即开始运行的线程
-    // 线程状态 Uninitialed -> Ready
+    // 线程状态 Uninitialized -> Ready
     pub fn add(&mut self, _thread: Box<Thread>) {
     	// 分配 Tid
         let tid = self.alloc_tid();
@@ -155,8 +143,7 @@ impl ThreadPool {
             return None;
         }
     }
-
-	// 这个线程已运行了太长时间或者已运行结束，需要将 CPU 资源交出去
+	// 这个线程已运行了太长时间或者已运行结束，需要交出CPU资源
     // 但是要提醒线程池它仍需要分配 CPU 资源
     pub fn retrieve(&mut self, tid: Tid, thread: Box<Thread>) {
         // 线程池位置为空，表明这个线程刚刚通过 exit 退出
@@ -167,12 +154,9 @@ impl ThreadPool {
     	// 获取并修改线程池对应位置的信息
         let mut thread_info = self.threads[tid].as_mut().expect("thread not exist!");       
         thread_info.thread = Some(thread);
-        // 此时状态可能是 Status::Sleeping
-        // 后面会提到线程可能会自动放弃 CPU 资源，进入睡眠状态
-        // 直到被唤醒之前都不必给它分配
-        // 而如果此时状态时 Running
-        // 就说明只是单纯的耗尽了这次分配 CPU 资源
-        // 但还要占用 CPU 资源继续执行
+        // 此时状态可能是 Status::Sleeping(线程可能会自动放弃 CPU 资源，进入睡眠状态),
+        // 直到被唤醒之前都不必给它分配。
+        // 而如果此时状态是Running,就说明只是单纯的耗尽了这次分配CPU资源,但还要占用CPU资源继续执行。
         if let Status::Running(_) = thread_info.status {
             // Running -> Ready
             thread_info.status = Status::Ready;
@@ -180,16 +164,12 @@ impl ThreadPool {
             self.scheduler.push(tid);
         }
     }
-
-	// Scheduler 的简单包装
-	// 时钟中断时查看当前所运行线程是否要切换出去
+	// Scheduler 的简单包装：时钟中断时查看当前所运行线程是否要切换出去
     pub fn tick(&mut self) -> bool {
         let ret = self.scheduler.tick();
         ret
     }
-
-	// 这个线程已经退出了
-	// 线程状态 Running -> Exited
+	// 这个线程已经退出了，线程状态 Running -> Exited
     pub fn exit(&mut self, tid: Tid) {
     	// 清空线程池对应位置
         self.threads[tid] = None;
@@ -198,6 +178,6 @@ impl ThreadPool {
     }
 }
 ```
-现在我们有了一个线程池 ``ThreadPool`` ，它内含调度器，是一个优秀的线程管理器。下一节我们将介绍调度线程 ``idle`` 以及调度单元 ``Processor``。
+现在我们有了一个线程池 ``ThreadPool`` ，它内含调度器，是一个不错的线程管理器。下一节我们将介绍调度线程 ``idle`` 以及调度单元 ``Processor``。
 
 [CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

@@ -2,28 +2,21 @@
 
 * [代码][CODE]
 
+### 调度线程 idle的作用
+
 调度线程 idle 是一个内核线程，它的作用是
 
 * 当没有任何其他线程时，idle 线程运行并循环检测是否能从线程池中找到一个可运行的线程，如果能找到的话就切换过去；
 * 当某个线程被调度器决定交出 CPU 资源并切换出去（如它已运行了很久，或它运行结束）时，并不是直接切换到下一个线程，而是先切换回 idle 线程，随后同样进行上述的循环尝试从线程池中找到一个可运行线程并切换过去。
 
+### 实现调度线程 idle的封装准备
+
+#### ProcessorInner
+
 在介绍 idle 线程的实现之前，我们先要将 idle 线程所需的各种资源封装在一起：
 
 ```rust
-// src/process/mod.rs
-
-pub mod processor;
-
 // src/process/processor.rs
-
-use core::cell::UnsafeCell;
-use alloc::boxed::Box;
-use crate::process::Tid;
-use crate::process::structs::*;
-use crate::process::thread_pool::ThreadPool;
-use crate::interrupt::*;
-use crate::context::ContextContent;
-
 // 调度单元 Processor 的内容
 pub struct ProcessorInner {
     // 线程池
@@ -35,21 +28,24 @@ pub struct ProcessorInner {
 }
 ```
 
-我们需要 ``ProcessorInner`` 能够全局访问，因为启动线程和调度线程 idle 以及 idle 所管理的线程都会访问它。在处理这种数据的时候我们需要格外小心。
+我们需要 ``ProcessorInner`` 能够被全局访问，因为启动线程和调度线程 idle 以及 idle 所管理的线程都会访问它。在处理这种数据的时候我们需要格外小心。
 
-我们在第四章内存管理中介绍内存分配器时也曾遇到过同样的情况，我们想要实现 ``static mut`` 的效果使得多个线程均可修改，但又要求是**线程安全**的。当时我们的处理方法是使用 ``spin::Mutex`` 上一把锁。这里虽然也可以，但是有些大材小用了。因为这里的情况更为简单一些，所以我们使用下面的方法就足够了。
+####　Processor　
+
+我们在第四章内存管理中介绍内存分配器时也曾遇到过同样的情况，我们想要实现 ``static mut`` 的效果使得多个线程均可修改，但又要求是**线程安全**的。当时我们的处理方法是使用 ``spin::Mutex`` 上一把锁。这里虽然也可以，但是有些大材小用了。因为*这里的情况更为简单一些*，所以我们使用下面的方法就足够了。
+
+> **[info]为何说“这里的情况更简单一些”？**
+>
+> 在处理``Processor``结构体时，是关闭CPU中断的。???
 
 ```rust
 // src/process/processor.rs
-
 pub struct Processor {
     inner: UnsafeCell<Option<ProcessorInner>>,
 }
-
 unsafe impl Sync for Processor {}
 
 // src/process/mod.rs
-
 use processor::Processor;
 static CPU: Processor = Processor::new();
 ```
@@ -64,15 +60,11 @@ static CPU: Processor = Processor::new();
 
 ```rust
 // src/process/processor.rs
-
 impl Processor {
     // 新建一个空的 Processor
     pub const fn new() -> Processor {
-        Processor {
-            inner: UnsafeCell::new(None),
-        }
+        Processor {  inner: UnsafeCell::new(None),  }
     }
-
     // 传入 idle 线程，以及线程池进行初始化
     pub fn init(&self, idle: Box<Thread>, pool: Box<ThreadPool>) {
         unsafe {
@@ -82,18 +74,15 @@ impl Processor {
                     idle,
                     current: None,
                 }
-            );
-            
+            );            
         }
     }
-
     // 内部可变性：获取包裹的值的可变引用
     fn inner(&self) -> &mut ProcessorInner {
         unsafe { &mut *self.inner.get() }
             .as_mut()
             .expect("Processor is not initialized!")
     }
-    
     // 通过线程池新增线程
     pub fn add_thread(&self, thread: Box<Thread>) {
         self.inner().pool.add(thread);
@@ -138,6 +127,8 @@ pub fn enable_and_wfi() {
     }
 }
 ```
+
+### 核心函数 idle_main
 
 接下来，我们来看 idle 线程的最核心函数，也是其入口点：
 
@@ -184,25 +175,11 @@ impl Processor {
 
 所以我们打开并默默等待中断的到来。待中断返回后，这时可能有线程能够运行了，我们再关闭中断，进入调度循环。
 
-接下来，看看如何借用时钟中断进行周期性调度：
+### 中断引发调度
+
+接下来，看看如何借用时钟中断进行周期性调用``Processor``的``tick``方法，实现周期性调度。当产生时钟中断时，中断处理函数``rust_trap``会进一步调用``super_timer``函数，并最终调用到``Processor``的``tick``方法。下面是`tick``方法的具体实现。
 
 ```rust
-// src/interrupt.rs
-
-use crate::process::tick;
-
-// 时钟中断
-fn super_timer() {
-    clock_set_next_event();
-    tick();
-}
-
-// src/process/mod.rs
-
-pub fn tick() {
-    CPU.tick();
-}
-
 // src/process/processor.rs
 
 impl Processor {
@@ -211,7 +188,7 @@ impl Processor {
         if !inner.current.is_none() {
             // 如果当前有在运行线程
             if inner.pool.tick() {
-                // 如果当前运行线程时间耗尽，需要被调度出去
+                // 如果返回true, 表示当前运行线程时间耗尽，需要被调度出去
                 
                 // 我们要进入 idle 线程了，因此必须关闭异步中断
                 // 我们可没保证 switch_to 前后 sstatus 寄存器不变
@@ -237,6 +214,8 @@ impl Processor {
 从一个被 idle 线程管理的线程的角度来看，从进入时钟中断到发现自己要被调度出去，整个过程都还是运行在这个线程自己身上。随后被切换到 idle 线程，又过了一段时间之后从 idle 线程切换回来，继续进行中断处理。
 
 当然 idle 线程也会进入时钟中断，但这仅限于当前无任何其他可运行线程的情况下。我们可以发现，进入这个时钟中断并不影响 idle 线程正常运行。
+
+### 线程退出
 
 接下来，一个线程如何通过 Processor 宣称自己运行结束并退出。这个函数也是在该线程自身上运行的。
 
