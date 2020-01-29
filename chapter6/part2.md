@@ -6,12 +6,9 @@
 
 ```rust
 // src/process/structs.rs
-
 impl Thread {
     pub fn switch_to(&mut self, target: &mut Thread) {
-        unsafe {
-            self.context.switch(&mut target.context);
-        }
+        unsafe { self.context.switch(&mut target.context); }
     }
 }
 ```
@@ -37,7 +34,7 @@ impl Context {
 这里需要对两个宏进行一下说明：
 
 * ``#[naked]`` ，告诉 rust 编译器不要给这个函数插入任何开场白 (prologue) 以及结语 (epilogue) 。
-  我们知道，一般情况下根据 calling convention ，编译器会自动在函数开头为我们插入设置寄存器、栈（比如保存 callee-save 寄存器，分配局部变量等工作）的代码作为开场白，结语则是将开场白造成的影响恢复。
+  我们知道，一般情况下根据 [函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，编译器会自动在函数开头为我们插入设置寄存器、栈（比如保存 callee-save 寄存器，分配局部变量等工作）的代码作为开场白，结语则是将开场白造成的影响恢复。
   
 * ``#[inline(never)]`` ，告诉 rust 编译器永远不要将该函数**内联**。
 
@@ -47,7 +44,26 @@ impl Context {
 
 这个函数我们用汇编代码 ``src/process/switch.asm`` 实现。
 
-由 calling convention ，我们知道的是寄存器 $$a_0,a_1$$ 分别保存“当前线程栈顶地址”所在的地址，以及“要切换到的线程栈顶地址”所在的地址。
+由于[函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，我们知道的是寄存器 $$a_0,a_1$$ 分别保存“当前线程栈顶地址”所在的地址，以及“要切换到的线程栈顶地址”所在的地址。
+
+> **[info]RISC-V 函数调用约定（Calling Convention）**
+>
+> | 寄存器 | ABI 名称 | 描述                             | Saver  |
+> | ------ | -------- | -------------------------------- | ------ |
+> | x0     | zero     | Hard-wired zero                  | ------ |
+> | x1     | ra       | Return address                   | Caller |
+> | x2     | sp       | Stack pointer                    | Callee |
+> | x3     | gp       | Global pointer                   | ------ |
+> | x4     | tp       | Thread pointer                   | ------ |
+> | x5-7   | t0-2     | Temporaries                      | Caller |
+> | x8     | s0/fp    | Saved register/frame pointer     | Callee |
+> | x9     | s1       | Saved register                   | Callee |
+> | x10-11 | a0-1     | Function arguments/return values | Caller |
+> | x12-17 | a2-7     | Function arguments               | Caller |
+> | x18-27 | s2-11    | Saved registers                  | Callee |
+> | x28-31 | t3-6     | Temporaries                      | Caller |
+>
+> 我们切换进程时需要保存Callee-saved registers以及`ra`。
 
 所以要做的事情是：
 
@@ -64,16 +80,14 @@ impl Context {
 .macro Store a1, a2 
 	sd \a1, \a2*XLENB(sp)
 .endm
-	# 在当前栈上分配空间保存当前 CPU 状态
+	# 入栈，即在当前栈上分配空间保存当前 CPU 状态
     addi sp, sp, -14*XLENB
     # 更新“当前线程栈顶地址”
     sd sp, 0(a0)
     # 依次保存各寄存器的值
     Store ra, 0
     Store s0, 2
-    Store s1, 3
-    ...
-    Store s10, 12
+    ......
     Store s11, 13
     csrr s11, satp
     Store s11, 1
@@ -89,13 +103,11 @@ impl Context {
     sfence.vma
     Load ra, 0
     Load s0, 2
-    Load s1, 3
-    ...
-    Load s10, 12
+    ......
     Load s11, 13
     # 各寄存器均被恢复，恢复过程结束
     # “要切换到的线程” 变成了 “当前线程”
-    # 在当前栈上回收用来保存线程状态的内存
+    # 出栈，即在当前栈上回收用来保存线程状态的内存
     addi sp, sp, 14*XLENB
 
 	# 将“当前线程的栈顶地址”修改为 0
@@ -110,13 +122,13 @@ impl Context {
 
 1. 我们是如何利用函数调用及返回机制的
 
-   我们说为了线程能够切换回来，我们要保证切换前后线程状态不变。这并不完全正确，事实上 $$\text{PC}$$ 发生了变化：在切换回来之后我们需要从 ``switch_to`` 返回之后的第一条指令继续执行！
+   我们说为了线程能够切换回来，我们要保证切换前后线程状态不变。这并不完全正确，事实上程序计数器 $$\text{PC}$$ 发生了变化：在切换回来之后我们需要从 ``switch_to`` 返回之后的第一条指令继续执行！
 
    因此可以较为巧妙地利用函数调用及返回机制：在调用 ``switch_to`` 函数之前编译器会帮我们将 $$\text{ra}$$ 寄存器的值改为 ``switch_to`` 返回后第一条指令的地址。所以我们恢复 $$\text{ra}$$ ，再调用 $$\text{ret: pc}\leftarrow\text{ra}$$ ，这样会跳转到返回之后的第一条指令。
 
 2. 为何不必保存全部寄存器
 
-   因此这是一个函数调用，由 calling convention ，编译器会自动生成代码在调用前后帮我们保存、恢复所有的 caller-saved 寄存器。于是乎我们需要手动保存所有的 callee-saved 寄存器 $$\text{s}_0\sim\text{s}_{11}$$ 。这样所有的寄存器都被保存了。
+   因此这是一个函数调用，由于[函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf)  ，编译器会自动生成代码在调用前后帮我们保存、恢复所有的 caller-saved 寄存器。于是乎我们需要手动保存所有的 callee-saved 寄存器 $$\text{s}_0\sim\text{s}_{11}$$ 。这样所有的寄存器都被保存了。
 
 下面一节我们来研究如何进行线程初始化。
 

@@ -1,4 +1,4 @@
-## 内核线程创建与切换测试
+## 测试线程创建与切换
 
 * [代码][CODE]
 
@@ -8,9 +8,6 @@
 
 ```rust
 // src/process/mod.rs
-
-use structs::Thread;
-
 #[no_mangle]
 pub extern "C" fn temp_thread(from_thread: &mut Thread, current_thread: &mut Thread) {
     println!("I'm leaving soon, but I still want to say: Hello world!");
@@ -22,7 +19,6 @@ pub extern "C" fn temp_thread(from_thread: &mut Thread, current_thread: &mut Thr
 
 ```rust
 // src/context.rs
-
 impl Context {
     pub fn null() -> Context {
         Context { content_addr: 0, }
@@ -30,7 +26,6 @@ impl Context {
 }
 
 // src/process/structs.rs
-
 impl Thread {
     pub fn get_boot_thread() -> Box<Thread> {
         Box::new(Thread {
@@ -60,24 +55,6 @@ pub fn init() {
     boot_thread.switch_to(&mut temp_thread);
     
     println!("switched back from temp_thread!");
-    loop {}
-}
-
-// src/init.rs
-
-#[no_mangle]
-pub extern "C" fn rust_main() -> ! {
-    crate::interrupt::init();
-
-	extern "C" {
-		fn end();
-	}
-	crate::memory::init(
-        ((end as usize - KERNEL_BEGIN_VADDR + KERNEL_BEGIN_PADDR) >> 12) + 1,
-        PHYSICAL_MEMORY_END >> 12
-    );
-	crate::process::init();
-    crate::timer::init();
     loop {}
 }
 ```
