@@ -30,8 +30,7 @@ $ mv user rust
 
 ```rust
 // usr/rust/rust-toolchain
-
-nightly-2019-12-08
+nightly
 ```
 
 我们先来看系统调用：
