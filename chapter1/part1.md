@@ -15,7 +15,7 @@ Rust 包含：stable、beta、nightly 三个版本。默认情况下我们安装
 我们在工作目录下创建一个名为 `rust-toolchain` 的文件，并在其中写入所需的工具链版本：
 
 ```
-nightly-2019-12-08
+nightly
 ```
 
 今后所有在这个目录下使用 Rust 时都会自动切换到这个版本的工具链。
@@ -24,7 +24,7 @@ nightly-2019-12-08
 
 ```bash
 $ rustc --version
-rustc 1.42.0-nightly (859764425 2020-01-07)
+rustc 1.42.0-nightly (6d3f4e0aa 2020-01-25)
 ```
 
 [CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4
