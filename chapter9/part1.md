@@ -4,7 +4,7 @@
 
 ### 打包磁盘文件
 
-首先我们将所有编译出来的用户程序放在 ``usr/build/riscv64/rust`` 文件夹下，并将 ``usr/build/riscv64`` 文件夹里面的内容使用 ``rcore-fs-fuse`` 工具打包成一个磁盘文件，由于选用不同的文件系统磁盘文件的布局会不同，我们这里选用一个简单的文件系统 ``SimpleFileSystem`` 。
+首先我们将所有编译出来的用户程序放在 ``usr/build/riscv64/rust`` 文件夹下，并将 ``usr/build/riscv64`` 文件夹里面的内容使用 [``rcore-fs-fuse``工具](https://github.com/rcore-os/rcore-fs/tree/master/rcore-fs-fuse) 打包成一个磁盘文件，由于选用不同的文件系统磁盘文件的布局会不同，我们这里选用一个简单的文件系统 [``SimpleFileSystem``](https://github.com/rcore-os/rcore-fs/tree/master/rcore-fs-sfs)（简称**SFS**）。
 
 磁盘文件布局为：里面只有一个 ``rust`` 文件夹，里面放着若干用户程序。
 
@@ -23,11 +23,10 @@ out_dir := build/riscv64
 sfsimg := build/riscv64.img
 .PHONY: rcore-fs-fuse rust user_img clean
 
-
 rcore-fs-fuse:
 ifeq ($(shell which rcore-fs-fuse),)
 	@echo Installing rcore-fs-fuse
-	@cargo install rcore-fs-fuse --git https://github.com/rcore-os/rcore-fs --rev d8d61190
+	@cargo install rcore-fs-fuse --git https://github.com/rcore-os/rcore-fs --rev d8d6119
 endif
 
 rust:
@@ -46,9 +45,9 @@ clean:
 	@rm -rf build/
 ```
 
-我们使用 ``make sfsimg`` 即可将磁盘打包到 ``usr/build/riscv64.img`` 。
+上面的脚本如没理解，没有关系，只要我们知道使用 ``make user_img`` 即可将磁盘打包到 ``usr/build/riscv64.img`` 。
 
-随后，将内核的 Makefile 中链接的文件从原来的可执行改为现在的磁盘镜像。
+随后，将内核的 Makefile 中链接的文件从原来的可执行改为现在的磁盘镜像，这样就可以把OS和``riscv64.img``文件系统合并在一起了。
 
 ```makefile
 # Makefile
@@ -58,7 +57,7 @@ clean:
 export USER_IMG = usr/build/riscv64.img
 ```
 
-### 实现设备驱动
+### 实现*磁盘*设备驱动
 
 首先引入 rust 文件系统的 crate ：
 
@@ -69,26 +68,13 @@ rcore-fs = { git = "https://github.com/rcore-os/rcore-fs", rev = "d8d61190"  }
 rcore-fs-sfs = { git = "https://github.com/rcore-os/rcore-fs", rev = "d8d61190"  }
 ```
 
-我们知道文件系统需要用到设备驱动来控制底层的设备。但是这里我们还是简单暴力的将磁盘直接链接到内核中，因此这里的设备其实就是一段内存。这可比实现磁盘的驱动要简单多了！但是，我们还是需要按照接口去实现。
+我们知道文件系统需要用到块设备驱动来控制底层的块设备（比如磁盘等）。但是这里我们还是简单暴力的将*磁盘*直接链接到内核中，因此这里的*磁盘设备*其实就是一段内存模拟的。这可比实现真实磁盘驱动要简单多了！但是，我们还是需要按照``Device``接口``read_at``、``write_at``和``sync``去实现。
 
 ```rust
-// src/lib.rs
-
-mod fs;
-
-// src/fs/mod.rs
-
-mod device;
-
 // src/fs/device.rs
-
-use spin::RwLock;
-use rcore_fs::dev::*;
-
-pub struct MemBuf(RwLock<&'static mut [u8]>);
-
+pub struct MemBuf(RwLock<&'static mut [u8]>); //一块用于模拟磁盘的内存
 impl MemBuf {
-    // 初始化参数为磁盘文件的头尾虚拟地址
+    // 初始化参数为磁盘的头尾虚拟地址
     pub unsafe fn new(begin: usize, end: usize) -> Self {
         use core::slice;
         MemBuf(
@@ -96,14 +82,8 @@ impl MemBuf {
             // 可以有多个线程同时获取 & 读
 			// 但是一旦有线程获取 &mut 写，那么其他所有线程都将被阻塞
             RwLock::new(
-                slice::from_raw_parts_mut(
-                    begin as *mut u8,
-                    end - begin
-                )
-            )
-        )
-    }
-}
+                slice::from_raw_parts_mut(　begin as *mut u8, end - begin)))
+        ...
 
 // 作为文件系统所用的设备驱动，只需实现下面三个接口
 // 而在设备实际上是内存的情况下，实现变的极其简单
@@ -126,30 +106,17 @@ impl Device for MemBuf {
 }
 ```
 
-### 文件系统初始化
+### 打开SFS文件系统
+
+在运行OS之前，我们已经通过[``rcore-fs-fuse``工具](https://github.com/rcore-os/rcore-fs/tree/master/rcore-fs-fuse) 把包含用户程序的多个文件打包成一个 [``SimpleFileSystem``](https://github.com/rcore-os/rcore-fs/tree/master/rcore-fs-sfs)格式的磁盘文件``riscv64.img``。bootloader启动后，把OS和riscv64.img加载到内存中了。在初始化阶段，OS为了能够读取``riscv64.img``，需要使用`rcore_fs_sfs::SimpleFileSystem::open(device)`方法打开磁盘并进行初始化，这样后续就可以读取文件系统中的目录和文件了。
 
 ```rust
-// Cargo.toml
-
-[dependencies.lazy_static]
-version = "1.0"
-features = ["spin_no_std"]
-
 // src/fs/mod.rs
-
-use lazy_static::*;
-use rcore_fs::vfs::*;
-use rcore_fs_sfs::SimpleFileSystem;
-use alloc::{ sync::Arc, vec::Vec };
-
 lazy_static! {
     pub static ref ROOT_INODE: Arc<dyn INode> = {
-        // 创建内存设备
+        // 创建内存模拟的"磁盘"设备
         let device = {
-            extern "C" {
-                fn _user_img_start();
-                fn _user_img_end();
-            };
+            ...
             let start = _user_img_start as usize;
             let end = _user_img_end as usize;
             Arc::new(unsafe { device::MemBuf::new(start, end) })        
@@ -159,7 +126,6 @@ lazy_static! {
         let sfs = SimpleFileSystem::open(device).expect("failed to open SFS");
         // 返回该文件系统的根 INode
         sfs.root_inode()
-        
     };
 }
 
@@ -172,9 +138,7 @@ impl INodeExt for dyn INode {
     fn read_as_vec(&self) -> Result<Vec<u8>> {
         let size = self.metadata()?.size;
         let mut buf = Vec::with_capacity(size);
-        unsafe {
-            buf.set_len(size);
-        }
+        unsafe { buf.set_len(size);　//??? }
         self.read_at(0, buf.as_mut_slice())?;
         Ok(buf)
     }
@@ -191,13 +155,17 @@ pub fn init() {
         id += 1;
         println!("  {}", name);
     }
-    println!("++++ setup fs!        ++++")
+    println!("++++ setup fs! ++++")
 }
 ```
 
-这里的 ``lazy_static!`` 宏指的是等到实际用到的时候再对里面的全局变量进行初始化，而非在编译时初始化。
+> **[info]``lazy_static!`` 宏**
+>
+> 这里的 ``lazy_static!`` 宏指的是等到实际用到的时候再对里面的全局变量进行初始化，而非在编译时初始化。
+>
+> 这通常用于不可变的某全局变量初始化依赖于运行时的某些东西，故在编译时无法初始化；但是若在运行时修改它的值起到初始化的效果，那么由于它发生了变化不得不将其声明为 ``static mut``，众所周知这是 ``unsafe`` 的，即使不会出问题也很不优雅。在这种情况下，使用 ``lazy_static!`` 就是一种较为理想的方案。
 
-这通常用于不可变的某全局变量初始化依赖于运行时的某些东西，故在编译时无法初始化；但是若在运行时修改它的值起到初始化的效果，那么由于它发生了变化不得不将其声明为 ``static mut``，众所周知这是 ``unsafe`` 的，即使不会出问题也很不优雅。在这种情况下，使用 ``lazy_static!`` 就是一种较为理想的方案。
+### 加载并运行用户程序
 
 那么现在我们就可以用另一种方式加载用户程序了！
 
