@@ -2,6 +2,7 @@
 
 * [Introduction](README.md)
 * [第零章：实验环境说明](chapter0/introduction.md)
+	
 	* [docker环境说明](chapter0/part1.md)
 * [第一章：独立式可执行程序](chapter1/introduction.md)
 	* [安装 nightly rust](chapter1/part1.md)
@@ -50,6 +51,7 @@
 	* [[线程调度测试]](chapter7/part4.md)
 	* [总结与展望](chapter7/part5.md)
 * [第八章：进程](chapter8/introduction.md)
+	
 	* [[编写用户程序]](chapter8/part1.md)
 	* [合并内核与应用程序](chapter8/part1_1.md)
 	* [在内核中实现系统调用](chapter8/part2.md)
@@ -57,11 +59,15 @@
 	* [[创建进程]](chapter8/part4.md)
 	* [总结与展望](chapter8/part5.md)
 * [第九章：文件系统](chapter9/introduction.md)
+	
 	* [[使用文件系统]](chapter9/part1.md)
 	* [[实现记事本]](chapter9/part2.md)
 	* [[实现终端]](chapter9/part3.md)
 	* [总结与展望](chapter9/part4.md)
+	
+	[第十章：同步互斥](chapter10/introduction.md)
 * [附录]
+    
     * [内链汇编](appendix/inline_asm.md)
 
 
