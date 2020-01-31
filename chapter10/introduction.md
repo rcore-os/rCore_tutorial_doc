@@ -12,8 +12,6 @@ graph TB
        Monitor --> Condvar
        Semaphore --> Condvar
        Semaphore --> SpinLock
-       mpsc --> SpinLock
-    mpsc --> Condvar
    end
    subgraph test
        Dining_Philosophers --> Mutex
