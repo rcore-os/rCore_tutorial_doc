@@ -8,3 +8,4 @@ mv _book/ docs/
 python3 extensions/highlight/add_code_style.py
 git add docs
 git commit -m "update html"
+# git push origin master:master --tags --force
