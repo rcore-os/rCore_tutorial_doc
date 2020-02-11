@@ -67,10 +67,10 @@ PMP0: 0x0000000080000000-0x000000008001ffff (A)
 PMP1: 0x0000000000000000-0xffffffffffffffff (A,R,W,X)
 ```
 
-可以看到我们已经在`qemu-system-riscv64`模拟的`virt machine`硬件上将 `OpenSBI` 这个`firmwire`跑起来了。Qemu 可以使用 `Ctrl+a` 再按下 `x` 退出。
+可以看到我们已经在 `qemu-system-riscv64` 模拟的 `virt machine` 硬件上将 `OpenSBI` 这个 `firmwire` 跑起来了。Qemu 可以使用 `Ctrl+a` 再按下 `x` 退出。
 
 > **[info] `OpenSBI`的内部实现**
-> 如果对`OpenSBI`的内部实现感兴趣，可以看看[RISCV OpenSBI Deep_Dive 介绍文档][riscv_opensbi_deep_dive]。
+> 如果对 `OpenSBI` 的内部实现感兴趣，可以看看[RISCV OpenSBI Deep_Dive 介绍文档][riscv_opensbi_deep_dive]。
 
 ### 加载内核镜像
 
@@ -108,7 +108,7 @@ extern "C" fn rust_main() -> ! {
 }
 ```
 
-这样，如果我们将内核镜像加载完成后，屏幕上出现了 OK ，就说明我们之前做的事情没有问题。如果想进一步了解上面例子中的内联汇编(**"asm!"**)，请参考[附录：内联汇编](../appendix/inline_asm.md)。
+这样，如果我们将内核镜像加载完成后，屏幕上出现了 OK ，就说明我们之前做的事情没有问题。如果想进一步了解上面例子中的内联汇编(**"asm!"**)，请参考 [附录：内联汇编](../appendix/inline_asm.md) 。
 
 现在我们生成内核镜像要通过多条命令来完成，我们通过 `Makefile` 来简化这一过程。
 
@@ -149,7 +149,7 @@ qemu: build
 		-machine virt \
 		-nographic \
 		-bios default \
-		-device loader,file=$(bin),addr=0x80200000
+		-device loader,file=$(bin), addr=0x80200000
 
 run: build qemu
 

@@ -143,7 +143,7 @@ fn page_fault(tf: &mut TrapFrame) {
 >
 > 在上面的三个测试中，虽然可以看到出错的指令的虚拟地址，但还是不能很直接地在源码级对应到出错的地方。这里有两个方法可以做到源码级错误定位，一个是 Qemu+GDB 的动态调试方法（这里不具体讲解），另外一个是通过`addr2line`工具来帮助我们根据指令的虚拟地址来做到源码的位置，具体方法如下：
 >
-> ```shell
+> ```bash
 > #先找到编译初的ELF格式的OS
 > $ cd rCore_tutorial/os/target/riscv64imac-unknown-none-elf/debug
 > $ file os  # 这个就是我们要分析的目标

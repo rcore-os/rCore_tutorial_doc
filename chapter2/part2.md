@@ -60,7 +60,7 @@ $ rustup component add llvm-tools-preview
 >
 > 除了内置的 LLVM 工具链以外，我们也可以使用 GNU 工具链，其中还包含了 GCC 等 C 语言工具链。
 >
-> 我们可以下载最新的预编译版本 ([Linux](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz)/[Mac](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz)) 并安装，如果该链接过期的话可以在[这里](https://www.sifive.com/boards#software)自己找。
+> 我们可以下载最新的预编译版本（[Linux](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz)/[Mac](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz)）并安装，如果该链接过期的话可以在 [这里](https://www.sifive.com/boards#software) 自己找。
 
 ### 查看生成的可执行文件
 
@@ -71,7 +71,7 @@ $ file target/riscv64imac-unknown-none-elf/debug/os
 target/riscv64imac-unknown-none-elf/debug/os: ELF 64-bit LSB executable, UCB RISC-V, version 1 (SYSV), statically linked, with debug_info, not stripped
 ```
 
-从中，我们可以看出它是一个 64 位的 `elf` 可执行文件，架构是 `RISC-V` ；链接方式为**静态链接**；`not stripped` 指的是里面符号表的信息未被剔除，而这些信息在调试程序时会用到，程序正常执行时通常不会使用。
+从中，我们可以看出它是一个 64 位的 `elf` 可执行文件，架构是 `RISC-V` ；链接方式为 **静态链接** ；`not stripped` 指的是里面符号表的信息未被剔除，而这些信息在调试程序时会用到，程序正常执行时通常不会使用。
 
 接下来使用刚刚安装的工具链中的 `rust-objdump` 工具看看它的具体信息：
 
@@ -131,9 +131,7 @@ Dynamic Section:
 
 - `start address` 是程序的入口地址。
 - `Sections`，从这里我们可以看到程序各段的各种信息。后面以 `debug` 开头的段是调试信息。
-
 - `SYMBOL TABLE` 即符号表，从中我们可以看到程序中所有符号的地址。例如 `_start` 就位于入口地址上。
-
 - `Program Header` 是程序加载时所需的段信息。
 
   其中 `off` 是它在文件中的位置，`vaddr` 和 `paddr` 是要加载到的虚拟地址和物理地址，`align` 规定了地址的对齐，`filesz` 和 `memsz` 分别表示它在文件和内存中的大小，`flags` 描述了相关权限（r：可读，w：可写，x：可执行）
@@ -166,9 +164,7 @@ Disassembly of section .text:
 - 含有冗余的调试信息，使得程序体积较大；
 - 需要对 `program header` 部分进行手动解析才能知道各段的信息，而这需要我们了解 `program header` 的二进制格式，并以字节为单位进行解析。
 
-我们目前没有调试的手段，因此不需要调试信息；同时也不想在现在就进行复杂的 `elf` 格式解析，而是简单粗暴的将 $$\text{.text,.rodata,.data,.stack,.bss}$$ 各段从文件开头开始按顺序接连放在一起即可。而它们在 `elf` 可执行文件中确实是按顺序放在一起的。
-
-我们可以使用工具 `rust-objcopy` 从 `elf` 格式可执行文件生成内核镜像：
+由于我们目前没有调试的手段，不需要调试信息；同时也不会解析 `elf` 格式文件，所以使用工具 `rust-objcopy` 从 `elf` 格式可执行文件生成内核镜像：
 
 ```bash
 $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binary target/riscv64imac-unknown-none-elf/debug/kernel.bin
@@ -176,6 +172,6 @@ $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binar
 
 这里 `--strip-all` 表明丢弃所有符号表及调试信息，`-O binary` 表示输出为二进制文件。
 
-至此，我们编译并生成了内核镜像 `kernel.bin` 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：调整内存布局 和 重写入口函数。
+至此，我们编译并生成了内核镜像 `kernel.bin` 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：**调整内存布局** 和 **重写入口函数** 。
 
 [code]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4

@@ -45,7 +45,7 @@ fn write_str(&mut self, s: &str) -> Result
 fn write_fmt(mut self: &mut Self, args: Arguments<'_>) -> Result
 ```
 
-`write_fmt`函数需要处理`Arguments` 类封装的输出字符串。而我们已经有现成的 `format_args!` 宏，它可以将模式字符串+参数列表的输入转化为 `Arguments` 类！比如 `format_args!("{} {}", 1, 2)` 。
+`write_fmt` 函数需要处理 `Arguments` 类封装的输出字符串。而我们已经有现成的 `format_args!` 宏，它可以将模式字符串+参数列表的输入转化为 `Arguments` 类！比如 `format_args!("{} {}", 1, 2)` 。
 
 因此，我们的 `print!` 宏的实现思路便为：
 

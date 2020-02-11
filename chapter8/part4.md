@@ -175,7 +175,7 @@ kernel:
 
 现在我们 `make run` 运行一下试试看，发现内核线程与用户线程能够在一起很好的工作了！
 
-```shell
+```bash
 $ make run
 ......
 <<<< switch_back to idle in idle_main!

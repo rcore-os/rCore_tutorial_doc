@@ -1,4 +1,4 @@
-## 重写程序入口点 \_start
+## 重写程序入口点 `_start`
 
 - [代码][code]
 
@@ -8,11 +8,11 @@
 
 > **[info] 第一条指令**
 >
-> 在 CPU 加电或 reset 后，它首先会进行**自检 (POST, Power-On Self-Test)**，通过自检后会跳转到**启动代码 bootloader** 的入口。在 bootloader 中，我们进行外设探测，并对内核的运行环境进行初步设置。随后， bootloader 会将内核代码从硬盘 load 到内存中，并跳转到内核入口，正式进入内核。
+> 在 CPU 加电或 reset 后，它首先会进行 **自检 (POST, Power-On Self-Test)** ，通过自检后会跳转到 **启动代码(bootloader)** 的入口。在 bootloader 中，我们进行外设探测，并对内核的运行环境进行初步设置。随后， bootloader 会将内核代码从硬盘 load 到内存中，并跳转到内核入口，正式进入内核。
 >
 > 所以 CPU 所执行的第一条指令是指 bootloader 的第一条指令。
 
-幸运的是， 我们已经有现成的 bootloader 实现 -- [OpenSBI](https://github.com/riscv/opensbi) 固件(firmware )。
+幸运的是， 我们已经有现成的 bootloader 实现 -- [OpenSBI](https://github.com/riscv/opensbi) 固件(firmware)。
 
 > **[info] firmware 固件**
 >
@@ -28,7 +28,7 @@ OpenSBI 固件运行在特权级别很高的计算机硬件环境中，即 riscv
 >
 > 从 U 到 S 再到 M，权限不断提高，这意味着你可以使用更多的特权指令，访需求权限更高的寄存器等等。我们可以使用一些指令来修改 CPU 的**当前特权级**。而当当前特权级不足以执行特权指令或访问一些寄存器时，CPU 会通过某种方式告诉我们。
 
-OpenSBI 所做的一件事情就是把 CPU 从 M Mode 切换到 S Mode ，接着跳转到一个固定地址 0x80200000，开始执行内核代码。（这就是为什么在上一节中我们将程序放在了这个地址上）
+OpenSBI 所做的一件事情就是把 CPU 从 M Mode 切换到 S Mode ，接着跳转到一个固定地址 0x80200000，开始执行内核代码。
 
 > **[info] riscv64 的 M Mode**
 >
@@ -58,11 +58,11 @@ bootstack:
 bootstacktop:
 ```
 
-可以看到之前未被定义的 $$\text{.bss.stack}$$ 段出现了，我们只是在这里分配了一块 $$4096\times{4}\text{Bytes}=\text{16KiB}$$ 的内存作为内核的栈。之前的 $$\text{.text.entry}$$ 也出现了：我们将 `_start` 函数放在了 $$\text{.text}$$ 段的开头。
+可以看到之前未被定义的 $\text{.bss.stack}$ 段出现了，我们只是在这里分配了一块 $4096\times{4}\text{Bytes}=\text{16KiB}$ 的内存作为内核的栈。之前的 $\text{.text.entry}$ 也出现了：我们将 `_start` 函数放在了 $\text{.text}$ 段的开头。
 
 我们看看 `_start` 里面做了什么：
 
-1. 修改栈指针寄存器 $$\text{sp}$$ 为 $$\text{.bss.stack}$$ 段的结束地址，由于栈是从高地址往低地址增长，所以高地址是栈顶；
+1. 修改栈指针寄存器 $\text{sp}$ 为 $\text{.bss.stack}$ 段的结束地址，由于栈是从高地址往低地址增长，所以高地址是栈顶；
 2. 使用 `call` 指令跳转到 `rust_main` 。这意味着我们的内核运行环境设置完成了，正式进入内核。
 
 我们将 `src/main.rs` 里面的 `_start` 函数删除，并换成 `rust_main` ：
