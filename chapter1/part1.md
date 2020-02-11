@@ -1,6 +1,6 @@
 ## 安装 nightly Rust
 
-* [代码][CODE]
+- [代码][code]
 
 我们首先使用如下命令安装 Rust 工具链管理器 rustup 和 Rust 包管理器 cargo：
 
@@ -20,11 +20,11 @@ nightly
 
 今后所有在这个目录下使用 Rust 时都会自动切换到这个版本的工具链。
 
-我们可以使用 ``rustc --version`` 或者 ``rustup show`` 查看当前 Rust 的版本，确认我们已经切换到了 nightly 版本。
+我们可以使用 `rustc --version` 或者 `rustup show` 查看当前 Rust 的版本，确认我们已经切换到了 nightly 版本。
 
 ```bash
 $ rustc --version
 rustc 1.42.0-nightly (6d3f4e0aa 2020-01-25)
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4

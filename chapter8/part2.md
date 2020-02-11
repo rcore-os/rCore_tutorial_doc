@@ -1,8 +1,8 @@
 ## 在内核中实现系统调用
 
-* [代码][CODE]
+- [代码][code]
 
-上一节中描述的``Hello World``应用程序会发出两个系统调用请求，我们的OS当然也就需要实现这两个系统调用：
+上一节中描述的`Hello World`应用程序会发出两个系统调用请求，我们的 OS 当然也就需要实现这两个系统调用：
 
 1. 在屏幕上输出一个字符
 2. 结束运行，退出当前线程
@@ -24,7 +24,7 @@ pub fn rust_trap(tf: &mut TrapFrame) {
 }
 ```
 
-首先是发现中断原因是在用户态执行 ``ecall`` 指令时，说明用户程序向我们请求服务，我们转入 ``syscall`` 函数。
+首先是发现中断原因是在用户态执行 `ecall` 指令时，说明用户程序向我们请求服务，我们转入 `syscall` 函数。
 
 ```rust
 // src/interrupt.rs
@@ -41,9 +41,9 @@ fn syscall(tf: &mut TrapFrame) {
 }
 ```
 
-我们从中断帧中取出中断之前的寄存器 $$a_7,a_0,a_1,a_2$$ 的值，分别表示 syscall id 以及传入的参数。这是通过用户态的内联汇编 ``ecall`` 传给我们的。
+我们从中断帧中取出中断之前的寄存器 $$a_7,a_0,a_1,a_2$$ 的值，分别表示 syscall id 以及传入的参数。这是通过用户态的内联汇编 `ecall` 传给我们的。
 
-### 添加syscall处理
+### 添加 syscall 处理
 
 我们将系统调用单开一个模块来实现：
 
@@ -79,4 +79,4 @@ fn sys_exit(code: usize) {
 
 不必花太多功夫，我们就在内核中支持了两个系统调用！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

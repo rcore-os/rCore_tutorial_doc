@@ -1,6 +1,6 @@
 ## 时钟中断
 
-* [代码][CODE]
+- [代码][code]
 
 在本节中，我们处理一种很重要的中断：时钟中断。这种中断我们可以设定为每隔一段时间硬件自动触发一次，在其对应的中断处理程序里，我们回到内核态，并可以强制对用户态或内核态的程序进行打断、调度、监控，并进一步管理它们对于资源的使用情况。
 
@@ -13,7 +13,7 @@
 > 2. TI(Timer Interrupt)，时钟中断
 > 3. EI(External Interrupt)，外部中断
 >
-> 比如 ``sie`` 有一个 ``STIE`` 位， 对应 ``sip`` 有一个 ``STIP`` 位，与时钟中断 TI 有关。当硬件决定触发时钟中断时，会将 ``STIP`` 设置为 1，当一条指令执行完毕后，如果发现 ``STIP`` 为 1，此时如果时钟中断使能，即 ``sie`` 的 ``STIE`` 位也为 1 ，就会进入 S 态时钟中断的处理程序。
+> 比如 `sie` 有一个 `STIE` 位， 对应 `sip` 有一个 `STIP` 位，与时钟中断 TI 有关。当硬件决定触发时钟中断时，会将 `STIP` 设置为 1，当一条指令执行完毕后，如果发现 `STIP` 为 1，此时如果时钟中断使能，即 `sie` 的 `STIE` 位也为 1 ，就会进入 S 态时钟中断的处理程序。
 
 ### 时钟初始化
 
@@ -61,9 +61,11 @@ fn get_cycle() -> u64 {
     time::read() as u64
 }
 ```
+
 ### 开启内核态中断使能
 
-事实上寄存器 ``sstatus`` 中有一控制位 ``SIE``，表示 S 态全部中断的使能。如果没有设置这个``SIE``控制位，那在S 态是不能正常接受时钟中断的。
+事实上寄存器 `sstatus` 中有一控制位 `SIE`，表示 S 态全部中断的使能。如果没有设置这个`SIE`控制位，那在 S 态是不能正常接受时钟中断的。
+
 ```rust
 // src/interrupt.rs
 
@@ -82,11 +84,12 @@ pub fn init() {
 ```
 
 ### 响应时钟中断
-让我们来更新 ``rust_trap`` 函数来让它能够处理多种不同的中断——当然事到如今也只有三种中断：
-1. 使用 ``ebreak`` 触发的断点中断；
-2. 使用 ``ecall`` 触发的系统调用中断；
-3. 时钟中断。
 
+让我们来更新 `rust_trap` 函数来让它能够处理多种不同的中断——当然事到如今也只有三种中断：
+
+1. 使用 `ebreak` 触发的断点中断；
+2. 使用 `ecall` 触发的系统调用中断；
+3. 时钟中断。
 
 ```rust
 // src/interrupt.rs
@@ -149,7 +152,7 @@ fn super_timer() {
 }
 ```
 
-同时修改主函数 ``rust_main`` ：
+同时修改主函数 `rust_main` ：
 
 ```rust
 // src/init.rs
@@ -167,7 +170,7 @@ pub extern "C" fn rust_main() -> ! {
 }
 ```
 
-我们期望能够同时处理断点中断和时钟中断。断点中断会输出断点地址并返回，接下来就是 ``panic``，我们 ``panic`` 的处理函数定义如下：
+我们期望能够同时处理断点中断和时钟中断。断点中断会输出断点地址并返回，接下来就是 `panic`，我们 `panic` 的处理函数定义如下：
 
 ```rust
 // src/lang_items.rs
@@ -184,6 +187,7 @@ fn panic(info: &PanicInfo) -> ! {
 最后的结果确实如我们所想：
 
 > **[success] breakpoint & timer interrupt handling**
+>
 > ```rust
 > ++++ setup interrupt! ++++
 > ++++ setup timer!     ++++
@@ -194,6 +198,6 @@ fn panic(info: &PanicInfo) -> ! {
 > ...
 > ```
 
-如果出现问题的话，可以在[这里][CODE]找到目前的代码。
+如果出现问题的话，可以在[这里][code]找到目前的代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch3-pa5
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch3-pa5

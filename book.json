@@ -1,24 +1,24 @@
 {
-    "plugins": [
-        "hide-element",
-        "chapter-fold",
-        "katex",
-        "alerts",
-        "emphasize",
-        "-highlight",
-	"prism",
-	"localized-footer",
+  "plugins": [
+    "hide-element",
+    "chapter-fold",
+    "katex",
+    "alerts",
+    "emphasize",
+    "-highlight",
+    "prism",
+    "localized-footer",
     "mermaid-gb3"
-    ],
-    "pluginsConfig": {
-        "hide-element": {
-            "elements": [".gitbook-link"]
-        },
-        "prism": {
-            "css": ["prismjs/themes/prism-tomorrow.css"]
-        },
-		"localized-footer": {
-			"filename": "extensions/comment/gitalk.html"
-		}
+  ],
+  "pluginsConfig": {
+    "hide-element": {
+      "elements": [".gitbook-link"]
+    },
+    "prism": {
+      "css": ["prismjs/themes/prism-tomorrow.css"]
+    },
+    "localized-footer": {
+      "filename": "extensions/comment/gitalk.html"
     }
+  }
 }

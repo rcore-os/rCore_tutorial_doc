@@ -1,12 +1,12 @@
 ## 内核重映射实现之一：页表
 
-* [代码][CODE]
+- [代码][code]
 
 首先我们来看如何实现页表。
 
 ### 访问物理内存
 
-简单起见，无论是初始映射还是重映射，无论是内核各段还是物理内存，我们都采用同样的偏移量进行映射，具体而言：``va -> pa = va - 0xffffffff40000000`` 。
+简单起见，无论是初始映射还是重映射，无论是内核各段还是物理内存，我们都采用同样的偏移量进行映射，具体而言：`va -> pa = va - 0xffffffff40000000` 。
 
 于是我们可以通过在内核中访问对应的虚拟内存来访问物理内存。相关常量定义在[consts.rs](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/consts.rs#L11)中。
 
@@ -25,10 +25,10 @@ pub fn access_pa_via_va(pa: usize) -> usize {
 
 在 [riscv crate](https://github.com/rcore-os/riscv) 和内核实现中，需要为页表机制提供了如下支持：
 
-* 基于偏移量(也即线性映射)的 [Sv39 三级页表 ``Rv39PageTable``](https://github.com/rcore-os/riscv/blob/master/src/paging/multi_level.rs#L85) 和[页表映射操作``PageTableImpl``](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L81)
-* [页表项 ``PageTableEntry``](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L56)和[页项 ``PageEntry``](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L24)
-* [页表项数组 ``PageTable`` ](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L5)
-* [页表项中的标志位 ``PageTableFlags``](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L103)
+- 基于偏移量(也即线性映射)的 [Sv39 三级页表 `Rv39PageTable`](https://github.com/rcore-os/riscv/blob/master/src/paging/multi_level.rs#L85) 和[页表映射操作`PageTableImpl`](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L81)
+- [页表项 `PageTableEntry`](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L56)和[页项 `PageEntry`](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa6/os/src/memory/paging.rs#L24)
+- [页表项数组 `PageTable` ](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L5)
+- [页表项中的标志位 `PageTableFlags`](https://github.com/rcore-os/riscv/blob/master/src/paging/page_table.rs#L103)
 
 ### 页表项和页项
 
@@ -43,7 +43,9 @@ impl PageTableEntry {
     ......
 }
 ```
+
 再来看一下页项：
+
 ```rust
 // src/paging.rs
 ......
@@ -60,13 +62,13 @@ impl PageEntry {
 }
 ```
 
-我们基于提供的类 ``PageTableEntry`` 自己封装了一个 ``PageEntry`` ，表示单个映射。里面分别保存了一个页表项 ``PageTableEntry`` 的可变引用，以及找到了这个页表项的虚拟页。但事实上，除了 ``update`` 函数之外，剩下的函数都是对 ``PageTableEntry`` 的简单包装，功能是读写页表项的目标物理页号以及标志位。
+我们基于提供的类 `PageTableEntry` 自己封装了一个 `PageEntry` ，表示单个映射。里面分别保存了一个页表项 `PageTableEntry` 的可变引用，以及找到了这个页表项的虚拟页。但事实上，除了 `update` 函数之外，剩下的函数都是对 `PageTableEntry` 的简单包装，功能是读写页表项的目标物理页号以及标志位。
 
-我们之前提到过，在修改页表之后我们需要通过屏障指令 ``sfence.vma`` 来刷新 ``TLB`` 。而这条指令后面可以接一个虚拟地址，这样在刷新的时候只关心与这个虚拟地址相关的部分，可能速度比起全部刷新要快一点。（实际上我们确实用了这种较快的刷新 TLB 方式，但并不是在这里使用，因此 ``update`` 根本没被调用过，这个类有些冗余了）
+我们之前提到过，在修改页表之后我们需要通过屏障指令 `sfence.vma` 来刷新 `TLB` 。而这条指令后面可以接一个虚拟地址，这样在刷新的时候只关心与这个虚拟地址相关的部分，可能速度比起全部刷新要快一点。（实际上我们确实用了这种较快的刷新 TLB 方式，但并不是在这里使用，因此 `update` 根本没被调用过，这个类有些冗余了）
 
 ### 为 Rv39PageTable 提供物理页帧管理
 
-在实现页表之前，我们回忆多级页表的修改会隐式的调用物理页帧分配与回收。比如在 Sv39 中，插入一对映射就可能新建一个二级页表和一个一级页表，而这需要分配两个物理页帧。因此，我们需要告诉 ``Rv39PageTable`` 如何进行物理页帧分配与回收。
+在实现页表之前，我们回忆多级页表的修改会隐式的调用物理页帧分配与回收。比如在 Sv39 中，插入一对映射就可能新建一个二级页表和一个一级页表，而这需要分配两个物理页帧。因此，我们需要告诉 `Rv39PageTable` 如何进行物理页帧分配与回收。
 
 ```rust
 // src/memory/paging.rs
@@ -87,9 +89,10 @@ impl FrameDeallocator for FrameAllocatorForPaging {
     }
 }
 ```
-### 实现我们自己的页表 映射操作PageTableImpl
 
-于是我们可以利用 ``Rv39PageTable``的实现我们自己的页表映射操作 ``PageTableImpl`` 。首先是声明及初始化：
+### 实现我们自己的页表 映射操作 PageTableImpl
+
+于是我们可以利用 `Rv39PageTable`的实现我们自己的页表映射操作 `PageTableImpl` 。首先是声明及初始化：
 
 ```rust
 // src/memory/paging.rs
@@ -124,13 +127,15 @@ impl PageTableImpl {
     }
 }
 ```
+
 然后是页表最重要的插入、删除映射的功能：
+
 ```rust
 impl PageTableImpl {
 	...
     pub fn map(&mut self, va: usize, pa: usize) -> &mut PageEntry {
     	// 为一对虚拟页与物理页帧建立映射
-    	
+
     	// 这里的标志位被固定为 R|W|X，即同时允许读/写/执行
     	// 后面我们会根据段的权限不同进行修改
         let flags = EF::VALID | EF::READABLE | EF::WRITABLE;
@@ -175,27 +180,29 @@ impl PageTableImpl {
     }
 }
 ```
-上面我们创建页表，并可以插入、删除映射了。但是它依然一动不动的放在内存中，如何将它用起来呢？我们可以通过修改 ``satp`` 寄存器的物理页号字段来设置作为根的三级页表所在的物理页帧，也就完成了页表的切换。
+
+上面我们创建页表，并可以插入、删除映射了。但是它依然一动不动的放在内存中，如何将它用起来呢？我们可以通过修改 `satp` 寄存器的物理页号字段来设置作为根的三级页表所在的物理页帧，也就完成了页表的切换。
+
 ```rust
 impl PageTableImpl {
 	...
 	// 我们用 token 也就是 satp 的值来描述一个页表
 	// 返回自身的 token
     pub fn token(&self) -> usize { self.root_frame.number() | (8 << 60) }
-    
+
     // 使用内联汇编将 satp 寄存器修改为传进来的 token
     // 这个 token 对应的页表将粉墨登场...
     unsafe fn set_token(token: usize) {
         asm!("csrw satp, $0" :: "r"(token) :: "volatile");
     }
-    
+
     // 查看 CPU 当前的 satp 值，就知道 CPU 目前在用哪个页表
     fn active_token() -> usize { satp::read().bits() }
-    
+
     // 修改 satp 值切换页表后，过时的不止一个虚拟页
     // 因此必须使用 sfence_vma_all 刷新整个 TLB
     fn flush_tlb() { unsafe { sfence_vma_all(); } }
-    
+
     // 将 CPU 所用的页表切换为当前的实例
     pub unsafe fn activate(&self) {
         let old_token = Self::active_token();
@@ -210,4 +217,4 @@ impl PageTableImpl {
 }
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6

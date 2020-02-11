@@ -1,6 +1,6 @@
 ## 内核线程初始化
 
-* [代码][CODE]
+- [代码][code]
 
 回忆一下我们如何进行启动线程的初始化？无非两步：设置栈顶地址、跳转到内核入口地址。从而变为启动线程的初始状态，并准备开始运行。
 
@@ -20,7 +20,7 @@ impl ContextContent {
         kstack_top: usize,
         satp: usize,
         ) -> ContextContent {
-        
+
         let mut content = ContextContent {
             ra: __trapret as usize,
             satp,
@@ -41,16 +41,16 @@ impl ContextContent {
 }
 ```
 
-首先 $$\text{satp}$$ 在 ``switch_to`` 中被正确设置。这里 $$\text{ra}$$ 的值为 ``__trapret`` ，因此当 ``switch_to`` 使用 ``ret`` 退出后会跳转到 ``__trapret`` 。而它是我们在中断处理返回时用来[恢复中断上下文](../chapter6/part4.md)的！实际上这里用 ``__trapret`` 仅仅是利用它来设置寄存器的初始值，而不是说它和中断有什么关系。
+首先 $$\text{satp}$$ 在 `switch_to` 中被正确设置。这里 $$\text{ra}$$ 的值为 `__trapret` ，因此当 `switch_to` 使用 `ret` 退出后会跳转到 `__trapret` 。而它是我们在中断处理返回时用来[恢复中断上下文](../chapter6/part4.md)的！实际上这里用 `__trapret` 仅仅是利用它来设置寄存器的初始值，而不是说它和中断有什么关系。
 
-从 ``switch_to`` 返回之后，原栈顶的 $$\text{ra,satp,s}_0\sim\text{s}_{11}$$ 被回收掉了。因此现在栈顶上恰好保存了一个中断帧。那么我们从中断返回的视角来看待：栈顶地址会被正确设置为 ``kstack_top`` ，由于将中断帧的 $$\text{sepc}$$ 设置为线程入口点，因此中断返回后会通过 ``sret`` 跳转到线程入口点。
+从 `switch_to` 返回之后，原栈顶的 $$\text{ra,satp,s}_0\sim\text{s}_{11}$$ 被回收掉了。因此现在栈顶上恰好保存了一个中断帧。那么我们从中断返回的视角来看待：栈顶地址会被正确设置为 `kstack_top` ，由于将中断帧的 $$\text{sepc}$$ 设置为线程入口点，因此中断返回后会通过 `sret` 跳转到线程入口点。
 
 注意中断帧中 $$\text{sstatus}$$ 的设置：
 
-* 将 $$\text{SPP}$$ 设置为 Supervisor ，使得使用 ``sret`` 返回后 CPU 的特权级为 S Mode 。
-* 设置 $$\text{SIE,SPIE}$$，这里的作用是 ``sret`` 返回后，在内核线程中使能异步中断。详情请参考[RISC-V 特权指令集文档](https://riscv.org/specifications/privileged-isa/)。
+- 将 $$\text{SPP}$$ 设置为 Supervisor ，使得使用 `sret` 返回后 CPU 的特权级为 S Mode 。
+- 设置 $$\text{SIE,SPIE}$$，这里的作用是 `sret` 返回后，在内核线程中使能异步中断。详情请参考[RISC-V 特权指令集文档](https://riscv.org/specifications/privileged-isa/)。
 
-我们还希望能够给线程传入参数，这只需要修改中断帧中的$$x_10,x_11,...,x_17 $$（即参数$$a_0,a_1,...,a_7$$ ）即可，``__trapret`` 函数可以协助完成参数传递。
+我们还希望能够给线程传入参数，这只需要修改中断帧中的$$x_10,x_11,...,x_17 $$（即参数$$a_0,a_1,...,a_7$$ ）即可，`__trapret` 函数可以协助完成参数传递。
 
 ```rust
 // src/context.rs
@@ -99,11 +99,11 @@ impl Thread {
     }
     // 为线程传入初始参数
     pub fn append_initial_arguments(&self, args: [usize; 3]) {
-        unsafe { self.context.append_initial_arguments(args); } 
+        unsafe { self.context.append_initial_arguments(args); }
     }
 }
 ```
 
 下一节我们终于能拨云见日，写一个测试看看我们的线程实现究竟有无问题了！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

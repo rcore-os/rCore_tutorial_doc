@@ -1,6 +1,6 @@
 ## 线程切换
 
-* [代码][CODE]
+- [代码][code]
 
 我们要用这个函数完成线程切换：
 
@@ -13,7 +13,7 @@ impl Thread {
 }
 ```
 
-通过调用 ``switch_to`` 函数将当前正在执行的线程切换为另一个线程。实现方法是两个 ``Context`` 的切换。
+通过调用 `switch_to` 函数将当前正在执行的线程切换为另一个线程。实现方法是两个 `Context` 的切换。
 
 ```rust
 // src/lib.rs
@@ -33,16 +33,16 @@ impl Context {
 
 这里需要对两个宏进行一下说明：
 
-* ``#[naked]`` ，告诉 rust 编译器不要给这个函数插入任何开场白 (prologue) 以及结语 (epilogue) 。
+- `#[naked]` ，告诉 rust 编译器不要给这个函数插入任何开场白 (prologue) 以及结语 (epilogue) 。
   我们知道，一般情况下根据 [函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，编译器会自动在函数开头为我们插入设置寄存器、栈（比如保存 callee-save 寄存器，分配局部变量等工作）的代码作为开场白，结语则是将开场白造成的影响恢复。
-  
-* ``#[inline(never)]`` ，告诉 rust 编译器永远不要将该函数**内联**。
+
+- `#[inline(never)]` ，告诉 rust 编译器永远不要将该函数**内联**。
 
   内联 (inline) 是指编译器对于一个函数调用，直接将函数体内的代码复制到调用函数的位置。而非像经典的函数调用那样，先跳转到函数入口，函数体结束后再返回。这样做的优点在于避免了跳转；但却加大了代码容量。
 
   有时编译器在优化中会将未显式声明为内联的函数优化为内联的。但是我们这里要用到调用-返回机制，因此告诉编译器不能将这个函数内联。
 
-这个函数我们用汇编代码 ``src/process/switch.asm`` 实现。
+这个函数我们用汇编代码 `src/process/switch.asm` 实现。
 
 由于[函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，我们知道的是寄存器 $$a_0,a_1$$ 分别保存“当前线程栈顶地址”所在的地址，以及“要切换到的线程栈顶地址”所在的地址。
 
@@ -63,7 +63,7 @@ impl Context {
 > | x18-27 | s2-11    | Saved registers                  | Callee |
 > | x28-31 | t3-6     | Temporaries                      | Caller |
 >
-> 我们切换进程时需要保存Callee-saved registers以及`ra`。
+> 我们切换进程时需要保存 Callee-saved registers 以及`ra`。
 
 所以要做的事情是：
 
@@ -74,10 +74,10 @@ impl Context {
 # src/process/switch.asm
 
 .equ XLENB, 8
-.macro Load a1, a2 
+.macro Load a1, a2
 	ld \a1, \a2*XLENB(sp)
 .endm
-.macro Store a1, a2 
+.macro Store a1, a2
 	sd \a1, \a2*XLENB(sp)
 .endm
 	# 入栈，即在当前栈上分配空间保存当前 CPU 状态
@@ -92,7 +92,7 @@ impl Context {
     csrr s11, satp
     Store s11, 1
 	# 当前线程状态保存完毕
-	
+
 	# 准备恢复到“要切换到的线程”
 	# 读取“要切换到的线程栈顶地址”，并直接换栈
     ld sp, 0(a1)
@@ -122,14 +122,14 @@ impl Context {
 
 1. 我们是如何利用函数调用及返回机制的
 
-   我们说为了线程能够切换回来，我们要保证切换前后线程状态不变。这并不完全正确，事实上程序计数器 $$\text{PC}$$ 发生了变化：在切换回来之后我们需要从 ``switch_to`` 返回之后的第一条指令继续执行！
+   我们说为了线程能够切换回来，我们要保证切换前后线程状态不变。这并不完全正确，事实上程序计数器 $$\text{PC}$$ 发生了变化：在切换回来之后我们需要从 `switch_to` 返回之后的第一条指令继续执行！
 
-   因此可以较为巧妙地利用函数调用及返回机制：在调用 ``switch_to`` 函数之前编译器会帮我们将 $$\text{ra}$$ 寄存器的值改为 ``switch_to`` 返回后第一条指令的地址。所以我们恢复 $$\text{ra}$$ ，再调用 $$\text{ret: pc}\leftarrow\text{ra}$$ ，这样会跳转到返回之后的第一条指令。
+   因此可以较为巧妙地利用函数调用及返回机制：在调用 `switch_to` 函数之前编译器会帮我们将 $$\text{ra}$$ 寄存器的值改为 `switch_to` 返回后第一条指令的地址。所以我们恢复 $$\text{ra}$$ ，再调用 $$\text{ret: pc}\leftarrow\text{ra}$$ ，这样会跳转到返回之后的第一条指令。
 
 2. 为何不必保存全部寄存器
 
-   因此这是一个函数调用，由于[函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf)  ，编译器会自动生成代码在调用前后帮我们保存、恢复所有的 caller-saved 寄存器。于是乎我们需要手动保存所有的 callee-saved 寄存器 $$\text{s}_0\sim\text{s}_{11}$$ 。这样所有的寄存器都被保存了。
+   因此这是一个函数调用，由于[函数调用约定(calling convention)](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf) ，编译器会自动生成代码在调用前后帮我们保存、恢复所有的 caller-saved 寄存器。于是乎我们需要手动保存所有的 callee-saved 寄存器 $$\text{s}_0\sim\text{s}_{11}$$ 。这样所有的寄存器都被保存了。
 
 下面一节我们来研究如何进行线程初始化。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

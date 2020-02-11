@@ -1,6 +1,6 @@
 ## 线程调度测试
 
-* [代码][CODE]
+- [代码][code]
 
 我们终于可以来测试一下这一章的代码实现的有没有问题了！
 
@@ -22,7 +22,7 @@ pub fn init() {
     idle.append_initial_arguments([&CPU as *const Processor as usize, 0, 0]);
     // 初始化 CPU
     CPU.init(idle, Box::new(thread_pool));
-    
+
     // 依次新建 5 个内核线程并加入调度单元
     for i in 0..5 {
         CPU.add_thread({
@@ -41,7 +41,7 @@ pub fn run() {
 
 // src/process/processor.rs
 
-impl Processor {  
+impl Processor {
 	pub fn run(&self) {
         // 运行，也就是从启动线程切换到调度线程 idle
         Thread::get_boot_thread().switch_to(&mut self.inner().idle);
@@ -67,7 +67,7 @@ pub extern "C" fn hello_thread(arg: usize) -> ! {
 }
 ```
 
-随后我们在``rust_main``主函数里添加调用``crate::process::init()``函数和``crate::process::run()``函数：
+随后我们在`rust_main`主函数里添加调用`crate::process::init()`函数和`crate::process::run()`函数：
 
 ```rust
 // src/init.rs
@@ -91,19 +91,19 @@ pub extern "C" fn rust_main() -> ! {
 
 ```
 
-``make run`` 一下，终于可以看到结果了！
+`make run` 一下，终于可以看到结果了！
 
 这里开始就已经没有确定性的运行显示结果了，一个参考结果如下：
 
 > **[success] 线程调度成功**
-> 
+>
 > ```rust
 > ++++ setup interrupt! ++++
 > switch satp from 0x8000000000080221 to 0x8000000000080a37
 > ++++ setup memory!    ++++
 > ++++ setup process!   ++++
 > ++++ setup timer!     ++++
-> 
+>
 > >>>> will switch_to thread 0 in idie_main!
 > begin of thread 0
 > 0000000000000000000000000000000000000000000000000000000000000000000000000
@@ -113,7 +113,7 @@ pub extern "C" fn rust_main() -> ! {
 > 0000000000000000000000000000000000000000000000000000000000000000000000000
 > 000000000000
 > <<<< switch_back to idle in idle_main!
-> 
+>
 > >>>> will switch_to thread 1 in idie_main!
 > begin of thread 1
 > 1111111111111111111111111111111111111111111111111111111111111111111111111
@@ -129,6 +129,6 @@ pub extern "C" fn rust_main() -> ! {
 
 我们可以清楚的看到在每一个时间片内每个线程所做的事情。
 
-如果结果不对的话，[这里][CODE]可以看到至今的所有代码。
+如果结果不对的话，[这里][code]可以看到至今的所有代码。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

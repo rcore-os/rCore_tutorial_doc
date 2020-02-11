@@ -1,15 +1,15 @@
 ## 内核调度线程 idle
 
-* [代码][CODE]
+- [代码][code]
 
-### 调度线程 idle的作用
+### 调度线程 idle 的作用
 
 调度线程 idle 是一个内核线程，它的作用是
 
-* 当没有任何其他线程时，idle 线程运行并循环检测是否能从线程池中找到一个可运行的线程，如果能找到的话就切换过去；
-* 当某个线程被调度器决定交出 CPU 资源并切换出去（如它已运行了很久，或它运行结束）时，并不是直接切换到下一个线程，而是先切换回 idle 线程，随后同样进行上述的循环尝试从线程池中找到一个可运行线程并切换过去。
+- 当没有任何其他线程时，idle 线程运行并循环检测是否能从线程池中找到一个可运行的线程，如果能找到的话就切换过去；
+- 当某个线程被调度器决定交出 CPU 资源并切换出去（如它已运行了很久，或它运行结束）时，并不是直接切换到下一个线程，而是先切换回 idle 线程，随后同样进行上述的循环尝试从线程池中找到一个可运行线程并切换过去。
 
-### 实现调度线程 idle的封装准备
+### 实现调度线程 idle 的封装准备
 
 #### ProcessorInner
 
@@ -28,15 +28,15 @@ pub struct ProcessorInner {
 }
 ```
 
-我们需要 ``ProcessorInner`` 能够被全局访问，因为启动线程和调度线程 idle 以及 idle 所管理的线程都会访问它。在处理这种数据的时候我们需要格外小心。
+我们需要 `ProcessorInner` 能够被全局访问，因为启动线程和调度线程 idle 以及 idle 所管理的线程都会访问它。在处理这种数据的时候我们需要格外小心。
 
-####　Processor　
+####　 Processor
 
-我们在第四章内存管理中介绍内存分配器时也曾遇到过同样的情况，我们想要实现 ``static mut`` 的效果使得多个线程均可修改，但又要求是**线程安全**的。当时我们的处理方法是使用 ``spin::Mutex`` 上一把锁。这里虽然也可以，但是有些大材小用了。因为*这里的情况更为简单一些*，所以我们使用下面的方法就足够了。
+我们在第四章内存管理中介绍内存分配器时也曾遇到过同样的情况，我们想要实现 `static mut` 的效果使得多个线程均可修改，但又要求是**线程安全**的。当时我们的处理方法是使用 `spin::Mutex` 上一把锁。这里虽然也可以，但是有些大材小用了。因为*这里的情况更为简单一些*，所以我们使用下面的方法就足够了。
 
 > **[info]为何说“这里的情况更简单一些”？**
 >
-> 在处理``Processor``结构体时，是关闭CPU中断的。???
+> 在处理`Processor`结构体时，是关闭 CPU 中断的。???
 
 ```rust
 // src/process/processor.rs
@@ -50,13 +50,13 @@ use processor::Processor;
 static CPU: Processor = Processor::new();
 ```
 
-这里面我们将实例 ``CPU`` 声明为 ``static`` 。编译器认为 ``Processor`` 不一定能够安全地允许多线程访问，于是声明一个 ``static`` 实例是会报错的。
+这里面我们将实例 `CPU` 声明为 `static` 。编译器认为 `Processor` 不一定能够安全地允许多线程访问，于是声明一个 `static` 实例是会报错的。
 
-因此我们为 ``Processor`` 实现 ``Sync Trait`` 告诉编译器这个结构体可以安全的在多个线程中拥有其值的引用，从而允许多线程访问。你并不需要实现任何方法，因为这只是一个标记。它是 ``unsafe`` 的，也就是说编译器认为它也许不是线程安全的，你却信誓旦旦地向它保证了这一点，那么如果出了问题的话就只能靠你自己解决了。
+因此我们为 `Processor` 实现 `Sync Trait` 告诉编译器这个结构体可以安全的在多个线程中拥有其值的引用，从而允许多线程访问。你并不需要实现任何方法，因为这只是一个标记。它是 `unsafe` 的，也就是说编译器认为它也许不是线程安全的，你却信誓旦旦地向它保证了这一点，那么如果出了问题的话就只能靠你自己解决了。
 
-那么 ``mut`` 又在哪里？注意到我们使用 ``UnsafeCell<T>`` 来对 ``ProcessInner`` 进行了包裹，``UnsafeCell<T>`` 提供了**内部可变性 (Interior mutability)**，即使它本身不是 ``mut`` 的，仍能够修改内部所包裹的值。另外还有很多种方式可以提供内部可变性。
+那么 `mut` 又在哪里？注意到我们使用 `UnsafeCell<T>` 来对 `ProcessInner` 进行了包裹，`UnsafeCell<T>` 提供了**内部可变性 (Interior mutability)**，即使它本身不是 `mut` 的，仍能够修改内部所包裹的值。另外还有很多种方式可以提供内部可变性。
 
-接下来首先来看 ``Processor`` 的几个简单的方法：
+接下来首先来看 `Processor` 的几个简单的方法：
 
 ```rust
 // src/process/processor.rs
@@ -74,7 +74,7 @@ impl Processor {
                     idle,
                     current: None,
                 }
-            );            
+            );
         }
     }
     // 内部可变性：获取包裹的值的可变引用
@@ -151,7 +151,7 @@ impl Processor {
                 inner.idle.switch_to(
                     &mut *inner.current.as_mut().unwrap().1
                 );
-                
+
                 // 上个线程时间耗尽，切换回调度线程 idle
                 println!("<<<< switch_back to idle in idle_main!");
                 // 此时 current 还保存着上个线程
@@ -177,7 +177,7 @@ impl Processor {
 
 ### 中断引发调度
 
-接下来，看看如何借用时钟中断进行周期性调用``Processor``的``tick``方法，实现周期性调度。当产生时钟中断时，中断处理函数``rust_trap``会进一步调用``super_timer``函数，并最终调用到``Processor``的``tick``方法。下面是`tick``方法的具体实现。
+接下来，看看如何借用时钟中断进行周期性调用`Processor`的`tick`方法，实现周期性调度。当产生时钟中断时，中断处理函数`rust_trap`会进一步调用`super_timer`函数，并最终调用到`Processor`的`tick`方法。下面是`tick``方法的具体实现。
 
 ```rust
 // src/process/processor.rs
@@ -189,19 +189,19 @@ impl Processor {
             // 如果当前有在运行线程
             if inner.pool.tick() {
                 // 如果返回true, 表示当前运行线程时间耗尽，需要被调度出去
-                
+
                 // 我们要进入 idle 线程了，因此必须关闭异步中断
                 // 我们可没保证 switch_to 前后 sstatus 寄存器不变
                 // 因此必须手动保存
                 let flags = disable_and_store();
-                
+
                 // 切换到 idle 线程进行调度
                 inner.current
                     .as_mut()
                     .unwrap()
                     .1
                     .switch_to(&mut inner.idle);
-                
+
                 // 之后某个时候又从 idle 线程切换回来
                 // 恢复 sstatus 寄存器继续中断处理
                 restore(flags);
@@ -233,7 +233,7 @@ impl Processor {
         // 通知线程池这个线程退出啦！
         inner.pool.exit(tid);
         println!("thread {} exited, exit code = {}", tid, code);
-       	
+
         // 切换到 idle 线程决定下一个运行哪个线程
         inner.current
             .as_mut()
@@ -254,4 +254,4 @@ pub fn exit(code: usize) {
 
 至此我们说明了调度线程 idle 以及调度单元 Processor 。但我们之前还挖了一个坑，也就是上一节中，调度算法我们只提供了一个接口但并未提供具体实现。下一节我们就来介绍一种最简单的调度算法实现。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch7-pa4

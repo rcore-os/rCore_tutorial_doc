@@ -9,14 +9,13 @@
 与章节相对应的代码可以很容易的找到。章节标题下提供了指向下一个存档点代码状态的链接。
 
 ## 阅读在线文档并进行实验
- - [实验ppt: rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/os2atc2019/os2atc.html)
- - [实验文档：rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/)
- - [实验代码：rcore step-by-step code](https://github.com/rcore-os/rCore_tutorial/)
+
+- [实验 ppt: rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/os2atc2019/os2atc.html)
+- [实验文档：rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/)
+- [实验代码：rcore step-by-step code](https://github.com/rcore-os/rCore_tutorial/)
 
 ## 评论区
 
 对于章节内容有任何疑问及建议，请在对应页面最下面的评论区中发表观点。注意需要用 Github ID 登录后才能评论。
-
-
 
 好了，那就让我们正式开始！

@@ -1,10 +1,8 @@
-
-
 下面的实验环境建立方式由简单到相对复杂一些，同学们可以基于自己的情况选择合适的实验方式。
 
-## 在线环境下运行实验  
+## 在线环境下运行实验
 
-目前在线实验环境是[基于实验楼的在线实验环境](https://www.shiyanlou.com/courses/1481)。用户只需有一个能够上网的browser即可进行实验。首先需要在[实验楼](https://www.shiyanlou.com/)上注册一个账号，然后在[rcore在线实验环境](https://www.shiyanlou.com/courses/1481)的网页上输入验证码：wfkblCQp 就可以进入在线的实验环境。尝试执行下面的命令就开始进行实验了。
+目前在线实验环境是[基于实验楼的在线实验环境](https://www.shiyanlou.com/courses/1481)。用户只需有一个能够上网的 browser 即可进行实验。首先需要在[实验楼](https://www.shiyanlou.com/)上注册一个账号，然后在[rcore 在线实验环境](https://www.shiyanlou.com/courses/1481)的网页上输入验证码：wfkblCQp 就可以进入在线的实验环境。尝试执行下面的命令就开始进行实验了。
 
 ```shell
 #编译
@@ -13,13 +11,11 @@ cd rCore_tutorial;  git checkout master; make all
 make run
 ```
 
+## docker 环境下运行实验
 
+我们支持 docker 环境下进行实现，在 docker hub 上已有可用的 docker 环境，在当前目录下运行`make docker`将会从云端拉取 docker 镜像，并将当前目录挂载到/mnt 位置。
 
-## docker环境下运行实验  
-
-我们支持docker环境下进行实现，在docker hub上已有可用的docker环境，在当前目录下运行`make docker`将会从云端拉取docker镜像，并将当前目录挂载到/mnt位置。
-
-```shell	
+```shell
 # 启动docker环境
 make docker # 会进入docker中的终端
 cd /mnt
@@ -34,11 +30,11 @@ make build
 make run
 ```
 
-如有兴趣，也可以自行构建/调整docker镜像，相关的Dockerfile文件在当前目录下，我们提供了`make docker_build`命令来帮助构建，详情请看Dockerfile和Makefile
+如有兴趣，也可以自行构建/调整 docker 镜像，相关的 Dockerfile 文件在当前目录下，我们提供了`make docker_build`命令来帮助构建，详情请看 Dockerfile 和 Makefile
 
-## 本地Linux环境下运行实验  
+## 本地 Linux 环境下运行实验
 
-我们也支持本地Linux环境下开展实验，不过需要提前安装相关软件包，如rustc nightly，qemu-4.1.0+，device-tree-compiler 等。具体细节可参考[支持docker建立的Dockerfile](https://github.com/rcore-os/rCore_tutorial/blob/master/Dockerfile)和[支持github自动测试的main.yml](https://github.com/rcore-os/rCore_tutorial/blob/master/.github/workflows/main.yml)。假定安装好了相关软件，直接只需下面的命令，即可进行实验：
+我们也支持本地 Linux 环境下开展实验，不过需要提前安装相关软件包，如 rustc nightly，qemu-4.1.0+，device-tree-compiler 等。具体细节可参考[支持 docker 建立的 Dockerfile](https://github.com/rcore-os/rCore_tutorial/blob/master/Dockerfile)和[支持 github 自动测试的 main.yml](https://github.com/rcore-os/rCore_tutorial/blob/master/.github/workflows/main.yml)。假定安装好了相关软件，直接只需下面的命令，即可进行实验：
 
 ```shell
 #在把实验代码下载到本地
@@ -83,5 +79,5 @@ available programs in rust/ are:
 ++++ setup process!   ++++
 ++++ setup timer!     ++++
 Rust user shell
->> 
+>>
 ```

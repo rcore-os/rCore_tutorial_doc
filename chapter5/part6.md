@@ -1,8 +1,9 @@
 ## 内核重映射实现之三：完结
 
-* [代码][CODE]
+- [代码][code]
 
-在内存模块初始化时，我们新建一个精细映射的 ``MemorySet`` 并切换过去供内核使用。
+在内存模块初始化时，我们新建一个精细映射的 `MemorySet` 并切换过去供内核使用。
+
 ```rust
 // src/memory/mod.rs
 ......
@@ -31,9 +32,11 @@ pub fn kernel_remap() {
     }
 }
 ```
+
 这里要注意的是，我们不要忘了将启动栈加入实际可用的虚拟内存空间。因为我们现在仍处于启动过程中，因此离不开启动栈。
 
 主函数里则是：
+
 ```rust
 // src/init.rs
 
@@ -54,7 +57,7 @@ pub extern "C" fn rust_main() -> ! {
 }
 ```
 
-运行一下，可以发现屏幕上仍在整齐的输出着 ``100 ticks``！
+运行一下，可以发现屏幕上仍在整齐的输出着 `100 ticks`！
 我们回过头来验证一下关于读、写、执行的权限是否被正确处理了。
 写这么几个测试函数：
 
@@ -85,8 +88,11 @@ fn read_invalid_test() {
     println!("{}", unsafe { *(0x12345678 as usize as *const u8) });
 }
 ```
-在 ``memory::init`` 后面调用任一个测试函数，都会发现内核 ``panic`` 并输出：
+
+在 `memory::init` 后面调用任一个测试函数，都会发现内核 `panic` 并输出：
+
 > **[danger]** undefined trap
+>
 > ```rust
 > panicked at 'undefined trap!', src/interrupt.rs:40:14
 > ```
@@ -114,8 +120,11 @@ fn page_fault(tf: &mut TrapFrame) {
     panic!("page fault!");
 }
 ```
+
 我们再依次运行三个测试，会得到结果为：
+
 > **[success] 权限测试**
+>
 > ```rust
 > // read_invalid_test Result
 > Exception(LoadPageFault) va = 0x12345678 instruction = 0xffffffffc020866c
@@ -125,14 +134,14 @@ fn page_fault(tf: &mut TrapFrame) {
 > panicked at 'page fault!', src/interrupt.rs:65:5
 > // write_readonly_test Result
 > Exception(StorePageFault) va = 0xffffffffc0213000 instruction = 0xffffffffc020527e
-panicked at 'page fault!', src/interrupt.rs:65:5
+> panicked at 'page fault!', src/interrupt.rs:65:5
 > ```
 
-从中我们可以清楚的看出内核成功的找到了错误的原因，内核各段被成功的设置了不同的权限。我们达到了内核重映射的目的！目前的代码能在[这里][CODE]找到。
+从中我们可以清楚的看出内核成功的找到了错误的原因，内核各段被成功的设置了不同的权限。我们达到了内核重映射的目的！目前的代码能在[这里][code]找到。
 
 > **[info] 如何找到产生错误的源码位置**
 >
-> 在上面的三个测试中，虽然可以看到出错的指令的虚拟地址，但还是不能很直接地在源码级对应到出错的地方。这里有两个方法可以做到源码级错误定位，一个是Qemu+GDB的动态调试方法（这里不具体讲解），另外一个是通过``addr2line``工具来帮助我们根据指令的虚拟地址来做到源码的位置，具体方法如下：
+> 在上面的三个测试中，虽然可以看到出错的指令的虚拟地址，但还是不能很直接地在源码级对应到出错的地方。这里有两个方法可以做到源码级错误定位，一个是 Qemu+GDB 的动态调试方法（这里不具体讲解），另外一个是通过`addr2line`工具来帮助我们根据指令的虚拟地址来做到源码的位置，具体方法如下：
 >
 > ```shell
 > #先找到编译初的ELF格式的OS
@@ -154,4 +163,4 @@ panicked at 'page fault!', src/interrupt.rs:65:5
 > #可以轻松定位到出错的语句``*ptr = 0xab;``
 > ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6

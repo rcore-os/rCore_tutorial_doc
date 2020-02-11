@@ -1,8 +1,8 @@
 ## 合并内核与应用程序
 
-* [代码][CODE]
+- [代码][code]
 
-到目前为止我们的OS还没有文件系统，所以我们只需将最终得到的应用程序可执行文件直接链接到内核中，合并在一起，形成一个image，这样让bootloader一开始就把内核和应用程序一并加载到内存中。
+到目前为止我们的 OS 还没有文件系统，所以我们只需将最终得到的应用程序可执行文件直接链接到内核中，合并在一起，形成一个 image，这样让 bootloader 一开始就把内核和应用程序一并加载到内存中。
 
 这里的实现有一些技巧，我们先写一个[编译脚本](https://doc.rust-lang.org/cargo/reference/build-scripts.html) `build.rs`。注意是直接放在项目文件夹 `os` 中，而不是源码文件夹 `src`：
 
@@ -48,7 +48,7 @@ global_asm!(include_str!("link_user.S"));
 
 这段编译脚本会在每次编译的**最开始**运行。它的作用是生成一段汇编代码，将用户程序可执行文件原封不动地链接到内核的 $$\text{.data}$$ 段中。这段汇编被生成到 `src/link_user.S` 文件中，然后我们在 `init.rs` 里把它导入进来。此后可以在其它地方通过 `_user_img_start` 和 `_user_img_end` 这两个符号得知它所在的虚拟地址。
 
-我们用一个环境变量 ``USER_IMG`` 记录用户程序可执行文件的路径，编译脚本在执行时，会将这个字符串填入生成的汇编中。所以我们只需在编译之前利用 ``export `` 修改环境变量 ``USER_IMG`` 为我们最终得到的可执行文件的路径即可。
+我们用一个环境变量 `USER_IMG` 记录用户程序可执行文件的路径，编译脚本在执行时，会将这个字符串填入生成的汇编中。所以我们只需在编译之前利用 `export` 修改环境变量 `USER_IMG` 为我们最终得到的可执行文件的路径即可。
 
 最后让我们关注一开始的两条奇怪语句：
 
@@ -63,4 +63,4 @@ println!("cargo:rerun-if-changed={}", user_img);
 
 现在，我们每次更新并编译生成用户程序执行文件后，都可以放心地直接 `make run` 了！
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

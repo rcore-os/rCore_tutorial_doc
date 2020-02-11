@@ -1,15 +1,15 @@
 ## 编写用户程序
 
-* [代码][CODE]
+- [代码][code]
 
-本节的工作很类似[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的工作，但区别是，[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)是要完全移除对runtime的需求，以构造OS；而本节需要实现一个支持U Mode应用程序的最小runtiｍe，这个runtime仅仅需要支持很少系统调用访问和基本的动态内存分配。虽然有区别，很多本节很多代码都可以直接参考[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的设计思路和代码。
+本节的工作很类似[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的工作，但区别是，[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)是要完全移除对 runtime 的需求，以构造 OS；而本节需要实现一个支持 U Mode 应用程序的最小 runti ｍ e，这个 runtime 仅仅需要支持很少系统调用访问和基本的动态内存分配。虽然有区别，很多本节很多代码都可以直接参考[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的设计思路和代码。
 
-我们的用户程序一般在 CPU 的用户态 (U Mode) 下执行，而它只能通过执行 ``ecall`` 指令，触发 ``Environment call from U-mode`` 异常l来发出系统服务请求，此时CPU进入内核态 (S Mode) ，OS通过中断服务例程收到请求，执行相应内核服务，并返回到U Mode。
+我们的用户程序一般在 CPU 的用户态 (U Mode) 下执行，而它只能通过执行 `ecall` 指令，触发 `Environment call from U-mode` 异常 l 来发出系统服务请求，此时 CPU 进入内核态 (S Mode) ，OS 通过中断服务例程收到请求，执行相应内核服务，并返回到 U Mode。
 
 这一章中，简单起见，内核和用户程序约定两个系统调用
 
-* 在屏幕上输出一个字符，系统调用 $$\text{id}=64$$
-* 退出用户线程，系统调用 $$\text{id}=97$$
+- 在屏幕上输出一个字符，系统调用 $$\text{id}=64$$
+- 退出用户线程，系统调用 $$\text{id}=97$$
 
 ### 创建用户程序模板
 
@@ -17,7 +17,7 @@
 
 所以我们的用户程序基本还是要使用前两章的方法，不同的则是要把系统调用加入进去。
 
-创建 ``usr`` 目录，并在 ``usr`` 目录下使用 Cargo 新建一个二进制项目，再删除掉默认生成的 ``usr/rust/src/main.rs`` 。
+创建 `usr` 目录，并在 `usr` 目录下使用 Cargo 新建一个二进制项目，再删除掉默认生成的 `usr/rust/src/main.rs` 。
 
 ```bash
 $ mkdir usr; cd usr
@@ -32,7 +32,7 @@ $ rm usr/rust/src/main.rs
 nightly
 ```
 
-### 建立最小Runtime系统
+### 建立最小 Runtime 系统
 
 #### 访问系统调用
 
@@ -78,9 +78,9 @@ pub fn sys_exit(code: usize) -> ! {
 }
 ```
 
-看起来很像内核中 ``src/sbi.rs`` 获取 OpenSBI 服务的代码对不对？其实内核中是在 S Mode 去获取 OpenSBI 提供的 M Mode 服务；这里是用户程序在U Mode 去获取内核提供的 S Mode 服务。所以看起来几乎一模一样。
+看起来很像内核中 `src/sbi.rs` 获取 OpenSBI 服务的代码对不对？其实内核中是在 S Mode 去获取 OpenSBI 提供的 M Mode 服务；这里是用户程序在 U Mode 去获取内核提供的 S Mode 服务。所以看起来几乎一模一样。
 
-相信内核会给我们提供这两项服务，我们可在用户程序中放心的调用 ``sys_write, sys_exit`` 两函数了！
+相信内核会给我们提供这两项服务，我们可在用户程序中放心的调用 `sys_write, sys_exit` 两函数了！
 
 #### 格式化输出
 
@@ -152,11 +152,11 @@ fn oom(_: Layout) -> ! {
 }
 ```
 
-看起来很像内核中 ``src/lang_item.rs`` 获取 OpenSBI 服务的代码对不对？其实内核中是在 S Mode 去获取 OpenSBI 提供的 M Mode 服务；这里是用户程序在U Mode 去获取内核提供的 S Mode 服务。所以看起来几乎一模一样。
+看起来很像内核中 `src/lang_item.rs` 获取 OpenSBI 服务的代码对不对？其实内核中是在 S Mode 去获取 OpenSBI 提供的 M Mode 服务；这里是用户程序在 U Mode 去获取内核提供的 S Mode 服务。所以看起来几乎一模一样。
 
-#### 形成runtime lib
+#### 形成 runtime lib
 
-还有 ``lib.rs``：
+还有 `lib.rs`：
 
 ```rust
 // usr/rust/Cargo.toml
@@ -188,7 +188,7 @@ static DYNAMIC_ALLOCATOR: LockedHeap = LockedHeap::empty();
 
 ### 应用程序模板
 
-现在我们可以将每一个含有 ``main`` 函数的 Rust 源代码放在 ``usr/rust/src/bin`` 目录下。它们每一个都会被编译成一个独立的可执行文件。
+现在我们可以将每一个含有 `main` 函数的 Rust 源代码放在 `usr/rust/src/bin` 目录下。它们每一个都会被编译成一个独立的可执行文件。
 
 其模板为：
 
@@ -211,9 +211,9 @@ pub fn main() -> usize {
 
 这里返回的那个值即为程序最终的返回值。
 
-### Hello World应用程序
+### Hello World 应用程序
 
-基于上述应用程序模板，我们可以实现一个最简单的``Hello World``程序：
+基于上述应用程序模板，我们可以实现一个最简单的`Hello World`程序：
 
 ```rust
 // usr/rust/src/bin/hello_world.rs
@@ -244,14 +244,14 @@ pub fn main() -> usize {
 target = "riscv64imac-unknown-none-elf"
 ```
 
-切换到 ``usr/rust`` 目录，就可以进行交叉编译：
+切换到 `usr/rust` 目录，就可以进行交叉编译：
 
 ```bash
 $ cargo build
 ```
 
-我们将能够在 ``usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world`` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
+我们将能够在 `usr/rust/target/riscv64imac-unknown-none-elf/debug/hello_world` 看到我们编译出来的可执行文件，接下来的问题就是如何把它加载到内核中执行了！
 
-目前的代码可以在[这里][CODE]找到。
+目前的代码可以在[这里][code]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa1
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa1

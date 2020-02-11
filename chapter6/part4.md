@@ -1,6 +1,6 @@
 ## 测试线程创建与切换
 
-* [代码][CODE]
+- [代码][code]
 
 我们想做的事情是：新建一个临时线程，从启动线程切换到临时线程，再切换回来。
 
@@ -15,7 +15,7 @@ pub extern "C" fn temp_thread(from_thread: &mut Thread, current_thread: &mut Thr
 }
 ```
 
-传入的参数中有一个 ``from_thread`` ，它本应代表启动线程。但是身处启动线程中，我们如何构造一个 ``Thread`` 实例表示其自身呢？
+传入的参数中有一个 `from_thread` ，它本应代表启动线程。但是身处启动线程中，我们如何构造一个 `Thread` 实例表示其自身呢？
 
 ```rust
 // src/context.rs
@@ -44,33 +44,32 @@ impl Thread {
 // src/process/mod.rs
 
 pub fn init() {
-    
+
     let mut boot_thread = Thread::get_boot_thread();
     let mut temp_thread = Thread::new_kernel(temp_thread as usize);
-    
+
     unsafe {
         // 对于放在堆上的数据，我只想到这种比较蹩脚的办法拿到它所在的地址...
         temp_thread.append_initial_arguments([&*boot_thread as *const Thread as usize, &*temp_thread as *const Thread as usize, 0]);
     }
     boot_thread.switch_to(&mut temp_thread);
-    
+
     println!("switched back from temp_thread!");
     loop {}
 }
 ```
 
-终于能够 ``make run`` 看一下结果啦！
+终于能够 `make run` 看一下结果啦！
 
 > **[success] 内核线程切换与测试**
-> 
+>
 > ```
 > I'm leaving soon, but I still want to say: Hello world!
 > switched back from temp_thread!
 > ```
-> 
 
 可见我们切换到了临时线程，又切换了回来！测试成功！
 
-截至目前所有的代码可以在[这里][CODE]找到以供参考。
+截至目前所有的代码可以在[这里][code]找到以供参考。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch6-pa4

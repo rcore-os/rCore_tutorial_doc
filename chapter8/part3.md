@@ -1,20 +1,20 @@
 ## 创建虚拟内存空间
 
-* [代码][CODE]
+- [代码][code]
 
-### ELF文件解析与内存空间创建
+### ELF 文件解析与内存空间创建
 
 为了能让用户程序运行起来，内核首先要给它分配用户内存空间，即创建一个虚拟内存空间供它使用。由于用户程序要通过中断访问内核的代码，因此它所在的虚拟内存空间必须也包含内核的各代码段和数据段。
 
-ELF文件与只含有代码和数据的纯二进制文件不同，需要我们手动去解析它的文件结构来获得各段的信息。所幸的是， rust 已经有 ``crate xmas-elf``帮我们实现了这一点。
+ELF 文件与只含有代码和数据的纯二进制文件不同，需要我们手动去解析它的文件结构来获得各段的信息。所幸的是， rust 已经有 `crate xmas-elf`帮我们实现了这一点。
 
-> **[info]ELF执行文件格式**
+> **[info]ELF 执行文件格式**
 >
-> ELF(Executable and Linking Format)文件格式是Linux系统下的一种常用目标文件(object file)格式，有三种主要类型，我们主要关注的是用于执行的可执行文件(Executable File)类型，它提供了程序的可执行代码/数据内容，加载的内存空间布局描述等。 这也是本实验的OS和应用的执行文件类型。可参考[ELF描述](https://wiki.osdev.org/ELF)进一步了解相关信息。
+> ELF(Executable and Linking Format)文件格式是 Linux 系统下的一种常用目标文件(object file)格式，有三种主要类型，我们主要关注的是用于执行的可执行文件(Executable File)类型，它提供了程序的可执行代码/数据内容，加载的内存空间布局描述等。 这也是本实验的 OS 和应用的执行文件类型。可参考[ELF 描述](https://wiki.osdev.org/ELF)进一步了解相关信息。
 
-对ELF文件解析与内存空间创建的处理，需要解析出ELF文件中的关键的段（如code段、data段、BSS段等），并把段的内容拷贝到段设定的地址中，设置好相关属性。这需要对虚拟内存相关的[``MemorySet`` 和 ``MemoryArea``](../chapter5/part5.md) 的相关实现进行扩展。具体修改如下：
+对 ELF 文件解析与内存空间创建的处理，需要解析出 ELF 文件中的关键的段（如 code 段、data 段、BSS 段等），并把段的内容拷贝到段设定的地址中，设置好相关属性。这需要对虚拟内存相关的[`MemorySet` 和 `MemoryArea`](../chapter5/part5.md) 的相关实现进行扩展。具体修改如下：
 
-### 解析ELF文件
+### 解析 ELF 文件
 
 ```rust
 // src/process/structs.rs
@@ -55,7 +55,7 @@ impl ElfExt for ElfFile<'_> {
 
 ###　建立对应的虚拟内存空间
 
-我们对 [``MemorySet`` 和 ``MemoryArea``](../chapter5/part5.md) 的接口略作修改：
+我们对 [`MemorySet` 和 `MemoryArea`](../chapter5/part5.md) 的接口略作修改：
 
 ```rust
 // src/memory/memory_set/mod.rs
@@ -78,7 +78,7 @@ impl MemorySet {
 // src/memory/memory_set/area.rs
 impl MemoryArea {
     ...
-    pub fn page_copy(&self, pt: &mut PageTableImpl, src: usize, length: usize) { 
+    pub fn page_copy(&self, pt: &mut PageTableImpl, src: usize, length: usize) {
         let mut l = length;
         let mut s = src;
         for page in PageRange::new(self.start, self.end) {
@@ -112,7 +112,7 @@ impl MemoryHandler for Linear {
 impl MemoryHandler for ByFrame {
     ...
     fn page_copy(&self, pt: &mut PageTableImpl, va: usize, src: usize, length: usize) {
-    //类似fn page_copy() in mpl MemoryHandler for Linear 
+    //类似fn page_copy() in mpl MemoryHandler for Linear
     ......
 }
 
@@ -137,8 +137,8 @@ impl PageTableImpl {
 }
 ```
 
-由于 ``MemorySet::push`` 的接口发生的变化，我们要将 ``ElfExt::make_memory_set`` 之外的所有 ``push`` 调用最后均加上一个 ``None`` 参数。
+由于 `MemorySet::push` 的接口发生的变化，我们要将 `ElfExt::make_memory_set` 之外的所有 `push` 调用最后均加上一个 `None` 参数。
 
-现在我们就可以从 ``ElfFile`` 创建用户程序的虚拟内存空间了。
+现在我们就可以从 `ElfFile` 创建用户程序的虚拟内存空间了。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch8-pa4

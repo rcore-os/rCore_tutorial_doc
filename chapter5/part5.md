@@ -1,6 +1,6 @@
 ## 内核重映射实现之二：MemorySet
 
-* [代码][CODE]
+- [代码][code]
 
 我们实现了页表，但是好像还不足以应对内核重映射的需求。我们要对多个段分别进行不同的映射，而页表只允许我们每次插入一对从虚拟页到物理页帧的映射。
 
@@ -10,23 +10,21 @@
 
 ![](figures/memory_set.jpg)
 
-
-
-在虚拟内存中，每个 ``MemoryArea`` 描述一个段，每个段单独映射到物理内存；``MemorySet`` 中则存储所有的 ``MemoryArea`` 段，相比巨大的虚拟内存空间，由于它含有的各个段都已经映射到物理内存，它可表示一个程序独自拥有的**实际可用**的虚拟内存空间。``PageTable`` 相当于一个底层接口，仅是管理映射，事实上它管理了 ``MemorySet`` 中所有 ``MemoryArea`` 的所有映射。
+在虚拟内存中，每个 `MemoryArea` 描述一个段，每个段单独映射到物理内存；`MemorySet` 中则存储所有的 `MemoryArea` 段，相比巨大的虚拟内存空间，由于它含有的各个段都已经映射到物理内存，它可表示一个程序独自拥有的**实际可用**的虚拟内存空间。`PageTable` 相当于一个底层接口，仅是管理映射，事实上它管理了 `MemorySet` 中所有 `MemoryArea` 的所有映射。
 
 ### MemoryArea
 
-我们刻意将不同的段分为不同的 ``MemoryArea`` ，说明它们映射到物理内存的方式一定是不同的：
+我们刻意将不同的段分为不同的 `MemoryArea` ，说明它们映射到物理内存的方式一定是不同的：
 
 ![](figures/memory_handler.jpg)
 
-我们则使用 ``MemoryHandler`` 来描述映射行为的不同。不同的类型的 ``MemoryArea``，会使用不同的 ``MemoryHandler`` ，而他们会用不同的方式调用 ``PageTable`` 提供的底层接口进行映射，因此导致了最终映射行为的不同。
+我们则使用 `MemoryHandler` 来描述映射行为的不同。不同的类型的 `MemoryArea`，会使用不同的 `MemoryHandler` ，而他们会用不同的方式调用 `PageTable` 提供的底层接口进行映射，因此导致了最终映射行为的不同。
 
 下面我们看一下这些类是如何实现的。
 
 #### MemoryAttr
 
-首先是用来修改 ``PageEntry`` (我们的页表映射默认将权限设为 ``R|W|X`` ，需要修改) 的类 ``MemoryAttr``：
+首先是用来修改 `PageEntry` (我们的页表映射默认将权限设为 `R|W|X` ，需要修改) 的类 `MemoryAttr`：
 
 ```rust
 // src/memory/memory_set/attr.rs
@@ -68,7 +66,7 @@ impl MemoryAttr {
 
 #### MemoryHandler
 
-然后是会以不同方式调用 ``PageTable`` 接口的 ``MemoryHandler``：
+然后是会以不同方式调用 `PageTable` 接口的 `MemoryHandler`：
 
 ```rust
 // src/memory/memory_set/handler.rs
@@ -120,7 +118,7 @@ impl MemoryHandler for ByFrame {
 }
 ```
 
-接着，是描述一个段的 ``MemoryArea``。
+接着，是描述一个段的 `MemoryArea`。
 
 ```rust
 // src/memory/memory_set/area.rs
@@ -130,7 +128,7 @@ impl MemoryHandler for ByFrame {
 // 页表项的权限： attr
 pub struct MemoryArea {
     start : usize,
-    end : usize, 
+    end : usize,
     handler : Box<dyn MemoryHandler>,
     attr : MemoryAttr,
 }
@@ -174,7 +172,7 @@ impl MemoryArea {
 
 ### MemorySet
 
-最后，则是最高层的 ``MemorySet`` ，它描述一个**实际可用**的虚拟地址空间以供程序使用。
+最后，则是最高层的 `MemorySet` ，它描述一个**实际可用**的虚拟地址空间以供程序使用。
 
 ```rust
 // src/memory/memory_set/mod.rs
@@ -199,7 +197,7 @@ impl MemorySet {
         area.map(&mut self.page_table);
         // 更新本 MemorySet 的 MemoryArea 集合
         self.areas.push(area);
-    } 
+    }
     fn test_free_area(&self, start: usize, end: usize) -> bool {
         // 迭代器的基本应用
         self.areas
@@ -215,7 +213,7 @@ impl MemorySet {
 }
 ```
 
-事实上，在内核中运行的所有程序都离不开内核的支持，所以必须要能够访问内核的代码和数据；同时，为了保证任何时候我们都可以修改页表，我们需要物理内存的映射一直存在。因此，在一个 ``MemorySet`` 初始化时，我们就要将上述这些段加入进去。
+事实上，在内核中运行的所有程序都离不开内核的支持，所以必须要能够访问内核的代码和数据；同时，为了保证任何时候我们都可以修改页表，我们需要物理内存的映射一直存在。因此，在一个 `MemorySet` 初始化时，我们就要将上述这些段加入进去。
 
 ```rust
 // src/memory/memory_set/mod.rs
@@ -275,7 +273,7 @@ impl MemorySet {
         );
         // 物理内存 R|W
         self.push(
-            (end as usize / PAGE_SIZE + 1) * PAGE_SIZE, 
+            (end as usize / PAGE_SIZE + 1) * PAGE_SIZE,
             access_pa_via_va(PHYSICAL_MEMORY_END),
             MemoryAttr::new(),
             Linear::new(offset),
@@ -283,6 +281,7 @@ impl MemorySet {
     }
 }
 ```
-这样，有了上面的抽象和对应实现，我们就可以根据OS kernel这个程序中不同段的属性建立不同属性的页表项，更加精确地体系了OS kernel各个部分的被访问特征。具体如何建立，请看下一节。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6
+这样，有了上面的抽象和对应实现，我们就可以根据 OS kernel 这个程序中不同段的属性建立不同属性的页表项，更加精确地体系了 OS kernel 各个部分的被访问特征。具体如何建立，请看下一节。
+
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa6

@@ -1,12 +1,12 @@
 ## 实现终端
 
-* [代码][CODE]
+- [代码][code]
 
-我们的终端也很简单：其功能为你输入想要执行的用户程序如 ``rust/hello_world`` ，随后按下回车，内核就会帮你执行这个程序。
+我们的终端也很简单：其功能为你输入想要执行的用户程序如 `rust/hello_world` ，随后按下回车，内核就会帮你执行这个程序。
 
 所以，我们需要实现一个新的系统调用：
 
-* 执行程序，系统调用 $$\text{id} = 221$$
+- 执行程序，系统调用 $$\text{id} = 221$$
 
 终端的实现基于上一节所讲的记事本：
 
@@ -114,7 +114,7 @@ impl Processor {
         if let Some(wait) = inner.current.as_ref().unwrap().1.wait {
             inner.pool.wakeup(wait);
         }
-        
+
         inner.current
             .as_mut()
             .unwrap()
@@ -126,7 +126,7 @@ impl Processor {
 }
 ```
 
-由于 ``Thread`` 的字段发生了变化，之前所有创建 ``Thread`` 的代码都要做出相应的修改，将 ``wait`` 字段的值设置为 ``None`` 即可。新建用户线程时，要新加入一个参数 ``wait_thread`` 。
+由于 `Thread` 的字段发生了变化，之前所有创建 `Thread` 的代码都要做出相应的修改，将 `wait` 字段的值设置为 `None` 即可。新建用户线程时，要新加入一个参数 `wait_thread` 。
 
 ```rust
 // src/process/structs.rs
@@ -169,8 +169,6 @@ impl Thread {
     }
 }
 ```
-
-
 
 现在我们在内核中实现该系统调用：
 
@@ -238,10 +236,10 @@ pub fn init() {
 }
 ```
 
-这里虽然还是将 ``rust/user_shell`` 硬编码到内核中，但是好歹它可以交互式运行其他程序了！
+这里虽然还是将 `rust/user_shell` 硬编码到内核中，但是好歹它可以交互式运行其他程序了！
 
-试一试运行 ``rust/hello_world`` ，它工作的很好；``rust/notebook`` 也不赖，但是我们没有实现 ``Ctrl+c`` 的功能，因此就无法从记事本中退出了。随便输入一个不存在的程序，终端也不会崩溃，而是会提示程序不存在！
+试一试运行 `rust/hello_world` ，它工作的很好；`rust/notebook` 也不赖，但是我们没有实现 `Ctrl+c` 的功能，因此就无法从记事本中退出了。随便输入一个不存在的程序，终端也不会崩溃，而是会提示程序不存在！
 
-所有的代码可以在[这里][CODE]找到。
+所有的代码可以在[这里][code]找到。
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa3
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa3

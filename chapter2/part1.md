@@ -1,12 +1,12 @@
 ## 使用目标三元组描述目标平台
 
-* [代码][CODE]
+- [代码][code]
 
 cargo 在编译项目时，可以附加目标参数 `--target <target triple>` 设置项目的目标平台。平台包括硬件和软件支持，事实上， **目标三元组(target triple)** 包含：cpu 架构、供应商、操作系统和 [ABI](https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi/2456882#2456882) 。
 
 安装 Rust 时，默认编译后的可执行文件要在本平台上执行，我们可以使用
 
-``rustc --version --verbose``来查看 Rust 的默认目标三元组：
+`rustc --version --verbose`来查看 Rust 的默认目标三元组：
 
 ```bash
 $ rustc --version --verbose
@@ -19,7 +19,7 @@ release: 1.42.0-nightly
 LLVM version: 9.0
 ```
 
-在 ``host`` 处可以看到默认的目标三元组， cpu 架构为 ``x86_64`` ，供应商为 ``unknown`` ，操作系统为 ``linux`` ，ABI 为 ``gnu`` 。由于我们是在 64 位 ubuntu 上安装的 Rust ，这个默认目标三元组的确描述了本平台。
+在 `host` 处可以看到默认的目标三元组， cpu 架构为 `x86_64` ，供应商为 `unknown` ，操作系统为 `linux` ，ABI 为 `gnu` 。由于我们是在 64 位 ubuntu 上安装的 Rust ，这个默认目标三元组的确描述了本平台。
 
 官方对一些平台提供了默认的目标三元组，我们可以通过以下命令来查看完整列表：
 
@@ -58,11 +58,7 @@ rustc -Z unstable-options --print target-spec-json --target x86_64-unknown-linux
   "os": "linux",
   "position-independent-executables": true,
   "pre-link-args": {
-    "gcc": [
-      "-Wl,--as-needed",
-      "-Wl,-z,noexecstack",
-      "-m64"
-    ]
+    "gcc": ["-Wl,--as-needed", "-Wl,-z,noexecstack", "-m64"]
   },
   "relro-level": "full",
   "stack-probes": true,
@@ -131,7 +127,7 @@ rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-
 "panic-strategy": "abort",
 ```
 
-这个描述了 ``panic`` 时采取的策略。回忆上一章中，我们在 ``Cargo.toml`` 中设置程序在 ``panic`` 时直接 ``abort`` ，从而不必调用堆栈展开处理函数。由于目标三元组中已经包含了这个参数，我们可以将 ``Cargo.toml`` 中的设置删除了：
+这个描述了 `panic` 时采取的策略。回忆上一章中，我们在 `Cargo.toml` 中设置程序在 `panic` 时直接 `abort` ，从而不必调用堆栈展开处理函数。由于目标三元组中已经包含了这个参数，我们可以将 `Cargo.toml` 中的设置删除了：
 
 ```diff
 -[profile.dev]
@@ -141,4 +137,4 @@ rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-
 -panic = "abort"
 ```
 
-[CODE]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4
+[code]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4
