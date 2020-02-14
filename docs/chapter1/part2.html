@@ -1,0 +1,1269 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>使用包管理器 cargo 创建 rust binary 项目 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-tomorrow.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part3.html" />
+    
+    
+    <link rel="prev" href="part1.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter0/introduction.html">
+            
+                <a href="../chapter0/introduction.html">
+            
+                    
+                    第零章：实验环境说明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../chapter2/introduction.html">
+            
+                <a href="../chapter2/introduction.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../chapter2/part1.html">
+            
+                <a href="../chapter2/part1.html">
+            
+                    
+                    使用目标三元组描述目标平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter2/part2.html">
+            
+                <a href="../chapter2/part2.html">
+            
+                    
+                    编译、生成内核镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter2/part3.html">
+            
+                <a href="../chapter2/part3.html">
+            
+                    
+                    使用链接脚本指定内存布局
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter2/part4.html">
+            
+                <a href="../chapter2/part4.html">
+            
+                    
+                    重写程序入口点 -start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter2/part5.html">
+            
+                <a href="../chapter2/part5.html">
+            
+                    
+                    使用 Qemu 运行内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter2/part6.html">
+            
+                <a href="../chapter2/part6.html">
+            
+                    
+                    封装 SBI 接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="../chapter2/part7.html">
+            
+                <a href="../chapter2/part7.html">
+            
+                    
+                    实现格式化输出
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="../chapter2/part8.html">
+            
+                <a href="../chapter2/part8.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64 中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
+            
+                    
+                    物理内存探测与管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../chapter4/part2.html">
+            
+                <a href="../chapter4/part2.html">
+            
+                    
+                    动态内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../chapter4/part3.html">
+            
+                <a href="../chapter4/part3.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../chapter5/introduction.html">
+            
+                <a href="../chapter5/introduction.html">
+            
+                    
+                    第五章：内存虚拟化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../chapter5/part1.html">
+            
+                <a href="../chapter5/part1.html">
+            
+                    
+                    页表：从虚拟内存到物理内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../chapter5/part2.html">
+            
+                <a href="../chapter5/part2.html">
+            
+                    
+                    内核初始映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../chapter5/part3.html">
+            
+                <a href="../chapter5/part3.html">
+            
+                    
+                    内核重映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../chapter5/part4.html">
+            
+                <a href="../chapter5/part4.html">
+            
+                    
+                    内核重映射实现之一：页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../chapter5/part5.html">
+            
+                <a href="../chapter5/part5.html">
+            
+                    
+                    内核重映射实现之二：MemorySet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../chapter5/part6.html">
+            
+                <a href="../chapter5/part6.html">
+            
+                    
+                    内核重映射实现之三：完结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../chapter5/part7.html">
+            
+                <a href="../chapter5/part7.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../chapter6/introduction.html">
+            
+                <a href="../chapter6/introduction.html">
+            
+                    
+                    第六章：内核线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../chapter6/part1.html">
+            
+                <a href="../chapter6/part1.html">
+            
+                    
+                    线程状态与保存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter6/part2.html">
+            
+                <a href="../chapter6/part2.html">
+            
+                    
+                    线程切换
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter6/part3.html">
+            
+                <a href="../chapter6/part3.html">
+            
+                    
+                    内核线程初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter6/part4.html">
+            
+                <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter7/introduction.html">
+            
+                <a href="../chapter7/introduction.html">
+            
+                    
+                    第七章：线程调度
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter7/part1.html">
+            
+                <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    线程调度之 Round Robin 算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter7/part4.html">
+            
+                <a href="../chapter7/part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../chapter7/part5.html">
+            
+                <a href="../chapter7/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter8/introduction.html">
+            
+                <a href="../chapter8/introduction.html">
+            
+                    
+                    第八章：进程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter8/part1.html">
+            
+                <a href="../chapter8/part1.html">
+            
+                    
+                    编写用户程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter8/part1-1.md">
+            
+                <span>
+            
+                    
+                    合并内核与应用程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter8/part2.html">
+            
+                <a href="../chapter8/part2.html">
+            
+                    
+                    在内核中实现系统调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter8/part3.html">
+            
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建虚拟内存空间
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
+            
+                    
+                    创建进程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.6" data-path="../chapter8/part5.html">
+            
+                <a href="../chapter8/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../chapter9/introduction.html">
+            
+                <a href="../chapter9/introduction.html">
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../chapter9/part1.html">
+            
+                <a href="../chapter9/part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="../chapter9/part2.html">
+            
+                <a href="../chapter9/part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="../chapter9/part3.html">
+            
+                <a href="../chapter9/part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="../chapter9/part4.html">
+            
+                <a href="../chapter9/part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../chapter10/introduction.html">
+            
+                <a href="../chapter10/introduction.html">
+            
+                    
+                    第十章：同步互斥
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../chapter13/introduction.html">
+            
+                <a href="../chapter13/introduction.html">
+            
+                    
+                    第十三章：线程管理：fork and execute
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../chapter13/part1.html">
+            
+                <a href="../chapter13/part1.html">
+            
+                    
+                    fork 介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../chapter13/part2.html">
+            
+                <a href="../chapter13/part2.html">
+            
+                    
+                    fork 实现思路
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../chapter13/part3.html">
+            
+                <a href="../chapter13/part3.html">
+            
+                    
+                    复制线程上下文
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../chapter13/part4.html">
+            
+                <a href="../chapter13/part4.html">
+            
+                    
+                    复制页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" >
+            
+                <span>
+            
+                    
+                    [附录]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+            
+                <span>
+            
+                    
+                    内链汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >使用包管理器 cargo 创建 rust binary 项目</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x4F7F;&#x7528;&#x5305;&#x7BA1;&#x7406;&#x5668;-cargo-&#x521B;&#x5EFA;-rust-binary-&#x9879;&#x76EE;">&#x4F7F;&#x7528;&#x5305;&#x7BA1;&#x7406;&#x5668; cargo &#x521B;&#x5EFA; Rust binary &#x9879;&#x76EE;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch1-pa4" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<p>&#x4F7F;&#x7528; <code>cargo new</code> &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684; Rust binary &#x9879;&#x76EE;&#xFF0C;&#x547D;&#x4EE4;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ cargo new os --bin
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>cargo new</code> &#x7684;&#x53C2;&#x6570;</th>
+<th>&#x542B;&#x4E49;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>os</code></td>
+<td>&#x9879;&#x76EE;&#x7684;&#x540D;&#x79F0;</td>
+</tr>
+<tr>
+<td><code>--bin</code></td>
+<td>&#x53EF;&#x6267;&#x884C;&#x9879;&#x76EE;&#xFF0C;&#x548C;&#x5176;&#x76F8;&#x5BF9;&#x7684;&#x662F;&#x5E93;&#x9879;&#x76EE; <code>--lib</code></td>
+</tr>
+</tbody>
+</table>
+<p>&#x521B;&#x5EFA;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x6574;&#x4E2A;&#x9879;&#x76EE;&#x7684;&#x6587;&#x4EF6;&#x7ED3;&#x6784;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code>os
+&#x251C;&#x2500;&#x2500; Cargo.toml     &#x9879;&#x76EE;&#x914D;&#x7F6E;&#x6587;&#x4EF6;
+&#x2514;&#x2500;&#x2500; src            &#x6E90;&#x4EE3;&#x7801;&#x8DEF;&#x5F84;
+    &#x2514;&#x2500;&#x2500; main.rs    &#x6E90;&#x7A0B;&#x5E8F;
+</code></pre><p>&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x8FDB;&#x5165; <code>os</code> &#x9879;&#x76EE;&#x6587;&#x4EF6;&#x5939;&#xFF0C;&#x5E76;&#x5C1D;&#x8BD5;&#x6784;&#x5EFA;&#x3001;&#x8FD0;&#x884C;&#x9879;&#x76EE;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ cargo run
+   <span class="token punctuation">..</span>.
+Hello, world<span class="token operator">!</span>
+</code></pre>
+<p>&#x6253;&#x5F00; <code>os/src/main.rs</code> &#x53D1;&#x73B0;&#x91CC;&#x9762;&#x786E;&#x5B9E;&#x53EA;&#x662F;&#x8F93;&#x51FA;&#x4E86;&#x4E00;&#x884C; <code>Hello, world!</code> &#x3002;&#x8FD9;&#x4E2A;&#x5E94;&#x7528;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#xFF0C;&#x4F46;&#x662F;&#x5373;&#x4F7F;&#x53EA;&#x662F;&#x8FD9;&#x4E48;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x4E5F;&#x79BB;&#x4E0D;&#x5F00;&#x6240;&#x5728;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;(Ubuntu)&#x7684;&#x5E2E;&#x52A9;&#x3002;&#x6211;&#x4EEC;&#x65E2;&#x7136;&#x8981;&#x5199;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF0C;&#x5C31;&#x4E0D;&#x80FD;&#x4F9D;&#x8D56;&#x4E8E;&#x4EFB;&#x4F55;&#x5DF2;&#x6709;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF01;&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x5C1D;&#x8BD5;&#x79FB;&#x9664;&#x8BE5;&#x5E94;&#x7528;&#x5BF9;&#x4E8E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x4F9D;&#x8D56;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: "ab871063a9fa7f1da571",
+    clientSecret: "4760b384e3e452d2241d859cfa6a7da21a8729ec",
+    repo: "rCore_tutorial_doc",
+    owner: "rcore-os",
+    admin: [
+      "chyyuu",
+      "xyongcn",
+      "wangrunji0408",
+      "xy-plus",
+      "PanQL",
+      "wyfcyx",
+      "equation314"
+    ],
+    id: location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render("gitalk-container");
+</script>
+</div></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part1.html" class="navigation navigation-prev " aria-label="Previous page: 安装 nightly rust">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part3.html" class="navigation navigation-next " aria-label="Next page: 移除标准库依赖">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.3.2","depth":2,"next":{"title":"移除标准库依赖","level":"1.3.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},"previous":{"title":"安装 nightly rust","level":"1.3.1","depth":2,"path":"chapter1/part1.md","ref":"chapter1/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part2.md","mtime":"2020-02-13T08:47:45.384Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-14T13:23:24.037Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+

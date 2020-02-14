@@ -1,0 +1,1377 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>封装 SBI 接口 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-tomorrow.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part7.html" />
+    
+    
+    <link rel="prev" href="part5.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter0/introduction.html">
+            
+                <a href="../chapter0/introduction.html">
+            
+                    
+                    第零章：实验环境说明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter1/introduction.html">
+            
+                <a href="../chapter1/introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../chapter1/part1.html">
+            
+                <a href="../chapter1/part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../chapter1/part2.html">
+            
+                <a href="../chapter1/part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../chapter1/part3.html">
+            
+                <a href="../chapter1/part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../chapter1/part4.html">
+            
+                <a href="../chapter1/part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../chapter1/part5.html">
+            
+                <a href="../chapter1/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    使用目标三元组描述目标平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    编译、生成内核镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    使用链接脚本指定内存布局
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    重写程序入口点 -start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    使用 Qemu 运行内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.6" data-path="part6.html">
+            
+                <a href="part6.html">
+            
+                    
+                    封装 SBI 接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="part7.html">
+            
+                <a href="part7.html">
+            
+                    
+                    实现格式化输出
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="part8.html">
+            
+                <a href="part8.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64 中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
+            
+                    
+                    物理内存探测与管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../chapter4/part2.html">
+            
+                <a href="../chapter4/part2.html">
+            
+                    
+                    动态内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../chapter4/part3.html">
+            
+                <a href="../chapter4/part3.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../chapter5/introduction.html">
+            
+                <a href="../chapter5/introduction.html">
+            
+                    
+                    第五章：内存虚拟化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../chapter5/part1.html">
+            
+                <a href="../chapter5/part1.html">
+            
+                    
+                    页表：从虚拟内存到物理内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../chapter5/part2.html">
+            
+                <a href="../chapter5/part2.html">
+            
+                    
+                    内核初始映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../chapter5/part3.html">
+            
+                <a href="../chapter5/part3.html">
+            
+                    
+                    内核重映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../chapter5/part4.html">
+            
+                <a href="../chapter5/part4.html">
+            
+                    
+                    内核重映射实现之一：页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../chapter5/part5.html">
+            
+                <a href="../chapter5/part5.html">
+            
+                    
+                    内核重映射实现之二：MemorySet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../chapter5/part6.html">
+            
+                <a href="../chapter5/part6.html">
+            
+                    
+                    内核重映射实现之三：完结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../chapter5/part7.html">
+            
+                <a href="../chapter5/part7.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../chapter6/introduction.html">
+            
+                <a href="../chapter6/introduction.html">
+            
+                    
+                    第六章：内核线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../chapter6/part1.html">
+            
+                <a href="../chapter6/part1.html">
+            
+                    
+                    线程状态与保存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter6/part2.html">
+            
+                <a href="../chapter6/part2.html">
+            
+                    
+                    线程切换
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter6/part3.html">
+            
+                <a href="../chapter6/part3.html">
+            
+                    
+                    内核线程初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter6/part4.html">
+            
+                <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter7/introduction.html">
+            
+                <a href="../chapter7/introduction.html">
+            
+                    
+                    第七章：线程调度
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter7/part1.html">
+            
+                <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    线程调度之 Round Robin 算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter7/part4.html">
+            
+                <a href="../chapter7/part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../chapter7/part5.html">
+            
+                <a href="../chapter7/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter8/introduction.html">
+            
+                <a href="../chapter8/introduction.html">
+            
+                    
+                    第八章：进程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter8/part1.html">
+            
+                <a href="../chapter8/part1.html">
+            
+                    
+                    编写用户程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter8/part1-1.md">
+            
+                <span>
+            
+                    
+                    合并内核与应用程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter8/part2.html">
+            
+                <a href="../chapter8/part2.html">
+            
+                    
+                    在内核中实现系统调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter8/part3.html">
+            
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建虚拟内存空间
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
+            
+                    
+                    创建进程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.6" data-path="../chapter8/part5.html">
+            
+                <a href="../chapter8/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../chapter9/introduction.html">
+            
+                <a href="../chapter9/introduction.html">
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../chapter9/part1.html">
+            
+                <a href="../chapter9/part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="../chapter9/part2.html">
+            
+                <a href="../chapter9/part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="../chapter9/part3.html">
+            
+                <a href="../chapter9/part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="../chapter9/part4.html">
+            
+                <a href="../chapter9/part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../chapter10/introduction.html">
+            
+                <a href="../chapter10/introduction.html">
+            
+                    
+                    第十章：同步互斥
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../chapter13/introduction.html">
+            
+                <a href="../chapter13/introduction.html">
+            
+                    
+                    第十三章：线程管理：fork and execute
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../chapter13/part1.html">
+            
+                <a href="../chapter13/part1.html">
+            
+                    
+                    fork 介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../chapter13/part2.html">
+            
+                <a href="../chapter13/part2.html">
+            
+                    
+                    fork 实现思路
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../chapter13/part3.html">
+            
+                <a href="../chapter13/part3.html">
+            
+                    
+                    复制线程上下文
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../chapter13/part4.html">
+            
+                <a href="../chapter13/part4.html">
+            
+                    
+                    复制页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" >
+            
+                <span>
+            
+                    
+                    [附录]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+            
+                <span>
+            
+                    
+                    内链汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >封装 SBI 接口</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x5C01;&#x88C5;-sbi-&#x63A5;&#x53E3;">&#x5C01;&#x88C5; SBI &#x63A5;&#x53E3;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa7" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<h3 id="&#x4EE3;&#x7801;&#x6574;&#x7406;">&#x4EE3;&#x7801;&#x6574;&#x7406;</h3>
+<p>&#x5C06;&#x4E00;&#x5207;&#x90FD;&#x5199;&#x5728;&#x4E00;&#x4E2A; <code>main.rs</code> &#x4E2D;&#x7EC8;&#x7A76;&#x662F;&#x4E00;&#x4E2A;&#x4E0D;&#x597D;&#x7684;&#x4E60;&#x60EF;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4EE3;&#x7801;&#x5206;&#x4E3A;&#x4E0D;&#x540C;&#x6A21;&#x5757;&#x6574;&#x7406;&#x4E00;&#x4E0B;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x5148;&#x5C06; <code>console_putchar</code> &#x51FD;&#x6570;&#x5220;&#x6389;&#xFF0C;&#x5E76;&#x5C06; <code>rust_main</code> &#x4E2D;&#x8C03;&#x7528; <code>console_putchar</code> &#x7684;&#x90E8;&#x5206;&#x4E5F;&#x5220;&#x9664;&#x3002;</p>
+<p>&#x968F;&#x540E;&#x5C06; <code>rust_main</code> &#x62BD;&#x53D6;&#x5230;<code>init.rs</code>&#x4E2D;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/init.rs</span>
+
+<span class="token function">global_asm!</span><span class="token punctuation">(</span><span class="token function">include_str!</span><span class="token punctuation">(</span><span class="token string">&quot;boot/entry64.asm&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">rust_main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5C06;&#x8BED;&#x4E49;&#x9879;&#x4EEC;&#x62BD;&#x53D6;&#x5230;<code>lang_items.rs</code>&#x4E2D;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/lang_items.rs</span>
+
+<span class="token keyword">use</span> core<span class="token punctuation">::</span>panic<span class="token punctuation">::</span>PanicInfo<span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[panic_handler]</span>
+<span class="token keyword">fn</span> <span class="token function">panic</span><span class="token punctuation">(</span>_<span class="token punctuation">:</span> <span class="token operator">&amp;</span>PanicInfo<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">abort</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token function">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;abort!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5E76;&#x5728;&#x4EE3;&#x8868;<code>os crate</code>&#x7684; <code>lib.rs</code> &#x4E2D;&#x5F15;&#x7528;&#x8FD9;&#x4E24;&#x4E2A;&#x5B50;&#x6A21;&#x5757;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/lib.rs</span>
+
+<span class="token attribute attr-name">#![no_std]</span>
+<span class="token attribute attr-name">#![feature(asm)]</span>
+<span class="token attribute attr-name">#![feature(global_asm)]</span>
+
+<span class="token keyword">mod</span> init<span class="token punctuation">;</span>
+<span class="token keyword">mod</span> lang_items<span class="token punctuation">;</span>
+</code></pre>
+<p>&#x4EE5;&#x53CA;&#x53EA;&#x9700;&#x4F7F;&#x7528; <code>os crate</code> &#x7684;&#x5B64;&#x96F6;&#x96F6;&#x7684; <code>main.rs</code>&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/main.rs</span>
+
+<span class="token attribute attr-name">#![no_std]</span>
+<span class="token attribute attr-name">#![no_main]</span>
+
+<span class="token attribute attr-name">#[allow(unused_imports)]</span>
+<span class="token keyword">use</span> os<span class="token punctuation">;</span>
+</code></pre>
+<h3 id="&#x4F7F;&#x7528;-opensbi-&#x63D0;&#x4F9B;&#x7684;&#x670D;&#x52A1;">&#x4F7F;&#x7528; OpenSBI &#x63D0;&#x4F9B;&#x7684;&#x670D;&#x52A1;</h3>
+<p>OpenSBI &#x5B9E;&#x9645;&#x4E0A;&#x4E0D;&#x4EC5;&#x8D77;&#x5230;&#x4E86; bootloader &#x7684;&#x4F5C;&#x7528;&#xFF0C;&#x8FD8;&#x4E3A;&#x6211;&#x4EEC;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E9B;&#x670D;&#x52A1;&#x4F9B;&#x6211;&#x4EEC;&#x5728;&#x7F16;&#x5199;&#x5185;&#x6838;&#x65F6;&#x4F7F;&#x7528;&#x3002;&#x8FD9;&#x5C42;&#x63A5;&#x53E3;&#x79F0;&#x4E3A; SBI (Supervisor Binary Interface)&#xFF0C;&#x662F; S-Mode &#x7684; kernel &#x548C; M-Mode &#x6267;&#x884C;&#x73AF;&#x5883;&#x4E4B;&#x95F4;&#x7684;&#x6807;&#x51C6;&#x63A5;&#x53E3;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x67E5;&#x770B; <a href="https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc#legacy-sbi-extension-extension-ids-0x00-through-0x0f" target="_blank">OpenSBI &#x6587;&#x6863; # legacy sbi extension</a> &#xFF0C;&#x91CC;&#x9762;&#x5305;&#x542B;&#x4E86;&#x4E00;&#x4E9B;&#x4EE5; C &#x51FD;&#x6570;&#x683C;&#x5F0F;&#x7ED9;&#x51FA;&#x7684;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x7684;&#x63A5;&#x53E3;&#x3002;</p>
+<p>&#x4E0A;&#x4E00;&#x8282;&#x4E2D;&#x6211;&#x4EEC;&#x7684; <code>console_putchar</code> &#x51FD;&#x6570;&#x7C7B;&#x4F3C;&#x4E8E;&#x8C03;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x63A5;&#x53E3;&#x6765;&#x5B9E;&#x73B0;&#x7684;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c"><span class="token keyword">void</span> <span class="token function">sbi_console_putchar</span><span class="token punctuation">(</span><span class="token keyword">int</span> ch<span class="token punctuation">)</span>
+</code></pre>
+<p>&#x5B9E;&#x9645;&#x7684;&#x8FC7;&#x7A0B;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A;&#x6211;&#x4EEC;&#x901A;&#x8FC7; ecall &#x53D1;&#x8D77;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x3002;OpenSBI &#x4F1A;&#x68C0;&#x5BDF;&#x53D1;&#x8D77;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x7684;&#x7F16;&#x53F7;&#xFF0C;&#x5982;&#x679C;&#x7F16;&#x53F7;&#x5728; <code>0-8</code> &#x4E4B;&#x95F4;&#xFF0C;&#x5219;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;&#x5426;&#x5219;&#x4EA4;&#x7531;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x7684;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x5904;&#x7406;&#xFF08;&#x6682;&#x672A;&#x5B9E;&#x73B0;&#xFF09;&#x3002;</p>
+<blockquote>
+<p>&#x5B9E;&#x73B0;&#x4E86;&#x7F16;&#x53F7;&#x5728; <code>0-8</code> &#x4E4B;&#x95F4;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x5177;&#x4F53;&#x8BF7;&#x770B; <a href="https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc#function-listing-1" target="_blank">OpenSBI &#x6587;&#x6863; # function list</a></p>
+</blockquote>
+<p>&#x6267;&#x884C; ecall &#x524D;&#x9700;&#x8981;&#x6307;&#x5B9A;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x7684;&#x7F16;&#x53F7;&#xFF0C;&#x4F20;&#x9012;&#x53C2;&#x6570;&#x3002;&#x4E00;&#x822C;&#x800C;&#x8A00;&#xFF0C;$a_7$ &#x4E3A;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x7F16;&#x53F7;&#xFF0C;$a_0 , a_1 , a_2$ &#x4E3A;&#x53C2;&#x6570;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/lib.rs</span>
+
+<span class="token keyword">mod</span> sbi<span class="token punctuation">;</span>
+</code></pre>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/sbi.rs</span>
+
+<span class="token comment">//! Port from sbi.h</span>
+<span class="token attribute attr-name">#![allow(dead_code)]</span>
+
+<span class="token attribute attr-name">#[inline(always)]</span>
+<span class="token keyword">fn</span> <span class="token function">sbi_call</span><span class="token punctuation">(</span>which<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> arg0<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> arg1<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> arg2<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> ret<span class="token punctuation">;</span>
+    <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+        <span class="token function">asm!</span><span class="token punctuation">(</span><span class="token string">&quot;ecall&quot;</span>
+            <span class="token punctuation">:</span> <span class="token string">&quot;={x10}&quot;</span> <span class="token punctuation">(</span>ret<span class="token punctuation">)</span>
+            <span class="token punctuation">:</span> <span class="token string">&quot;{x10}&quot;</span> <span class="token punctuation">(</span>arg0<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x11}&quot;</span> <span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x12}&quot;</span> <span class="token punctuation">(</span>arg2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x17}&quot;</span> <span class="token punctuation">(</span>which<span class="token punctuation">)</span>
+            <span class="token punctuation">:</span> <span class="token string">&quot;memory&quot;</span>
+            <span class="token punctuation">:</span> <span class="token string">&quot;volatile&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    ret
+<span class="token punctuation">}</span>
+</code></pre>
+<blockquote>
+<p><strong>[info] &#x51FD;&#x6570;&#x8C03;&#x7528;&#x4E0E; calling convention </strong></p>
+<p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x5C06;&#x9AD8;&#x7EA7;&#x8BED;&#x8A00;&#x6E90;&#x4EE3;&#x7801;&#x7FFB;&#x8BD1;&#x6210;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x3002;&#x5BF9;&#x4E8E;&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x800C;&#x8A00;&#xFF0C;&#x5728;&#x6700;&#x7B80;&#x5355;&#x7684;&#x7F16;&#x7A0B;&#x6A21;&#x578B;&#x4E2D;&#xFF0C;&#x6240;&#x80FD;&#x591F;&#x5229;&#x7528;&#x7684;&#x53EA;&#x6709;&#x6307;&#x4EE4;&#x96C6;&#x4E2D;&#x63D0;&#x4F9B;&#x7684;&#x6307;&#x4EE4;&#x3001;&#x5404;&#x901A;&#x7528;&#x5BC4;&#x5B58;&#x5668;&#x3001; CPU &#x7684;&#x72B6;&#x6001;&#x3001;&#x5185;&#x5B58;&#x8D44;&#x6E90;&#x3002;&#x90A3;&#x4E48;&#xFF0C;&#x5728;&#x9AD8;&#x7EA7;&#x8BED;&#x8A00;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x8FDB;&#x884C;&#x4E00;&#x6B21;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x8981;&#x505A;&#x54EA;&#x4E9B;&#x5DE5;&#x4F5C;&#x5229;&#x7528;&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x6765;&#x5B9E;&#x73B0;&#x8FD9;&#x4E00;&#x529F;&#x80FD;&#x5462;&#xFF1F;</p>
+<p>&#x663E;&#x7136;&#x5E76;&#x4E0D;&#x662F;&#x4EC5;&#x7528;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x8DF3;&#x8F6C;&#x5230;&#x88AB;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x5F00;&#x5934;&#x5730;&#x5740;&#x5C31;&#x884C;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x8FD8;&#x9700;&#x8981;&#x8003;&#x8651;&#xFF1A;</p>
+<ul>
+<li>&#x5982;&#x4F55;&#x4F20;&#x9012;&#x53C2;&#x6570;&#xFF1F;</li>
+<li>&#x5982;&#x4F55;&#x4F20;&#x9012;&#x8FD4;&#x56DE;&#x503C;&#xFF1F;</li>
+<li>&#x5982;&#x4F55;&#x4FDD;&#x8BC1;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x540E;&#x80FD;&#x4ECE;&#x6211;&#x4EEC;&#x671F;&#x671B;&#x7684;&#x4F4D;&#x7F6E;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF1F;</li>
+</ul>
+<p>&#x7B49;&#x66F4;&#x591A;&#x4E8B;&#x9879;&#x3002;&#x901A;&#x5E38;&#x7F16;&#x8BD1;&#x5668;&#x6309;&#x7167;&#x67D0;&#x79CD;&#x89C4;&#x8303;&#x53BB;&#x7FFB;&#x8BD1;&#x6240;&#x6709;&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF0C;&#x8FD9;&#x79CD;&#x89C4;&#x8303;&#x88AB;&#x79F0;&#x4E3A; <a href="https://en.wikipedia.org/wiki/Calling_convention" target="_blank">calling convention</a> &#x3002;&#x503C;&#x5F97;&#x4E00;&#x63D0;&#x7684;&#x662F;&#xFF0C;&#x4E3A;&#x4E86;&#x5B9E;&#x73B0;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x9884;&#x5148;&#x5206;&#x914D;&#x4E00;&#x5757;&#x5185;&#x5B58;&#x4F5C;&#x4E3A; <strong>&#x8C03;&#x7528;&#x6808;</strong> &#xFF0C;&#x540E;&#x9762;&#x4F1A;&#x770B;&#x5230;&#x8C03;&#x7528;&#x6808;&#x5728;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x8FC7;&#x7A0B;&#x4E2D;&#x6781;&#x5176;&#x91CD;&#x8981;&#x3002;&#x4F60;&#x4E5F;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A;&#x4EC0;&#x4E48;&#x7B2C;&#x4E00;&#x7AE0;&#x521A;&#x5F00;&#x59CB;&#x6211;&#x4EEC;&#x5C31;&#x8981;&#x5206;&#x914D;&#x6808;&#x4E86;&#x3002;</p>
+</blockquote>
+<p>&#x5BF9;&#x4E8E;&#x53C2;&#x6570;&#x6BD4;&#x8F83;&#x5C11;&#x4E14;&#x662F;&#x57FA;&#x672C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x4ECE;&#x5DE6;&#x5230;&#x53F3;&#x4F7F;&#x7528;&#x5BC4;&#x5B58;&#x5668; $a_0 \sim a_7$ &#x5C31;&#x53EF;&#x4EE5;&#x5B8C;&#x6210;&#x53C2;&#x6570;&#x7684;&#x4F20;&#x9012;&#x3002;&#xFF08;&#x53EF;&#x53C2;&#x8003; <a href="https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf" target="_blank">riscv calling convention</a>&#xFF09;</p>
+<p>&#x7136;&#x800C;&#xFF0C;&#x5982;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E00;&#x6837;&#xFF0C;&#x8BBE;&#x7F6E;&#x5BC4;&#x5B58;&#x5668;&#x5E76;&#x6267;&#x884C;&#x6C47;&#x7F16;&#x6307;&#x4EE4;&#xFF0C;&#x8FD9;&#x8D85;&#x51FA;&#x4E86; Rust &#x8BED;&#x8A00;&#x7684;&#x63CF;&#x8FF0;&#x80FD;&#x529B;&#x3002;&#x7136;&#x800C;&#x53C8;&#x4E0E;&#x4E4B;&#x524D; <code>global_asm!</code> &#x5927;&#x6BB5;&#x63D2;&#x5165;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4E0D;&#x540C;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x628A; <code>u8</code> &#x7C7B;&#x578B;&#x7684;&#x5355;&#x4E2A;&#x5B57;&#x7B26;&#x4F20;&#x7ED9; $a_0$ &#x4F5C;&#x4E3A;&#x8F93;&#x5165;&#x53C2;&#x6570;&#xFF0C;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x8F83;&#x4E3A;&#x5F3A;&#x8C03; Rust &#x4E0E;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x7684;&#x4EA4;&#x4E92;&#x3002;&#x6B64;&#x65F6;&#x6211;&#x4EEC;&#x901A;&#x5E38;&#x4F7F;&#x7528; <strong>&#x5185;&#x8054;&#x6C47;&#x7F16;&#xFF08;inline assembly&#xFF09;</strong> &#x3002;</p>
+<blockquote>
+<p><strong>[info] &#x62D3;&#x5C55;&#x5185;&#x8054;&#x6C47;&#x7F16;</strong></p>
+<p>Rust &#x4E2D;&#x62D3;&#x5C55;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x7684;&#x683C;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token function">asm!</span><span class="token punctuation">(</span>assembler template
+    <span class="token punctuation">:</span> <span class="token comment">/* output operands */</span>
+    <span class="token punctuation">:</span> <span class="token comment">/* input operands */</span>
+    <span class="token punctuation">:</span> <span class="token comment">/* clobbered registers list */</span>
+    <span class="token punctuation">:</span> <span class="token comment">/* option */</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x5176;&#x4E2D;&#xFF1A;</p>
+<ul>
+<li><code>assembler template</code> &#x7ED9;&#x51FA;&#x5B57;&#x7B26;&#x4E32;&#x5F62;&#x5F0F;&#x7684;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#xFF1B;</li>
+<li><code>output operands</code> &#x4EE5;&#x53CA; <code>input operands</code> &#x5206;&#x522B;&#x8868;&#x793A;&#x8F93;&#x51FA;&#x548C;&#x8F93;&#x5165;&#xFF0C;&#x4F53;&#x73B0;&#x7740;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4E0E; Rust &#x4EE3;&#x7801;&#x7684;&#x4EA4;&#x4E92;&#x3002;&#x6BCF;&#x4E2A;&#x8F93;&#x51FA;&#x548C;&#x8F93;&#x5165;&#x90FD;&#x662F;&#x7528; <code>&#x201C;constraint&#x201D;(expr)</code> &#x7684;&#x5F62;&#x5F0F;&#x7ED9;&#x51FA;&#x7684;&#xFF0C;&#x5176;&#x4E2D; <code>expr</code> &#x90E8;&#x5206;&#x662F;&#x4E00;&#x4E2A; Rust &#x8868;&#x8FBE;&#x5F0F;&#x4F5C;&#x4E3A;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x7684;&#x8F93;&#x5165;&#x3001;&#x8F93;&#x51FA;&#xFF0C;&#x901A;&#x5E38;&#x4E3A;&#x4E86;&#x7B80;&#x5355;&#x8D77;&#x89C1;&#x4EC5;&#x7528;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x3002;&#x800C; <code>constraint</code> &#x5219;&#x662F;&#x4F60;&#x7528;&#x6765;&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x53C2;&#x6570;&#x4F20;&#x9012;&#xFF1B;</li>
+<li><code>clobbered registers list</code> &#x9700;&#x8981;&#x7ED9;&#x51FA;&#x4F60;&#x5728;&#x6574;&#x6BB5;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4E2D;&#xFF0C;&#x9664;&#x4E86;&#x7528;&#x6765;&#x4F5C;&#x4E3A;&#x8F93;&#x5165;&#x3001;&#x8F93;&#x51FA;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x4E4B;&#x5916;&#xFF0C;&#x8FD8;&#x66FE;&#x7ECF;&#x663E;&#x5F0F;/&#x9690;&#x5F0F;&#x7684;&#x4FEE;&#x6539;&#x8FC7;&#x54EA;&#x4E9B;&#x5BC4;&#x5B58;&#x5668;&#x3002;&#x7531;&#x4E8E;&#x7F16;&#x8BD1;&#x5668;&#x5BF9;&#x4E8E;&#x6C47;&#x7F16;&#x6307;&#x4EE4;&#x6240;&#x77E5;&#x6709;&#x9650;&#xFF0C;&#x4F60;&#x5FC5;&#x987B;&#x624B;&#x52A8;&#x544A;&#x8BC9;&#x5B83;&#x201C;&#x6211;&#x53EF;&#x80FD;&#x4F1A;&#x4FEE;&#x6539;&#x8FD9;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x201D;&#xFF0C;&#x8FD9;&#x6837;&#x5B83;&#x5728;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x65F6;&#x5C31;&#x4F1A;&#x66F4;&#x52A0;&#x5C0F;&#x5FC3;&#xFF1B;</li>
+<li><code>option</code> &#x662F; Rust &#x8BED;&#x8A00;&#x5185;&#x8054;&#x6C47;&#x7F16; <strong>&#x7279;&#x6709;</strong> &#x7684;(&#x76F8;&#x5BF9;&#x4E8E; C &#x8BED;&#x8A00;)&#xFF0C;&#x7528;&#x6765;&#x5BF9;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x6574;&#x4F53;&#x8FDB;&#x884C;&#x914D;&#x7F6E;&#x3002;</li>
+<li>&#x5982;&#x679C;&#x60F3;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x4E0A;&#x9762;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;&#x5185;&#x8054;&#x6C47;&#x7F16;(<strong>&quot;asm!&quot;</strong>)&#xFF0C;&#x8BF7;&#x53C2;&#x8003;<a href="../appendix/inline_asm.md">&#x9644;&#x5F55;&#xFF1A;&#x5185;&#x8054;&#x6C47;&#x7F16;</a>&#x3002;</li>
+</ul>
+</blockquote>
+<p>&#x8F93;&#x51FA;&#x90E8;&#x5206;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x7ED3;&#x679C;&#x4FDD;&#x5B58;&#x5230;&#x53D8;&#x91CF; <code>ret</code> &#x4E2D;&#xFF0C;&#x9650;&#x5236;&#x6761;&#x4EF6; <code>{x10}</code> &#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x4F7F;&#x7528;&#x5BC4;&#x5B58;&#x5668; $x_{10}(a_0)$ &#xFF0C;&#x524D;&#x9762;&#x7684; <code>=</code> &#x8868;&#x660E;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4F1A;&#x4FEE;&#x6539;&#x8BE5;&#x5BC4;&#x5B58;&#x5668;&#x5E76;&#x4F5C;&#x4E3A;&#x6700;&#x540E;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x3002;&#x4E00;&#x822C;&#x60C5;&#x51B5;&#x4E0B; <code>output operands</code> &#x7684; constraint &#x90E8;&#x5206;&#x524D;&#x9762;&#x90FD;&#x8981;&#x52A0;&#x4E0A; <code>=</code> &#x3002;</p>
+<p>&#x8F93;&#x5165;&#x90E8;&#x5206;&#xFF0C;&#x6211;&#x4EEC;&#x5206;&#x522B;&#x901A;&#x8FC7;&#x5BC4;&#x5B58;&#x5668; $x<em>{10}(a_0),x</em>{11}(a<em>1),x</em>{12}(a<em>2),x</em>{17}(a_7)$ &#x4F20;&#x5165;&#x53C2;&#x6570; <code>arg0,arg1,arg2,which</code> &#xFF0C;&#x5B83;&#x4EEC;&#x5206;&#x522B;&#x4EE3;&#x8868;&#x63A5;&#x53E3;&#x53EF;&#x80FD;&#x6240;&#x9700;&#x7684;&#x4E09;&#x4E2A;&#x8F93;&#x5165;&#x53C2;&#x6570;&#xFF08;<code>arg0,arg1,arg2</code>&#xFF09;&#xFF0C;&#x4EE5;&#x53CA;&#x7528;&#x6765;&#x533A;&#x5206;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x7684;&#x662F;&#x54EA;&#x4E2A;&#x63A5;&#x53E3;&#x7684; <code>SBI Extension ID(</code>which<code>) &#x3002;&#x8FD9;&#x91CC;&#x4E4B;&#x6240;&#x4EE5;&#x63D0;&#x4F9B;&#x4E09;&#x4E2A;&#x8F93;&#x5165;&#x53C2;&#x6570;&#x662F;&#x4E3A;&#x4E86;&#x5C06;&#x6240;&#x6709;&#x63A5;&#x53E3;&#x56CA;&#x62EC;&#x8FDB;&#x53BB;&#xFF0C;&#x5BF9;&#x4E8E;&#x67D0;&#x4E9B;&#x63A5;&#x53E3;&#x6709;&#x7684;&#x8F93;&#x5165;&#x53C2;&#x6570;&#x662F;&#x5197;&#x4F59;&#x7684;&#xFF0C;&#x6BD4;&#x5982;</code>sbi_console_putchar`` &#x7531;&#x4E8E;&#x53EA;&#x9700;&#x4E00;&#x4E2A;&#x8F93;&#x5165;&#x53C2;&#x6570;&#xFF0C;&#x5B83;&#x5C31;&#x53EA;&#x5173;&#x5FC3;&#x5BC4;&#x5B58;&#x5668; $a_0$ &#x7684;&#x503C;&#x3002;</p>
+<p>&#x5728; clobbered registers list &#x4E2D;&#xFF0C;&#x51FA;&#x73B0;&#x4E86;&#x4E00;&#x4E2A; <code>&quot;memory&quot;</code> &#xFF0C;&#x8FD9;&#x7528;&#x6765;&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x9690;&#x5F0F;&#x7684;&#x4FEE;&#x6539;&#x4E86;&#x5728;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4E2D;&#x672A;&#x66FE;&#x51FA;&#x73B0;&#x7684;&#x67D0;&#x4E9B;&#x5BC4;&#x5B58;&#x5668;&#x3002;&#x6240;&#x4EE5;&#xFF0C;&#x5B83;&#x4E5F;&#x4E0D;&#x80FD;&#x8BA4;&#x4E3A;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x4E2D;&#x672A;&#x51FA;&#x73B0;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x5C31;&#x4F1A;&#x5728;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x524D;&#x540E;&#x4FDD;&#x6301;&#x4E0D;&#x53D8;&#x4E86;&#x3002;</p>
+<p>&#x5728; option &#x90E8;&#x5206;&#x51FA;&#x73B0;&#x4E86; <code>&quot;volatile&quot;</code> &#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x80FD;&#x5728;&#x5F88;&#x591A;&#x5730;&#x65B9;&#x770B;&#x5230;&#x8FC7;&#x8FD9;&#x4E2A;&#x5355;&#x8BCD;&#x3002;&#x4E0D;&#x8FC7;&#x5728;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x4E2D;&#xFF0C;&#x4E3B;&#x8981;&#x610F;&#x601D;&#x662F;&#x544A;&#x8BC9;&#x7F16;&#x8BD1;&#x5668;&#xFF0C;&#x4E0D;&#x8981;&#x5C06;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x79FB;&#x52A8;&#x5230;&#x522B;&#x7684;&#x5730;&#x65B9;&#x53BB;&#x3002;&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x901A;&#x5E38;&#x4F1A;&#x5BF9;&#x7FFB;&#x8BD1;&#x5B8C;&#x7684;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x8FDB;&#x884C;&#x4F18;&#x5316;&#xFF0C;&#x5176;&#x4E2D;&#x5C31;&#x5305;&#x62EC;&#x5BF9;&#x6307;&#x4EE4;&#x7684;&#x4F4D;&#x7F6E;&#x8FDB;&#x884C;&#x8C03;&#x6362;&#x3002;&#x50CF;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x8C03;&#x6362;&#x53EF;&#x80FD;&#x5C31;&#x4F1A;&#x4EA7;&#x751F;&#x6211;&#x4EEC;&#x9884;&#x671F;&#x4E4B;&#x5916;&#x7684;&#x7ED3;&#x679C;&#x3002;&#x8C28;&#x614E;&#x8D77;&#x89C1;&#xFF0C;&#x6211;&#x4EEC;&#x9488;&#x5BF9;&#x5185;&#x8054;&#x6C47;&#x7F16;&#x7981;&#x7528;&#x8FD9;&#x4E00;&#x4F18;&#x5316;&#x3002;</p>
+<p>&#x63A5;&#x7740;&#x5229;&#x7528; <code>sbi_call</code> &#x53C2;&#x8003; OpenSBI &#x6587;&#x6863;&#x5B9E;&#x73B0;&#x5BF9;&#x5E94;&#x7684;&#x63A5;&#x53E3;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/sbi.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">console_putchar</span><span class="token punctuation">(</span>ch<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">sbi_call</span><span class="token punctuation">(</span>SBI_CONSOLE_PUTCHAR<span class="token punctuation">,</span> ch<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">console_getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+    <span class="token function">sbi_call</span><span class="token punctuation">(</span>SBI_CONSOLE_GETCHAR<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">...</span>
+
+<span class="token keyword">const</span> SBI_SET_TIMER<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_CONSOLE_PUTCHAR<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_CONSOLE_GETCHAR<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_CLEAR_IPI<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_SEND_IPI<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_REMOTE_FENCE_I<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_REMOTE_SFENCE_VMA<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_REMOTE_SFENCE_VMA_ASID<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SBI_SHUTDOWN<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x6BD4;&#x8F83;&#x6DF1;&#x5165;&#x7684;&#x7406;&#x89E3;&#x4E86; <code>console_putchar</code> &#x5230;&#x5E95;&#x662F;&#x600E;&#x4E48;&#x4E00;&#x56DE;&#x4E8B;&#x3002;&#x4E0B;&#x4E00;&#x8282;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528; <code>console_putchar</code> &#x5B9E;&#x73B0;&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;&#xFF0C;&#x4E3A;&#x540E;&#x9762;&#x7684;&#x8C03;&#x8BD5;&#x63D0;&#x4F9B;&#x65B9;&#x4FBF;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: "ab871063a9fa7f1da571",
+    clientSecret: "4760b384e3e452d2241d859cfa6a7da21a8729ec",
+    repo: "rCore_tutorial_doc",
+    owner: "rcore-os",
+    admin: [
+      "chyyuu",
+      "xyongcn",
+      "wangrunji0408",
+      "xy-plus",
+      "PanQL",
+      "wyfcyx",
+      "equation314"
+    ],
+    id: location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render("gitalk-container");
+</script>
+</div></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part5.html" class="navigation navigation-prev " aria-label="Previous page: 使用 Qemu 运行内核">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part7.html" class="navigation navigation-next " aria-label="Next page: 实现格式化输出">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"封装 SBI 接口","level":"1.4.6","depth":2,"next":{"title":"实现格式化输出","level":"1.4.7","depth":2,"path":"chapter2/part7.md","ref":"chapter2/part7.md","articles":[]},"previous":{"title":"使用 Qemu 运行内核","level":"1.4.5","depth":2,"path":"chapter2/part5.md","ref":"chapter2/part5.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part6.md","mtime":"2020-02-13T08:47:45.387Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-14T13:23:24.037Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+

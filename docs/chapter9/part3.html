@@ -1,0 +1,1451 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>实现终端 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-tomorrow.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part4.html" />
+    
+    
+    <link rel="prev" href="part2.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter0/introduction.html">
+            
+                <a href="../chapter0/introduction.html">
+            
+                    
+                    第零章：实验环境说明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter1/introduction.html">
+            
+                <a href="../chapter1/introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../chapter1/part1.html">
+            
+                <a href="../chapter1/part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../chapter1/part2.html">
+            
+                <a href="../chapter1/part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../chapter1/part3.html">
+            
+                <a href="../chapter1/part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../chapter1/part4.html">
+            
+                <a href="../chapter1/part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../chapter1/part5.html">
+            
+                <a href="../chapter1/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../chapter2/introduction.html">
+            
+                <a href="../chapter2/introduction.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../chapter2/part1.html">
+            
+                <a href="../chapter2/part1.html">
+            
+                    
+                    使用目标三元组描述目标平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter2/part2.html">
+            
+                <a href="../chapter2/part2.html">
+            
+                    
+                    编译、生成内核镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter2/part3.html">
+            
+                <a href="../chapter2/part3.html">
+            
+                    
+                    使用链接脚本指定内存布局
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter2/part4.html">
+            
+                <a href="../chapter2/part4.html">
+            
+                    
+                    重写程序入口点 -start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter2/part5.html">
+            
+                <a href="../chapter2/part5.html">
+            
+                    
+                    使用 Qemu 运行内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter2/part6.html">
+            
+                <a href="../chapter2/part6.html">
+            
+                    
+                    封装 SBI 接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="../chapter2/part7.html">
+            
+                <a href="../chapter2/part7.html">
+            
+                    
+                    实现格式化输出
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="../chapter2/part8.html">
+            
+                <a href="../chapter2/part8.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64 中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
+            
+                    
+                    物理内存探测与管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../chapter4/part2.html">
+            
+                <a href="../chapter4/part2.html">
+            
+                    
+                    动态内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../chapter4/part3.html">
+            
+                <a href="../chapter4/part3.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../chapter5/introduction.html">
+            
+                <a href="../chapter5/introduction.html">
+            
+                    
+                    第五章：内存虚拟化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../chapter5/part1.html">
+            
+                <a href="../chapter5/part1.html">
+            
+                    
+                    页表：从虚拟内存到物理内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../chapter5/part2.html">
+            
+                <a href="../chapter5/part2.html">
+            
+                    
+                    内核初始映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../chapter5/part3.html">
+            
+                <a href="../chapter5/part3.html">
+            
+                    
+                    内核重映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../chapter5/part4.html">
+            
+                <a href="../chapter5/part4.html">
+            
+                    
+                    内核重映射实现之一：页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../chapter5/part5.html">
+            
+                <a href="../chapter5/part5.html">
+            
+                    
+                    内核重映射实现之二：MemorySet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../chapter5/part6.html">
+            
+                <a href="../chapter5/part6.html">
+            
+                    
+                    内核重映射实现之三：完结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../chapter5/part7.html">
+            
+                <a href="../chapter5/part7.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../chapter6/introduction.html">
+            
+                <a href="../chapter6/introduction.html">
+            
+                    
+                    第六章：内核线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../chapter6/part1.html">
+            
+                <a href="../chapter6/part1.html">
+            
+                    
+                    线程状态与保存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter6/part2.html">
+            
+                <a href="../chapter6/part2.html">
+            
+                    
+                    线程切换
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter6/part3.html">
+            
+                <a href="../chapter6/part3.html">
+            
+                    
+                    内核线程初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter6/part4.html">
+            
+                <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter7/introduction.html">
+            
+                <a href="../chapter7/introduction.html">
+            
+                    
+                    第七章：线程调度
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter7/part1.html">
+            
+                <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    线程调度之 Round Robin 算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter7/part4.html">
+            
+                <a href="../chapter7/part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../chapter7/part5.html">
+            
+                <a href="../chapter7/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter8/introduction.html">
+            
+                <a href="../chapter8/introduction.html">
+            
+                    
+                    第八章：进程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter8/part1.html">
+            
+                <a href="../chapter8/part1.html">
+            
+                    
+                    编写用户程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter8/part1-1.md">
+            
+                <span>
+            
+                    
+                    合并内核与应用程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter8/part2.html">
+            
+                <a href="../chapter8/part2.html">
+            
+                    
+                    在内核中实现系统调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter8/part3.html">
+            
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建虚拟内存空间
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
+            
+                    
+                    创建进程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.6" data-path="../chapter8/part5.html">
+            
+                <a href="../chapter8/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.11.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../chapter10/introduction.html">
+            
+                <a href="../chapter10/introduction.html">
+            
+                    
+                    第十章：同步互斥
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../chapter13/introduction.html">
+            
+                <a href="../chapter13/introduction.html">
+            
+                    
+                    第十三章：线程管理：fork and execute
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../chapter13/part1.html">
+            
+                <a href="../chapter13/part1.html">
+            
+                    
+                    fork 介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../chapter13/part2.html">
+            
+                <a href="../chapter13/part2.html">
+            
+                    
+                    fork 实现思路
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../chapter13/part3.html">
+            
+                <a href="../chapter13/part3.html">
+            
+                    
+                    复制线程上下文
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../chapter13/part4.html">
+            
+                <a href="../chapter13/part4.html">
+            
+                    
+                    复制页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" >
+            
+                <span>
+            
+                    
+                    [附录]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+            
+                <span>
+            
+                    
+                    内链汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >实现终端</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;">&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa3" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<p>&#x6211;&#x4EEC;&#x7684;&#x7EC8;&#x7AEF;&#x4E5F;&#x5F88;&#x7B80;&#x5355;&#xFF1A;&#x5176;&#x529F;&#x80FD;&#x4E3A;&#x4F60;&#x8F93;&#x5165;&#x60F3;&#x8981;&#x6267;&#x884C;&#x7684;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x5982; <code>rust/hello_world</code> &#xFF0C;&#x968F;&#x540E;&#x6309;&#x4E0B;&#x56DE;&#x8F66;&#xFF0C;&#x5185;&#x6838;&#x5C31;&#x4F1A;&#x5E2E;&#x4F60;&#x6267;&#x884C;&#x8FD9;&#x4E2A;&#x7A0B;&#x5E8F;&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;</p>
+<ul>
+<li>&#x6267;&#x884C;&#x7A0B;&#x5E8F;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mtext><mo>=</mo><mn>2</mn><mn>2</mn><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{id} = 221</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">id</span></span><span class="mrel">=</span><span class="mord mathrm">2</span><span class="mord mathrm">2</span><span class="mord mathrm">1</span></span></span></span></li>
+</ul>
+<p>&#x7EC8;&#x7AEF;&#x7684;&#x5B9E;&#x73B0;&#x57FA;&#x4E8E;&#x4E0A;&#x4E00;&#x8282;&#x6240;&#x8BB2;&#x7684;&#x8BB0;&#x4E8B;&#x672C;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/bin/user_shell.rs</span>
+
+<span class="token attribute attr-name">#![no_std]</span>
+<span class="token attribute attr-name">#![no_main]</span>
+<span class="token attribute attr-name">#![feature(alloc)]</span>
+
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> alloc<span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[macro_use]</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> LF<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0au8</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> CR<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0du8</span><span class="token punctuation">;</span>
+
+<span class="token keyword">use</span> rust<span class="token punctuation">::</span>io<span class="token punctuation">::</span>getc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> rust<span class="token punctuation">::</span>syscall<span class="token punctuation">::</span>sys_exec<span class="token punctuation">;</span>
+<span class="token keyword">use</span> alloc<span class="token punctuation">::</span>string<span class="token punctuation">::</span>String<span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Rust user shell&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token comment">// &#x4FDD;&#x5B58;&#x672C;&#x884C;&#x5DF2;&#x7ECF;&#x8F93;&#x5165;&#x7684;&#x5185;&#x5BB9;</span>
+   <span class="token keyword">let</span> <span class="token keyword">mut</span> line<span class="token punctuation">:</span> String <span class="token operator">=</span> String<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;&gt;&gt; &quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+       <span class="token keyword">let</span> c <span class="token operator">=</span> <span class="token function">getc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">match</span> c <span class="token punctuation">{</span>
+           LF <span class="token operator">|</span> CR <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+               <span class="token comment">// &#x5982;&#x679C;&#x9047;&#x5230;&#x56DE;&#x8F66;&#x6216;&#x6362;&#x884C;</span>
+               <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token keyword">if</span> <span class="token operator">!</span>line<span class="token punctuation">.</span><span class="token function">is_empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                   <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;searching for program {}&quot;</span><span class="token punctuation">,</span> line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token comment">// &#x4F7F;&#x7528;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x6267;&#x884C;&#x7A0B;&#x5E8F;</span>
+                   <span class="token function">sys_exec</span><span class="token punctuation">(</span>line<span class="token punctuation">.</span><span class="token function">as_ptr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token comment">// &#x6E05;&#x7A7A;&#x672C;&#x884C;&#x5185;&#x5BB9;</span>
+                   line<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token punctuation">}</span>
+               <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;&gt;&gt; &quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span><span class="token punctuation">,</span>
+           _ <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+               <span class="token comment">// &#x5426;&#x5219;&#x6B63;&#x5E38;&#x8F93;&#x5165;</span>
+               <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> c <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+               line<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>c <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x4EE5;&#x53CA;&#x7528;&#x6237;&#x6001;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/syscall.rs</span>
+
+<span class="token keyword">enum</span> SyscallId <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    Exec <span class="token operator">=</span> <span class="token number">221</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// &#x4F20;&#x5165;&#x8DEF;&#x5F84;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x5730;&#x5740;</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_exec</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">sys_call</span><span class="token punctuation">(</span>SyscallId<span class="token punctuation">::</span>Exec<span class="token punctuation">,</span> path <span class="token keyword">as</span> usize<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x90A3;&#x6211;&#x4EEC;&#x5982;&#x4F55;&#x5728;&#x5185;&#x6838;&#x4E2D;&#x5B9E;&#x73B0;&#x8FD9;&#x4E2A;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x5462;&#xFF1F;&#x5927;&#x6982;&#x6D41;&#x7A0B;&#x662F;&#xFF1A;</p>
+<ol>
+<li>&#x89E3;&#x6790;&#x4F20;&#x5165;&#x7684;&#x8DEF;&#x5F84;&#x5B57;&#x7B26;&#x4E32;</li>
+<li>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x7684;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#xFF0C;&#x5E76;&#x52A0;&#x5165;&#x8C03;&#x5EA6;</li>
+</ol>
+<p>&#x73B0;&#x5728;&#x7684;&#x95EE;&#x9898;&#x662F;&#x6211;&#x4EEC;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x8F93;&#x51FA;&#x5373;&#x8F93;&#x51FA;&#x5230;&#x5C4F;&#x5E55;&#xFF0C;&#x5982;&#x679C;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x548C;&#x7EC8;&#x7AEF;&#x7EBF;&#x7A0B;&#x540C;&#x65F6;&#x8FD0;&#x884C;&#xFF0C;&#x4ED6;&#x4EEC;&#x8F93;&#x51FA;&#x7684;&#x4FE1;&#x606F;&#x4F1A;&#x6DF7;&#x6742;&#x5728;&#x4E00;&#x8D77;&#x8BA9;&#x6211;&#x4EEC;&#x5F88;&#x96BE;&#x533A;&#x5206;&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x7684;&#x505A;&#x6CD5;&#x662F;&#xFF1A;&#x501F;&#x7528;&#x4E0A;&#x4E00;&#x8282;&#x963B;&#x585E;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5F53;&#x7EC8;&#x7AEF;&#x7EBF;&#x7A0B;&#x51C6;&#x5907;&#x542F;&#x52A8;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x65F6;&#xFF0C;&#x5B83;&#x4F1A;&#x653E;&#x5F03; CPU &#x8D44;&#x6E90;&#x8FDB;&#x5165;&#x963B;&#x585E;&#x72B6;&#x6001;&#xFF1B;&#x76F4;&#x5230;&#x88AB;&#x542F;&#x52A8;&#x7684;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x7ED3;&#x675F;&#x540E;&#x624D;&#x5524;&#x9192;&#x542F;&#x52A8;&#x5B83;&#x7684;&#x7EC8;&#x7AEF;&#x7EBF;&#x7A0B;&#x3002;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x89E3;&#x51B3;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x4E5F;&#x4E0D;&#x5FC5;&#x4F7F;&#x7528;&#x4E0A;&#x4E00;&#x8282;&#x4E2D;&#x7684;&#x6761;&#x4EF6;&#x53D8;&#x91CF;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x7EBF;&#x7A0B;&#x7ED3;&#x6784;&#x4F53;&#x4E2D;&#x52A0;&#x5165;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/structs.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> Thread <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token keyword">pub</span> wait<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>Tid<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x8868;&#x793A;&#x6B63;&#x5728;&#x7B49;&#x5F85;&#x8FD9;&#x4E2A;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x7ED3;&#x675F;&#x7684;&#x7EBF;&#x7A0B; Tid &#x3002;&#x5728;&#x7EBF;&#x7A0B;&#x9000;&#x51FA;&#x65F6;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/processor.rs</span>
+
+<span class="token keyword">impl</span> Processor <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">exit</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> code<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+        <span class="token function">disable_and_store</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> inner <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">inner</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> tid <span class="token operator">=</span> inner<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token punctuation">;</span>
+
+        inner<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span>tid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;thread {} exited, exit code = {}&quot;</span><span class="token punctuation">,</span> tid<span class="token punctuation">,</span> code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// &#x52A0;&#x5165;&#x8FD9;&#x4E2A;&#x5224;&#x65AD;</span>
+        <span class="token comment">// &#x5982;&#x679C;&#x6709;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6B63;&#x5728;&#x7B49;&#x5F85;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x7ED3;&#x675F;</span>
+        <span class="token comment">// &#x5C06;&#x5176;&#x5524;&#x9192;</span>
+        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>wait<span class="token punctuation">)</span> <span class="token operator">=</span> inner<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">.</span>wait <span class="token punctuation">{</span>
+            inner<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">wakeup</span><span class="token punctuation">(</span>wait<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        inner<span class="token punctuation">.</span>current
+            <span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token number">1</span>
+            <span class="token punctuation">.</span><span class="token function">switch_to</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> inner<span class="token punctuation">.</span>idle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x7531;&#x4E8E; <code>Thread</code> &#x7684;&#x5B57;&#x6BB5;&#x53D1;&#x751F;&#x4E86;&#x53D8;&#x5316;&#xFF0C;&#x4E4B;&#x524D;&#x6240;&#x6709;&#x521B;&#x5EFA; <code>Thread</code> &#x7684;&#x4EE3;&#x7801;&#x90FD;&#x8981;&#x505A;&#x51FA;&#x76F8;&#x5E94;&#x7684;&#x4FEE;&#x6539;&#xFF0C;&#x5C06; <code>wait</code> &#x5B57;&#x6BB5;&#x7684;&#x503C;&#x8BBE;&#x7F6E;&#x4E3A; <code>None</code> &#x5373;&#x53EF;&#x3002;&#x65B0;&#x5EFA;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x65F6;&#xFF0C;&#x8981;&#x65B0;&#x52A0;&#x5165;&#x4E00;&#x4E2A;&#x53C2;&#x6570; <code>wait_thread</code> &#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/structs.rs</span>
+
+<span class="token keyword">impl</span> Thread <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new_kernel</span><span class="token punctuation">(</span>entry<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Box<span class="token operator">&lt;</span>Thread<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> kstack_ <span class="token operator">=</span> KernelStack<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Box<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>Thread <span class="token punctuation">{</span>
+                context<span class="token punctuation">:</span> Context<span class="token punctuation">::</span><span class="token function">new_kernel_thread</span><span class="token punctuation">(</span>entry<span class="token punctuation">,</span> kstack_<span class="token punctuation">.</span><span class="token function">top</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> satp<span class="token punctuation">::</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bits</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                kstack<span class="token punctuation">:</span> kstack_<span class="token punctuation">,</span>
+                wait<span class="token punctuation">:</span> None
+            <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_boot_thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Box<span class="token operator">&lt;</span>Thread<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        Box<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>Thread <span class="token punctuation">{</span>
+            context<span class="token punctuation">:</span> Context<span class="token punctuation">::</span><span class="token function">null</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            kstack<span class="token punctuation">:</span> KernelStack<span class="token punctuation">::</span><span class="token function">new_empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            wait<span class="token punctuation">:</span> None
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">new_user</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token punctuation">[</span>u8<span class="token punctuation">]</span><span class="token punctuation">,</span> wait_thread<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>Tid<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Box<span class="token operator">&lt;</span>Thread<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">...</span>
+        Box<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
+            Thread <span class="token punctuation">{</span>
+                context<span class="token punctuation">:</span> Context<span class="token punctuation">::</span><span class="token function">new_user_thread</span><span class="token punctuation">(</span>entry_addr<span class="token punctuation">,</span> ustack_top<span class="token punctuation">,</span> kstack<span class="token punctuation">.</span><span class="token function">top</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vm<span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                kstack<span class="token punctuation">:</span> kstack<span class="token punctuation">,</span>
+                proc<span class="token punctuation">:</span> <span class="token function">Some</span><span class="token punctuation">(</span>
+                    Arc<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
+                        Process <span class="token punctuation">{</span>
+                            vm<span class="token punctuation">:</span> Arc<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>vm<span class="token punctuation">)</span>
+                        <span class="token punctuation">}</span>
+                    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span><span class="token punctuation">,</span>
+                wait<span class="token punctuation">:</span> wait_thread
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span>
+        <span class="token punctuation">...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x5728;&#x5185;&#x6838;&#x4E2D;&#x5B9E;&#x73B0;&#x8BE5;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/syscall.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">const</span> SYS_EXEC<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">221</span><span class="token punctuation">;</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">syscall</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> args<span class="token punctuation">:</span> <span class="token punctuation">[</span>usize<span class="token punctuation">;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> TrapFrame<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">match</span> id <span class="token punctuation">{</span>
+        <span class="token punctuation">...</span>
+        SYS_EXEC <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token function">sys_exec</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">from_cstr</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;static</span> str <span class="token punctuation">{</span>
+    <span class="token keyword">use</span> core<span class="token punctuation">::</span><span class="token punctuation">{</span> slice<span class="token punctuation">,</span> str <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">// &#x4F7F;&#x7528;&#x8FED;&#x4EE3;&#x5668;&#x83B7;&#x5F97;&#x5B57;&#x7B26;&#x4E32;&#x957F;&#x5EA6;</span>
+    <span class="token keyword">let</span> len <span class="token operator">=</span> <span class="token punctuation">(</span>0usize<span class="token punctuation">..</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token operator">|</span><span class="token operator">&amp;</span>i<span class="token operator">|</span> <span class="token operator">*</span>s<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    str<span class="token punctuation">::</span><span class="token function">from_utf8</span><span class="token punctuation">(</span>slice<span class="token punctuation">::</span><span class="token function">from_raw_parts</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">sys_exec</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> valid <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token function">from_cstr</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token function">Some</span><span class="token punctuation">(</span>process<span class="token punctuation">::</span><span class="token function">current_tid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// &#x5982;&#x679C;&#x6B63;&#x5E38;&#x6267;&#x884C;&#xFF0C;&#x5219;&#x963B;&#x585E;&#x7EC8;&#x7AEF;&#x7EBF;&#x7A0B;&#xFF0C;&#x7B49;&#x5230;&#x542F;&#x52A8;&#x7684;&#x8FD9;&#x4E2A;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x7ED3;&#x675F;</span>
+    <span class="token keyword">if</span> valid <span class="token punctuation">{</span> process<span class="token punctuation">::</span><span class="token function">yield_now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token comment">// &#x4E0D;&#x80FD;&#x6B63;&#x5E38;&#x6267;&#x884C;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#xFF1B;&#x6216;&#x8005;&#x88AB;&#x542F;&#x52A8;&#x7EBF;&#x7A0B;&#x7ED3;&#x675F;&#x540E;&#x5524;&#x9192;&#x7EC8;&#x7AEF;&#x7EBF;&#x7A0B;&#x4E4B;&#x540E;&#x8FD4;&#x56DE;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// src/process/mod.rs</span>
+
+<span class="token comment">// &#x8FD4;&#x56DE;&#x503C;&#x8868;&#x793A;&#x662F;&#x5426;&#x6B63;&#x5E38;&#x6267;&#x884C;</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">execute</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> <span class="token operator">&amp;</span>str<span class="token punctuation">,</span> host_tid<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>Tid<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> find_result <span class="token operator">=</span> ROOT_INODE<span class="token punctuation">.</span><span class="token function">lookup</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">match</span> find_result <span class="token punctuation">{</span>
+        <span class="token function">Ok</span><span class="token punctuation">(</span>inode<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> data <span class="token operator">=</span> inode<span class="token punctuation">.</span><span class="token function">read_as_vec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// &#x8FD9;&#x91CC;&#x521B;&#x5EFA;&#x7528;&#x6237;&#x7EBF;&#x7A0B;&#x65F6;&#xFF0C;&#x4F20;&#x5165; host_tid</span>
+            <span class="token keyword">let</span> user_thread <span class="token operator">=</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> Thread<span class="token punctuation">::</span><span class="token function">new_user</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span><span class="token function">as_slice</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> host_tid<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            CPU<span class="token punctuation">.</span><span class="token function">add_thread</span><span class="token punctuation">(</span>user_thread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token function">Err</span><span class="token punctuation">(</span>_<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token comment">// &#x5982;&#x679C;&#x627E;&#x4E0D;&#x5230;&#x8DEF;&#x5F84;&#x5B57;&#x7B26;&#x4E32;&#x5BF9;&#x5E94;&#x7684;&#x7528;&#x6237;&#x7A0B;&#x5E8F;</span>
+            <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;command not found!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">false</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x6837;&#x6211;&#x4EEC;&#x5728;&#x7EBF;&#x7A0B;&#x521D;&#x59CB;&#x5316;&#x4E2D;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x5C01;&#x88C5;&#x597D;&#x7684;&#x51FD;&#x6570;&#x5C31;&#x597D;&#x4E86;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/process/mod.rs</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token function">execute</span><span class="token punctuation">(</span><span class="token string">&quot;rust/user_shell&quot;</span><span class="token punctuation">,</span> None<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x867D;&#x7136;&#x8FD8;&#x662F;&#x5C06; <code>rust/user_shell</code> &#x786C;&#x7F16;&#x7801;&#x5230;&#x5185;&#x6838;&#x4E2D;&#xFF0C;&#x4F46;&#x662F;&#x597D;&#x6B79;&#x5B83;&#x53EF;&#x4EE5;&#x4EA4;&#x4E92;&#x5F0F;&#x8FD0;&#x884C;&#x5176;&#x4ED6;&#x7A0B;&#x5E8F;&#x4E86;&#xFF01;</p>
+<p>&#x8BD5;&#x4E00;&#x8BD5;&#x8FD0;&#x884C; <code>rust/hello_world</code> &#xFF0C;&#x5B83;&#x5DE5;&#x4F5C;&#x7684;&#x5F88;&#x597D;&#xFF1B;<code>rust/notebook</code> &#x4E5F;&#x4E0D;&#x8D56;&#xFF0C;&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x6CA1;&#x6709;&#x5B9E;&#x73B0; <code>Ctrl+c</code> &#x7684;&#x529F;&#x80FD;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x65E0;&#x6CD5;&#x4ECE;&#x8BB0;&#x4E8B;&#x672C;&#x4E2D;&#x9000;&#x51FA;&#x4E86;&#x3002;&#x968F;&#x4FBF;&#x8F93;&#x5165;&#x4E00;&#x4E2A;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x7EC8;&#x7AEF;&#x4E5F;&#x4E0D;&#x4F1A;&#x5D29;&#x6E83;&#xFF0C;&#x800C;&#x662F;&#x4F1A;&#x63D0;&#x793A;&#x7A0B;&#x5E8F;&#x4E0D;&#x5B58;&#x5728;&#xFF01;</p>
+<p>&#x6240;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa3" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: "ab871063a9fa7f1da571",
+    clientSecret: "4760b384e3e452d2241d859cfa6a7da21a8729ec",
+    repo: "rCore_tutorial_doc",
+    owner: "rcore-os",
+    admin: [
+      "chyyuu",
+      "xyongcn",
+      "wangrunji0408",
+      "xy-plus",
+      "PanQL",
+      "wyfcyx",
+      "equation314"
+    ],
+    id: location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render("gitalk-container");
+</script>
+</div></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part2.html" class="navigation navigation-prev " aria-label="Previous page: 实现记事本">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part4.html" class="navigation navigation-next " aria-label="Next page: 总结与展望">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"实现终端","level":"1.11.3","depth":2,"next":{"title":"总结与展望","level":"1.11.4","depth":2,"path":"chapter9/part4.md","ref":"chapter9/part4.md","articles":[]},"previous":{"title":"实现记事本","level":"1.11.2","depth":2,"path":"chapter9/part2.md","ref":"chapter9/part2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part3.md","mtime":"2020-02-13T08:47:45.403Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-14T13:23:24.037Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+

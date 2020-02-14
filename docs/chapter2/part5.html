@@ -1,0 +1,1378 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>使用 Qemu 运行内核 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-tomorrow.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part6.html" />
+    
+    
+    <link rel="prev" href="part4.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter0/introduction.html">
+            
+                <a href="../chapter0/introduction.html">
+            
+                    
+                    第零章：实验环境说明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter1/introduction.html">
+            
+                <a href="../chapter1/introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../chapter1/part1.html">
+            
+                <a href="../chapter1/part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../chapter1/part2.html">
+            
+                <a href="../chapter1/part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../chapter1/part3.html">
+            
+                <a href="../chapter1/part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../chapter1/part4.html">
+            
+                <a href="../chapter1/part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../chapter1/part5.html">
+            
+                <a href="../chapter1/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    使用目标三元组描述目标平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    编译、生成内核镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    使用链接脚本指定内存布局
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    重写程序入口点 -start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    使用 Qemu 运行内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="part6.html">
+            
+                <a href="part6.html">
+            
+                    
+                    封装 SBI 接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="part7.html">
+            
+                <a href="part7.html">
+            
+                    
+                    实现格式化输出
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="part8.html">
+            
+                <a href="part8.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64 中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
+            
+                    
+                    物理内存探测与管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../chapter4/part2.html">
+            
+                <a href="../chapter4/part2.html">
+            
+                    
+                    动态内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../chapter4/part3.html">
+            
+                <a href="../chapter4/part3.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../chapter5/introduction.html">
+            
+                <a href="../chapter5/introduction.html">
+            
+                    
+                    第五章：内存虚拟化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../chapter5/part1.html">
+            
+                <a href="../chapter5/part1.html">
+            
+                    
+                    页表：从虚拟内存到物理内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../chapter5/part2.html">
+            
+                <a href="../chapter5/part2.html">
+            
+                    
+                    内核初始映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../chapter5/part3.html">
+            
+                <a href="../chapter5/part3.html">
+            
+                    
+                    内核重映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../chapter5/part4.html">
+            
+                <a href="../chapter5/part4.html">
+            
+                    
+                    内核重映射实现之一：页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../chapter5/part5.html">
+            
+                <a href="../chapter5/part5.html">
+            
+                    
+                    内核重映射实现之二：MemorySet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../chapter5/part6.html">
+            
+                <a href="../chapter5/part6.html">
+            
+                    
+                    内核重映射实现之三：完结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../chapter5/part7.html">
+            
+                <a href="../chapter5/part7.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../chapter6/introduction.html">
+            
+                <a href="../chapter6/introduction.html">
+            
+                    
+                    第六章：内核线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../chapter6/part1.html">
+            
+                <a href="../chapter6/part1.html">
+            
+                    
+                    线程状态与保存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter6/part2.html">
+            
+                <a href="../chapter6/part2.html">
+            
+                    
+                    线程切换
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter6/part3.html">
+            
+                <a href="../chapter6/part3.html">
+            
+                    
+                    内核线程初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter6/part4.html">
+            
+                <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter7/introduction.html">
+            
+                <a href="../chapter7/introduction.html">
+            
+                    
+                    第七章：线程调度
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter7/part1.html">
+            
+                <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    线程调度之 Round Robin 算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter7/part4.html">
+            
+                <a href="../chapter7/part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../chapter7/part5.html">
+            
+                <a href="../chapter7/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter8/introduction.html">
+            
+                <a href="../chapter8/introduction.html">
+            
+                    
+                    第八章：进程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter8/part1.html">
+            
+                <a href="../chapter8/part1.html">
+            
+                    
+                    编写用户程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter8/part1-1.md">
+            
+                <span>
+            
+                    
+                    合并内核与应用程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter8/part2.html">
+            
+                <a href="../chapter8/part2.html">
+            
+                    
+                    在内核中实现系统调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter8/part3.html">
+            
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建虚拟内存空间
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
+            
+                    
+                    创建进程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.6" data-path="../chapter8/part5.html">
+            
+                <a href="../chapter8/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../chapter9/introduction.html">
+            
+                <a href="../chapter9/introduction.html">
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../chapter9/part1.html">
+            
+                <a href="../chapter9/part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="../chapter9/part2.html">
+            
+                <a href="../chapter9/part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="../chapter9/part3.html">
+            
+                <a href="../chapter9/part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="../chapter9/part4.html">
+            
+                <a href="../chapter9/part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../chapter10/introduction.html">
+            
+                <a href="../chapter10/introduction.html">
+            
+                    
+                    第十章：同步互斥
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../chapter13/introduction.html">
+            
+                <a href="../chapter13/introduction.html">
+            
+                    
+                    第十三章：线程管理：fork and execute
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../chapter13/part1.html">
+            
+                <a href="../chapter13/part1.html">
+            
+                    
+                    fork 介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../chapter13/part2.html">
+            
+                <a href="../chapter13/part2.html">
+            
+                    
+                    fork 实现思路
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../chapter13/part3.html">
+            
+                <a href="../chapter13/part3.html">
+            
+                    
+                    复制线程上下文
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../chapter13/part4.html">
+            
+                <a href="../chapter13/part4.html">
+            
+                    
+                    复制页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" >
+            
+                <span>
+            
+                    
+                    [附录]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+            
+                <span>
+            
+                    
+                    内链汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >使用 Qemu 运行内核</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x4F7F;&#x7528;-qemu-&#x8FD0;&#x884C;&#x5185;&#x6838;">&#x4F7F;&#x7528; Qemu &#x8FD0;&#x884C;&#x5185;&#x6838;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa5" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<h3 id="&#x5B89;&#x88C5;&#x6A21;&#x62DF;&#x5668;-qemu">&#x5B89;&#x88C5;&#x6A21;&#x62DF;&#x5668; Qemu</h3>
+<p>&#x5982;&#x679C;&#x4F60;&#x5728;&#x4F7F;&#x7528; Linux (Ubuntu) &#xFF0C;&#x9700;&#x8981;&#x5230; Qemu &#x5B98;&#x65B9;&#x7F51;&#x7AD9;&#x4E0B;&#x8F7D;&#x6E90;&#x7801;&#x5E76;&#x81EA;&#x884C;&#x7F16;&#x8BD1;&#xFF0C;&#x56E0;&#x4E3A; Ubuntu &#x81EA;&#x5E26;&#x7684;&#x8F6F;&#x4EF6;&#x5305;&#x7BA1;&#x7406;&#x5668; <code>apt</code> &#x4E2D;&#x7684; Qemu &#x7684;&#x7248;&#x672C;&#x8FC7;&#x4F4E;&#x65E0;&#x6CD5;&#x4F7F;&#x7528;&#x3002;&#x53C2;&#x8003;&#x547D;&#x4EE4;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-sh">$ <span class="token function">wget</span> https://download.qemu.org/qemu-4.1.1.tar.xz
+$ <span class="token function">tar</span> xvJf qemu-4.1.1.tar.xz
+$ <span class="token builtin class-name">cd</span> qemu-4.1.1
+$ ./configure --target-list<span class="token operator">=</span>riscv32-softmmu,riscv64-softmmu
+$ <span class="token function">make</span> -j
+$ <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PWD</span>/riscv32-softmmu:<span class="token environment constant">$PWD</span>/riscv64-softmmu:<span class="token environment constant">$PATH</span>
+</code></pre>
+<p>&#x53EF;&#x67E5;&#x770B;<a href="https://github.com/riscv/riscv-qemu/wiki" target="_blank">&#x66F4;&#x8BE6;&#x7EC6;&#x7684;&#x5B89;&#x88C5;&#x548C;&#x4F7F;&#x7528;&#x547D;&#x4EE4;</a>&#x3002;&#x540C;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x6BCF;&#x6B21;&#x5F00;&#x673A;&#x4E4B;&#x540E;&#x8981;&#x4F7F;&#x7528;&#x6B64;&#x547D;&#x4EE4;&#x6765;&#x5141;&#x8BB8;&#x6A21;&#x62DF;&#x5668;&#x8FC7;&#x91CF;&#x4F7F;&#x7528;&#x5185;&#x5B58;&#xFF08;&#x4E0D;&#x662F;&#x5FC5;&#x987B;&#x7684;&#xFF09;&#xFF0C;&#x5426;&#x5219;&#x65E0;&#x6CD5;&#x6B63;&#x5E38;&#x4F7F;&#x7528; Qemu&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ <span class="token function">sudo</span> sysctl vm.overcommit_memory<span class="token operator">=</span><span class="token number">1</span>
+</code></pre>
+<p>&#x5982;&#x679C;&#x4F60;&#x5728;&#x4F7F;&#x7528; macOS&#xFF0C;&#x53EA;&#x9700;&#x8981; Homebrew &#x4E00;&#x4E2A;&#x547D;&#x4EE4;&#x5373;&#x53EF;&#xFF1A;</p>
+<pre class="language-"><code class="lang-sh">$ brew <span class="token function">install</span> qemu
+</code></pre>
+<p>&#x6700;&#x540E;&#x786E;&#x8BA4;&#x4E00;&#x4E0B; Qemu &#x5DF2;&#x7ECF;&#x5B89;&#x88C5;&#x597D;&#xFF0C;&#x4E14;&#x7248;&#x672C;&#x5728; 4.1.0 &#x4EE5;&#x4E0A;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ qemu-system-riscv64 --version
+QEMU emulator version <span class="token number">4.1</span>.1
+Copyright <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2003</span>-2019 Fabrice Bellard and the QEMU Project developers
+</code></pre>
+<h3 id="&#x4F7F;&#x7528;-opensbi">&#x4F7F;&#x7528; OpenSBI</h3>
+<p>&#x65B0;&#x7248; Qemu &#x4E2D;&#x5185;&#x7F6E;&#x4E86; <a href="https://github.com/riscv/opensbi" target="_blank">OpenSBI</a> <code>firrmwire</code>&#xFF08;&#x56FA;&#x4EF6;&#xFF09;&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x8D1F;&#x8D23;&#x5728;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x8FD0;&#x884C;&#x524D;&#x7684;&#x786C;&#x4EF6;&#x521D;&#x59CB;&#x5316;&#x548C;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x529F;&#x80FD;&#x3002;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x5C1D;&#x8BD5;&#x8FD0;&#x884C;&#x4E00;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-bash">$ qemu-system-riscv64 <span class="token punctuation">\</span>
+<span class="token operator">&gt;</span> --machine virt <span class="token punctuation">\</span>
+<span class="token operator">&gt;</span> --nographic <span class="token punctuation">\</span>
+<span class="token operator">&gt;</span> --bios default
+
+OpenSBI v0.4 <span class="token punctuation">(</span>Jul  <span class="token number">2</span> <span class="token number">2019</span> <span class="token number">11</span>:53:53<span class="token punctuation">)</span>
+   ____                    _____ ____ _____
+  / __ <span class="token punctuation">\</span>                  / ____<span class="token operator">|</span>  _ <span class="token punctuation">\</span>_   _<span class="token operator">|</span>
+ <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span>_ __   ___ _ __ <span class="token operator">|</span> <span class="token punctuation">(</span>___ <span class="token operator">|</span> <span class="token operator">|</span>_<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">|</span>
+ <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span> <span class="token string">&apos;_ \ / _ \ &apos;</span>_ <span class="token punctuation">\</span> <span class="token punctuation">\</span>___ <span class="token punctuation">\</span><span class="token operator">|</span>  _ <span class="token operator">&lt;</span> <span class="token operator">|</span> <span class="token operator">|</span>
+ <span class="token operator">|</span> <span class="token operator">|</span>__<span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span>_<span class="token punctuation">)</span> <span class="token operator">|</span>  __/ <span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span>____<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token operator">|</span>_<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">|</span>_
+  <span class="token punctuation">\</span>____/<span class="token operator">|</span> .__/ <span class="token punctuation">\</span>___<span class="token operator">|</span>_<span class="token operator">|</span> <span class="token operator">|</span>_<span class="token operator">|</span>_____/<span class="token operator">|</span>____/_____<span class="token operator">|</span>
+        <span class="token operator">|</span> <span class="token operator">|</span>
+        <span class="token operator">|</span>_<span class="token operator">|</span>
+
+Platform Name          <span class="token builtin class-name">:</span> QEMU Virt Machine
+Platform HART Features <span class="token builtin class-name">:</span> RV64ACDFIMSU
+Platform Max HARTs     <span class="token builtin class-name">:</span> <span class="token number">8</span>
+Current Hart           <span class="token builtin class-name">:</span> <span class="token number">0</span>
+Firmware Base          <span class="token builtin class-name">:</span> 0x80000000
+Firmware Size          <span class="token builtin class-name">:</span> <span class="token number">112</span> KB
+Runtime SBI Version    <span class="token builtin class-name">:</span> <span class="token number">0.1</span>
+
+PMP0: 0x0000000080000000-0x000000008001ffff <span class="token punctuation">(</span>A<span class="token punctuation">)</span>
+PMP1: 0x0000000000000000-0xffffffffffffffff <span class="token punctuation">(</span>A,R,W,X<span class="token punctuation">)</span>
+</code></pre>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x5728; <code>qemu-system-riscv64</code> &#x6A21;&#x62DF;&#x7684; <code>virt machine</code> &#x786C;&#x4EF6;&#x4E0A;&#x5C06; <code>OpenSBI</code> &#x8FD9;&#x4E2A; <code>firmwire</code> &#x8DD1;&#x8D77;&#x6765;&#x4E86;&#x3002;Qemu &#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>Ctrl+a</code> &#x518D;&#x6309;&#x4E0B; <code>x</code> &#x9000;&#x51FA;&#x3002;</p>
+<blockquote>
+<p><strong>[info] <code>OpenSBI</code>&#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;</strong>
+&#x5982;&#x679C;&#x5BF9; <code>OpenSBI</code> &#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x611F;&#x5174;&#x8DA3;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x770B;<a href="https://content.riscv.org/wp-content/uploads/2019/06/13.30-RISCV_OpenSBI_Deep_Dive_v5.pdf" target="_blank">RISCV OpenSBI Deep_Dive &#x4ECB;&#x7ECD;&#x6587;&#x6863;</a>&#x3002;</p>
+</blockquote>
+<h3 id="&#x52A0;&#x8F7D;&#x5185;&#x6838;&#x955C;&#x50CF;">&#x52A0;&#x8F7D;&#x5185;&#x6838;&#x955C;&#x50CF;</h3>
+<p>&#x4E3A;&#x4E86;&#x786E;&#x4FE1;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x8DD1;&#x8D77;&#x6765;&#x4E86;&#x5185;&#x6838;&#x91CC;&#x9762;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x6211;&#x4EEC;&#x6700;&#x597D;&#x5728; <code>rust_main</code> &#x91CC;&#x9762;&#x52A0;&#x4E00;&#x70B9;&#x4E1C;&#x897F;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// src/main.rs</span>
+
+<span class="token attribute attr-name">#![feature(asm)]</span>
+
+<span class="token comment">// &#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x8F93;&#x51FA;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#xFF0C;&#x76EE;&#x524D;&#x6211;&#x4EEC;&#x5148;&#x4E0D;&#x7528;&#x4E86;&#x89E3;&#x5176;&#x5B9E;&#x73B0;&#x539F;&#x7406;</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">console_putchar</span><span class="token punctuation">(</span>ch<span class="token punctuation">:</span> u8<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> ret<span class="token punctuation">:</span> usize<span class="token punctuation">;</span>
+    <span class="token keyword">let</span> arg0<span class="token punctuation">:</span> usize <span class="token operator">=</span> ch <span class="token keyword">as</span> usize<span class="token punctuation">;</span>
+    <span class="token keyword">let</span> arg1<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> arg2<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> which<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+        <span class="token function">asm!</span><span class="token punctuation">(</span><span class="token string">&quot;ecall&quot;</span>
+             <span class="token punctuation">:</span> <span class="token string">&quot;={x10}&quot;</span> <span class="token punctuation">(</span>ret<span class="token punctuation">)</span>
+             <span class="token punctuation">:</span> <span class="token string">&quot;{x10}&quot;</span> <span class="token punctuation">(</span>arg0<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x11}&quot;</span> <span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x12}&quot;</span> <span class="token punctuation">(</span>arg2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;{x17}&quot;</span> <span class="token punctuation">(</span>which<span class="token punctuation">)</span>
+             <span class="token punctuation">:</span> <span class="token string">&quot;memory&quot;</span>
+             <span class="token punctuation">:</span> <span class="token string">&quot;volatile&quot;</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">rust_main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token comment">// &#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x8F93;&#x51FA; &quot;OK\n&quot; &#xFF0C;&#x968F;&#x540E;&#x8FDB;&#x5165;&#x6B7B;&#x5FAA;&#x73AF;</span>
+    <span class="token function">console_putchar</span><span class="token punctuation">(</span><span class="token char string">b&apos;O&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">console_putchar</span><span class="token punctuation">(</span><span class="token char string">b&apos;K&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">console_putchar</span><span class="token punctuation">(</span><span class="token char string">b&apos;\n&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x6837;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x5C06;&#x5185;&#x6838;&#x955C;&#x50CF;&#x52A0;&#x8F7D;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x5C4F;&#x5E55;&#x4E0A;&#x51FA;&#x73B0;&#x4E86; OK &#xFF0C;&#x5C31;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#x3002;&#x5982;&#x679C;&#x60F3;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x4E0A;&#x9762;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;&#x5185;&#x8054;&#x6C47;&#x7F16;(<strong>&quot;asm!&quot;</strong>)&#xFF0C;&#x8BF7;&#x53C2;&#x8003; <a href="../appendix/inline_asm.md">&#x9644;&#x5F55;&#xFF1A;&#x5185;&#x8054;&#x6C47;&#x7F16;</a> &#x3002;</p>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;&#x8981;&#x901A;&#x8FC7;&#x591A;&#x6761;&#x547D;&#x4EE4;&#x6765;&#x5B8C;&#x6210;&#xFF0C;&#x6211;&#x4EEC;&#x901A;&#x8FC7; <code>Makefile</code> &#x6765;&#x7B80;&#x5316;&#x8FD9;&#x4E00;&#x8FC7;&#x7A0B;&#x3002;</p>
+<pre class="language-"><code class="lang-makefile"><span class="token comment"># Makefile</span>
+
+target <span class="token operator">:=</span> riscv64imac-unknown-none-elf
+mode <span class="token operator">:=</span> debug
+kernel <span class="token operator">:=</span> target/<span class="token variable">$</span><span class="token punctuation">(</span>target<span class="token punctuation">)</span>/<span class="token variable">$</span><span class="token punctuation">(</span>mode<span class="token punctuation">)</span>/os
+bin <span class="token operator">:=</span> target/<span class="token variable">$</span><span class="token punctuation">(</span>target<span class="token punctuation">)</span>/<span class="token variable">$</span><span class="token punctuation">(</span>mode<span class="token punctuation">)</span>/kernel.bin
+
+objdump <span class="token operator">:=</span> rust-objdump --arch-name<span class="token operator">=</span>riscv64
+objcopy <span class="token operator">:=</span> rust-objcopy --binary-architecture<span class="token operator">=</span>riscv64
+
+<span class="token builtin">.PHONY</span><span class="token punctuation">:</span> kernel build clean qemu run env
+
+<span class="token symbol">env</span><span class="token punctuation">:</span>
+    cargo install cargo-binutils
+    rustup component add llvm-tools-preview rustfmt
+    rustup target add <span class="token variable">$</span><span class="token punctuation">(</span>target<span class="token punctuation">)</span>
+
+<span class="token symbol">kernel</span><span class="token punctuation">:</span>
+    cargo build
+
+<span class="token symbol"><span class="token variable">$</span>(bin)</span><span class="token punctuation">:</span> kernel
+    <span class="token variable">$</span><span class="token punctuation">(</span>objcopy<span class="token punctuation">)</span> <span class="token variable">$</span><span class="token punctuation">(</span>kernel<span class="token punctuation">)</span> --strip-all -O binary <span class="token variable">$@</span>
+
+<span class="token symbol">asm</span><span class="token punctuation">:</span>
+    <span class="token variable">$</span><span class="token punctuation">(</span>objdump<span class="token punctuation">)</span> -d <span class="token variable">$</span><span class="token punctuation">(</span>kernel<span class="token punctuation">)</span> <span class="token operator">|</span> less
+
+<span class="token symbol">build</span><span class="token punctuation">:</span> <span class="token variable">$</span><span class="token punctuation">(</span>bin<span class="token punctuation">)</span>
+
+<span class="token symbol">clean</span><span class="token punctuation">:</span>
+    cargo clean
+
+<span class="token symbol">qemu</span><span class="token punctuation">:</span> build
+    qemu-system-riscv64 \
+        -machine virt \
+        -nographic \
+        -bios default \
+        -device loader,file<span class="token operator">=</span><span class="token variable">$</span><span class="token punctuation">(</span>bin<span class="token punctuation">)</span>, addr<span class="token operator">=</span>0x80200000
+
+<span class="token symbol">run</span><span class="token punctuation">:</span> build qemu
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x901A;&#x8FC7;&#x53C2;&#x6570; <code>--device</code> &#x6765;&#x5C06;&#x5185;&#x6838;&#x955C;&#x50CF;&#x52A0;&#x8F7D;&#x5230; Qemu &#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x6307;&#x5B9A;&#x4E86;&#x5185;&#x6838;&#x955C;&#x50CF;&#x6587;&#x4EF6;&#xFF0C;&#x4F46;&#x8FD9;&#x4E2A;&#x5730;&#x5740; <code>0x80200000</code> &#x53C8;&#x662F;&#x600E;&#x4E48;&#x4E00;&#x56DE;&#x4E8B;&#xFF1F;&#x6211;&#x4EEC;&#x76EE;&#x524D;&#x5148;&#x4E0D;&#x7528;&#x5728;&#x610F;&#x8FD9;&#x4E9B;&#x7EC6;&#x8282;&#xFF0C;&#x7B49;&#x540E;&#x9762;&#x4F1A;&#x8BE6;&#x7EC6;&#x8BB2;&#x89E3;&#x3002;</p>
+<p>&#x4E8E;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>make run</code> &#x6765;&#x7528; Qemu &#x52A0;&#x8F7D;&#x5185;&#x6838;&#x955C;&#x50CF;&#x5E76;&#x8FD0;&#x884C;&#x3002;&#x5306;&#x5306;&#x7FFB;&#x8FC7;&#x4E00;&#x4E32;&#x957F;&#x957F;&#x7684; OpenSBI &#x8F93;&#x51FA;&#xFF0C;&#x6211;&#x4EEC;&#x770B;&#x5230;&#x4E86; <code>OK</code> &#xFF01;&#x4E8E;&#x662F;&#x5386;&#x7ECF;&#x4E86;&#x5343;&#x8F9B;&#x4E07;&#x82E6;&#x6211;&#x4EEC;&#x7EC8;&#x4E8E;&#x5C06;&#x6211;&#x4EEC;&#x7684;&#x5185;&#x6838;&#x8DD1;&#x8D77;&#x6765;&#x4E86;&#xFF01;</p>
+<p>&#x6CA1;&#x6709;&#x770B;&#x5230; OK &#xFF1F;&#x8FC4;&#x4ECA;&#x4E3A;&#x6B62;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa5" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#xFF0C;&#x8BF7;&#x53C2;&#x8003;&#x3002;</p>
+<h3 id="virt-machine&#x786C;&#x4EF6;&#x914D;&#x7F6E;"><code>virt machine</code>&#x786C;&#x4EF6;&#x914D;&#x7F6E;</h3>
+<blockquote>
+<p><strong>[info] &#x6269;&#x5C55;&#x5185;&#x5BB9;</strong></p>
+</blockquote>
+<p>&#x4E5F;&#x8BB8;&#x6709;&#x540C;&#x5B66;&#x5BF9;<code>qemu-system-riscv64</code>&#x6A21;&#x62DF;&#x7684;<code>virt machine</code>&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x786C;&#x4EF6;&#x914D;&#x7F6E;&#x611F;&#x5174;&#x8DA3;&#xFF0C;&#x90A3;&#x4E48;&#x901A;&#x8FC7;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5230;&#x5F53;&#x524D;<code>virt machine</code>&#x7684;&#x786C;&#x4EF6;&#x914D;&#x7F6E;&#x4FE1;&#x606F;&#xFF1A;</p>
+<pre class="language-"><code>$ sudo apt install device-tree-compiler #&#x5B89;&#x88C5;device tree&#x7F16;&#x8BD1;&#x5668;/&#x89E3;&#x91CA;&#x5668; dtc
+$ qemu-system-riscv64 -machine virt -machine dumpdtb=riscv64-virt.dtb -bios default #&#x751F;&#x6210;virt machine&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x4E8C;&#x8FDB;&#x5236;device tree&#x4FE1;&#x606F;
+$ dtc -I dtb -O dts -o riscv64-virt.dts riscv64-virt.dtb #&#x8F6C;&#x6362;&#x4E3A;&#x6587;&#x672C;&#x683C;&#x5F0F;&#x7684;device tree&#x4FE1;&#x606F;
+$ more riscv64-virt.dts #&#x663E;&#x793A;virt machine&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x786C;&#x4EF6;&#x914D;&#x7F6E;&#x4FE1;&#x606F;
+</code></pre><p>&#x5982;&#x679C;&#x540C;&#x5B66;&#x5BF9;<code>qemu-system-riscv64</code>&#x6A21;&#x62DF;&#x7684;<code>virt machine</code>&#x8BA1;&#x7B97;&#x673A;&#x786C;&#x4EF6;&#xFF08;&#x5305;&#x62EC;&#x5916;&#x8BBE;&#xFF09;&#x914D;&#x7F6E;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x611F;&#x5174;&#x8DA3;&#xFF0C;&#x90A3;&#x4E48;&#x53EF;&#x770B;&#x770B;<a href="https://github.com/qemu/qemu/blob/master/hw/riscv/virt.c" target="_blank">qemu riscv &#x7684; virt machine &#x5B9E;&#x73B0;</a>&#x3002;</p>
+<p>&#x4E0B;&#x4E00;&#x8282;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;&#x6765;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x540E;&#x7EED;&#x80FD;&#x591F;&#x66F4;&#x52A0;&#x65B9;&#x4FBF;&#x7684;&#x901A;&#x8FC7;&#x8F93;&#x51FA;&#x6765;&#x8FDB;&#x884C;&#x5185;&#x6838;&#x8C03;&#x8BD5;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: "ab871063a9fa7f1da571",
+    clientSecret: "4760b384e3e452d2241d859cfa6a7da21a8729ec",
+    repo: "rCore_tutorial_doc",
+    owner: "rcore-os",
+    admin: [
+      "chyyuu",
+      "xyongcn",
+      "wangrunji0408",
+      "xy-plus",
+      "PanQL",
+      "wyfcyx",
+      "equation314"
+    ],
+    id: location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render("gitalk-container");
+</script>
+</div></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part4.html" class="navigation navigation-prev " aria-label="Previous page: 重写程序入口点 -start">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part6.html" class="navigation navigation-next " aria-label="Next page: 封装 SBI 接口">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"使用 Qemu 运行内核","level":"1.4.5","depth":2,"next":{"title":"封装 SBI 接口","level":"1.4.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"previous":{"title":"重写程序入口点 -start","level":"1.4.4","depth":2,"path":"chapter2/part4.md","ref":"chapter2/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part5.md","mtime":"2020-02-13T08:47:45.387Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-14T13:23:24.037Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+

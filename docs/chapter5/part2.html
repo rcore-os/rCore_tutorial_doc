@@ -1,0 +1,1313 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>内核初始映射 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-tomorrow.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="part3.html" />
+    
+    
+    <link rel="prev" href="part1.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../chapter0/introduction.html">
+            
+                <a href="../chapter0/introduction.html">
+            
+                    
+                    第零章：实验环境说明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../chapter1/introduction.html">
+            
+                <a href="../chapter1/introduction.html">
+            
+                    
+                    第一章：独立式可执行程序
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../chapter1/part1.html">
+            
+                <a href="../chapter1/part1.html">
+            
+                    
+                    安装 nightly rust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../chapter1/part2.html">
+            
+                <a href="../chapter1/part2.html">
+            
+                    
+                    使用包管理器 cargo 创建 rust binary 项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../chapter1/part3.html">
+            
+                <a href="../chapter1/part3.html">
+            
+                    
+                    移除标准库依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../chapter1/part4.html">
+            
+                <a href="../chapter1/part4.html">
+            
+                    
+                    移除 runtime 依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../chapter1/part5.html">
+            
+                <a href="../chapter1/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../chapter2/introduction.html">
+            
+                <a href="../chapter2/introduction.html">
+            
+                    
+                    第二章：最小化内核
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../chapter2/part1.html">
+            
+                <a href="../chapter2/part1.html">
+            
+                    
+                    使用目标三元组描述目标平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../chapter2/part2.html">
+            
+                <a href="../chapter2/part2.html">
+            
+                    
+                    编译、生成内核镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../chapter2/part3.html">
+            
+                <a href="../chapter2/part3.html">
+            
+                    
+                    使用链接脚本指定内存布局
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../chapter2/part4.html">
+            
+                <a href="../chapter2/part4.html">
+            
+                    
+                    重写程序入口点 -start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../chapter2/part5.html">
+            
+                <a href="../chapter2/part5.html">
+            
+                    
+                    使用 Qemu 运行内核
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../chapter2/part6.html">
+            
+                <a href="../chapter2/part6.html">
+            
+                    
+                    封装 SBI 接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="../chapter2/part7.html">
+            
+                <a href="../chapter2/part7.html">
+            
+                    
+                    实现格式化输出
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="../chapter2/part8.html">
+            
+                <a href="../chapter2/part8.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../chapter3/introduction.html">
+            
+                <a href="../chapter3/introduction.html">
+            
+                    
+                    第三章：中断
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../chapter3/part1.html">
+            
+                <a href="../chapter3/part1.html">
+            
+                    
+                    rv64 中断介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../chapter3/part2.html">
+            
+                <a href="../chapter3/part2.html">
+            
+                    
+                    手动触发断点中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../chapter3/part3.html">
+            
+                <a href="../chapter3/part3.html">
+            
+                    
+                    程序运行上下文环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../chapter3/part4.html">
+            
+                <a href="../chapter3/part4.html">
+            
+                    
+                    实现上下文环境保存与恢复
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../chapter3/part5.html">
+            
+                <a href="../chapter3/part5.html">
+            
+                    
+                    时钟中断
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../chapter3/part6.html">
+            
+                <a href="../chapter3/part6.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../chapter4/introduction.html">
+            
+                <a href="../chapter4/introduction.html">
+            
+                    
+                    第四章：内存管理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../chapter4/part1.html">
+            
+                <a href="../chapter4/part1.html">
+            
+                    
+                    物理内存探测与管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../chapter4/part2.html">
+            
+                <a href="../chapter4/part2.html">
+            
+                    
+                    动态内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../chapter4/part3.html">
+            
+                <a href="../chapter4/part3.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="introduction.html">
+            
+                <a href="introduction.html">
+            
+                    
+                    第五章：内存虚拟化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="part1.html">
+            
+                <a href="part1.html">
+            
+                    
+                    页表：从虚拟内存到物理内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.7.2" data-path="part2.html">
+            
+                <a href="part2.html">
+            
+                    
+                    内核初始映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="part3.html">
+            
+                <a href="part3.html">
+            
+                    
+                    内核重映射
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="part4.html">
+            
+                <a href="part4.html">
+            
+                    
+                    内核重映射实现之一：页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
+                    内核重映射实现之二：MemorySet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="part6.html">
+            
+                <a href="part6.html">
+            
+                    
+                    内核重映射实现之三：完结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="part7.html">
+            
+                <a href="part7.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../chapter6/introduction.html">
+            
+                <a href="../chapter6/introduction.html">
+            
+                    
+                    第六章：内核线程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../chapter6/part1.html">
+            
+                <a href="../chapter6/part1.html">
+            
+                    
+                    线程状态与保存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../chapter6/part2.html">
+            
+                <a href="../chapter6/part2.html">
+            
+                    
+                    线程切换
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../chapter6/part3.html">
+            
+                <a href="../chapter6/part3.html">
+            
+                    
+                    内核线程初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../chapter6/part4.html">
+            
+                <a href="../chapter6/part4.html">
+            
+                    
+                    内核线程创建与切换测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../chapter6/part5.html">
+            
+                <a href="../chapter6/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../chapter7/introduction.html">
+            
+                <a href="../chapter7/introduction.html">
+            
+                    
+                    第七章：线程调度
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../chapter7/part1.html">
+            
+                <a href="../chapter7/part1.html">
+            
+                    
+                    线程池与线程管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../chapter7/part2.html">
+            
+                <a href="../chapter7/part2.html">
+            
+                    
+                    内核调度线程 idle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../chapter7/part3.html">
+            
+                <a href="../chapter7/part3.html">
+            
+                    
+                    线程调度之 Round Robin 算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../chapter7/part4.html">
+            
+                <a href="../chapter7/part4.html">
+            
+                    
+                    线程调度测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../chapter7/part5.html">
+            
+                <a href="../chapter7/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../chapter8/introduction.html">
+            
+                <a href="../chapter8/introduction.html">
+            
+                    
+                    第八章：进程
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../chapter8/part1.html">
+            
+                <a href="../chapter8/part1.html">
+            
+                    
+                    编写用户程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../chapter8/part1-1.md">
+            
+                <span>
+            
+                    
+                    合并内核与应用程序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../chapter8/part2.html">
+            
+                <a href="../chapter8/part2.html">
+            
+                    
+                    在内核中实现系统调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../chapter8/part3.html">
+            
+                <a href="../chapter8/part3.html">
+            
+                    
+                    创建虚拟内存空间
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../chapter8/part4.html">
+            
+                <a href="../chapter8/part4.html">
+            
+                    
+                    创建进程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.6" data-path="../chapter8/part5.html">
+            
+                <a href="../chapter8/part5.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../chapter9/introduction.html">
+            
+                <a href="../chapter9/introduction.html">
+            
+                    
+                    第九章：文件系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../chapter9/part1.html">
+            
+                <a href="../chapter9/part1.html">
+            
+                    
+                    使用文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="../chapter9/part2.html">
+            
+                <a href="../chapter9/part2.html">
+            
+                    
+                    实现记事本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="../chapter9/part3.html">
+            
+                <a href="../chapter9/part3.html">
+            
+                    
+                    实现终端
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="../chapter9/part4.html">
+            
+                <a href="../chapter9/part4.html">
+            
+                    
+                    总结与展望
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../chapter10/introduction.html">
+            
+                <a href="../chapter10/introduction.html">
+            
+                    
+                    第十章：同步互斥
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../chapter13/introduction.html">
+            
+                <a href="../chapter13/introduction.html">
+            
+                    
+                    第十三章：线程管理：fork and execute
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../chapter13/part1.html">
+            
+                <a href="../chapter13/part1.html">
+            
+                    
+                    fork 介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../chapter13/part2.html">
+            
+                <a href="../chapter13/part2.html">
+            
+                    
+                    fork 实现思路
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../chapter13/part3.html">
+            
+                <a href="../chapter13/part3.html">
+            
+                    
+                    复制线程上下文
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../chapter13/part4.html">
+            
+                <a href="../chapter13/part4.html">
+            
+                    
+                    复制页表
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" >
+            
+                <span>
+            
+                    
+                    [附录]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+            
+                <span>
+            
+                    
+                    内链汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >内核初始映射</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x9B54;&#x6CD5;&#x2014;&#x2014;&#x5185;&#x6838;&#x521D;&#x59CB;&#x6620;&#x5C04;">&#x201C;&#x9B54;&#x6CD5;&#x201D;&#x2014;&#x2014;&#x5185;&#x6838;&#x521D;&#x59CB;&#x6620;&#x5C04;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch5-pa2" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<p>&#x8BA9;&#x6211;&#x4EEC;&#x56DE;&#x987E;&#x4E00;&#x4E0B;&#x5728;&#x76F8;&#x5F53;&#x4E8E; bootloader &#x7684; OpenSBI &#x7ED3;&#x675F;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x9762;&#x5BF9;&#x7684;&#x662F;&#x600E;&#x6837;&#x4E00;&#x79CD;&#x5C40;&#x9762;&#xFF1A;</p>
+<ul>
+<li>&#x7269;&#x7406;&#x5185;&#x5B58;&#x72B6;&#x6001;&#xFF1A;OpenSBI &#x4EE3;&#x7801;&#x653E;&#x5728; <code>[0x80000000,0x80200000)</code> &#x4E2D;&#xFF0C;&#x5185;&#x6838;&#x4EE3;&#x7801;&#x653E;&#x5728;&#x4EE5; <code>0x80200000</code> &#x5F00;&#x5934;&#x7684;&#x4E00;&#x5757;&#x8FDE;&#x7EED;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E2D;&#x3002;</li>
+<li>CPU &#x72B6;&#x6001;&#xFF1A;&#x5904;&#x4E8E; S Mode &#xFF0C;&#x5BC4;&#x5B58;&#x5668; <code>satp</code> &#x7684; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">M</mi><mi mathvariant="normal">O</mi><mi mathvariant="normal">D</mi><mi mathvariant="normal">E</mi></mtext></mrow><annotation encoding="application/x-tex">\text{MODE}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">MODE</span></span></span></span></span> &#x88AB;&#x8BBE;&#x7F6E;&#x4E3A; <code>Bare</code> &#xFF0C;&#x5373;&#x65E0;&#x8BBA;&#x53D6;&#x6307;&#x8FD8;&#x662F;&#x8BBF;&#x5B58;&#x6211;&#x4EEC;&#x901A;&#x8FC7;&#x7269;&#x7406;&#x5730;&#x5740;&#x76F4;&#x63A5;&#x8BBF;&#x95EE;&#x7269;&#x7406;&#x5185;&#x5B58;&#x3002; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">P</mi><mi mathvariant="normal">C</mi></mtext><mo>=</mo><mn>0</mn><mtext><mi mathvariant="normal">x</mi></mtext><mn>8</mn><mn>0</mn><mn>2</mn><mn>0</mn><mn>0</mn><mn>0</mn><mn>0</mn><mn>0</mn></mrow><annotation encoding="application/x-tex">\text{PC}=0\text{x}80200000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">PC</span></span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mord text textstyle uncramped"><span class="mord mathrm">x</span></span><span class="mord mathrm">8</span><span class="mord mathrm">0</span><span class="mord mathrm">2</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span></span></span></span> &#x6307;&#x5411;&#x5185;&#x6838;&#x7684;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x3002;&#x6808;&#x9876;&#x5730;&#x5740; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi></mtext></mrow><annotation encoding="application/x-tex">\text{SP}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">SP</span></span></span></span></span> &#x5904;&#x5728; OpenSBI &#x4EE3;&#x7801;&#x5185;&#x3002;</li>
+<li>&#x5185;&#x6838;&#x4EE3;&#x7801;&#xFF1A;&#x4F7F;&#x7528;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF0C;&#x4EE3;&#x7801;&#x548C;&#x6570;&#x636E;&#x6BB5;&#x5747;&#x653E;&#x5728;&#x4EE5;<a href="https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/linker64.ld#L9" target="_blank">&#x865A;&#x62DF;&#x5730;&#x5740; <code>0xffffffffc0200000</code></a>&#x5F00;&#x5934;&#x7684;&#x4E00;&#x6BB5;&#x8FDE;&#x7EED;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x4E2D;&#x3002;</li>
+<li>&#x6211;&#x4EEC;&#x6240;&#x8981;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#xFF1A;&#x5C06; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi></mtext></mrow><annotation encoding="application/x-tex">\text{SP}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">SP</span></span></span></span></span> &#x5BC4;&#x5B58;&#x5668;&#x6307;&#x5411;&#x7684;&#x6808;&#x7A7A;&#x95F4;&#x4ECE; OpenSBI &#x67D0;&#x5904;&#x79FB;&#x5230;&#x6211;&#x4EEC;&#x7684;&#x5185;&#x6838;&#x5B9A;&#x4E49;&#x7684;&#x67D0;&#x5757;&#x5185;&#x5B58;&#x533A;&#x57DF;&#x4E2D;&#xFF0C;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5B8C;&#x5168;&#x652F;&#x914D;&#x542F;&#x52A8;&#x6808;&#xFF1B;&#x540C;&#x65F6;&#x9700;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x51FD;&#x6570; <code>rust_main</code> &#x4E2D;&#x3002;</li>
+</ul>
+<p>&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x5728; <a href="https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/entry64.asm#L19" target="_blank"><code>src/boot/entry64.asm</code></a> &#x4E2D;&#x81EA;&#x5DF1;&#x5206;&#x914D;&#x4E86;&#x4E00;&#x5757; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mn>6</mn><mtext><mi mathvariant="normal">K</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">B</mi></mtext></mrow><annotation encoding="application/x-tex">16\text{KiB}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mord mathrm">6</span><span class="mord text textstyle uncramped"><span class="mord mathrm">KiB</span></span></span></span></span> &#x7684;&#x5185;&#x5B58;&#x7528;&#x6765;&#x505A;&#x542F;&#x52A8;&#x6808;&#xFF1A;</p>
+<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/boot/entry64.asm
+</span>
+    <span class="token section-directives tag">.section</span> <span class="token section-directives tag">.bss</span>.<span class="token last-literals operator">stack</span>
+    <span class="token alignment-directives tag">.align</span> <span class="token number">12</span>
+    .<span class="token last-literals operator">global</span> <span class="token last-literals operator">bootstack</span>
+<span class="token labels operator">bootstack:</span>
+    .<span class="token last-literals operator">space</span> <span class="token number">4096</span> * <span class="token number">4</span>
+    .<span class="token last-literals operator">global</span> <span class="token last-literals operator">bootstacktop</span>
+<span class="token labels operator">bootstacktop:</span>
+</code></pre>
+<p>&#x7B26;&#x53F7; <code>bootstacktop</code> &#x5C31;&#x662F;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x6808;&#x9876;&#x5730;&#x5740;&#xFF01;&#x540C;&#x6837;&#x7B26;&#x53F7; <code>rust_main</code> &#x4E5F;&#x4EE3;&#x8868;&#x4E86;&#x6211;&#x4EEC;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x7684;&#x5730;&#x5740;&#x3002;&#x76F4;&#x63A5;&#x5C06; <code>bootstacktop</code> &#x7684;&#x503C;&#x7ED9;&#x5230; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi></mtext></mrow><annotation encoding="application/x-tex">\text{SP}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">SP</span></span></span></span></span>&#xFF0C; &#x518D;&#x8DF3;&#x8F6C;&#x5230; <code>rust_main</code> &#x5C31;&#x884C;&#x4E86;&#x5417;&#xFF1F;</p>
+<p>&#x95EE;&#x9898;&#x5728;&#x4E8E;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x548C;&#x94FE;&#x63A5;&#x5668;&#x8BA4;&#x4E3A;&#x7A0B;&#x5E8F;&#x5728;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E2D;&#x8FD0;&#x884C;&#xFF0C;&#x56E0;&#x6B64;&#x8FD9;&#x4E24;&#x4E2A;&#x7B26;&#x53F7;&#x90FD;&#x4F1A;&#x88AB;&#x7FFB;&#x8BD1;&#x6210;&#x865A;&#x62DF;&#x5730;&#x5740;&#x3002;&#x800C;&#x6211;&#x4EEC;&#x7684; CPU &#x76EE;&#x524D;&#x5904;&#x4E8E; <code>Bare</code> &#x6A21;&#x5F0F;&#xFF0C;&#x4F1A;&#x5C06;&#x5730;&#x5740;&#x90FD;&#x5F53;&#x6210;&#x7269;&#x7406;&#x5730;&#x5740;&#x5904;&#x7406;&#x3002;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x8DF3;&#x8F6C;&#x5230; <code>rust_main</code> &#x5C31;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230; <code>0xffffffffc0200000+</code> &#x7684;&#x4E00;&#x4E2A;&#x7269;&#x7406;&#x5730;&#x5740;&#xFF0C;&#x7269;&#x7406;&#x5730;&#x5740;&#x90FD;&#x6CA1;&#x6709;&#x8FD9;&#x4E48;&#x591A;&#x4F4D;&#xFF01;&#x8FD9;&#x663E;&#x7136;&#x662F;&#x4F1A;&#x51FA;&#x95EE;&#x9898;&#x7684;&#x3002;</p>
+<p>&#x89C2;&#x5BDF;&#x53EF;&#x4EE5;&#x53D1;&#x73B0;&#xFF0C;&#x540C;&#x6837;&#x7684;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#xFF0C;&#x5176;&#x5728;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E2D;&#x7684;&#x865A;&#x62DF;&#x5730;&#x5740;&#x4E0E;&#x5176;&#x5728;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x7269;&#x7406;&#x5730;&#x5740;&#x6709;&#x7740;&#x4E00;&#x4E2A;&#x56FA;&#x5B9A;&#x7684;<strong>&#x504F;&#x79FB;&#x91CF;</strong>&#x3002;&#x6BD4;&#x5982;&#x5185;&#x6838;&#x7684;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#xFF0C;&#x865A;&#x62DF;&#x5730;&#x5740;&#x4E3A; <code>0xffffffffc0200000</code> &#xFF0C;&#x7269;&#x7406;&#x5730;&#x5740;&#x4E3A; <code>0x80200000</code> &#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x8981;&#x5C06;&#x865A;&#x62DF;&#x5730;&#x5740;&#x51CF;&#x53BB; <code>0xffffffff40000000</code> &#xFF0C;&#x5C31;&#x5F97;&#x5230;&#x4E86;&#x7269;&#x7406;&#x5730;&#x5740;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x4E0A;&#x4E00;&#x8282;&#x9875;&#x8868;&#x7684;&#x77E5;&#x8BC6;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x8981;&#x505A;&#x5230;&#x5F53;&#x8BBF;&#x95EE;&#x5185;&#x6838;&#x91CC;&#x9762;&#x7684;&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x5730;&#x5740; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">v</mi><mi mathvariant="normal">a</mi></mtext></mrow><annotation encoding="application/x-tex">\text{va}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">va</span></span></span></span></span> &#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x77E5;&#x9053; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">v</mi><mi mathvariant="normal">a</mi></mtext></mrow><annotation encoding="application/x-tex">\text{va}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">va</span></span></span></span></span> &#x5904;&#x7684;&#x4EE3;&#x7801;&#x6216;&#x6570;&#x636E;&#x653E;&#x5728;&#x7269;&#x7406;&#x5730;&#x5740;&#x4E3A; <code>pa = va - 0xffffffff40000000</code> &#x5904;&#x7684;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x771F;&#x6B63;&#x6240;&#x8981;&#x505A;&#x7684;&#x662F;&#x8981;&#x8BA9; CPU &#x53BB;&#x8BBF;&#x95EE; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">p</mi><mi mathvariant="normal">a</mi></mtext></mrow><annotation encoding="application/x-tex">\text{pa} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">pa</span></span></span></span></span>&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x901A;&#x8FC7;&#x6070;&#x5F53;&#x6784;&#x9020;&#x9875;&#x8868;&#xFF0C;&#x6765;&#x5BF9;&#x4E8E;&#x5185;&#x6838;&#x6240;&#x5C5E;&#x7684;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF0C;&#x5B9E;&#x73B0;&#x8FD9;&#x79CD; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">v</mi><mi mathvariant="normal">a</mi></mtext><mo>&#x2192;</mo><mtext><mi mathvariant="normal">p</mi><mi mathvariant="normal">a</mi></mtext></mrow><annotation encoding="application/x-tex">\text{va}\rightarrow\text{pa}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">va</span></span><span class="mrel">&#x2192;</span><span class="mord text textstyle uncramped"><span class="mord mathrm">pa</span></span></span></span></span> &#x7684;&#x6620;&#x5C04;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x5148;&#x4F7F;&#x7528;&#x4E00;&#x79CD;&#x6700;&#x7B80;&#x5355;&#x7684;&#x9875;&#x8868;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD8;&#x8BB0;&#x5F97;&#x4E0A;&#x4E00;&#x8282;&#x4E2D;&#x6240;&#x8BB2;&#x7684;&#x5927;&#x9875;&#x5417;&#xFF1F;&#x90A3;&#x65F6;&#x6211;&#x4EEC;&#x63D0;&#x5230;&#xFF0C;&#x5C06;&#x4E00;&#x4E2A;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x9879;&#x7684;&#x6807;&#x5FD7;&#x4F4D; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">W</mi><mi mathvariant="normal">,</mi><mi mathvariant="normal">X</mi></mtext></mrow><annotation encoding="application/x-tex">\text{R,W,X}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord text textstyle uncramped"><span class="mord mathrm">R,W,X</span></span></span></span></span> &#x4E0D;&#x8BBE;&#x4E3A;&#x5168; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">0</span></span></span></span> &#xFF0C;&#x53EF;&#x4EE5;&#x5C06;&#x5B83;&#x53D8;&#x4E3A;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#xFF0C;&#x4ECE;&#x800C;&#x83B7;&#x5F97;&#x5927;&#x5C0F;&#x4E3A; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mtext><mi mathvariant="normal">G</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">B</mi></mtext></mrow><annotation encoding="application/x-tex">1\text{GiB}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mord text textstyle uncramped"><span class="mord mathrm">GiB</span></span></span></span></span> &#x7684;&#x4E00;&#x4E2A;&#x5927;&#x9875;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x5047;&#x5B9A;&#x5185;&#x6838;&#x5927;&#x5C0F;&#x4E0D;&#x8D85;&#x8FC7; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mtext><mi mathvariant="normal">G</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">B</mi></mtext></mrow><annotation encoding="application/x-tex">1\text{GiB}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mord text textstyle uncramped"><span class="mord mathrm">GiB</span></span></span></span></span>&#xFF0C;&#x56E0;&#x6B64;&#x901A;&#x8FC7;&#x4E00;&#x4E2A;&#x5927;&#x9875;&#xFF0C;&#x5C06;&#x865A;&#x62DF;&#x5730;&#x5740;&#x533A;&#x95F4; <code>[0xffffffffc0000000,0xffffffffffffffff]</code> &#x6620;&#x5C04;&#x5230;&#x7269;&#x7406;&#x5730;&#x5740;&#x533A;&#x95F4; <code>[0x80000000,0xc0000000)</code>&#xFF0C;&#x800C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x8981;&#x5206;&#x914D;&#x4E00;&#x9875;&#x5185;&#x5B58;&#x7528;&#x6765;&#x5B58;&#x653E;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#xFF0C;&#x5E76;&#x5C06;&#x5176;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9875;&#x8868;&#x9879;(&#x8FD9;&#x4E2A;&#x865A;&#x62DF;&#x5730;&#x5740;&#x533A;&#x95F4;&#x660E;&#x663E;&#x5BF9;&#x5E94;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9875;&#x8868;&#x9879;)&#xFF0C;&#x8FDB;&#x884C;&#x9002;&#x5F53;&#x8BBE;&#x7F6E;&#x5373;&#x53EF;&#x3002;</p>
+<p>&#x56E0;&#x6B64;&#xFF0C;<a href="https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/entry64.asm" target="_blank">&#x5B9E;&#x73B0;&#x7684;&#x6C47;&#x7F16;&#x4EE3;&#x7801;</a>&#x4E3A;&#xFF1A;</p>
+<pre class="language-"><code class="lang-riscv"><span class="token comment"># src/boot/entry64.asm
+</span>
+    <span class="token section-directives tag">.section</span> <span class="token section-directives tag">.text</span>.<span class="token last-literals operator">entry</span>
+    <span class="token symbol-directives tag">.globl</span> <span class="token last-literals operator">_start</span>
+<span class="token labels operator">_start:</span>
+    <span class="token comment"># t0 := &#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x865A;&#x62DF;&#x5730;&#x5740;
+</span>    <span class="token rv32/64i-instructions keyword">lui</span>     <span class="token general-registers class-name">t0</span>, <span class="token relocation-functions important">%hi</span>(<span class="token last-literals operator">boot_page_table_sv39</span>)
+    <span class="token comment"># t1 := 0xffffffff40000000 &#x5373;&#x865A;&#x5B9E;&#x6620;&#x5C04;&#x504F;&#x79FB;&#x91CF;
+</span>    <span class="token pseudo-instructions important">li</span>      <span class="token general-registers class-name">t1</span>, <span class="token number">0xffffffffc0000000</span> - <span class="token number">0x80000000</span>
+    <span class="token comment"># t0 &#x51CF;&#x53BB;&#x865A;&#x5B9E;&#x6620;&#x5C04;&#x504F;&#x79FB;&#x91CF; 0xffffffff40000000&#xFF0C;&#x53D8;&#x4E3A;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x7269;&#x7406;&#x5730;&#x5740;
+</span>    <span class="token rv32/64i-instructions keyword">sub</span>     <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t1</span>
+    <span class="token comment"># t0 &gt;&gt;= 12&#xFF0C;&#x53D8;&#x4E3A;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7684;&#x7269;&#x7406;&#x9875;&#x53F7;
+</span>    <span class="token rv32/64i-instructions keyword">srli</span>    <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t0</span>, <span class="token number">12</span>
+
+    <span class="token comment"># t1 := 8 &lt;&lt; 60&#xFF0C;&#x8BBE;&#x7F6E; satp &#x7684; MODE &#x5B57;&#x6BB5;&#x4E3A; Sv39
+</span>    <span class="token pseudo-instructions important">li</span>      <span class="token general-registers class-name">t1</span>, <span class="token number">8</span> &lt;&lt; <span class="token number">60</span>
+    <span class="token comment"># &#x5C06;&#x521A;&#x624D;&#x8BA1;&#x7B97;&#x51FA;&#x7684;&#x9884;&#x8BBE;&#x4E09;&#x7EA7;&#x9875;&#x8868;&#x7269;&#x7406;&#x9875;&#x53F7;&#x9644;&#x52A0;&#x5230; satp &#x4E2D;
+</span>    <span class="token rv32/64i-instructions keyword">or</span>      <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t1</span>
+    <span class="token comment"># &#x5C06;&#x7B97;&#x51FA;&#x7684; t0(&#x5373;&#x65B0;&#x7684;MODE|&#x9875;&#x8868;&#x57FA;&#x5740;&#x7269;&#x7406;&#x9875;&#x53F7;) &#x8986;&#x76D6;&#x5230; satp &#x4E2D;
+</span>    <span class="token csr-instructions keyword">csrw</span>    <span class="token s-mode-csrs class-name">satp</span>, <span class="token general-registers class-name">t0</span>
+    <span class="token comment"># &#x4F7F;&#x7528; sfence.vma &#x6307;&#x4EE4;&#x5237;&#x65B0; TLB
+</span>    <span class="token privilege-instructions keyword">sfence.vma</span>
+    <span class="token comment"># &#x4ECE;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x7ED9;&#x5185;&#x6838;&#x642D;&#x5EFA;&#x51FA;&#x4E86;&#x4E00;&#x4E2A;&#x5B8C;&#x7F8E;&#x7684;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#xFF01;
+</span>
+    <span class="token comment"># &#x6211;&#x4EEC;&#x5728;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E2D;&#xFF1A;&#x968F;&#x610F;&#x5C06; sp &#x8BBE;&#x7F6E;&#x4E3A;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF01;
+</span>    <span class="token rv32/64i-instructions keyword">lui</span> <span class="token general-registers class-name">sp</span>, <span class="token relocation-functions important">%hi</span>(<span class="token last-literals operator">bootstacktop</span>)
+
+    <span class="token comment"># &#x6211;&#x4EEC;&#x5728;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E2D;&#xFF1A;&#x968F;&#x610F;&#x8DF3;&#x8F6C;&#x5230;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF01;
+</span>    <span class="token comment"># &#x8DF3;&#x8F6C;&#x5230; rust_main
+</span>    <span class="token rv32/64i-instructions keyword">lui</span> <span class="token general-registers class-name">t0</span>, <span class="token relocation-functions important">%hi</span>(<span class="token last-literals operator">rust_main</span>)
+    <span class="token rv32/64i-instructions keyword">addi</span> <span class="token general-registers class-name">t0</span>, <span class="token general-registers class-name">t0</span>, <span class="token relocation-functions important">%lo</span>(<span class="token last-literals operator">rust_main</span>)
+    <span class="token pseudo-instructions important">jr</span> <span class="token general-registers class-name">t0</span>
+
+    <span class="token section-directives tag">.section</span> <span class="token section-directives tag">.data</span>
+    <span class="token comment"># &#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x8981;&#x628A;&#x8FD9;&#x4E2A;&#x9875;&#x8868;&#x653E;&#x5230;&#x4E00;&#x4E2A;&#x9875;&#x91CC;&#x9762;&#xFF0C;&#x56E0;&#x6B64;&#x5FC5;&#x987B; 12 &#x4F4D;&#x5BF9;&#x9F50;
+</span>    <span class="token alignment-directives tag">.align</span> <span class="token number">12</span>
+<span class="token comment"># &#x5206;&#x914D; 4KiB &#x5185;&#x5B58;&#x7ED9;&#x9884;&#x8BBE;&#x7684;&#x4E09;&#x7EA7;&#x9875;&#x8868;
+</span><span class="token labels operator">boot_page_table_sv39:</span>
+    <span class="token comment"># 0xffffffff_c0000000 map to 0x80000000 (1G)
+</span>    <span class="token comment"># &#x524D; 511 &#x4E2A;&#x9875;&#x8868;&#x9879;&#x5747;&#x8BBE;&#x7F6E;&#x4E3A; 0 &#xFF0C;&#x56E0;&#x6B64; V=0 &#xFF0C;&#x610F;&#x5473;&#x7740;&#x662F;&#x7A7A;&#x7684;(unmapped)
+</span>    .<span class="token general-registers class-name">zero</span> <span class="token number">8</span> * <span class="token number">511</span>
+    <span class="token comment"># &#x8BBE;&#x7F6E;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9875;&#x8868;&#x9879;&#xFF0C;PPN=0x80000&#xFF0C;&#x6807;&#x5FD7;&#x4F4D; VRWXAD &#x5747;&#x4E3A; 1
+</span>    <span class="token data-emitting-directives tag">.quad</span> (<span class="token number">0x80000</span> &lt;&lt; <span class="token number">10</span>) | <span class="token number">0xcf</span> <span class="token comment"># VRWXAD
+</span></code></pre>
+<p>&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#xFF0C;&#x8981;&#x8FDB;&#x5165;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x8BBF;&#x95EE;&#x65B9;&#x5F0F;&#xFF0C;&#x9700;&#x8981;&#x5982;&#x4E0B;&#x6B65;&#x9AA4;&#xFF1A;</p>
+<ol>
+<li>&#x5206;&#x914D;&#x9875;&#x8868;&#x6240;&#x5728;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x5E76;&#x521D;&#x59CB;&#x5316;&#x9875;&#x8868;&#xFF1B;</li>
+<li>&#x8BBE;&#x7F6E;&#x597D;&#x9875;&#x57FA;&#x5740;&#x5BC4;&#x5B58;&#x5668;&#xFF08;&#x6307;&#x5411;&#x9875;&#x8868;&#x8D77;&#x59CB;&#x5730;&#x5740;&#xFF09;&#xFF1B;</li>
+<li>&#x5237;&#x65B0; TLB&#x3002;</li>
+</ol>
+<p>&#x5230;&#x73B0;&#x5728;&#x4E3A;&#x6B62;&#x6211;&#x4EEC;&#x7EC8;&#x4E8E;&#x7406;&#x89E3;&#x4E86;&#x81EA;&#x5DF1;&#x662F;&#x5982;&#x4F55;&#x505A;&#x8D77;&#x767D;&#x65E5;&#x68A6;&#x2014;&#x2014;&#x8FDB;&#x5165;&#x90A3;&#x770B;&#x4F3C;&#x865A;&#x65E0;&#x7F25;&#x7F08;&#x7684;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x7684;&#x3002;</p>
+<p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: "ab871063a9fa7f1da571",
+    clientSecret: "4760b384e3e452d2241d859cfa6a7da21a8729ec",
+    repo: "rCore_tutorial_doc",
+    owner: "rcore-os",
+    admin: [
+      "chyyuu",
+      "xyongcn",
+      "wangrunji0408",
+      "xy-plus",
+      "PanQL",
+      "wyfcyx",
+      "equation314"
+    ],
+    id: location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render("gitalk-container");
+</script>
+</div></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="part1.html" class="navigation navigation-prev " aria-label="Previous page: 页表：从虚拟内存到物理内存">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="part3.html" class="navigation navigation-next " aria-label="Next page: 内核重映射">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"内核初始映射","level":"1.7.2","depth":2,"next":{"title":"内核重映射","level":"1.7.3","depth":2,"path":"chapter5/part3.md","ref":"chapter5/part3.md","articles":[]},"previous":{"title":"页表：从虚拟内存到物理内存","level":"1.7.1","depth":2,"path":"chapter5/part1.md","ref":"chapter5/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter5/part2.md","mtime":"2020-02-13T08:47:45.396Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-14T13:23:24.037Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-chapter-fold/chapter-fold.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+
