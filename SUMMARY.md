@@ -66,5 +66,8 @@
   - [fork 实现思路](chapter13/part2.md)
   - [复制线程上下文](chapter13/part3.md)
   - [复制页表](chapter13/part4.md)
+  - [exec 介绍](chapter13/par5.md)
+  - [exec 实现思路](chapter13/part6.md)
+  - [跳转到指定用户太环境](chapter13/part7.md)
 - [附录]
   - [内链汇编](appendix/inline-asm.md)
