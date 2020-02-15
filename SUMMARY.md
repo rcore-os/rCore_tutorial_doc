@@ -61,7 +61,7 @@
   - [实现终端](chapter9/part3.md)
   - [总结与展望](chapter9/part4.md)
 - [第十章：同步互斥](chapter10/introduction.md)
-- [第十三章：线程管理：fork and execute](chapter13/introduction.md)
+- [第十三章：进程管理：fork and execute](chapter13/introduction.md)
   - [fork 介绍](chapter13/part1.md)
   - [fork 实现思路](chapter13/part2.md)
   - [复制线程上下文](chapter13/part3.md)
