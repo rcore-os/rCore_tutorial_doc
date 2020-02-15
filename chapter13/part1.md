@@ -11,11 +11,32 @@ fork 产生的新线程，除了返回值不一样，其它都完全一样。通
 
 规范和细节听起来很麻烦，我们直接看例子：
 
-- 程序
+- `usr/rust/src/syscall.rs`
 
 ```rust
+enum SyscallId {
+    Fork = 57,
+    ...
+}
+
+pub fn sys_fork() -> i64 {
+    sys_call(SyscallId::Fork, 0, 0, 0, 0)
+}
+```
+
+- `usr/rust/src/bin/fork.rs`
+
+```rust
+#![no_std]
+#![no_main]
+
+#[macro_use]
+extern crate user;
+
+use user::syscall::sys_fork;
+
+#[no_mangle]
 pub fn main() -> usize {
-    println!("{}", sys_get_tid());
     let tid = sys_fork();
     let tid = sys_fork();
     if tid == 0 {
@@ -31,7 +52,6 @@ pub fn main() -> usize {
 - 输出
 
 ```bash
-1
 I am child
 ret tid is: 0
 thread 3 exited, exit code = 0
@@ -52,4 +72,4 @@ thread 1 exited, exit code = 0
 2. `thread 1` 执行第四行，产生 `thread 3`
 3. `thread 2` 执行第四行，产生 `thread 4`
 
-除了 `thread 1` 多输出一个 `1` ，其它线程都只输出两行，以及一行程序退出时由操作系统输出的信息。可以看出 `thread 1` 和 `thread 2` 都声称自己是 father ，这是由于它们在第四行 fork 之后，分别成为了 `thread 3` 和 `thread 4` 的 father 。需要注意的是，`thread 1` 还是 `thread 2` 的 father 哦。至于线程的执行顺序，那就看调度器算法咯。。。
+每个线程都只输出两行，以及一行程序退出时由操作系统输出的信息。可以看出 `thread 1` 和 `thread 2` 都声称自己是 father ，这是由于它们在第四行 fork 之后，分别成为了 `thread 3` 和 `thread 4` 的 father 。需要注意的是，`thread 1` 还是 `thread 2` 的 father 哦。至于线程的执行顺序，那就看调度器算法咯。。。

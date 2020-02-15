@@ -1118,10 +1118,30 @@
 </ul>
 <p>&#x89C4;&#x8303;&#x548C;&#x7EC6;&#x8282;&#x542C;&#x8D77;&#x6765;&#x5F88;&#x9EBB;&#x70E6;&#xFF0C;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x770B;&#x4F8B;&#x5B50;&#xFF1A;</p>
 <ul>
-<li>&#x7A0B;&#x5E8F;</li>
+<li><code>usr/rust/src/syscall.rs</code></li>
 </ul>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> <span class="token function">sys_get_tid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-"><code class="lang-rust"><span class="token keyword">enum</span> SyscallId <span class="token punctuation">{</span>
+    Fork <span class="token operator">=</span> <span class="token number">57</span><span class="token punctuation">,</span>
+    <span class="token punctuation">...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i64 <span class="token punctuation">{</span>
+    <span class="token function">sys_call</span><span class="token punctuation">(</span>SyscallId<span class="token punctuation">::</span>Fork<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li><code>usr/rust/src/bin/fork.rs</code></li>
+</ul>
+<pre class="language-"><code class="lang-rust"><span class="token attribute attr-name">#![no_std]</span>
+<span class="token attribute attr-name">#![no_main]</span>
+
+<span class="token attribute attr-name">#[macro_use]</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
+
+<span class="token keyword">use</span> user<span class="token punctuation">::</span>syscall<span class="token punctuation">::</span>sys_fork<span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
     <span class="token keyword">let</span> tid <span class="token operator">=</span> <span class="token function">sys_fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">let</span> tid <span class="token operator">=</span> <span class="token function">sys_fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">if</span> tid <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
@@ -1136,8 +1156,7 @@
 <ul>
 <li>&#x8F93;&#x51FA;</li>
 </ul>
-<pre class="language-"><code class="lang-bash"><span class="token number">1</span>
-I am child
+<pre class="language-"><code class="lang-bash">I am child
 ret tid is: <span class="token number">0</span>
 thread <span class="token number">3</span> exited, <span class="token builtin class-name">exit</span> code <span class="token operator">=</span> <span class="token number">0</span>
 I am father
@@ -1156,7 +1175,7 @@ thread <span class="token number">1</span> exited, <span class="token builtin cl
 <li><code>thread 1</code> &#x6267;&#x884C;&#x7B2C;&#x56DB;&#x884C;&#xFF0C;&#x4EA7;&#x751F; <code>thread 3</code></li>
 <li><code>thread 2</code> &#x6267;&#x884C;&#x7B2C;&#x56DB;&#x884C;&#xFF0C;&#x4EA7;&#x751F; <code>thread 4</code></li>
 </ol>
-<p>&#x9664;&#x4E86; <code>thread 1</code> &#x591A;&#x8F93;&#x51FA;&#x4E00;&#x4E2A; <code>1</code> &#xFF0C;&#x5176;&#x5B83;&#x7EBF;&#x7A0B;&#x90FD;&#x53EA;&#x8F93;&#x51FA;&#x4E24;&#x884C;&#xFF0C;&#x4EE5;&#x53CA;&#x4E00;&#x884C;&#x7A0B;&#x5E8F;&#x9000;&#x51FA;&#x65F6;&#x7531;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x8F93;&#x51FA;&#x7684;&#x4FE1;&#x606F;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x51FA; <code>thread 1</code> &#x548C; <code>thread 2</code> &#x90FD;&#x58F0;&#x79F0;&#x81EA;&#x5DF1;&#x662F; father &#xFF0C;&#x8FD9;&#x662F;&#x7531;&#x4E8E;&#x5B83;&#x4EEC;&#x5728;&#x7B2C;&#x56DB;&#x884C; fork &#x4E4B;&#x540E;&#xFF0C;&#x5206;&#x522B;&#x6210;&#x4E3A;&#x4E86; <code>thread 3</code> &#x548C; <code>thread 4</code> &#x7684; father &#x3002;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;<code>thread 1</code> &#x8FD8;&#x662F; <code>thread 2</code> &#x7684; father &#x54E6;&#x3002;&#x81F3;&#x4E8E;&#x7EBF;&#x7A0B;&#x7684;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x90A3;&#x5C31;&#x770B;&#x8C03;&#x5EA6;&#x5668;&#x7B97;&#x6CD5;&#x54AF;&#x3002;&#x3002;&#x3002;</p>
+<p>&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x90FD;&#x53EA;&#x8F93;&#x51FA;&#x4E24;&#x884C;&#xFF0C;&#x4EE5;&#x53CA;&#x4E00;&#x884C;&#x7A0B;&#x5E8F;&#x9000;&#x51FA;&#x65F6;&#x7531;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x8F93;&#x51FA;&#x7684;&#x4FE1;&#x606F;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x51FA; <code>thread 1</code> &#x548C; <code>thread 2</code> &#x90FD;&#x58F0;&#x79F0;&#x81EA;&#x5DF1;&#x662F; father &#xFF0C;&#x8FD9;&#x662F;&#x7531;&#x4E8E;&#x5B83;&#x4EEC;&#x5728;&#x7B2C;&#x56DB;&#x884C; fork &#x4E4B;&#x540E;&#xFF0C;&#x5206;&#x522B;&#x6210;&#x4E3A;&#x4E86; <code>thread 3</code> &#x548C; <code>thread 4</code> &#x7684; father &#x3002;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;<code>thread 1</code> &#x8FD8;&#x662F; <code>thread 2</code> &#x7684; father &#x54E6;&#x3002;&#x81F3;&#x4E8E;&#x7EBF;&#x7A0B;&#x7684;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x90A3;&#x5C31;&#x770B;&#x8C03;&#x5EA6;&#x5668;&#x7B97;&#x6CD5;&#x54AF;&#x3002;&#x3002;&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1224,7 +1243,7 @@ thread <span class="token number">1</span> exited, <span class="token builtin cl
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"fork 介绍","level":"1.13.1","depth":2,"next":{"title":"fork 实现思路","level":"1.13.2","depth":2,"path":"chapter13/part2.md","ref":"chapter13/part2.md","articles":[]},"previous":{"title":"第十三章：进程管理：fork and execute","level":"1.13","depth":1,"path":"chapter13/introduction.md","ref":"chapter13/introduction.md","articles":[{"title":"fork 介绍","level":"1.13.1","depth":2,"path":"chapter13/part1.md","ref":"chapter13/part1.md","articles":[]},{"title":"fork 实现思路","level":"1.13.2","depth":2,"path":"chapter13/part2.md","ref":"chapter13/part2.md","articles":[]},{"title":"复制线程上下文","level":"1.13.3","depth":2,"path":"chapter13/part3.md","ref":"chapter13/part3.md","articles":[]},{"title":"复制页表","level":"1.13.4","depth":2,"path":"chapter13/part4.md","ref":"chapter13/part4.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter13/part1.md","mtime":"2020-02-13T10:02:30.663Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-15T09:07:41.719Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"fork 介绍","level":"1.13.1","depth":2,"next":{"title":"fork 实现思路","level":"1.13.2","depth":2,"path":"chapter13/part2.md","ref":"chapter13/part2.md","articles":[]},"previous":{"title":"第十三章：进程管理：fork and execute","level":"1.13","depth":1,"path":"chapter13/introduction.md","ref":"chapter13/introduction.md","articles":[{"title":"fork 介绍","level":"1.13.1","depth":2,"path":"chapter13/part1.md","ref":"chapter13/part1.md","articles":[]},{"title":"fork 实现思路","level":"1.13.2","depth":2,"path":"chapter13/part2.md","ref":"chapter13/part2.md","articles":[]},{"title":"复制线程上下文","level":"1.13.3","depth":2,"path":"chapter13/part3.md","ref":"chapter13/part3.md","articles":[]},{"title":"复制页表","level":"1.13.4","depth":2,"path":"chapter13/part4.md","ref":"chapter13/part4.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter13/part1.md","mtime":"2020-02-15T09:19:05.123Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-15T09:20:49.018Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
