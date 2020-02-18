@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>第十三章：进程管理：fork and execute · GitBook</title>
+        <title>练习题 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -80,8 +80,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
-    
-    <link rel="next" href="part1.html" />
     
     
     <link rel="prev" href="../chapter10/introduction.html" />
@@ -960,74 +958,16 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.13" data-path="introduction.html">
+        <li class="chapter active" data-level="1.13" data-path="exercise.html">
             
-                <a href="introduction.html">
+                <a href="exercise.html">
             
                     
-                    第十三章：进程管理：fork and execute
+                    练习题
             
                 </a>
             
 
-            
-            <ul class="articles">
-                
-    
-        <li class="chapter " data-level="1.13.1" data-path="part1.html">
-            
-                <a href="part1.html">
-            
-                    
-                    fork 介绍
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.13.2" data-path="part2.html">
-            
-                <a href="part2.html">
-            
-                    
-                    fork 实现思路
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.13.3" data-path="part3.html">
-            
-                <a href="part3.html">
-            
-                    
-                    复制线程上下文
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.13.4" data-path="part4.html">
-            
-                <a href="part4.html">
-            
-                    
-                    复制页表
-            
-                </a>
-            
-
-            
-        </li>
-    
-
-            </ul>
             
         </li>
     
@@ -1093,7 +1033,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >第十三章：进程管理：fork and execute</a>
+        <a href=".." >练习题</a>
     </h1>
 </div>
 
@@ -1108,22 +1048,26 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="&#x7B2C;&#x5341;&#x4E09;&#x7AE0;&#xFF1A;&#x8FDB;&#x7A0B;&#x7BA1;&#x7406;&#xFF1A;fork-and-execute">&#x7B2C;&#x5341;&#x4E09;&#x7AE0;&#xFF1A;&#x8FDB;&#x7A0B;&#x7BA1;&#x7406;&#xFF1A;fork and execute</h2>
-<p><img src="figures/hhh.jpeg" alt="hhh"></p>
-<h3 id="&#x672C;&#x7AE0;&#x6982;&#x8981;">&#x672C;&#x7AE0;&#x6982;&#x8981;</h3>
-<p><code>sys_fork</code> &#x7528;&#x4E8E;&#x590D;&#x5236;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#xFF0C;<code>sys_exec</code> &#x7528;&#x4E8E;&#x5C06;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x5BB9;&#x4FEE;&#x6539;&#x4E3A;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7A0B;&#x5E8F;&#x3002;&#x5728; 99% &#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;fork &#x4E4B;&#x540E;&#x4F1A;&#x7ACB;&#x523B;&#x8C03;&#x7528; exec &#x3002;Linux &#x4FBF;&#x662F;&#x8FD9;&#x6837;&#x521B;&#x5EFA;&#x8FDB;&#x7A0B;&#x7684;&#x3002;</p>
-<p>&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x5E76;&#x6CA1;&#x6709;&#x505A;&#x8FDB;&#x7A0B;&#x62C6;&#x5206;&#xFF0C;&#x6240;&#x4EE5;&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x8FDB;&#x7A0B;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x4E8E;&#x662F;&#x5C31;&#x5077;&#x61D2;&#x7528; <code>Thread</code> &#x63CF;&#x8FF0;&#x7528;&#x6237;&#x8FDB;&#x7A0B;&#x4E86;&#x3002;</p>
-<blockquote>
-<p>&#x6709;&#x6CA1;&#x6709;&#x89C9;&#x5F97;&#x8FD9;&#x6837;&#x521B;&#x5EFA;&#x8FDB;&#x7A0B;&#x5341;&#x5206;&#x522B;&#x626D;&#xFF0C;&#x5148;&#x590D;&#x5236;&#x4E00;&#x904D;&#x81EA;&#x8EAB;&#xFF0C;&#x7136;&#x540E;&#x7528;&#x522B;&#x7684;&#x4E1C;&#x897F;&#x8986;&#x76D6;&#x3002;&#x3002;&#x3002;&#x90A3;&#x590D;&#x5236;&#x8FD9;&#x4E9B;&#x4E1C;&#x897F;&#x5E72;&#x5565;&#x3002;&#x3002;&#x3002;
-&#x660E;&#x660E;&#x5728;&#x524D;&#x9762;&#x7684;&#x7AE0;&#x8282;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x80FD;&#x591F;&#x901A;&#x8FC7; <code>new_user_thread</code> &#x76F4;&#x63A5;&#x521B;&#x5EFA;&#x65B0;&#x8FDB;&#x7A0B;&#xFF08;&#x7EBF;&#x7A0B;&#xFF09;&#x4E86;&#x3002;&#x3002;&#x3002;</p>
-</blockquote>
-<p>&#x672C;&#x7AE0;&#x4F60;&#x5C06;&#x4F1A;&#x5B66;&#x5230;&#xFF1A;</p>
-<ul>
-<li>fork &#x7684;&#x529F;&#x80FD;</li>
-<li>&#x5982;&#x4F55;&#x63CF;&#x8FF0;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;&#x8FDB;&#x7A0B;&#xFF08;&#x7EBF;&#x7A0B;&#xFF09;</li>
-<li>&#x5982;&#x4F55;&#x5B8C;&#x5168;&#x590D;&#x5236;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;&#x8FDB;&#x7A0B;&#xFF08;&#x7EBF;&#x7A0B;&#xFF09;</li>
-<li>TODO&#xFF1A;&#x5199; execute</li>
-</ul>
+                                <h1 id="&#x7EC3;&#x4E60;&#x9898;">&#x7EC3;&#x4E60;&#x9898;</h1>
+<p>&#x6240;&#x6709;&#x9898;&#x76EE;&#x5206;&#x6570;&#x603B;&#x548C;&#xFF1A;130 &#xFF0C;&#x6EE1;&#x5206; 100 &#xFF0C;&#x8D85;&#x51FA; 100 &#x6309; 100 &#x8BA1;&#x7B97;&#x3002;</p>
+<ol>
+<li>&#x89E6;&#x53D1;&#x5E76;&#x6355;&#x83B7;&#x4E00;&#x6761;&#x975E;&#x6CD5;&#x6307;&#x4EE4;&#x5F02;&#x5E38;&#xFF08;&#x5982;&#xFF1A;mret&#xFF09;&#xFF0C;&#x5E76;&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF08;&#x7B80;&#x5355; <code>print &amp; panic</code> &#x5373;&#x53EF;&#xFF09;&#x3002;&#xFF08;5 &#x5206;&#xFF09;</li>
+<li>&#x5C06; <code>SegmentTreeAllocator</code> &#x66FF;&#x6362;&#x4E3A; <code>YourAllocator</code> &#xFF0C;&#x53EF;&#x5B9E;&#x73B0;&#x4EFB;&#x4E00;&#x4F60;&#x559C;&#x6B22;&#x7684;&#x5185;&#x5B58;&#x5206;&#x914D;&#x7B97;&#x6CD5;&#xFF0C;&#x5E76;&#x7F16;&#x5199;&#x7B80;&#x5355;&#x7684;&#x6D4B;&#x8BD5;&#x6837;&#x4F8B;&#x9A8C;&#x8BC1;&#x5176;&#x6B63;&#x786E;&#x6027;&#x3002;&#xFF08;10 &#x5206;&#xFF09;</li>
+<li>&#x8BE6;&#x7EC6;&#x63CF;&#x8FF0; <code>process::init</code> &#x7684;&#x6267;&#x884C;&#x8FC7;&#x7A0B;&#xFF0C;&#x7ED9;&#x51FA; <code>switch</code> &#x65F6;&#xFF0C;&#x91CD;&#x8981;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x4F7F;&#x7528;&#x60C5;&#x51B5;&#xFF0C;&#x753B;&#x51FA;&#x6808;&#x7684;&#x4F7F;&#x7528;&#x60C5;&#x51B5;&#x3002;&#xFF08;10 &#x5206;&#xFF09;</li>
+<li>&#x5C06; <code>Round Robin &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x66FF;&#x6362;&#x4E3A; <code>Stride Scheduling &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+<li>&#x5B9E;&#x73B0; <code>sys_fork</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+<li>&#x5B9E;&#x73B0; <code>sys_wait</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+<li>&#x7528; rust &#x91CD;&#x5199; <a href="https://github.com/chyyuu/ucore_os_lab/blob/master/labcodes/lab6/user/priority.c" target="_blank">&#x6307;&#x5B9A; C &#x7A0B;&#x5E8F;</a> &#xFF0C;&#x7F16;&#x8BD1;&#x8FD0;&#x884C;&#x3002;&#xFF08;10 &#x5206;&#xFF09;</li>
+<li>&#x68C0;&#x5BDF; 7 &#x7684;&#x8F93;&#x51FA;&#x7ED3;&#x679C;&#xFF0C;&#x5E94;&#x8BE5;&#x4E0E; <a href="https://github.com/chyyuu/ucore_os_lab/blob/master/labcodes/lab6/tools/grade.sh#L576" target="_blank">ucore &#x5B9E;&#x9A8C;&#x4E2D;&#x7684;&#x8F93;&#x51FA;</a> &#x4E00;&#x81F4;&#x3002;&#xFF08;15 &#x5206;&#xFF09;</li>
+<li>&#x57FA;&#x4E8E; filesystem &#x5B9E;&#x73B0; pipe &#xFF0C;&#x7F16;&#x5199;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x8FDB;&#x884C;&#x6D4B;&#x8BD5;&#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+</ol>
+<h2 id="&#x5B9E;&#x9A8C;&#x62A5;&#x544A;&#x8981;&#x6C42;">&#x5B9E;&#x9A8C;&#x62A5;&#x544A;&#x8981;&#x6C42;</h2>
+<ol>
+<li>&#x4E00;&#x9053;&#x9898;&#x4E00;&#x4EFD;&#x5B9E;&#x9A8C;&#x62A5;&#x544A;&#xFF0C;&#x547D;&#x540D;&#x4E3A;&#xFF1A;<code>report_X.md</code> &#xFF0C;X &#x4E3A;&#x9898;&#x76EE;&#x7F16;&#x53F7;&#xFF0C;&#x4E0D;&#x63A5;&#x53D7;&#x5176;&#x5B83;&#x683C;&#x5F0F;&#x7684;&#x5B9E;&#x9A8C;&#x62A5;&#x544A;&#x3002;</li>
+<li>&#x4E0D;&#x8981;&#x5728;&#x62A5;&#x544A;&#x91CC;&#x5927;&#x6BB5;&#x7C98;&#x8D34;&#x4EE3;&#x7801;&#xFF0C;&#x8BB2;&#x6E05;&#x695A;&#x5B9E;&#x9A8C;&#x8FC7;&#x7A0B;&#x548C;&#x601D;&#x8DEF;&#x5373;&#x53EF;&#x3002;</li>
+<li>&#x6BCF;&#x9053;&#x9898;&#x7684;&#x62A5;&#x544A;&#x5747;&#x4F1A;&#x8FDB;&#x884C;&#x5B57;&#x6570;&#x7EDF;&#x8BA1;&#xFF0C;&#x5B57;&#x6570;&#x8D85;&#x8FC7; <code>&#x5E73;&#x5747;&#x5B57;&#x6570; * 3</code> &#x6216;&#x4F4E;&#x4E8E; <code>&#x5E73;&#x5747;&#x5B57;&#x6570; / 3</code> &#x7684;&#x540C;&#x5B66;&#x53EF;&#x80FD;&#x88AB;&#x914C;&#x60C5;&#x6263;&#x5206;&#x3002;&#xFF08;&#x6C42;&#x6C42;&#x4F60;&#x4EEC;&#x522B;&#x5377;&#x4E86;&#xFF09;</li>
+<li>&#x82E5;&#x672A;&#x901A;&#x8FC7; 8 &#xFF0C;&#x5219; 4/5/6 &#x9700;&#x8981;&#x81EA;&#x884C;&#x7F16;&#x5199;&#x6D4B;&#x8BD5;&#x6837;&#x4F8B;&#x9A8C;&#x8BC1;&#x5176;&#x6B63;&#x786E;&#x6027;&#x3002;</li>
+</ol>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1175,14 +1119,10 @@
 
             
                 
-                <a href="../chapter10/introduction.html" class="navigation navigation-prev " aria-label="Previous page: 第十章：同步互斥">
+                <a href="../chapter10/introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 第十章：同步互斥">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="part1.html" class="navigation navigation-next " aria-label="Next page: fork 介绍">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -1191,7 +1131,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第十三章：进程管理：fork and execute","level":"1.13","depth":1,"next":{"title":"fork 介绍","level":"1.13.1","depth":2,"path":"chapter13/part1.md","ref":"chapter13/part1.md","articles":[]},"previous":{"title":"第十章：同步互斥","level":"1.12","depth":1,"path":"chapter10/introduction.md","ref":"chapter10/introduction.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter13/introduction.md","mtime":"2020-02-15T09:07:24.653Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-15T09:20:49.018Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"练习题","level":"1.13","depth":1,"next":{"title":"[附录]","level":"1.14","depth":1,"ref":"","articles":[{"title":"内链汇编","level":"1.14.1","depth":2,"path":"appendix/inline-asm.md","ref":"appendix/inline-asm.md","articles":[]}]},"previous":{"title":"第十章：同步互斥","level":"1.12","depth":1,"path":"chapter10/introduction.md","ref":"chapter10/introduction.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/exercise.md","mtime":"2020-02-18T06:18:18.964Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-18T06:18:49.140Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
