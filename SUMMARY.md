@@ -66,6 +66,6 @@
     - [fork 实现思路](chapter13/part2.md)
     - [复制线程上下文](chapter13/part3.md)
     - [复制页表](chapter13/part4.md) -->
-- [练习题](./exercise/exercise.md)
+- [练习题（施工中）](./exercise/exercise.md)
 - [附录]
   - [内链汇编](appendix/inline-asm.md)
