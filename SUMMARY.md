@@ -66,6 +66,14 @@
     - [fork 实现思路](chapter13/part2.md)
     - [复制线程上下文](chapter13/part3.md)
     - [复制页表](chapter13/part4.md) -->
-- [练习题（施工中）](./exercise/exercise.md)
+- [练习题（施工中）](./exercise/introduction.md)
+  - [1. 中断异常](./exercise/part1.md)
+  - [2. 物理内存管理](./exercise/part2.md)
+  - [3. 虚拟内存管理](./exercise/part3.md)
+  - [4. 线程管理](./exercise/part4.md)
+  - [5. 线程调度（TODO）](./exercise/part5.md)
+  - [6. 用户进程（+ 虚拟内存管理 + 线程管理）](./exercise/part6.md)
+  - [7. 同步互斥（TODO）](./exercise/part7.md)
+  - [8. 文件系统](./exercise/part8.md)
 - [附录]
   - [内链汇编](appendix/inline-asm.md)
