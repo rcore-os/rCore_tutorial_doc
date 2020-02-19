@@ -26,13 +26,13 @@ $ rustup target add riscv64imac-unknown-none-elf
 
 很快下载安装好后，我们重试一下，发现就可以成功编译了。
 
-编译出的结果被放在了 `target/riscv64imac-unknown-none-elf/debug` 文件夹中。可以看到其中有一个名为 `os` 的可执行文件。不过由于它的目标平台是 riscv64，我们暂时还不能执行它。
+编译出的结果被放在了 *target/riscv64imac-unknown-none-elf/debug* 文件夹中。可以看到其中有一个名为 *os* 的可执行文件。不过由于它的目标平台是 riscv64，我们暂时还不能执行它。
 
 ### 为项目设置默认目标三元组
 
 由于我们之后都会使用 riscv64 作为编译目标，为了避免每次都要加 `--target` 参数，我们可以使用 [Cargo 配置文件](https://doc.rust-lang.org/cargo/reference/config.html) 为项目配置默认的编译选项。
 
-在 `os` 文件夹中创建一个 `.cargo` 文件夹，并在其中创建一个名为 `config` 的文件，在其中填入以下内容：
+在 *os* 文件夹中创建一个 *.cargo* 文件夹，并在其中创建一个名为 *config* 的文件，在其中填入以下内容：
 
 ```toml
 # .cargo/config
@@ -64,7 +64,7 @@ $ rustup component add llvm-tools-preview
 
 ### 查看生成的可执行文件
 
-我们编译之后的产物为 `target/riscv64imac-unknown-none-elf/debug/os` ，让我们先看看它的文件类型：
+我们编译之后的产物为 *target/riscv64imac-unknown-none-elf/debug/os* ，让我们先看看它的文件类型：
 
 ```bash
 $ file target/riscv64imac-unknown-none-elf/debug/os
@@ -129,10 +129,10 @@ Dynamic Section:
 
 我们按顺序逐个查看：
 
-- `start address` 是程序的入口地址。
-- `Sections`，从这里我们可以看到程序各段的各种信息。后面以 `debug` 开头的段是调试信息。
-- `SYMBOL TABLE` 即符号表，从中我们可以看到程序中所有符号的地址。例如 `_start` 就位于入口地址上。
-- `Program Header` 是程序加载时所需的段信息。
+- *start address* 是程序的入口地址。
+- *Sections*，从这里我们可以看到程序各段的各种信息。后面以 `debug` 开头的段是调试信息。
+- *SYMBOL TABLE* 即符号表，从中我们可以看到程序中所有符号的地址。例如 `_start` 就位于入口地址上。
+- *Program Header* 是程序加载时所需的段信息。
 
   其中 `off` 是它在文件中的位置，`vaddr` 和 `paddr` 是要加载到的虚拟地址和物理地址，`align` 规定了地址的对齐，`filesz` 和 `memsz` 分别表示它在文件和内存中的大小，`flags` 描述了相关权限（r：可读，w：可写，x：可执行）
 
@@ -159,12 +159,12 @@ Disassembly of section .text:
 
 ### 生成内核镜像
 
-我们之前生成的 `elf` 格式可执行文件有以下特点：
+我们之前生成的 *elf* 格式可执行文件有以下特点：
 
 - 含有冗余的调试信息，使得程序体积较大；
-- 需要对 `program header` 部分进行手动解析才能知道各段的信息，而这需要我们了解 `program header` 的二进制格式，并以字节为单位进行解析。
+- 需要对 *program header* 部分进行手动解析才能知道各段的信息，而这需要我们了解 *program header* 的二进制格式，并以字节为单位进行解析。
 
-由于我们目前没有调试的手段，不需要调试信息；同时也不会解析 `elf` 格式文件，所以使用工具 `rust-objcopy` 从 `elf` 格式可执行文件生成内核镜像：
+由于我们目前没有调试的手段，不需要调试信息；同时也不会解析 *elf* 格式文件，所以使用工具 `rust-objcopy` 从 `elf` 格式可执行文件生成内核镜像：
 
 ```bash
 $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binary target/riscv64imac-unknown-none-elf/debug/kernel.bin
@@ -172,6 +172,6 @@ $ rust-objcopy target/riscv64imac-unknown-none-elf/debug/os --strip-all -O binar
 
 这里 `--strip-all` 表明丢弃所有符号表及调试信息，`-O binary` 表示输出为二进制文件。
 
-至此，我们编译并生成了内核镜像 `kernel.bin` 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：**调整内存布局** 和 **重写入口函数** 。
+至此，我们编译并生成了内核镜像 *kernel.bin* 。接下来，我们将使用 Qemu 模拟器真正将我们的内核镜像跑起来。不过在此之前还需要完成两个工作：**调整内存布局** 和 **重写入口函数** 。
 
 [code]: https://github.com/rcore-os/rCore_tutorial/tree/ch2-pa4

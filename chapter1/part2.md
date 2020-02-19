@@ -4,7 +4,7 @@
 
 使用 `cargo new` 创建一个新的 Rust binary 项目，命令如下：
 
-```bash
+```sh
 $ cargo new os --bin
 ```
 
@@ -24,7 +24,7 @@ os
 
 接下来我们进入 `os` 项目文件夹，并尝试构建、运行项目：
 
-```bash
+```sh
 $ cargo run
    ...
 Hello, world!

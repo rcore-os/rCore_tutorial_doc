@@ -80,7 +80,7 @@ void sbi_console_putchar(int ch)
 
 > 实现了编号在 `0-8` 之间的系统调用，具体请看 [OpenSBI 文档 # function list](https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc#function-listing-1)
 
-执行 ecall 前需要指定系统调用的编号，传递参数。一般而言，$a_7$ 为系统调用编号，$a_0 , a_1 , a_2$ 为参数：
+执行 ecall 前需要指定系统调用的编号，传递参数。一般而言，$$a_7$$ 为系统调用编号，$$a_0 , a_1 , a_2$$ 为参数：
 
 ```rust
 // src/lib.rs
@@ -120,9 +120,9 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
 >
 > 等更多事项。通常编译器按照某种规范去翻译所有的函数调用，这种规范被称为 [calling convention](https://en.wikipedia.org/wiki/Calling_convention) 。值得一提的是，为了实现函数调用，我们需要预先分配一块内存作为 **调用栈** ，后面会看到调用栈在函数调用过程中极其重要。你也可以理解为什么第一章刚开始我们就要分配栈了。
 
-对于参数比较少且是基本数据类型的时候，我们从左到右使用寄存器 $a_0 \sim a_7$ 就可以完成参数的传递。（可参考 [riscv calling convention](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf)）
+对于参数比较少且是基本数据类型的时候，我们从左到右使用寄存器 $$a_0 \sim a_7$$ 就可以完成参数的传递。（可参考 [riscv calling convention](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf)）
 
-然而，如这种情况一样，设置寄存器并执行汇编指令，这超出了 Rust 语言的描述能力。然而又与之前 `global_asm!` 大段插入汇编代码不同，我们要把 `u8` 类型的单个字符传给 $a_0$ 作为输入参数，这种情况较为强调 Rust 与汇编代码的交互。此时我们通常使用 **内联汇编（inline assembly）** 。
+然而，如这种情况一样，设置寄存器并执行汇编指令，这超出了 Rust 语言的描述能力。然而又与之前 `global_asm!` 大段插入汇编代码不同，我们要把 `u8` 类型的单个字符传给 $$a_0$$ 作为输入参数，这种情况较为强调 Rust 与汇编代码的交互。此时我们通常使用 **内联汇编（inline assembly）** 。
 
 > **[info] 拓展内联汇编**
 >
@@ -145,9 +145,9 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
 > - `option` 是 Rust 语言内联汇编 **特有** 的(相对于 C 语言)，用来对内联汇编整体进行配置。
 > - 如果想进一步了解上面例子中的内联汇编(**"asm!"**)，请参考[附录：内联汇编](../appendix/inline_asm.md)。
 
-输出部分，我们将结果保存到变量 `ret` 中，限制条件 `{x10}` 告诉编译器使用寄存器 $x_{10}(a_0)$ ，前面的 `=` 表明汇编代码会修改该寄存器并作为最后的返回值。一般情况下 `output operands` 的 constraint 部分前面都要加上 `=` 。
+输出部分，我们将结果保存到变量 `ret` 中，限制条件 `{x10}` 告诉编译器使用寄存器 $$x_{10}(a_0)$$ ，前面的 `=` 表明汇编代码会修改该寄存器并作为最后的返回值。一般情况下 `output operands` 的 constraint 部分前面都要加上 `=` 。
 
-输入部分，我们分别通过寄存器 $x_{10}(a_0),x_{11}(a_1),x_{12}(a_2),x_{17}(a_7)$ 传入参数 `arg0,arg1,arg2,which` ，它们分别代表接口可能所需的三个输入参数（`arg0,arg1,arg2`），以及用来区分我们调用的是哪个接口的 `SBI Extension ID(`which`) 。这里之所以提供三个输入参数是为了将所有接口囊括进去，对于某些接口有的输入参数是冗余的，比如`sbi_console_putchar`` 由于只需一个输入参数，它就只关心寄存器 $a_0$ 的值。
+输入部分，我们分别通过寄存器 $$x_{10}(a_0),x_{11}(a_1),x_{12}(a_2),x_{17}(a_7)$$ 传入参数 *arg0,arg1,arg2,which* ，它们分别代表接口可能所需的三个输入参数（*arg0,arg1,arg2*），以及用来区分我们调用的是哪个接口的 `SBI Extension ID(*which*)` 。这里之所以提供三个输入参数是为了将所有接口囊括进去，对于某些接口有的输入参数是冗余的，比如*sbi_console_putchar* 由于只需一个输入参数，它就只关心寄存器 $$a_0$$ 的值。
 
 在 clobbered registers list 中，出现了一个 `"memory"` ，这用来告诉编译器汇编代码隐式的修改了在汇编代码中未曾出现的某些寄存器。所以，它也不能认为汇编代码中未出现的寄存器就会在内联汇编前后保持不变了。
 

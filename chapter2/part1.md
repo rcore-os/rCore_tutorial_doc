@@ -8,7 +8,7 @@ cargo 在编译项目时，可以附加目标参数 `--target <target triple>` �
 
 `rustc --version --verbose` 来查看 Rust 的默认目标三元组：
 
-```bash
+```sh
 $ rustc --version --verbose
 rustc 1.42.0-nightly (859764425 2020-01-07)
 binary: rustc
@@ -24,7 +24,7 @@ LLVM version: 9.0
 官方对一些平台提供了默认的目标三元组，我们可以通过以下命令来查看完整列表：
 
 ```sh
-rustc --print target-list
+$ rustc --print target-list
 ```
 
 ### 目标三元组 JSON 描述文件
@@ -34,7 +34,7 @@ rustc --print target-list
 首先我们来看一下默认的目标三元组 **x86_64-unknown-linux-gnu** 的 **JSON** 文件描述，输入以下命令：
 
 ```sh
-rustc -Z unstable-options --print target-spec-json --target x86_64-unknown-linux-gnu
+$ rustc -Z unstable-options --print target-spec-json --target x86_64-unknown-linux-gnu
 ```
 
 可以得到如下输出：
@@ -77,7 +77,7 @@ rustc -Z unstable-options --print target-spec-json --target x86_64-unknown-linux
 我们查看一下它的 JSON 描述文件：
 
 ```sh
-rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-none-elf
+$ rustc -Z unstable-options --print target-spec-json --target riscv64imac-unknown-none-elf
 ```
 
 ```json

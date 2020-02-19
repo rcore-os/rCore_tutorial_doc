@@ -76,4 +76,4 @@
   - [7. 同步互斥（TODO）](./exercise/part7.md)
   - [8. 文件系统](./exercise/part8.md)
 - [附录]
-  - [内链汇编](appendix/inline-asm.md)
+  - [内联汇编](appendix/inline-asm.md)

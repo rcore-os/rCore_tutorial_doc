@@ -34,9 +34,11 @@ OpenSBI 所做的一件事情就是把 CPU 从 M Mode 切换到 S Mode ，接着
 >
 > M-mode(机器模式，缩写为 M 模式)是 RISC-V 中 hart(hardware thread,硬件线程)可以执行的最高权限模式。在 M 模式下运行的 hart 对内存,I/O 和一些对于启动和配置系统来说必要的底层功能有着完全的使用权。
 >
-> **[info] riscv64 的 S Mode**
+> **riscv64 的 S Mode**
 >
 > S-mode(监管者模式，缩写为 S 模式)是支持现代类 Unix 操作系统的权限模式，支持现代类 Unix 操作系统所需要的基于页面的虚拟内存机制是其核心。
+>
+
 
 接着我们要在 `_start` 中设置内核的运行环境了，我们直接来看代码：
 
@@ -58,11 +60,11 @@ bootstack:
 bootstacktop:
 ```
 
-可以看到之前未被定义的 $\text{.bss.stack}$ 段出现了，我们只是在这里分配了一块 $4096\times{4}\text{Bytes}=\text{16KiB}$ 的内存作为内核的栈。之前的 $\text{.text.entry}$ 也出现了：我们将 `_start` 函数放在了 $\text{.text}$ 段的开头。
+可以看到之前未被定义的 *.bss.stack* 段出现了，我们只是在这里分配了一块 $$4096\times{4}\text{Bytes}=\text{16KiB}$$ 的内存作为内核的栈。之前的 *.text.entry* 也出现了：我们将 `_start` 函数放在了 *.text* 段的开头。
 
 我们看看 `_start` 里面做了什么：
 
-1. 修改栈指针寄存器 $\text{sp}$ 为 $\text{.bss.stack}$ 段的结束地址，由于栈是从高地址往低地址增长，所以高地址是栈顶；
+1. 修改栈指针寄存器 `sp` 为 *.bss.stack* 段的结束地址，由于栈是从高地址往低地址增长，所以高地址是栈顶；
 2. 使用 `call` 指令跳转到 `rust_main` 。这意味着我们的内核运行环境设置完成了，正式进入内核。
 
 我们将 `src/main.rs` 里面的 `_start` 函数删除，并换成 `rust_main` ：

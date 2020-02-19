@@ -14,7 +14,7 @@
 
 ### MemoryArea
 
-我们刻意将不同的段分为不同的 `MemoryArea` ，说明它们映射到物理内存的方式一定是不同的：
+我们刻意将不同的段分为不同的 `MemoryArea` ，说明它们映射到物理内存的方式可以是不同的：
 
 ![](figures/memory_handler.jpg)
 
