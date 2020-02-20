@@ -1,3 +1,14 @@
+## ***最新通知***
+
+由于本文档还不稳定，将会经常更新，因此大家遇到了 bug 可以第一时间看看这里有无解决方案。
+
+> **[info] 2020-02-20**
+> 
+> 如果在编译 *buddy_system_allocator* 时报错，可能是本地 crate 版本未更新，只需进入 *os/,usr/* 文件夹下分别 ``cargo update -p buddy_system_allocator`` ，并重新编译即可。
+> 
+> 如果内核在输出 ``setup process!`` 后 panic 报 page fault ，则很有可能将 ``timer::init`` 函数中的 ``TICKS = 0;`` 注释掉即可正常运行。
+>
+
 # rCore Tutorial
 
 这是一个展示如何从零开始用 Rust 语言写一个基于 64 位 RISC-V 架构的操作系统的教程。完成这个教程后，你将可以在内核上运行用户态终端，并在终端内输入命令运行其他程序。
