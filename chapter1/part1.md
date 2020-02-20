@@ -8,11 +8,13 @@
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
+> 如果安装 rust 的过程中出现了困难，可以阅读 [附录：安装 rust](../appendix/install_rust.md)
+
 Rust 包含：stable、beta、nightly 三个版本。默认情况下我们安装的是 stable 稳定版。由于在编写操作系统时需要使用 Rust 的一些不稳定的实验功能，因此我们使用 nightly 每日构建版。
 
 但是，由于官方不保证 nightly 版本的 ABI 稳定性，也就意味着今天写的代码用未来的 nightly 可能无法编译通过，因此一般在使用 nightly 时应该锁定一个日期。
 
-我们在工作目录下创建一个名为 `rust-toolchain` 的文件，并在其中写入所需的工具链版本：
+我们在工作目录下创建一个名为 `rust-toolchain` 的文件（无后缀），并在其中写入所需的工具链版本：
 
 ```
 nightly-2020-01-27

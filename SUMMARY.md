@@ -75,5 +75,6 @@
   - [6. 用户进程（+ 虚拟内存管理 + 线程管理）](./exercise/part6.md)
   - [7. 同步互斥（TODO）](./exercise/part7.md)
   - [8. 文件系统](./exercise/part8.md)
-- [附录]
-  - [内联汇编](appendix/inline-asm.md)
+- [附录](./appendix/introduction.md)
+  - [内联汇编](appendix/inline_asm.md)
+  - [安装 rust](appendix/install_rust.md)

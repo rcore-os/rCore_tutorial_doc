@@ -1083,26 +1083,39 @@
             
         </li>
     
-        <li class="chapter " data-level="1.14" >
+        <li class="chapter " data-level="1.14" data-path="../appendix/introduction.html">
             
-                <span>
+                <a href="../appendix/introduction.html">
             
                     
-                    [附录]
+                    附录
             
-                </span>
+                </a>
             
 
             
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline_asm.html">
             
-                <span>
+                <a href="../appendix/inline_asm.html">
             
                     
                     内联汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14.2" data-path="../appendix/install_rust.html">
+            
+                <a href="../appendix/install_rust.html">
+            
+                    
+                    安装 rust
             
                 </a>
             
@@ -1249,7 +1262,7 @@ PMP1: 0x0000000000000000-0xffffffffffffffff <span class="token punctuation">(</s
     <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>&#x8FD9;&#x6837;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x5C06;&#x5185;&#x6838;&#x955C;&#x50CF;&#x52A0;&#x8F7D;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x5C4F;&#x5E55;&#x4E0A;&#x51FA;&#x73B0;&#x4E86; OK &#xFF0C;&#x5C31;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#x3002;&#x5982;&#x679C;&#x60F3;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x4E0A;&#x9762;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;&#x5185;&#x8054;&#x6C47;&#x7F16;(<strong>&quot;asm!&quot;</strong>)&#xFF0C;&#x8BF7;&#x53C2;&#x8003; <a href="../appendix/inline_asm.md">&#x9644;&#x5F55;&#xFF1A;&#x5185;&#x8054;&#x6C47;&#x7F16;</a> &#x3002;</p>
+<p>&#x8FD9;&#x6837;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x5C06;&#x5185;&#x6838;&#x955C;&#x50CF;&#x52A0;&#x8F7D;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x5C4F;&#x5E55;&#x4E0A;&#x51FA;&#x73B0;&#x4E86; OK &#xFF0C;&#x5C31;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#x3002;&#x5982;&#x679C;&#x60F3;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x4E0A;&#x9762;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;&#x5185;&#x8054;&#x6C47;&#x7F16;(<strong>&quot;asm!&quot;</strong>)&#xFF0C;&#x8BF7;&#x53C2;&#x8003; <a href="../appendix/inline_asm.html">&#x9644;&#x5F55;&#xFF1A;&#x5185;&#x8054;&#x6C47;&#x7F16;</a> &#x3002;</p>
 <p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x751F;&#x6210;&#x5185;&#x6838;&#x955C;&#x50CF;&#x8981;&#x901A;&#x8FC7;&#x591A;&#x6761;&#x547D;&#x4EE4;&#x6765;&#x5B8C;&#x6210;&#xFF0C;&#x6211;&#x4EEC;&#x901A;&#x8FC7; <code>Makefile</code> &#x6765;&#x7B80;&#x5316;&#x8FD9;&#x4E00;&#x8FC7;&#x7A0B;&#x3002;</p>
 <pre class="language-"><code class="lang-makefile"><span class="token comment"># Makefile</span>
 
@@ -1372,7 +1385,7 @@ $ more riscv64-virt.dts #&#x663E;&#x793A;virt machine&#x8BA1;&#x7B97;&#x673A;&#x
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"使用 Qemu 运行内核","level":"1.4.5","depth":2,"next":{"title":"封装 SBI 接口","level":"1.4.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"previous":{"title":"重写程序入口点 -start","level":"1.4.4","depth":2,"path":"chapter2/part4.md","ref":"chapter2/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part5.md","mtime":"2020-02-19T11:36:27.646Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-19T12:19:31.691Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"使用 Qemu 运行内核","level":"1.4.5","depth":2,"next":{"title":"封装 SBI 接口","level":"1.4.6","depth":2,"path":"chapter2/part6.md","ref":"chapter2/part6.md","articles":[]},"previous":{"title":"重写程序入口点 -start","level":"1.4.4","depth":2,"path":"chapter2/part4.md","ref":"chapter2/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/part5.md","mtime":"2020-02-13T08:47:45.387Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-20T08:41:12.867Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

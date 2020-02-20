@@ -1083,26 +1083,39 @@
             
         </li>
     
-        <li class="chapter " data-level="1.14" >
+        <li class="chapter " data-level="1.14" data-path="../appendix/introduction.html">
             
-                <span>
+                <a href="../appendix/introduction.html">
             
                     
-                    [附录]
+                    附录
             
-                </span>
+                </a>
             
 
             
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline-asm.md">
+        <li class="chapter " data-level="1.14.1" data-path="../appendix/inline_asm.html">
             
-                <span>
+                <a href="../appendix/inline_asm.html">
             
                     
                     内联汇编
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14.2" data-path="../appendix/install_rust.html">
+            
+                <a href="../appendix/install_rust.html">
+            
+                    
+                    安装 rust
             
                 </a>
             
@@ -1167,9 +1180,12 @@
 <p>&#x6211;&#x4EEC;&#x9996;&#x5148;&#x4F7F;&#x7528;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x5B89;&#x88C5; Rust &#x5DE5;&#x5177;&#x94FE;&#x7BA1;&#x7406;&#x5668; rustup &#x548C; Rust &#x5305;&#x7BA1;&#x7406;&#x5668; cargo&#xFF1A;</p>
 <pre class="language-"><code class="lang-bash">$ <span class="token function">curl</span> https://sh.rustup.rs -sSf <span class="token operator">|</span> <span class="token function">sh</span>
 </code></pre>
+<blockquote>
+<p>&#x5982;&#x679C;&#x5B89;&#x88C5; rust &#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x51FA;&#x73B0;&#x4E86;&#x56F0;&#x96BE;&#xFF0C;&#x53EF;&#x4EE5;&#x9605;&#x8BFB; <a href="../appendix/install_rust.html">&#x9644;&#x5F55;&#xFF1A;&#x5B89;&#x88C5; rust</a></p>
+</blockquote>
 <p>Rust &#x5305;&#x542B;&#xFF1A;stable&#x3001;beta&#x3001;nightly &#x4E09;&#x4E2A;&#x7248;&#x672C;&#x3002;&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#x6211;&#x4EEC;&#x5B89;&#x88C5;&#x7684;&#x662F; stable &#x7A33;&#x5B9A;&#x7248;&#x3002;&#x7531;&#x4E8E;&#x5728;&#x7F16;&#x5199;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x65F6;&#x9700;&#x8981;&#x4F7F;&#x7528; Rust &#x7684;&#x4E00;&#x4E9B;&#x4E0D;&#x7A33;&#x5B9A;&#x7684;&#x5B9E;&#x9A8C;&#x529F;&#x80FD;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x4F7F;&#x7528; nightly &#x6BCF;&#x65E5;&#x6784;&#x5EFA;&#x7248;&#x3002;</p>
 <p>&#x4F46;&#x662F;&#xFF0C;&#x7531;&#x4E8E;&#x5B98;&#x65B9;&#x4E0D;&#x4FDD;&#x8BC1; nightly &#x7248;&#x672C;&#x7684; ABI &#x7A33;&#x5B9A;&#x6027;&#xFF0C;&#x4E5F;&#x5C31;&#x610F;&#x5473;&#x7740;&#x4ECA;&#x5929;&#x5199;&#x7684;&#x4EE3;&#x7801;&#x7528;&#x672A;&#x6765;&#x7684; nightly &#x53EF;&#x80FD;&#x65E0;&#x6CD5;&#x7F16;&#x8BD1;&#x901A;&#x8FC7;&#xFF0C;&#x56E0;&#x6B64;&#x4E00;&#x822C;&#x5728;&#x4F7F;&#x7528; nightly &#x65F6;&#x5E94;&#x8BE5;&#x9501;&#x5B9A;&#x4E00;&#x4E2A;&#x65E5;&#x671F;&#x3002;</p>
-<p>&#x6211;&#x4EEC;&#x5728;&#x5DE5;&#x4F5C;&#x76EE;&#x5F55;&#x4E0B;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x540D;&#x4E3A; <code>rust-toolchain</code> &#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x5728;&#x5176;&#x4E2D;&#x5199;&#x5165;&#x6240;&#x9700;&#x7684;&#x5DE5;&#x5177;&#x94FE;&#x7248;&#x672C;&#xFF1A;</p>
+<p>&#x6211;&#x4EEC;&#x5728;&#x5DE5;&#x4F5C;&#x76EE;&#x5F55;&#x4E0B;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x540D;&#x4E3A; <code>rust-toolchain</code> &#x7684;&#x6587;&#x4EF6;&#xFF08;&#x65E0;&#x540E;&#x7F00;&#xFF09;&#xFF0C;&#x5E76;&#x5728;&#x5176;&#x4E2D;&#x5199;&#x5165;&#x6240;&#x9700;&#x7684;&#x5DE5;&#x5177;&#x94FE;&#x7248;&#x672C;&#xFF1A;</p>
 <pre class="language-"><code>nightly-2020-01-27
 </code></pre><p>&#x4ECA;&#x540E;&#x6240;&#x6709;&#x5728;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x4E0B;&#x4F7F;&#x7528; Rust &#x65F6;&#x90FD;&#x4F1A;&#x81EA;&#x52A8;&#x5207;&#x6362;&#x5230;&#x8FD9;&#x4E2A;&#x7248;&#x672C;&#x7684;&#x5DE5;&#x5177;&#x94FE;&#x3002;</p>
 <blockquote>
@@ -1246,7 +1262,7 @@ rustc <span class="token number">1.42</span>.0-nightly <span class="token punctu
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"安装 nightly rust","level":"1.3.1","depth":2,"next":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.3.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},"previous":{"title":"第一章：独立式可执行程序","level":"1.3","depth":1,"path":"chapter1/introduction.md","ref":"chapter1/introduction.md","articles":[{"title":"安装 nightly rust","level":"1.3.1","depth":2,"path":"chapter1/part1.md","ref":"chapter1/part1.md","articles":[]},{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.3.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},{"title":"移除标准库依赖","level":"1.3.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},{"title":"移除 runtime 依赖","level":"1.3.4","depth":2,"path":"chapter1/part4.md","ref":"chapter1/part4.md","articles":[]},{"title":"总结与展望","level":"1.3.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part1.md","mtime":"2020-02-19T11:36:27.646Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-19T12:19:31.691Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"安装 nightly rust","level":"1.3.1","depth":2,"next":{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.3.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},"previous":{"title":"第一章：独立式可执行程序","level":"1.3","depth":1,"path":"chapter1/introduction.md","ref":"chapter1/introduction.md","articles":[{"title":"安装 nightly rust","level":"1.3.1","depth":2,"path":"chapter1/part1.md","ref":"chapter1/part1.md","articles":[]},{"title":"使用包管理器 cargo 创建 rust binary 项目","level":"1.3.2","depth":2,"path":"chapter1/part2.md","ref":"chapter1/part2.md","articles":[]},{"title":"移除标准库依赖","level":"1.3.3","depth":2,"path":"chapter1/part3.md","ref":"chapter1/part3.md","articles":[]},{"title":"移除 runtime 依赖","level":"1.3.4","depth":2,"path":"chapter1/part4.md","ref":"chapter1/part4.md","articles":[]},{"title":"总结与展望","level":"1.3.5","depth":2,"path":"chapter1/part5.md","ref":"chapter1/part5.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter1/part1.md","mtime":"2020-02-20T08:25:59.948Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-20T08:41:12.867Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
