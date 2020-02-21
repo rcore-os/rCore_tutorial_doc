@@ -71,7 +71,7 @@
   - [2. 物理内存管理](./exercise/part2.md)
   - [3. 虚拟内存管理](./exercise/part3.md)
   - [4. 线程管理](./exercise/part4.md)
-  - [5. 线程调度（TODO）](./exercise/part5.md)
+  - [5. 线程调度](./exercise/part5.md)
   - [6. 用户进程（+ 虚拟内存管理 + 线程管理）](./exercise/part6.md)
   - [7. 同步互斥（TODO）](./exercise/part7.md)
   - [8. 文件系统](./exercise/part8.md)
