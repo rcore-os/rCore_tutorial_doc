@@ -84,3 +84,5 @@ impl ThreadPool {
     }
 }
 ```
+
+> [sys_wait 测试文件（依赖 fork）（可不复制，仅供自行调试用）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/wait_test.rs)
