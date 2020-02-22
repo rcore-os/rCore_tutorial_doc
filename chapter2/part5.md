@@ -41,9 +41,9 @@ Copyright (c) 2003-2019 Fabrice Bellard and the QEMU Project developers
 
 ```bash
 $ qemu-system-riscv64 \
-> --machine virt \
-> --nographic \
-> --bios default
+  --machine virt \
+  --nographic \
+  --bios default
 
 OpenSBI v0.4 (Jul  2 2019 11:53:53)
    ____                    _____ ____ _____
@@ -149,13 +149,13 @@ qemu: build
 		-machine virt \
 		-nographic \
 		-bios default \
-		-device loader,file=$(bin), addr=0x80200000
+		-device loader,file=$(bin),addr=0x80200000
 
 run: build qemu
 
 ```
 
-这里我们通过参数 `--device` 来将内核镜像加载到 Qemu 中，我们指定了内核镜像文件，但这个地址 `0x80200000` 又是怎么一回事？我们目前先不用在意这些细节，等后面会详细讲解。
+这里我们通过参数 `-device` 来将内核镜像加载到 Qemu 中，我们指定了内核镜像文件，但这个地址 `0x80200000` 又是怎么一回事？我们目前先不用在意这些细节，等后面会详细讲解。
 
 于是，我们可以使用 `make run` 来用 Qemu 加载内核镜像并运行。匆匆翻过一串长长的 OpenSBI 输出，我们看到了 `OK` ！于是历经了千辛万苦我们终于将我们的内核跑起来了！
 
