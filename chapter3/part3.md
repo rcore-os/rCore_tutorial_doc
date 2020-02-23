@@ -27,7 +27,6 @@ use riscv::register::{
 };
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct TrapFrame {
     pub x: [usize; 32], // General registers
     pub sstatus: Sstatus, // Supervisor Status Register
