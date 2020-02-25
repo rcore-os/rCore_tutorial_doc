@@ -2,7 +2,7 @@
 
 - [代码][code]
 
-本节的工作很类似[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的工作，但区别是，[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)是要完全移除对 runtime 的需求，以构造 OS；而本节需要实现一个支持 U Mode 应用程序的最小 runti ｍ e，这个 runtime 仅仅需要支持很少系统调用访问和基本的动态内存分配。虽然有区别，很多本节很多代码都可以直接参考[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的设计思路和代码。
+本节的工作很类似[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的工作，但区别是，[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)是要完全移除对 runtime 的需求，以构造 OS；而本节需要实现一个支持 U Mode 应用程序的最小 runtime ，这个 runtime 仅仅需要支持很少系统调用访问和基本的动态内存分配。虽然有区别，很多本节很多代码都可以直接参考[第一章第四节**移除 runtime 依赖**](../chapter1/part4.md)的设计思路和代码。
 
 我们的用户程序一般在 CPU 的用户态 (U Mode) 下执行，而它只能通过执行 `ecall` 指令，触发 `Environment call from U-mode` 异常 l 来发出系统服务请求，此时 CPU 进入内核态 (S Mode) ，OS 通过中断服务例程收到请求，执行相应内核服务，并返回到 U Mode。
 

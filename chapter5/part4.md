@@ -47,7 +47,7 @@ impl PageTableEntry {
 再来看一下页项：
 
 ```rust
-// src/paging.rs
+// src/memory/paging.rs
 ......
 pub struct PageEntry(&'static mut PageTableEntry, Page);
 
