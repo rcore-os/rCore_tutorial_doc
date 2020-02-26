@@ -1,5 +1,12 @@
 # 5. CPU 调度
 
+> **[info] 文档更新**
+>
+> 2020-02-26 号进行了一些更新
+> 修改了测试文件
+> 删掉了对 `sys_wait` 的需求
+> 在文件末尾增加了测评方式
+
 将 `Round Robin 调度算法` 替换为 `Stride 调度算法` 。（20 分）
 
 ## 实验要求
@@ -13,78 +20,10 @@
 - 认真阅读 [ucore doc](https://learningos.github.io/ucore_os_webdocs/lab6/lab6_3_6_1_basic_method.html) 中 stride 调度算法部分。
 - 在 `process/scheduler.rs` 中创建 `StrideScheduler` ，为其实现 `Scheduler trait` 。
 
-为降低难度，提供 `sys_wait` 的大致实现，方便同学们 debug（不确定会不会有潜在的 bug ，仅供参考）：
-
-- `process/structs.rs`
-
-```rust
-pub struct Thread {
-    ...
-+   pub wait_ret: Option<isize>,
-    ...
-}
-```
-
-- `syscall.rs`
-
-```rust
-fn sys_wait(pid: usize, code: *mut isize) -> isize {
-    if process::wait(pid) {
-        if let Some(ret) = process::current_thread().wait_ret {
-            unsafe {
-                *code = ret;
-            }
-        }
-        return 0;
-    } else {
-        return -10;
-    }
-}
-```
-
-- `process/processor.rs`
-
-```rust
-impl Processor {
-    pub fn wait(&self, tid: usize) -> bool {
-        if let Some(thread_) = &mut self.inner().pool.threads[tid] {
-            let wait_tid = thread_.thread.as_mut().unwrap().wait.as_mut().unwrap();
-            *wait_tid = self.current_tid();
-            self.yield_now(true);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    pub fn exit(&self, code: usize) -> ! {
-        ...
-        println!("thread {} exited, exit code = {}", tid, code);
-        if let Some(wait) = inner.current.as_ref().unwrap().1.wait {
-            inner.pool.wakeup(wait, Some(code as isize));
-        }
-        inner.current.as_mut().unwrap().1.switch_to(&mut inner.idle);
-        loop {}
-    }
-}
-```
-
-- `process/thread_pool.rs`
-
-```rust
-impl ThreadPool {
-    pub fn wakeup(&mut self, tid: Tid, wait_ret: Option<isize>) {
-        let proc = self.threads[tid]
-            .as_mut()
-            .expect("thread not exist when waking up");
-        proc.status = Status::Ready;
-        let thread = proc.thread.as_mut().expect("thread is none?");
-        thread.wait_ret = wait_ret;
-        self.scheduler.push(tid);
-    }
-}
-```
-
-> [sys_wait 测试文件（依赖 sys_fork）（可不复制，仅供自行调试用）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/wait_test.rs)
+> [stride 测试文件（依赖 sys_fork，sys_gettime）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs)
 >
-> [stride 测试文件（依赖 sys_fork, sys_wait）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs)
+> `sys_fork` 为下一章要求实现的系统调用，如果未能实现，请向老师/助教提供无需 `sys_fork` 的测试用例（我没 xiang 想 yao 出 mo 优 yu 雅 bu 的 xiang 写 xie 法 le ，所以在这向大家征集了 QAQ）
+>
+> `sys_gettime` 返回当前 `tick` 就可以了
+>
+> 由于 rcore 还不是很完善，尤其是 wait 机制，所以弱化了测例

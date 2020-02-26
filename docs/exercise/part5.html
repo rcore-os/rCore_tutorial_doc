@@ -1173,89 +1173,31 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="5-&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;">5. &#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;</h1>
+                                <h1 id="5-cpu-&#x8C03;&#x5EA6;">5. CPU &#x8C03;&#x5EA6;</h1>
+<blockquote>
+<p><strong>[info] &#x6587;&#x6863;&#x66F4;&#x65B0;</strong></p>
+<p>2020-02-26 &#x53F7;&#x8FDB;&#x884C;&#x4E86;&#x4E00;&#x4E9B;&#x66F4;&#x65B0;
+&#x4FEE;&#x6539;&#x4E86;&#x6D4B;&#x8BD5;&#x6587;&#x4EF6;
+&#x5220;&#x6389;&#x4E86;&#x5BF9; <code>sys_wait</code> &#x7684;&#x9700;&#x6C42;
+&#x5728;&#x6587;&#x4EF6;&#x672B;&#x5C3E;&#x589E;&#x52A0;&#x4E86;&#x6D4B;&#x8BC4;&#x65B9;&#x5F0F;</p>
+</blockquote>
 <p>&#x5C06; <code>Round Robin &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x66FF;&#x6362;&#x4E3A; <code>Stride &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</p>
 <h2 id="&#x5B9E;&#x9A8C;&#x8981;&#x6C42;">&#x5B9E;&#x9A8C;&#x8981;&#x6C42;</h2>
 <ol>
-<li>&#x9605;&#x8BFB;&#x6587;&#x6863;&#x7B2C;&#x4E03;&#x7AE0;&#xFF0C;&#x5E76;&#x81EA;&#x884C;&#x5B9E;&#x73B0;&#x3002;</li>
+<li>&#x9605;&#x8BFB;&#x6587;&#x6863;&#x7B2C;&#x4E03;&#x7AE0;&#xFF0C;&#x5B8C;&#x6210;&#x7F16;&#x8BD1;&#x8FD0;&#x884C;&#x4E03;&#x7AE0;&#x4EE3;&#x7801;&#x3002;</li>
 <li>&#x7406;&#x89E3; rcore &#x4E2D;&#x5B9E;&#x73B0;&#x7684; Round Robin &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;&#x3002;</li>
-<li>&#x7F16;&#x7A0B;&#x5B9E;&#x73B0;&#xFF1A;&#x5C06; <code>Round Robin &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x66FF;&#x6362;&#x4E3A; <code>Stride &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+<li>&#x7F16;&#x7A0B;&#xFF1A;&#x5C06; <code>Round Robin &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x66FF;&#x6362;&#x4E3A; <code>Stride &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;</code> &#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
 </ol>
 <h2 id="&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;">&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;</h2>
 <ul>
 <li>&#x8BA4;&#x771F;&#x9605;&#x8BFB; <a href="https://learningos.github.io/ucore_os_webdocs/lab6/lab6_3_6_1_basic_method.html" target="_blank">ucore doc</a> &#x4E2D; stride &#x8C03;&#x5EA6;&#x7B97;&#x6CD5;&#x90E8;&#x5206;&#x3002;</li>
 <li>&#x5728; <code>process/scheduler.rs</code> &#x4E2D;&#x521B;&#x5EFA; <code>StrideScheduler</code> &#xFF0C;&#x4E3A;&#x5176;&#x5B9E;&#x73B0; <code>Scheduler trait</code> &#x3002;</li>
 </ul>
-<p>&#x4E3A;&#x964D;&#x4F4E;&#x96BE;&#x5EA6;&#xFF0C;&#x63D0;&#x4F9B; <code>sys_wait</code> &#x7684;&#x5927;&#x81F4;&#x5B9E;&#x73B0;&#xFF0C;&#x65B9;&#x4FBF;&#x540C;&#x5B66;&#x4EEC; debug&#xFF08;&#x4E0D;&#x786E;&#x5B9A;&#x4F1A;&#x4E0D;&#x4F1A;&#x6709;&#x6F5C;&#x5728;&#x7684; bug &#xFF0C;&#x4EC5;&#x4F9B;&#x53C2;&#x8003;&#xFF09;&#xFF1A;</p>
-<ul>
-<li><code>process/structs.rs</code></li>
-</ul>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">pub</span> <span class="token keyword">struct</span> Thread <span class="token punctuation">{</span>
-    <span class="token punctuation">...</span>
-<span class="token operator">+</span>   <span class="token keyword">pub</span> wait_ret<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>isize<span class="token operator">&gt;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">...</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<ul>
-<li><code>syscall.rs</code></li>
-</ul>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">fn</span> <span class="token function">sys_wait</span><span class="token punctuation">(</span>pid<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> code<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">mut</span> isize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> process<span class="token punctuation">::</span><span class="token function">wait</span><span class="token punctuation">(</span>pid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>ret<span class="token punctuation">)</span> <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">current_thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>wait_ret <span class="token punctuation">{</span>
-            <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
-                <span class="token operator">*</span>code <span class="token operator">=</span> ret<span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">10</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<ul>
-<li><code>process/processor.rs</code></li>
-</ul>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">impl</span> Processor <span class="token punctuation">{</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> tid<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>thread_<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">inner</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>pool<span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span> <span class="token punctuation">{</span>
-            <span class="token keyword">let</span> wait_tid <span class="token operator">=</span> thread_<span class="token punctuation">.</span>thread<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>wait<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">*</span>wait_tid <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">current_tid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">yield_now</span><span class="token punctuation">(</span><span class="token keyword">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">return</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token keyword">false</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">exit</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> code<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
-        <span class="token punctuation">...</span>
-        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;thread {} exited, exit code = {}&quot;</span><span class="token punctuation">,</span> tid<span class="token punctuation">,</span> code<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>wait<span class="token punctuation">)</span> <span class="token operator">=</span> inner<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">.</span>wait <span class="token punctuation">{</span>
-            inner<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">wakeup</span><span class="token punctuation">(</span>wait<span class="token punctuation">,</span> <span class="token function">Some</span><span class="token punctuation">(</span>code <span class="token keyword">as</span> isize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        inner<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">.</span><span class="token function">switch_to</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> inner<span class="token punctuation">.</span>idle<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<ul>
-<li><code>process/thread_pool.rs</code></li>
-</ul>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">impl</span> ThreadPool <span class="token punctuation">{</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">wakeup</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> tid<span class="token punctuation">:</span> Tid<span class="token punctuation">,</span> wait_ret<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>isize<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">let</span> proc <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>threads<span class="token punctuation">[</span>tid<span class="token punctuation">]</span>
-            <span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-            <span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">&quot;thread not exist when waking up&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        proc<span class="token punctuation">.</span>status <span class="token operator">=</span> Status<span class="token punctuation">::</span>Ready<span class="token punctuation">;</span>
-        <span class="token keyword">let</span> thread <span class="token operator">=</span> proc<span class="token punctuation">.</span>thread<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">&quot;thread is none?&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span>wait_ret <span class="token operator">=</span> wait_ret<span class="token punctuation">;</span>
-        <span class="token keyword">self</span><span class="token punctuation">.</span>scheduler<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>tid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
 <blockquote>
-<p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/wait_test.rs" target="_blank">sys_wait &#x6D4B;&#x8BD5;&#x6587;&#x4EF6;&#xFF08;&#x4F9D;&#x8D56; sys_fork&#xFF09;&#xFF08;&#x53EF;&#x4E0D;&#x590D;&#x5236;&#xFF0C;&#x4EC5;&#x4F9B;&#x81EA;&#x884C;&#x8C03;&#x8BD5;&#x7528;&#xFF09;</a></p>
-<p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs" target="_blank">stride &#x6D4B;&#x8BD5;&#x6587;&#x4EF6;&#xFF08;&#x4F9D;&#x8D56; sys_fork, sys_wait&#xFF09;</a></p>
+<p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs" target="_blank">stride &#x6D4B;&#x8BD5;&#x6587;&#x4EF6;&#xFF08;&#x4F9D;&#x8D56; sys_fork&#xFF0C;sys_gettime&#xFF09;</a></p>
+<p><code>sys_fork</code> &#x4E3A;&#x4E0B;&#x4E00;&#x7AE0;&#x8981;&#x6C42;&#x5B9E;&#x73B0;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x5982;&#x679C;&#x672A;&#x80FD;&#x5B9E;&#x73B0;&#xFF0C;&#x8BF7;&#x5411;&#x8001;&#x5E08;/&#x52A9;&#x6559;&#x63D0;&#x4F9B;&#x65E0;&#x9700; <code>sys_fork</code> &#x7684;&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;&#xFF08;&#x6211;&#x6CA1; xiang &#x60F3; yao &#x51FA; mo &#x4F18; yu &#x96C5; bu &#x7684; xiang &#x5199; xie &#x6CD5; le &#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x8FD9;&#x5411;&#x5927;&#x5BB6;&#x5F81;&#x96C6;&#x4E86; QAQ&#xFF09;</p>
+<p><code>sys_gettime</code> &#x8FD4;&#x56DE;&#x5F53;&#x524D; <code>tick</code> &#x5C31;&#x53EF;&#x4EE5;&#x4E86;</p>
+<p>&#x7531;&#x4E8E; rcore &#x8FD8;&#x4E0D;&#x662F;&#x5F88;&#x5B8C;&#x5584;&#xFF0C;&#x5C24;&#x5176;&#x662F; wait &#x673A;&#x5236;&#xFF0C;&#x6240;&#x4EE5;&#x5F31;&#x5316;&#x4E86;&#x6D4B;&#x4F8B;</p>
 </blockquote>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
@@ -1324,7 +1266,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"5. 线程调度","level":"1.13.5","depth":2,"next":{"title":"6. 用户进程（+ 虚拟内存管理 + 线程管理）","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"previous":{"title":"4. 线程管理","level":"1.13.4","depth":2,"path":"exercise/part4.md","ref":"./exercise/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part5.md","mtime":"2020-02-25T10:19:27.457Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-25T10:40:10.237Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"5. 线程调度","level":"1.13.5","depth":2,"next":{"title":"6. 用户进程（+ 虚拟内存管理 + 线程管理）","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"previous":{"title":"4. 线程管理","level":"1.13.4","depth":2,"path":"exercise/part4.md","ref":"./exercise/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part5.md","mtime":"2020-02-26T11:02:35.824Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-26T11:04:51.761Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
