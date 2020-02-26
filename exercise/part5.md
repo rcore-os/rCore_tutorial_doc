@@ -1,4 +1,4 @@
-# 5. CPU调度
+# 5. CPU 调度
 
 将 `Round Robin 调度算法` 替换为 `Stride 调度算法` 。（20 分）
 
