@@ -8,7 +8,10 @@
 4. 编程：在任意位置触发一条非法指令异常（如：mret），在 `rust_trap` 中捕获并对其进行处理（简单 `print & panic` 即可）。（6 分）
 
 ## 实验帮助
-
+- 参考资料
+  - [RV硬件简要手册-中文](http://crva.ict.ac.cn/documents/RISC-V-Reader-Chinese-v2p1.pdf)
+  - [RV硬件规范手册-英文](https://riscv.org/specifications/privileged-isa/)
+  
 - 非法指令可以加在任意位置，比如在通过内联汇编加入，也可以直接修改汇编。
-- 查阅资料，判断自己触发的异常属于什么类型的，在 `rust_trap` 中完善 `match` 的情况。
-- 完成后，请把代码和文档在Deadline之前提交到规定的地方。不接受迟交和晚交的情况。
+- 查阅参考资料，判断自己触发的异常属于什么类型的，在 `rust_trap` 中完善 `match` 的情况。
+- 注意：完成后，请把代码和文档在Deadline之前提交到规定的地方。不接受迟交和晚交的情况。
