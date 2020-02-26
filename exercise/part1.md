@@ -9,7 +9,7 @@
 
 ## 实验帮助
 - 参考资料
-  - [RV硬件简要手册-中文](http://crva.ict.ac.cn/documents/RISC-V-Reader-Chinese-v2p1.pdf)
+  - [RV硬件简要手册-中文](http://crva.ict.ac.cn/documents/RISC-V-Reader-Chinese-v2p1.pdf) ：重点第10章
   - [RV硬件规范手册-英文](https://riscv.org/specifications/privileged-isa/)
   
 - 非法指令可以加在任意位置，比如在通过内联汇编加入，也可以直接修改汇编。
