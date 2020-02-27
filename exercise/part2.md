@@ -10,7 +10,7 @@
 
 - `FirstFitAllocator` 只需修改 `SegmentTreeAllocator` 接口的内部实现。
 - First Fit 就是蛮力寻找第一块大小合适的连续内存进行分配。
-- 这里可以简单的用一维数组维护。由于没有性能要求，$O(n^2)$ 查找都行。（如果参考 ucore 反而可能看不懂）
+- 这里可以简单的用一维数组维护。由于没有性能要求，$$O(n^2)$$ 查找都行。（可以参考 ucore ，不过那个相对复杂一些）
 
 > 该测试在内核态进行，需要替换 `init.rs` 。
 > [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/init.rs)

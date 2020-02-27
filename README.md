@@ -1,13 +1,22 @@
-## ***最新通知***
+## **_最新通知_**
 
-由于本文档还不稳定，将会经常更新，因此大家遇到了 bug 可以第一时间看看这里有无解决方案。
+由于本文档还不稳定，有时会有更新，更新信息会第一时间放在这里。由于文档不稳定引起的问题不会导致扣分。
 
-> **[info] 2020-02-20**
-> 
-> 如果在编译 *buddy_system_allocator* 时报错，可能是本地 crate 版本未更新，只需进入 *os/,usr/* 文件夹下分别 ``cargo update -p buddy_system_allocator`` ，并重新编译即可。
-> 
-> 如果内核在输出 ``setup process!`` 后 panic 报 page fault ，则很有可能将 ``timer::init`` 函数中的 ``TICKS = 0;`` 注释掉即可正常运行。
+> **[info] 2020-02-27**
+> 修改了 `2. 物理内存管理` 章节中的 `实验要求 2（问答题）`。
+> **[info] 2020-02-27**
 >
+> 优化了 `1. 中断异常` 章节中的 `实验要求 3（问答题）` 的描述。
+>
+> **[info] 2020-02-26**
+>
+> 简化了 `5. CPU 调度` 章节中的测试用例，删掉了对 `sys_wait` 等系统调用的要求，并且降低了对输出数据的的要求。
+>
+> **[info] 2020-02-20**
+>
+> 如果在编译 _buddy_system_allocator_ 时报错，可能是本地 crate 版本未更新，只需进入 _os/,usr/_ 文件夹下分别 `cargo update -p buddy_system_allocator` ，并重新编译即可。
+>
+> 如果内核在输出 `setup process!` 后 panic 报 page fault ，则很有可能将 `timer::init` 函数中的 `TICKS = 0;` 注释掉即可正常运行。
 
 # rCore Tutorial
 
