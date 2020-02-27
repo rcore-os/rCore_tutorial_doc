@@ -1180,7 +1180,7 @@
 <p>OS &#x5728;&#x6B63;&#x786E;&#x5B8C;&#x6210;&#x4E2D;&#x65AD;&#x521D;&#x59CB;&#x5316;&#xFF08;&#x8BBE;&#x7F6E;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x7684;&#x8D77;&#x59CB;&#x5730;&#x5740;&#xFF0C;&#x5E76;&#x4F7F;&#x80FD;&#x4E2D;&#x65AD;&#xFF09;&#x540E;&#xFF0C;&#x8FD8;&#x9700;&#x4E3A;&#x88AB;&#x4E2D;&#x65AD;&#x7684;&#x7A0B;&#x5E8F;&#x4FDD;&#x5B58;&#x548C;&#x6062;&#x590D;&#x5F53;&#x65F6;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x65F6;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#xFF08;&#x5B9E;&#x9645;&#x4E0A;&#x5C31;&#x662F;&#x4E00;&#x5806;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#xFF0C;&#x5177;&#x4F53;&#x5185;&#x5BB9;&#x5728;<a href="part3.html">part3 &#x4E2D;&#x63CF;&#x8FF0;&#x7684;<strong>&#x4E2D;&#x65AD;&#x5E27;(TrapFrame)</strong>&#x7ED3;&#x6784;&#x4F53;</a>&#x4E2D;&#x6709;&#x8BE6;&#x7EC6;&#x5B9A;&#x4E49;&#xFF09;</p>
 <pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
 </span>
-    <span class="token section-directives tag">.section</span><span class="token section-directives tag">.text</span>
+    <span class="token section-directives tag">.section</span> <span class="token section-directives tag">.text</span>
     <span class="token symbol-directives tag">.globl</span> <span class="token last-literals operator">__alltraps</span>
 <span class="token labels operator">__alltraps:</span>
     <span class="token last-literals operator">SAVE_ALL</span>
@@ -1188,7 +1188,7 @@
     <span class="token rv32/64i-instructions keyword">jal</span> <span class="token last-literals operator">rust_trap</span>
 
     <span class="token symbol-directives tag">.globl</span> <span class="token last-literals operator">__trapret</span>
-<span class="token last-literals operator">__trapret</span>
+<span class="token labels operator">__trapret:</span>
     <span class="token last-literals operator">RESTORE_ALL</span>
     <span class="token privilege-instructions keyword">sret</span>
 </code></pre>
@@ -1199,7 +1199,7 @@
 <pre class="language-"><code class="lang-riscv"><span class="token comment"># src/trap/trap.asm
 </span>
 <span class="token comment"># &#x5E38;&#x91CF;&#xFF1A;&#x8868;&#x793A;&#x6BCF;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x5360;&#x7684;&#x5B57;&#x8282;&#x6570;&#xFF0C;&#x7531;&#x4E8E;&#x662F;64&#x4F4D;&#xFF0C;&#x90FD;&#x662F;8&#x5B57;&#x8282;
-</span><span class="token symbol-directives tag">.equ</span> <span class="token last-literals operator">XLENB</span> <span class="token number">8</span>
+</span><span class="token symbol-directives tag">.equ</span> <span class="token last-literals operator">XLENB</span>, <span class="token number">8</span>
 
 <span class="token comment"># &#x5C06;&#x5730;&#x5740; sp+8*a2 &#x5904;&#x7684;&#x503C; load &#x5230;&#x5BC4;&#x5B58;&#x5668; a1 &#x5185;
 </span><span class="token miscellaneous-directives tag">.macro</span> <span class="token last-literals operator">LOAD</span> <span class="token general-registers class-name">a1</span>, <span class="token general-registers class-name">a2</span>
@@ -1465,7 +1465,7 @@ panicked at &apos;end of rust_main&apos;, src/init.rs:9:5
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[实现上下文环境保存与恢复]","level":"1.5.4","depth":2,"next":{"title":"[时钟中断]","level":"1.5.5","depth":2,"path":"chapter3/part5.md","ref":"chapter3/part5.md","articles":[]},"previous":{"title":"程序运行上下文环境","level":"1.5.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part4.md","mtime":"2020-02-23T12:05:28.007Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-27T06:58:31.050Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[实现上下文环境保存与恢复]","level":"1.5.4","depth":2,"next":{"title":"[时钟中断]","level":"1.5.5","depth":2,"path":"chapter3/part5.md","ref":"chapter3/part5.md","articles":[]},"previous":{"title":"程序运行上下文环境","level":"1.5.3","depth":2,"path":"chapter3/part3.md","ref":"chapter3/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part4.md","mtime":"2020-02-27T14:10:59.925Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-02-27T14:11:21.472Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

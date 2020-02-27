@@ -7,7 +7,7 @@ OS 在正确完成中断初始化（设置中断处理程序的起始地址，�
 ```riscv
 # src/trap/trap.asm
 
-	.section.text
+	.section .text
 	.globl __alltraps
 __alltraps:
 	SAVE_ALL
@@ -15,7 +15,7 @@ __alltraps:
 	jal rust_trap
 
 	.globl __trapret
-__trapret
+__trapret:
 	RESTORE_ALL
 	sret
 ```
@@ -32,7 +32,7 @@ __trapret
 # src/trap/trap.asm
 
 # 常量：表示每个寄存器占的字节数，由于是64位，都是8字节
-.equ XLENB 8
+.equ XLENB, 8
 
 # 将地址 sp+8*a2 处的值 load 到寄存器 a1 内
 .macro LOAD a1, a2
