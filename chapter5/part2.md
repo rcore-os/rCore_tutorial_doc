@@ -2,30 +2,54 @@
 
 - [代码][code]
 
-让我们回顾一下在相当于 bootloader 的 OpenSBI 结束后，我们要面对的是怎样一种局面：
+之前的内核实现并未使能页表机制，实际上内核是直接在物理地址空间上运行的。这样虽然比较简单，但是为了后续能够支持多个用户进程能够在内核中并发运行，满足隔离等性质，我们要先运用学过的页表知识，把内核的运行环境从物理地址空间转移到虚拟地址空间，为之后的功能打好铺垫。
+
+更具体的，我们现在想将内核代码放在虚拟地址空间中以 ``0xffffffffc0200000`` 开头的一段高地址空间中。因此，我们将下面的参数修改一下：
+
+```diff
+# src/boot/linker64.ld
+-BASE_ADDRESS = 0x80200000;
++BASE_ADDRESS = 0xffffffffc0200000;
+
+# src/consts.rs
+-pub const KERNEL_BEGIN_VADDR: usize = 0x80200000;
++pub const KERNEL_BEGIN_VADDR: usize = 0xffffffffc0200000;
+```
+
+我们修改了链接脚本中的链接开头地址。但是这样做的话，就能从物理地址空间转移到虚拟地址空间了吗？让我们回顾一下在相当于 bootloader 的 OpenSBI 结束后，我们要面对的是怎样一种局面：
 
 - 物理内存状态：OpenSBI 代码放在 `[0x80000000,0x80200000)` 中，内核代码放在以 `0x80200000` 开头的一块连续物理内存中。
 - CPU 状态：处于 S Mode ，寄存器 `satp` 的 $$\text{MODE}$$ 被设置为 `Bare` ，即无论取指还是访存我们通过物理地址直接访问物理内存。 $$\text{PC}=0\text{x}80200000$$ 指向内核的第一条指令。栈顶地址 $$\text{SP}$$ 处在 OpenSBI 代码内。
-- 内核代码：使用虚拟地址，代码和数据段均放在以[虚拟地址 `0xffffffffc0200000`](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/linker64.ld#L9)开头的一段连续虚拟内存中。
-- 我们所要做的事情：将 $$\text{SP}$$ 寄存器指向的栈空间从 OpenSBI 某处移到我们的内核定义的某块内存区域中，使得我们可以完全支配启动栈；同时需要跳转到函数 `rust_main` 中。
+- 内核代码：由于改动了链接脚本的起始地址，认为自己处在以虚拟地址 ``0xffffffffc0200000`` 开头的一段连续虚拟地址空间中。
 
-我们已经在 [`src/boot/entry64.asm`](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/entry64.asm#L19) 中自己分配了一块 $$16\text{KiB}$$ 的内存用来做启动栈：
+
+接下来，我们在入口点 ``entry64.asm`` 中所要做的事情是：将 $$\text{SP}$$ 寄存器指向的栈空间从 OpenSBI 某处移到我们的内核定义的某块内存区域中，使得我们可以完全支配启动栈；同时需要跳转到函数 `rust_main` 中。
+
+在之前的实现中，我们已经在 [`src/boot/entry64.asm`](https://github.com/rcore-os/rCore_tutorial/blob/ch5-pa2/os/src/boot/entry64.asm#L19) 中自己分配了一块 $$16\text{KiB}$$ 的内存用来做启动栈：
 
 ```riscv
 # src/boot/entry64.asm
 
-	.section .bss.stack
-	.align 12
-	.global bootstack
+    .section .text.entry
+    .globl _start
+_start:
+    la sp, bootstacktop
+    call rust_main
+
+    .section .bss.stack
+    .align 12
+    .global bootstack
 bootstack:
-	.space 4096 * 4
-	.global bootstacktop
+    .space 4096 * 4
+    .global bootstacktop
 bootstacktop:
 ```
 
-符号 `bootstacktop` 就是我们需要的栈顶地址！同样符号 `rust_main` 也代表了我们要跳转到的地址。直接将 `bootstacktop` 的值给到 $$\text{SP}$$， 再跳转到 `rust_main` 就行了吗？
+符号 `bootstacktop` 就是我们需要的栈顶地址！同样符号 `rust_main` 也代表了我们要跳转到的地址。直接将 `bootstacktop` 的值给到 $$\text{SP}$$， 再跳转到 `rust_main` 就行了。看起来原来的代码仍然能用啊？
 
-问题在于，编译器和链接器认为程序在虚拟内存空间中运行，因此这两个符号都会被翻译成虚拟地址。而我们的 CPU 目前处于 `Bare` 模式，会将地址都当成物理地址处理。这样，我们跳转到 `rust_main` 就会跳转到 `0xffffffffc0200000+` 的一个物理地址，物理地址都没有这么多位！这显然是会出问题的。
+问题在于，由于我们修改了链接脚本的起始地址，编译器和链接器认为内核开头地址为 ``0xffffffffc0200000``，因此这两个符号会被翻译成比这个开头地址还要高的绝对虚拟地址。而我们的 CPU 目前处于 `Bare` 模式，会将地址都当成物理地址处理。这样，我们跳转到 `rust_main` 就会跳转到 `0xffffffffc0200000+` 的一个物理地址，物理地址都没有这么多位！这显然是会出问题的。
+
+于是，我们只能想办法利用刚学的页表知识，帮内核将需要的虚拟地址空间构造出来。
 
 观察可以发现，同样的一条指令，其在虚拟内存空间中的虚拟地址与其在物理内存中的物理地址有着一个固定的**偏移量**。比如内核的第一条指令，虚拟地址为 `0xffffffffc0200000` ，物理地址为 `0x80200000` ，因此，我们只要将虚拟地址减去 `0xffffffff40000000` ，就得到了物理地址。
 

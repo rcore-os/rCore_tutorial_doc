@@ -15,7 +15,6 @@
 
 #![no_std]
 #![no_main]
-#![feature(alloc)]
 
 extern crate alloc;
 
@@ -24,39 +23,53 @@ extern crate user;
 
 const LF: u8 = 0x0au8;
 const CR: u8 = 0x0du8;
+const DL: u8 = 0x7fu8;
+const BS: u8 = 0x08u8;
 
-use rust::io::getc;
-use rust::syscall::sys_exec;
 use alloc::string::String;
+use user::io::getc;
+use user::io::putchar;
+use user::syscall::sys_exec;
 
 #[no_mangle]
 pub fn main() {
-   println!("Rust user shell");
-   // 保存本行已经输入的内容
-   let mut line: String = String::new();
-   print!(">> ");
-   loop {
-       let c = getc();
-       match c {
-           LF | CR => {
-               // 如果遇到回车或换行
-               println!("");
-               if !line.is_empty() {
-                   println!("searching for program {}", line);
-                   // 使用系统调用执行程序
-                   sys_exec(line.as_ptr());
-                   // 清空本行内容
-                   line.clear();
-               }
-               print!(">> ");
-           },
-           _ => {
-               // 否则正常输入
-               print!("{}", c as char);
-               line.push(c as char);
-           }
-       }
-   }
+    println!("Rust user shell");
+    // 保存本行已经输入的内容
+    let mut line: String = String::new();
+    print!(">> ");
+    loop {
+        let c = getc();
+        match c {
+            LF | CR => {
+                // 如果遇到回车或换行
+                println!("");
+                if !line.is_empty() {
+                    println!("searching for program {}", line);
+                    // 这里在程序名结尾需要手动添加 '\0'，因为 Rust 编译器不会帮我们在字符串结尾附上 '\0'
+                    line.push('\0');
+                    // 使用系统调用执行程序
+                    sys_exec(line.as_ptr());
+                    // 清空本行内容
+                    line.clear();
+                }
+                print!(">> ");
+            }
+            DL => {
+                // 如果是退格键
+                if !line.is_empty() {
+                    putchar(BS as char);
+                    putchar(' ');
+                    putchar(BS as char);
+                    line.pop();
+                }
+            }
+            _ => {
+                // 否则正常输入
+                print!("{}", c as char);
+                line.push(c as char);
+            }
+        }
+    }
 }
 ```
 

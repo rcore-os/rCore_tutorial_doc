@@ -1215,29 +1215,44 @@
 </code></pre>
 <p>&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528; <code>getc</code> &#x7740;&#x624B;&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x7684;&#x8BB0;&#x4E8B;&#x672C;&#x4E86;&#xFF01;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/bin/notebook.rs</span>
-
 <span class="token attribute attr-name">#![no_std]</span>
 <span class="token attribute attr-name">#![no_main]</span>
 
 <span class="token attribute attr-name">#[macro_use]</span>
 <span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
 
-<span class="token keyword">use</span> rust<span class="token punctuation">::</span>io<span class="token punctuation">::</span>getc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> user<span class="token punctuation">::</span>io<span class="token punctuation">::</span>getc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> user<span class="token punctuation">::</span>io<span class="token punctuation">::</span>putchar<span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> LF<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0au8</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> CR<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x0du8</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> BS<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x08u8</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> DL<span class="token punctuation">:</span> u8 <span class="token operator">=</span> <span class="token number">0x7fu8</span><span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[no_mangle]</span>
 <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Welcome to notebook!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> line_count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token keyword">loop</span> <span class="token punctuation">{</span>
         <span class="token keyword">let</span> c <span class="token operator">=</span> <span class="token function">getc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">match</span> c <span class="token punctuation">{</span>
             LF <span class="token operator">|</span> CR <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                line_count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
                 <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> LF <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> CR <span class="token keyword">as</span> char<span class="token punctuation">)</span>
+                <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> CR <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
-            _ <span class="token operator">=&gt;</span> <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> c <span class="token keyword">as</span> char<span class="token punctuation">)</span>
+            DL <span class="token operator">=&gt;</span> <span class="token keyword">if</span> line_count <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+                <span class="token comment">// &#x652F;&#x6301;&#x9000;&#x683C;&#x952E;</span>
+                <span class="token comment">// &#x5199;&#x6CD5;&#x6765;&#x6E90;&#xFF1A;https://github.com/mit-pdos/xv6-riscv-fall19/blob/xv6-riscv-fall19/kernel/console.c#L41</span>
+                <span class="token function">putchar</span><span class="token punctuation">(</span>BS <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">putchar</span><span class="token punctuation">(</span><span class="token char string">&apos; &apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">putchar</span><span class="token punctuation">(</span>BS <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                line_count <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            _ <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                line_count <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> c <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
@@ -1706,7 +1721,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[实现记事本]","level":"1.11.2","depth":2,"next":{"title":"[实现终端]","level":"1.11.3","depth":2,"path":"chapter9/part3.md","ref":"chapter9/part3.md","articles":[]},"previous":{"title":"[使用文件系统]","level":"1.11.1","depth":2,"path":"chapter9/part1.md","ref":"chapter9/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part2.md","mtime":"2020-02-13T08:47:45.403Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-03T01:56:30.720Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[实现记事本]","level":"1.11.2","depth":2,"next":{"title":"[实现终端]","level":"1.11.3","depth":2,"path":"chapter9/part3.md","ref":"chapter9/part3.md","articles":[]},"previous":{"title":"[使用文件系统]","level":"1.11.1","depth":2,"path":"chapter9/part1.md","ref":"chapter9/part1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part2.md","mtime":"2020-03-03T14:22:52.504Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-03T15:44:52.618Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
