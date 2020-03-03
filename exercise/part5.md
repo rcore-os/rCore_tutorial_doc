@@ -24,6 +24,6 @@
 >
 > `sys_fork` 为下一章要求实现的系统调用，如果未能实现，请向老师/助教提供无需 `sys_fork` 的测试用例（我没 xiang 想 yao 出 mo 优 yu 雅 bu 的 xiang 写 xie 法 le ，所以在这向大家征集了 QAQ）
 >
-> `sys_gettime` 返回当前 `tick` 就可以了
+> `sys_gettime` 返回当前 `timer::TICKS` 就可以了
 >
 > 由于 rcore 还不是很完善，尤其是 wait 机制，所以弱化了测例
