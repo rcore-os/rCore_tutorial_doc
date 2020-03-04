@@ -42,5 +42,5 @@
    * 缺页中断处理  
      当发生缺页中断时，我们借助硬件提供的异常信息，获取当前发生缺页异常的虚拟地址，从而获取该虚拟地址所指向的页表项，将页表项传递给全局页面替换管理器PAGE_REPLACE_HANDLER的do_pgfault接口进行处理，修复映射关系。
 2. 测试  
-   [测试文件]()  
+   [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/init.rs)  
    用该文件替换掉init.rs，并为MemorySet添加一个get_table接口（参考[这里](https://github.com/rcore-os/rCore_tutorial/blob/pgreplace_test/os/src/memory/memory_set/mod.rs#L112))。运行make qemu可以进行测试。
