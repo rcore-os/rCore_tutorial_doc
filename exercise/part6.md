@@ -1,45 +1,27 @@
-# 6. 用户进程（+ 虚拟内存管理 + 线程管理）
+# 6. CPU 调度
+
+> **[info] 文档更新**
+>
+> 2020-02-26 号进行了一些更新
+> 修改了测试文件
+> 删掉了对 `sys_wait` 的需求
+> 在文件末尾增加了测评方式
 
 ## 实验要求
 
-1. 阅读文档第八章，完成编译运行八章代码。
-2. 编程实现：为 rcore 增加 `sys_fork` 。（20 分）
+1. 阅读理解文档第七章。
+2. 理解 rcore 中实现的 Round Robin 调度算法。
+3. 编程：将 `Round Robin 调度算法` 替换为 `Stride 调度算法` 。（20 分）
 
 ## 实验指导
 
-思考以下问题：
+- 认真阅读 [ucore doc](https://learningos.github.io/ucore_os_webdocs/lab6/lab6_3_6_1_basic_method.html) 中 stride 调度算法部分。
+- 在 `process/scheduler.rs` 中创建 `StrideScheduler` ，为其实现 `Scheduler trait` 。
 
-1. 如何控制子进程的返回值？（线程管理）
-   <p><font color="white">修改上下文中的 a0 寄存器。</font></p>
-2. 目前尚未实现进程切分，是否可以偷懒把线程当进程用？
-   <p><font color="white">目前，可以。（出于偷懒甚至不需要维护进程的父子关系）</font></p>
-3. 如何复制一个线程？（虚拟内存管理）
-   <p><font color="white">分配新的栈、新的页表，并将页表的内容进行复制和映射。</font></p>
-4. 为什么这道题这么难分值还和其它题一样？
-   <p><font color="white">因为有现成的代码可以参考呀（小声）</font></p>
-   <p><font color="white">GitHub: rcore-os/rCore</font></p>
-
-一些可能有用的函数实现（仅供参考）：
-
-```rust
-// in syscall.rs
-fn sys_fork(tf: &mut TrapFrame) -> isize {
-    let new_thread = process::current_thread().fork(tf);
-    let tid = process::add_thread(new_thread);
-    tid as isize
-}
-
-// in paging.rs
-impl PageTableImpl {
-    pub fn get_page_slice_mut<'a>(&mut self, vaddr: usize) -> &'a mut [u8] {
-        let frame = self
-            .page_table
-            .translate_page(Page::of_addr(VirtAddr::new(vaddr)))
-            .unwrap();
-        let vaddr = frame.start_address().as_usize() + PHYSICAL_MEMORY_OFFSET;
-        unsafe { core::slice::from_raw_parts_mut(vaddr as *mut u8, 0x1000) }
-    }
-}
-```
-
-> [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs)
+> [stride 测试文件（依赖 sys_fork，sys_gettime）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs)
+>
+> `sys_fork` 为上一章要求实现的系统调用，如果未能实现，请向老师/助教提供无需 `sys_fork` 的测试用例（我没 xiang 想 yao 出 mo 优 yu 雅 bu 的 xiang 写 xie 法 le ，所以在这向大家征集了 QAQ）
+>
+> `sys_gettime` 返回当前 `timer::TICKS` 就可以了
+>
+> 由于 rcore 还不是很完善，尤其是 wait 机制，所以弱化了测例
