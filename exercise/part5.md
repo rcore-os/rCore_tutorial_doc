@@ -23,6 +23,7 @@
 
 ```rust
 // in syscall.rs
+pub const SYS_FORK: usize = 220;
 fn sys_fork(tf: &mut TrapFrame) -> isize {
     let new_thread = process::current_thread().fork(tf);
     let tid = process::add_thread(new_thread);

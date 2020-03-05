@@ -934,6 +934,19 @@
                 <a href="../chapter9/part4.html">
             
                     
+                    [文件读写]
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.5" data-path="../chapter9/part5.html">
+            
+                <a href="../chapter9/part5.html">
+            
+                    
                     总结与展望
             
                 </a>
@@ -1176,22 +1189,49 @@
                                 <h1 id="8-&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;">8. &#x6587;&#x4EF6;&#x7CFB;&#x7EDF;</h1>
 <h2 id="&#x5B9E;&#x9A8C;&#x8981;&#x6C42;">&#x5B9E;&#x9A8C;&#x8981;&#x6C42;</h2>
 <ol>
-<li>&#x9605;&#x8BFB;&#x7406;&#x89E3;&#x6587;&#x6863;&#x7B2C;&#x4E5D;&#x7AE0;&#x3002;</li>
-<li>&#x7F16;&#x7A0B;&#x5B9E;&#x73B0;&#xFF1A;&#x57FA;&#x4E8E; filesystem &#x5B9E;&#x73B0; pipe &#xFF0C;&#x7F16;&#x5199;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x8FDB;&#x884C;&#x6D4B;&#x8BD5;&#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
+<li>&#x9605;&#x8BFB;&#x7406;&#x89E3;&#x6587;&#x6863;&#x7B2C;&#x4E5D;&#x7AE0;&#xFF0C;&#x5E76;&#x786E;&#x4FDD;&#x5DF2;&#x7ECF;&#x5728;&#x4E4B;&#x524D;&#x7684;&#x5B9E;&#x9A8C;&#x4E2D;&#x5B9E;&#x73B0;&#x4E86; <code>sys_fork</code> &#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x3002;</li>
+<li>&#x7F16;&#x7A0B;&#x5B9E;&#x73B0;&#xFF1A;&#x57FA;&#x4E8E;&#x7B2C;&#x4E5D;&#x7AE0;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x652F;&#x6301; pipe &#xFF0C;&#x4F7F;&#x5F97;&#x7ED9;&#x5B9A;&#x7684;&#x7528;&#x6237;&#x6001;&#x6D4B;&#x8BD5;&#x7A0B;&#x5E8F;&#x5F97;&#x5230;&#x6B63;&#x786E;&#x7684;&#x7ED3;&#x679C;&#x3002;&#xFF08;20 &#x5206;&#xFF09;</li>
 </ol>
 <h2 id="&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;">&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;</h2>
-<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x8F83;&#x4E3A;&#x590D;&#x6742;&#xFF0C;&#x6545;&#x53EA;&#x8003;&#x8651;&#x4EE5;&#x4E0B;&#x7B80;&#x5316;&#x60C5;&#x51B5;&#xFF1A;&#x53EA;&#x5B58;&#x5728;&#x4E00;&#x5BF9;&#x7236;&#x5B50;&#x8FDB;&#x7A0B;&#x4E4B;&#x95F4;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x4F20;&#x8F93;&#x3002;</p>
-<p>&#x5B9E;&#x73B0;&#x8FC7;&#x7A0B;&#xFF1A;</p>
+<p>&#x65B0;&#x589E;&#x5982;&#x4E0B;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/syscall.rs</span>
+<span class="token keyword">enum</span> SyscallId <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    Pipe <span class="token operator">=</span> <span class="token number">59</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_pipe</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span><span class="token punctuation">[</span>i32<span class="token punctuation">;</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i64<span class="token punctuation">;</span>
+</code></pre>
+<p><code>sys_pipe</code> &#x7684;&#x529F;&#x80FD;&#x662F;&#xFF1A;&#x4E3A;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7BA1;&#x9053;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x5206;&#x522B;&#x4EE3;&#x8868;&#x5B83;&#x7684;&#x8BFB;&#x7AEF;&#x548C;&#x5199;&#x7AEF;&#x3002;</p>
+<p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/pipe_test.rs" target="_blank">&#x6D4B;&#x8BD5;&#x7A0B;&#x5E8F;</a>&#x7684;&#x529F;&#x80FD;&#x5982;&#x4E0B;&#xFF1A;</p>
 <ol>
-<li>&#x7236;&#x8FDB;&#x7A0B;&#x8C03;&#x7528; pipe &#xFF0C;&#x83B7;&#x5F97;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x5206;&#x522B;&#x6307;&#x5411;&#x7BA1;&#x9053;&#x7684;&#x8BFB;&#x7AEF;&#x548C;&#x5199;&#x7AEF;&#x3002;</li>
-<li>fork &#x4EA7;&#x751F;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x62E5;&#x6709;&#x540C;&#x6837;&#x7684;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x3002;</li>
+<li>&#x7236;&#x8FDB;&#x7A0B;&#x8C03;&#x7528; <code>sys_pipe</code> &#xFF0C;&#x521B;&#x5EFA;&#x7BA1;&#x9053;&#x5E76;&#x83B7;&#x5F97;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x5206;&#x522B;&#x6307;&#x5411;&#x7BA1;&#x9053;&#x7684;&#x8BFB;&#x7AEF;&#x548C;&#x5199;&#x7AEF;&#x3002;</li>
+<li>&#x8C03;&#x7528; <code>sys_fork</code> &#x4EA7;&#x751F;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x62E5;&#x6709;&#x540C;&#x6837;&#x7684;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x3002;</li>
 <li>&#x7236;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;&#x7BA1;&#x9053;&#x8BFB;&#x7AEF;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;&#x7BA1;&#x9053;&#x5199;&#x7AEF;&#x3002;</li>
 <li>&#x7236;&#x8FDB;&#x7A0B;&#x5411;&#x7BA1;&#x9053;&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5C06;&#x7BA1;&#x9053;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x8BFB;&#x51FA;&#x3002;</li>
-<li>&#x7BA1;&#x9053;&#x4F7F;&#x7528;&#x73AF;&#x5F62;&#x961F;&#x5217;&#x5B9E;&#x73B0;&#x3002;</li>
 </ol>
-<blockquote>
-<p>&#x601D;&#x8003;&#xFF1A;&#x5982;&#x679C;&#x7236;&#x8FDB;&#x7A0B;&#x8FD8;&#x6CA1;&#x5199;&#x6570;&#x636E;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5C31;&#x5F00;&#x59CB;&#x8BFB;&#x6570;&#x636E;&#x4F1A;&#x600E;&#x4E48;&#x6837;&#xFF0C;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#xFF1F;</p>
-</blockquote>
+<p>&#x5176;&#x53C2;&#x8003;&#x8F93;&#x51FA;&#x4E3A;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust">fd_read <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">,</span> fd_write <span class="token operator">=</span> <span class="token number">4</span>
+forking
+message sent to child process pid <span class="token macro-rules function">2!</span>
+thread <span class="token number">1</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token operator">&gt;&gt;</span> message received <span class="token keyword">in</span> child process <span class="token operator">=</span> Hello <span class="token macro-rules function">world!</span>
+thread <span class="token number">2</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
+</code></pre>
+<p>&#x8BF7;&#x5FFD;&#x7565; &apos;&gt;&gt;&apos; &#x4F4D;&#x7F6E;&#x7684;&#x4E0D;&#x786E;&#x5B9A;&#x6027;&#x5BF9;&#x4E8E;&#x7A0B;&#x5E8F;&#x8F93;&#x51FA;&#x5E26;&#x6765;&#x7684;&#x5F71;&#x54CD;&#x3002;</p>
+<h2 id="&#x601D;&#x8003;&#x9898;">&#x601D;&#x8003;&#x9898;</h2>
+<ol>
+<li>&#x5982;&#x679C;&#x7236;&#x8FDB;&#x7A0B;&#x8FD8;&#x6CA1;&#x5199;&#x6570;&#x636E;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5C31;&#x5F00;&#x59CB;&#x8BFB;&#x6570;&#x636E;&#x4F1A;&#x600E;&#x4E48;&#x6837;&#xFF1F;&#x5E94;&#x5982;&#x4F55;&#x89E3;&#x51B3;&#xFF1F;</li>
+<li>&#x7B80;&#x8981;&#x8BF4;&#x660E;&#x4F60;&#x662F;&#x5982;&#x4F55;&#x4FDD;&#x8BC1;&#x8BFB;&#x8005;&#x548C;&#x5199;&#x8005;&#x5BF9;&#x4E8E;&#x7BA1;&#x9053; <code>Pipe</code> &#x7684;&#x8BBF;&#x95EE;&#x4E0D;&#x4F1A;&#x89E6;&#x53D1; race condition &#x7684;&#xFF1F;</li>
+<li>&#x5728;&#x5B9E;&#x73B0;&#x4E2D;&#x662F;&#x5426;&#x66FE;&#x9047;&#x5230;&#x6B7B;&#x9501;&#xFF1F;&#x5982;&#x679C;&#x662F;&#xFF0C;&#x4F60;&#x662F;&#x5982;&#x4F55;&#x89E3;&#x51B3;&#x5B83;&#x7684;&#xFF1F;</li>
+</ol>
+<h2 id="&#x63D0;&#x793A;">&#x63D0;&#x793A;</h2>
+<ul>
+<li>&#x5728; <code>os/src/fs/file.rs</code> &#x65B0;&#x589E; <code>FileDescriptorType::FD_PIPE</code>&#xFF0C;&#x5E76;&#x5728; <code>File</code> &#x5185;&#x4FDD;&#x5B58; <code>Pipe</code> &#x7684;&#x6307;&#x9488;&#x3002;<code>Pipe</code> &#x53EF;&#x4EE5;&#x7528;&#x4E00;&#x4E2A;&#x73AF;&#x5F62;&#x961F;&#x5217;&#x6765;&#x5B9E;&#x73B0;&#xFF0C;&#x7EF4;&#x62A4;&#x4E24;&#x4E2A;&#x6307;&#x9488;&#x8868;&#x793A;&#x8BFB;&#x8005;&#x548C;&#x5199;&#x8005;&#x5F53;&#x524D;&#x6240;&#x5728;&#x7684;&#x4F4D;&#x7F6E;&#x3002;</li>
+<li>&#x62D3;&#x5C55;&#x539F;&#x6765;&#x7684; <code>sys_read, sys_close</code> &#x6765;&#x652F;&#x6301;&#x7BA1;&#x9053;&#x3002;</li>
+<li>&#x62D3;&#x5C55;&#x539F;&#x6765;&#x7684; <code>sys_fork</code> &#x652F;&#x6301;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x7684;&#x590D;&#x5236;&#x3002;</li>
+<li>&#x7075;&#x6D3B;&#x5229;&#x7528; <code>Arc, spin::Mutex</code> &#x7B49; wrapper &#x5B9E;&#x73B0;&#x540C;&#x6B65;&#x4E92;&#x65A5;&#x3002;</li>
+</ul>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1259,7 +1299,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"8. 文件系统","level":"1.13.8","depth":2,"next":{"title":"附录","level":"1.14","depth":1,"path":"appendix/introduction.md","ref":"./appendix/introduction.md","articles":[{"title":"内联汇编","level":"1.14.1","depth":2,"path":"appendix/inline_asm.md","ref":"appendix/inline_asm.md","articles":[]},{"title":"安装 rust","level":"1.14.2","depth":2,"path":"appendix/install_rust.md","ref":"appendix/install_rust.md","articles":[]}]},"previous":{"title":"7. 同步互斥（TODO）","level":"1.13.7","depth":2,"path":"exercise/part7.md","ref":"./exercise/part7.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part8.md","mtime":"2020-03-04T13:06:07.686Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-05T06:24:28.045Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"8. 文件系统","level":"1.13.8","depth":2,"next":{"title":"附录","level":"1.14","depth":1,"path":"appendix/introduction.md","ref":"./appendix/introduction.md","articles":[{"title":"内联汇编","level":"1.14.1","depth":2,"path":"appendix/inline_asm.md","ref":"appendix/inline_asm.md","articles":[]},{"title":"安装 rust","level":"1.14.2","depth":2,"path":"appendix/install_rust.md","ref":"appendix/install_rust.md","articles":[]}]},"previous":{"title":"7. 同步互斥（TODO）","level":"1.13.7","depth":2,"path":"exercise/part7.md","ref":"./exercise/part7.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part8.md","mtime":"2020-03-05T12:28:46.833Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-05T13:40:04.881Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

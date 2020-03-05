@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>总结与展望 · GitBook</title>
+        <title>[文件读写] · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -81,7 +81,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../chapter10/introduction.html" />
+    <link rel="next" href="part5.html" />
     
     
     <link rel="prev" href="part3.html" />
@@ -934,6 +934,19 @@
                 <a href="part4.html">
             
                     
+                    [文件读写]
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.5" data-path="part5.html">
+            
+                <a href="part5.html">
+            
+                    
                     总结与展望
             
                 </a>
@@ -1158,7 +1171,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >总结与展望</a>
+        <a href=".." >[文件读写]</a>
     </h1>
 </div>
 
@@ -1173,10 +1186,371 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="&#x603B;&#x7ED3;&#x4E0E;&#x5C55;&#x671B;">&#x603B;&#x7ED3;&#x4E0E;&#x5C55;&#x671B;</h2>
-<p>&#x611F;&#x8C22;&#x4F60;&#xFF0C;&#x80FD;&#x966A;&#x6211;&#x4EEC;&#x4E00;&#x76F4;&#x8D70;&#x5230;&#x8FD9;&#x91CC;&#x3002;</p>
-<p>&#x4E0D;&#x8FC7;&#x8FD9;&#x4EC5;&#x4EC5;&#x662F;&#x4E00;&#x4E2A;&#x5F00;&#x59CB;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x53EA;&#x6D89;&#x53CA;&#x4E86;&#x5F88;&#x5C11;&#x4E00;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#x3002;&#x50CF;&#x662F;&#x8FDB;&#x7A0B;&#x4E0E;&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x3001;&#x591A;&#x6838;&#x652F;&#x6301;&#x3001;&#x4E3A;&#x771F;&#x5B9E;&#x8BBE;&#x5907;&#x5F00;&#x53D1;&#x9A71;&#x52A8;&#x7B49;&#x7B49;&#x90FD;&#x662F;&#x9700;&#x8981;&#x6211;&#x4EEC;&#x7EE7;&#x7EED;&#x63A2;&#x7D22;&#x7684;&#x3002;</p>
-<p>&#x4F46;&#x613F;&#x8FD9;&#x7BC7;&#x5C0F;&#x5C0F;&#x7684; tutorial &#xFF0C;&#x80FD;&#x7ED9;&#x4F60;&#x5E26;&#x6765;&#x4E00;&#x70B9;&#x5C0F;&#x5C0F;&#x7684;&#x5E2E;&#x52A9;&#xFF01;</p>
+                                <h2 id="&#x6587;&#x4EF6;&#x8BFB;&#x5199;">&#x6587;&#x4EF6;&#x8BFB;&#x5199;</h2>
+<ul>
+<li><a href="https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa4" target="_blank">&#x4EE3;&#x7801;</a></li>
+</ul>
+<blockquote>
+<p>&#x5FC3;&#x6001;&#x70B8;&#x4E86;&#x3002;&#x672C;&#x6765;&#x5DF2;&#x7ECF;&#x5199;&#x597D;&#x4E86;&#xFF0C;&#x56E0;&#x4E3A;&#x6587;&#x4EF6;&#x4E0D;&#x5C0F;&#x5FC3;&#x88AB;&#x5220;&#x4E86;&#x53EA;&#x80FD;&#x91CD;&#x5199;&#x4E00;&#x904D;&#x3002;:cry:</p>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x8981;&#x5728;&#x7528;&#x6237;&#x6001;&#x652F;&#x6301;&#x6587;&#x4EF6;&#x8BFB;&#x5199;&#x529F;&#x80FD;&#x3002;&#x5177;&#x4F53;&#x7684;&#x7528;&#x6237;&#x6001;&#x7A0B;&#x5E8F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/src/rust/bin/write.rs</span>
+<span class="token attribute attr-name">#![no_std]</span>
+<span class="token attribute attr-name">#![no_main]</span>
+
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> alloc<span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[macro_use]</span>
+<span class="token keyword">extern</span> <span class="token keyword">crate</span> user<span class="token punctuation">;</span>
+
+<span class="token keyword">use</span> user<span class="token punctuation">::</span>io<span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> user<span class="token punctuation">::</span>syscall<span class="token punctuation">::</span><span class="token punctuation">{</span>
+    sys_open<span class="token punctuation">,</span>
+    sys_close<span class="token punctuation">,</span>
+    sys_read<span class="token punctuation">,</span>
+    sys_write<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+    <span class="token comment">// &#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x5199;&#x5165;&#x5230;&#x6587;&#x4EF6; temp</span>
+    <span class="token keyword">let</span> write_fd <span class="token operator">=</span> <span class="token function">sys_open</span><span class="token punctuation">(</span><span class="token string">&quot;temp\0&quot;</span><span class="token punctuation">.</span><span class="token function">as_ptr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> O_WRONLY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> text <span class="token operator">=</span> <span class="token string">&quot;Hello world!\0&quot;</span><span class="token punctuation">;</span>
+    <span class="token function">sys_write</span><span class="token punctuation">(</span>write_fd <span class="token keyword">as</span> usize<span class="token punctuation">,</span> text<span class="token punctuation">.</span><span class="token function">as_ptr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> text<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;write to file &apos;temp&apos; successfully...&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sys_close</span><span class="token punctuation">(</span>write_fd <span class="token keyword">as</span> i32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// &#x4ECE;&#x6587;&#x4EF6; temp &#x8BFB;&#x5165;&#x5B57;&#x7B26;&#x4E32;</span>
+    <span class="token keyword">let</span> read_fd <span class="token operator">=</span> <span class="token function">sys_open</span><span class="token punctuation">(</span><span class="token string">&quot;temp\0&quot;</span><span class="token punctuation">.</span><span class="token function">as_ptr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> O_RDONLY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> read<span class="token punctuation">:</span> <span class="token punctuation">[</span>u8<span class="token punctuation">;</span> <span class="token number">20</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">;</span> <span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">sys_read</span><span class="token punctuation">(</span>read_fd <span class="token keyword">as</span> usize<span class="token punctuation">,</span> <span class="token operator">&amp;</span>read<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;read from file &apos;temp&apos; successfully...&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// &#x68C0;&#x67E5;&#x8BFB;&#x5230;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x662F;&#x5426;&#x6B63;&#x786E;</span>
+    <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">&quot;content = &quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">20</span> <span class="token punctuation">{</span>
+        <span class="token function">putchar</span><span class="token punctuation">(</span>read<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> read<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">as</span> u8 <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">putchar</span><span class="token punctuation">(</span><span class="token char string">&apos;\n&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sys_close</span><span class="token punctuation">(</span>read_fd <span class="token keyword">as</span> i32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token number">0</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x8981;&#x5B9E;&#x73B0;&#x4E24;&#x4E2A;&#x65B0;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/bin/syscall.rs</span>
+
+<span class="token keyword">enum</span> SyscallId <span class="token punctuation">{</span>
+    Open <span class="token operator">=</span> <span class="token number">56</span><span class="token punctuation">,</span>
+    Close <span class="token operator">=</span> <span class="token number">57</span><span class="token punctuation">,</span>
+    <span class="token punctuation">...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_open</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> flags<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i64 <span class="token punctuation">{</span>
+    <span class="token function">sys_call</span><span class="token punctuation">(</span>SyscallId<span class="token punctuation">::</span>Open<span class="token punctuation">,</span> path <span class="token keyword">as</span> usize<span class="token punctuation">,</span> flags <span class="token keyword">as</span> usize<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_close</span><span class="token punctuation">(</span>fd<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i64 <span class="token punctuation">{</span>
+    <span class="token function">sys_call</span><span class="token punctuation">(</span>SyscallId<span class="token punctuation">::</span>Close<span class="token punctuation">,</span> fd <span class="token keyword">as</span> usize<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><code>sys_open, sys_close</code> &#x7684; syscall id &#x5206;&#x522B;&#x4E3A; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>5</mn><mn>6</mn><mo separator="true">,</mo><mn>5</mn><mn>7</mn></mrow><annotation encoding="application/x-tex">56, 57</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">5</span><span class="mord mathrm">6</span><span class="mpunct">,</span><span class="mord mathrm">5</span><span class="mord mathrm">7</span></span></span></span> &#x3002;&#x4E3A;&#x4E86;&#x8BF4;&#x660E;&#x5B83;&#x4EEC;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5148;&#x4ECB;&#x7ECD;&#x4E00;&#x4E0B;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26; (fd, File Descriptor) &#x7684;&#x6982;&#x5FF5;&#x3002;&#x5728;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x5185;&#xFF0C;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x7528;&#x6765;&#x63CF;&#x8FF0;&#x4E00;&#x4E2A;&#x6253;&#x5F00;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5B83;&#x88AB;&#x6240;&#x6709;&#x7684;&#x7EBF;&#x7A0B;&#x5171;&#x4EAB;&#x3002;&#x800C; <code>sys_open</code> &#x7684;&#x529F;&#x80FD;&#x662F;&#x4E3A;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x6253;&#x5F00;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x3002;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x63A5;&#x4E0B;&#x6765;&#x53EF;&#x88AB;&#x8BFB;&#x5199;&#x76F8;&#x5173;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528; <code>sys_read, sys_write</code> &#x5229;&#x7528;&#x6765;&#x8BBF;&#x95EE;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#x3002;&#x5F53;&#x6240;&#x6709;&#x7684;&#x8BBF;&#x95EE;&#x7ED3;&#x675F;&#x540E;&#xFF0C;&#x8FDB;&#x7A0B;&#x901A;&#x8FC7; <code>sys_close</code> &#x5173;&#x95ED;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x56DE;&#x6536;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x770B;&#x5230;&#xFF0C;&#x4F20;&#x5165; <code>sys_open</code> &#x7684;&#x53C2;&#x6570;&#x9664;&#x4E86; <code>path</code> &#x8868;&#x793A;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#xFF0C;&#x8FD8;&#x6709;&#x4E00;&#x4E2A;&#x6807;&#x5FD7;&#x4F4D; <code>flags</code>&#x3002;&#x5B83;&#x7684;&#x4F5C;&#x7528;&#x662F;&#x63A7;&#x5236;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x5BF9;&#x6253;&#x5F00;&#x6587;&#x4EF6;&#x7684;&#x8BFB;&#x5199;&#x6743;&#x9650;&#x3002;&#x4E0E; Linux &#x4E00;&#x81F4;&#xFF0C;&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x4E0B;&#x9762;&#x7684;&#x6807;&#x5FD7;&#x4F4D;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/io.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> O_RDONLY<span class="token punctuation">:</span> i32 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment">// &#x53EA;&#x8BFB;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> O_WRONLY<span class="token punctuation">:</span> i32 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token comment">// &#x53EA;&#x5199;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> O_RDWR<span class="token punctuation">:</span> i32 <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>        <span class="token comment">// &#x53EF;&#x8BFB;&#x53EF;&#x5199;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> O_CREAT<span class="token punctuation">:</span> i32 <span class="token operator">=</span> <span class="token number">64</span><span class="token punctuation">;</span>    <span class="token comment">// &#x6253;&#x5F00;&#x6587;&#x4EF6;&#x65F6;&#x82E5;&#x6587;&#x4EF6;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x521B;&#x5EFA;&#x5B83;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> O_APPEND<span class="token punctuation">:</span> i32 <span class="token operator">=</span> <span class="token number">1024</span><span class="token punctuation">;</span>    <span class="token comment">// &#x4ECE;&#x6587;&#x4EF6;&#x7ED3;&#x5C3E;&#x5F00;&#x59CB;&#x5199;&#x5165;</span>
+</code></pre>
+<p>&#x6B64;&#x5916;&#xFF0C;&#x4E4B;&#x524D;&#x5B9A;&#x4E49;&#x7684; <code>sys_write</code> &#x529F;&#x80FD;&#x592A;&#x5F31;&#xFF0C;&#x4EC5;&#x652F;&#x6301;&#x5411;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x5199;&#x5165;&#x5355;&#x4E2A;&#x5B57;&#x7B26;&#x3002;&#x6211;&#x4EEC;&#x5C06;&#x5176;&#x6309;&#x7167; <code>sys_read</code> &#x7684;&#x6807;&#x51C6;&#x91CD;&#x5199;&#xFF0C;&#x652F;&#x6301;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x3001;&#x5185;&#x5B58;&#x7F13;&#x51B2;&#x533A;&#x4EE5;&#x53CA;&#x957F;&#x5EA6;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// usr/rust/src/syscall.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">sys_write</span><span class="token punctuation">(</span>fd<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> base<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> len<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i64 <span class="token punctuation">{</span>
+    <span class="token function">sys_call</span><span class="token punctuation">(</span>SyscallId<span class="token punctuation">::</span>Write<span class="token punctuation">,</span> fd<span class="token punctuation">,</span> base <span class="token keyword">as</span> usize<span class="token punctuation">,</span> len<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8C03;&#x7528; <code>sys_write</code> &#x7684;&#x5730;&#x65B9;&#x4E5F;&#x8981;&#x505A;&#x76F8;&#x5E94;&#x4FEE;&#x6539;&#xFF1A;</p>
+<pre class="language-"><code class="lang-diff">// usr/rust/src/io.rs
+pub fn putchar(ch: char) {
+<span class="token deleted-sign deleted">-   sys_write(ch as u8);
+</span><span class="token inserted-sign inserted">+   sys_write(STDOUT, &amp;ch as *const char as *const u8, 1);
+</span>}
+</code></pre>
+<p>&#x6CE8;&#x610F;&#x5230;&#x6211;&#x4EEC;&#x5728;&#x6253;&#x5F00;&#x6587;&#x4EF6;&#x65F6;&#x5E76;&#x6CA1;&#x6709;&#x4F7F;&#x7528;&#x6807;&#x5FD7;&#x4F4D; <code>O_CREAT</code> &#xFF0C;&#x56E0;&#x6B64;&#x5047;&#x5B9A;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x5185; <code>temp</code> &#x6587;&#x4EF6;&#x4E00;&#x5B9A;&#x5B58;&#x5728;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x628A;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x548C;&#x4F17;&#x591A;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x4E00;&#x8D77;&#x6253;&#x5305;&#x5230;&#x78C1;&#x76D8;&#x955C;&#x50CF;&#x4E2D;&#x3002;</p>
+<pre class="language-"><code class="lang-diff">//  usr/Makefile
+$(sfsimg): rcore-fs-fuse rust
+<span class="token inserted-sign inserted">+   @dd if=/dev/zero of=$(out_dir)/temp bs=1K count=2
+</span><span class="token unchanged">    @rcore-fs-fuse --fs sfs $@ $(out_dir) zip
+</span></code></pre>
+<p>&#x73B0;&#x5728;&#x7528;&#x6237;&#x6001;&#x51C6;&#x5907;&#x5B8C;&#x6BD5;&#xFF0C;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x770B;&#x5185;&#x6838;&#x6001;&#x8981;&#x505A;&#x51FA;&#x54EA;&#x4E9B;&#x53D8;&#x5316;&#x3002;</p>
+<p>&#x9996;&#x5148;&#x6211;&#x4EEC;&#x6765;&#x652F;&#x6301;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x673A;&#x5236;&#x3002;&#x5B83;&#x662F;&#x7528;&#x6765;&#x63CF;&#x8FF0;&#x8FDB;&#x7A0B;&#x5185;&#x6253;&#x5F00;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x7ED3;&#x6784;&#x4F53;&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/fs/mod.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> file<span class="token punctuation">;</span>
+
+<span class="token comment">// os/src/fs/file.rs</span>
+<span class="token keyword">use</span> alloc<span class="token punctuation">::</span>sync<span class="token punctuation">::</span>Arc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> rcore_fs<span class="token punctuation">::</span>vfs<span class="token punctuation">::</span>INode<span class="token punctuation">;</span>
+<span class="token keyword">use</span> rcore_fs_sfs<span class="token punctuation">::</span>INodeImpl<span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>fs<span class="token punctuation">::</span>ROOT_INODE<span class="token punctuation">;</span>
+
+<span class="token comment">// &#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x7C7B;&#x578B;</span>
+<span class="token attribute attr-name">#[derive(Copy,Clone,Debug)]</span>
+<span class="token keyword">pub</span> <span class="token keyword">enum</span> FileDescriptorType <span class="token punctuation">{</span>
+    FD_NONE<span class="token punctuation">,</span>    <span class="token comment">// &#x7A7A;&#x7C7B;&#x578B;</span>
+    FD_INODE<span class="token punctuation">,</span>    <span class="token comment">// INode &#x7C7B;&#x578B;</span>
+    FD_DEVICE<span class="token punctuation">,</span>    <span class="token comment">// &#x8BBE;&#x5907;&#x7C7B;&#x578B;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// &#x8FDB;&#x7A0B;&#x5185;&#x6253;&#x5F00;&#x7684;&#x6587;&#x4EF6;</span>
+<span class="token attribute attr-name">#[derive(Clone)]</span>
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> File <span class="token punctuation">{</span>
+    fdtype<span class="token punctuation">:</span> FileDescriptorType<span class="token punctuation">,</span>
+    <span class="token comment">// &#x8FDB;&#x7A0B;&#x5BF9;&#x8BE5;&#x6587;&#x4EF6;&#x7684;&#x6743;&#x9650;</span>
+    readable<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+    writable<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+    <span class="token comment">// &#x8BE5;&#x6587;&#x4EF6;&#x7684; INode &#x6307;&#x9488;&#xFF0C;&#x7528;&#x4E8E;&#x8FDB;&#x884C;&#x5B9E;&#x9645;&#x8BFB;&#x5199;</span>
+    <span class="token keyword">pub</span> inode<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>Arc<span class="token operator">&lt;</span><span class="token keyword">dyn</span> INode<span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span>
+    <span class="token comment">// &#x8FDB;&#x7A0B;&#x4E2D;&#x8BE5;&#x6587;&#x4EF6;&#x7684;&#x504F;&#x79FB;&#x91CF;&#x6307;&#x9488;</span>
+    offset<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x4E00;&#x4E9B;&#x7B80;&#x5355;&#x7684;&#x51FD;&#x6570;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/fs/file.rs</span>
+<span class="token keyword">impl</span> File <span class="token punctuation">{</span>
+    <span class="token comment">// &#x521D;&#x59CB;&#x5316;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        File <span class="token punctuation">{</span>
+            fdtype<span class="token punctuation">:</span> FileDescriptorType<span class="token punctuation">::</span>FD_NONE<span class="token punctuation">,</span>
+            readable<span class="token punctuation">:</span> <span class="token keyword">false</span><span class="token punctuation">,</span>
+            writable<span class="token punctuation">:</span> <span class="token keyword">false</span><span class="token punctuation">,</span>
+            inode<span class="token punctuation">:</span> None<span class="token punctuation">,</span>
+            offset<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// get/set &#x51FD;&#x6570;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_readable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> v<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>readable <span class="token operator">=</span> v<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_writable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> v<span class="token punctuation">:</span> bool<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>writable <span class="token operator">=</span> v<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_readable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>readable <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_writable</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>writable <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_fdtype</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> t<span class="token punctuation">:</span> FileDescriptorType<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>fdtype <span class="token operator">=</span> t<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_fdtype</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> FileDescriptorType <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>fdtype <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">set_offset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> o<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>offset <span class="token operator">=</span> o<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">get_offset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span> <span class="token keyword">self</span><span class="token punctuation">.</span>offset <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x6BCF;&#x4E2A;&#x8FDB;&#x7A0B;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x6253;&#x5F00;&#x7684;&#x6587;&#x4EF6;&#x5217;&#x8868;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5728;&#x8FDB;&#x7A0B;&#x63A7;&#x5236;&#x5757;&#x4E2D;&#x5F00;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x5B57;&#x6BB5; <code>ofile</code> &#x3002;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x4E00;&#x9879;&#x5982;&#x679C;&#x662F; <code>None</code> &#xFF0C;&#x8868;&#x660E;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x53EF;&#x7528;&#x3002;</p>
+<pre class="language-"><code class="lang-diff">// os/src/consts.rs
+<span class="token inserted-sign inserted">+pub const NOFILE: usize = 16;
+</span>
+// os/src/process/structs.rs
+<span class="token inserted-sign inserted">+use crate::fs::file::File;
++use spin::Mutex;
++use alloc::sync::Arc;
+</span>pub struct Thread {
+<span class="token unchanged">    pub context: Context,
+    pub kstack: KernelStack,
+    pub wait: Option&lt;Tid&gt;,
+</span><span class="token inserted-sign inserted">+   pub ofile: [Option&lt;Arc&lt;Mutex&lt;File&gt;&gt;&gt;; NOFILE],
+</span>}
+</code></pre>
+<p>&#x5728;&#x65B0;&#x5EFA;&#x5185;&#x6838;&#x7EBF;&#x7A0B; <code>new_kernel</code> &#x4EE5;&#x53CA;&#x83B7;&#x5F97;&#x542F;&#x52A8;&#x7EBF;&#x7A0B; <code>get_boot_thread</code> &#x4E2D;&#xFF0C;&#x6700;&#x7EC8;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x4E5F;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x53D8;&#x5316;&#xFF1A;</p>
+<pre class="language-"><code class="lang-diff">// os/src/process/structs.rs
+Box::new(Thread {
+<span class="token unchanged">    ...
+</span><span class="token inserted-sign inserted">+   ofile: [None; NOFILE],
+</span>})
+</code></pre>
+<p>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x7F16;&#x8BD1;&#x901A;&#x8FC7;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x6253;&#x5F00;&#x4EE5;&#x4E0B;&#x5F00;&#x5173;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/lib.rs</span>
+<span class="token attribute attr-name">#![feature(const_in_array_repeat_expressions)]</span>
+</code></pre>
+<p>&#x65B0;&#x5EFA;&#x7528;&#x6237;&#x8FDB;&#x7A0B; <code>new_user</code> &#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x8FDB;&#x884C;&#x7C7B;&#x4F3C;&#x7684;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x4F46;&#x662F;&#x8981;&#x5C06;&#x6570;&#x7EC4;&#x7684;&#x524D;&#x4E09;&#x9879; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">0,1,2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathrm">2</span></span></span></span> &#x8D4B;&#x503C;&#x3002;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;&#x5B83;&#x4EEC;&#x5206;&#x522B;&#x8868;&#x793A;&#x6807;&#x51C6;&#x8F93;&#x5165; (stdin)&#x3001;&#x6807;&#x51C6;&#x8F93;&#x51FA; (stdout)&#x3001;&#x6807;&#x51C6;&#x9519;&#x8BEF;&#x8F93;&#x51FA; (stderr) &#xFF0C;&#x5728;&#x521B;&#x5EFA;&#x7528;&#x6237;&#x8FDB;&#x7A0B;&#x7684;&#x65F6;&#x5019;&#x9ED8;&#x8BA4;&#x6253;&#x5F00;&#x3002;&#x4E5F;&#x5C31;&#x662F;&#x518D;&#x5206;&#x914D;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x662F;&#x4ECE; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">3</span></span></span></span> &#x5F00;&#x59CB;&#x5206;&#x914D;&#x7684;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">//  os/src/process/structs.rs</span>
+<span class="token keyword">impl</span> Thread <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">new_user</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token punctuation">[</span>u8<span class="token punctuation">]</span><span class="token punctuation">,</span> wait_thread<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>Tid<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Box<span class="token operator">&lt;</span>Thread<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">...</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> thread <span class="token operator">=</span> Thread <span class="token punctuation">{</span>
+            context<span class="token punctuation">:</span> Context<span class="token punctuation">::</span><span class="token function">new_user_thread</span><span class="token punctuation">(</span>entry_addr<span class="token punctuation">,</span> ustack_top<span class="token punctuation">,</span> kstack<span class="token punctuation">.</span><span class="token function">top</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vm<span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            kstack<span class="token punctuation">:</span> kstack<span class="token punctuation">,</span>
+            wait<span class="token punctuation">:</span> wait_thread<span class="token punctuation">,</span>
+            ofile<span class="token punctuation">:</span> <span class="token punctuation">[</span>None<span class="token punctuation">;</span> NOFILE<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">3</span> <span class="token punctuation">{</span>
+            thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Some</span><span class="token punctuation">(</span>Arc<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>Mutex<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>File<span class="token punctuation">::</span><span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        Box<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5728;&#x8FDB;&#x7A0B;&#x4E2D;&#x5206;&#x914D;&#x3001;&#x56DE;&#x6536;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#xFF1A;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">//  os/src/process/structs.rs</span>
+<span class="token keyword">impl</span> Thread <span class="token punctuation">{</span>
+    <span class="token comment">// &#x5206;&#x914D;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">alloc_fd</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> i32 <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> fd <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> 0usize<span class="token punctuation">..</span>NOFILE <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_none</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                fd <span class="token operator">=</span> i<span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Some</span><span class="token punctuation">(</span>Arc<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>Mutex<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>File<span class="token punctuation">::</span><span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fd <span class="token keyword">as</span> i32
+    <span class="token punctuation">}</span>
+    <span class="token comment">// &#x56DE;&#x6536;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">dealloc_fd</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> fd<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_some</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span> <span class="token operator">=</span> None<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x770B;&#x770B;&#x7528;&#x6237;&#x6001;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x5E94;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/syscall.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> SYS_OPEN<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">56</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">const</span> SYS_CLOSE<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">57</span><span class="token punctuation">;</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">syscall</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> args<span class="token punctuation">:</span> <span class="token punctuation">[</span>usize<span class="token punctuation">;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> TrapFrame<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">match</span> id <span class="token punctuation">{</span>
+        SYS_OPEN <span class="token operator">=&gt;</span> <span class="token function">sys_open</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">as</span> i32<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        SYS_CLOSE <span class="token operator">=&gt;</span> <span class="token function">sys_close</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">as</span> i32<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        SYS_READ <span class="token operator">=&gt;</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token function">sys_read</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">mut</span> u8<span class="token punctuation">,</span> args<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        SYS_WRITE <span class="token operator">=&gt;</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token function">sys_write</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> args<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x4E0E;&#x4E4B;&#x524D;&#x7684;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x4E0D;&#x540C;&#x4E4B;&#x5904;&#x5728;&#x4E8E;&#xFF0C;&#x5728;&#x8FD9;&#x4E9B;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x5185;&#xFF0C;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x7684;&#x8FDB;&#x7A0B;&#x63A7;&#x5236;&#x5757;&#x53EF;&#x80FD;&#x88AB;&#x4FEE;&#x6539;&#x3002;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x8FDB;&#x7A0B;&#x63A7;&#x5236;&#x5757;&#x7684;&#x53EF;&#x53D8;&#x5F15;&#x7528;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/process/processor.rs</span>
+<span class="token keyword">impl</span> Processor <span class="token punctuation">{</span>
+    <span class="token punctuation">...</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> Thread <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">inner</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">.</span><span class="token function">as_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// os/src/process/mod.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;static</span> <span class="token keyword">mut</span> Thread <span class="token punctuation">{</span>
+    CPU<span class="token punctuation">.</span><span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x4F9D;&#x6B21;&#x5B9E;&#x73B0;&#x8FD9;&#x4E9B;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x3002;</p>
+<p>&#x5BF9;&#x4E8E; <code>sys_open</code> &#xFF0C;&#x5206;&#x914D;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#xFF0C;&#x5E76;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x6587;&#x4EF6;&#x7684; INode &#xFF0C;&#x5C06;&#x6307;&#x9488;&#x4FDD;&#x5B58;&#x4E0B;&#x6765;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/syscall.rs</span>
+<span class="token keyword">fn</span> <span class="token function">sys_open</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> flags<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> thread <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> fd <span class="token operator">=</span> thread<span class="token punctuation">.</span><span class="token function">alloc_fd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> isize<span class="token punctuation">;</span>
+    thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span>
+        <span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">open_file</span><span class="token punctuation">(</span><span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token function">from_cstr</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    fd
+<span class="token punctuation">}</span>
+<span class="token comment">// os/src/fs/file.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">open_file</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> path<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;static</span> str<span class="token punctuation">,</span> flags<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">set_fdtype</span><span class="token punctuation">(</span>FileDescriptorType<span class="token punctuation">::</span>FD_INODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">set_readable</span><span class="token punctuation">(</span><span class="token keyword">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>flags <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">set_readable</span><span class="token punctuation">(</span><span class="token keyword">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>flags <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">set_writable</span><span class="token punctuation">(</span><span class="token keyword">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>inode <span class="token operator">=</span> <span class="token function">Some</span><span class="token punctuation">(</span>ROOT_INODE<span class="token punctuation">.</span><span class="token function">lookup</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">set_offset</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5BF9;&#x4E8E; <code>sys_close</code> &#xFF0C;&#x76F4;&#x63A5;&#x56DE;&#x6536;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x5373;&#x53EF;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/syscall.rs</span>
+<span class="token keyword">fn</span> <span class="token function">sys_close</span><span class="token punctuation">(</span>fd<span class="token punctuation">:</span> i32<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> thread <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assert!</span><span class="token punctuation">(</span>thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_some</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    thread<span class="token punctuation">.</span><span class="token function">dealloc_fd</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token number">0</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5BF9;&#x4E8E; <code>sys_open</code> &#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x662F;&#x6807;&#x51C6;&#x8F93;&#x5165;&#x7684;&#x8BDD;&#xFF0C;&#x5E94;&#x8BE5;&#x4ECE;&#x5BF9;&#x5E94;&#x7684; INode &#x4E2D;&#x8BFB;&#x5165;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/syscall.rs</span>
+<span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">sys_read</span><span class="token punctuation">(</span>fd<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> base<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">mut</span> u8<span class="token punctuation">,</span> len<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> fd <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &#x5982;&#x679C;&#x662F;&#x6807;&#x51C6;&#x8F93;&#x5165;</span>
+        <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+            <span class="token operator">*</span>base <span class="token operator">=</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>fs<span class="token punctuation">::</span>stdio<span class="token punctuation">::</span>STDIN<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> u8<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> thread <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_some</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> file <span class="token operator">=</span> thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span><span class="token function">get_readable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">match</span> file<span class="token punctuation">.</span><span class="token function">get_fdtype</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            FileDescriptorType<span class="token punctuation">::</span>FD_INODE <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                <span class="token keyword">let</span> <span class="token keyword">mut</span> offset <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token function">get_offset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">let</span> s <span class="token operator">=</span> file
+                    <span class="token punctuation">.</span>inode
+                    <span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">read_at</span><span class="token punctuation">(</span>offset<span class="token punctuation">,</span> core<span class="token punctuation">::</span>slice<span class="token punctuation">::</span><span class="token function">from_raw_parts_mut</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                offset <span class="token operator">+=</span> s<span class="token punctuation">;</span>
+                file<span class="token punctuation">.</span><span class="token function">set_offset</span><span class="token punctuation">(</span>offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> s <span class="token keyword">as</span> isize<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            _ <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                <span class="token function">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;fdtype not handled!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x5BF9;&#x4E8E; <code>sys_write</code> &#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x662F;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x7684;&#x8BDD;&#xFF0C;&#x8F93;&#x5165;&#x5230;&#x5BF9;&#x5E94;&#x7684; INode &#x4E2D;&#x3002;</p>
+<pre class="language-"><code class="lang-rust"><span class="token comment">// os/src/syscall.rs</span>
+<span class="token keyword">unsafe</span> <span class="token keyword">fn</span> <span class="token function">sys_write</span><span class="token punctuation">(</span>fd<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> base<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> u8<span class="token punctuation">,</span> len<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> isize <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> fd <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">{</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>len <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>io<span class="token punctuation">::</span><span class="token function">putchar</span><span class="token punctuation">(</span><span class="token operator">*</span>base <span class="token keyword">as</span> char<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> thread <span class="token operator">=</span> process<span class="token punctuation">::</span><span class="token function">current_thread_mut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_some</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> file <span class="token operator">=</span> thread<span class="token punctuation">.</span>ofile<span class="token punctuation">[</span>fd <span class="token keyword">as</span> usize<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span><span class="token function">get_writable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">match</span> file<span class="token punctuation">.</span><span class="token function">get_fdtype</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            FileDescriptorType<span class="token punctuation">::</span>FD_INODE <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                <span class="token keyword">let</span> <span class="token keyword">mut</span> offset <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token function">get_offset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">let</span> s <span class="token operator">=</span> file
+                    <span class="token punctuation">.</span>inode
+                    <span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">write_at</span><span class="token punctuation">(</span>offset<span class="token punctuation">,</span> core<span class="token punctuation">::</span>slice<span class="token punctuation">::</span><span class="token function">from_raw_parts</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                offset <span class="token operator">+=</span> s<span class="token punctuation">;</span>
+                file<span class="token punctuation">.</span><span class="token function">set_offset</span><span class="token punctuation">(</span>offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> s <span class="token keyword">as</span> isize<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            _ <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                <span class="token function">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;fdtype not handled!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token number">0</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8BA9;&#x6211;&#x4EEC;&#x6D4B;&#x8BD5;&#x4E00;&#x4E0B;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x80FD;&#x5426;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#xFF1A;</p>
+<blockquote>
+<p><strong>[success] &#x6587;&#x4EF6;&#x8BFB;&#x5199;&#x6D4B;&#x8BD5;</strong></p>
+<pre class="language-"><code class="lang-rust"><span class="token operator">&gt;&gt;</span> rust<span class="token operator">/</span>write
+searching <span class="token keyword">for</span> program rust<span class="token operator">/</span>write
+write to file <span class="token lifetime-annotation symbol">&apos;temp</span>&apos; successfully<span class="token punctuation">...</span>
+read from file <span class="token lifetime-annotation symbol">&apos;temp</span>&apos; successfully<span class="token punctuation">...</span>
+content <span class="token operator">=</span> Hello <span class="token macro-rules function">world!</span>
+thread <span class="token number">1</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
+</code></pre>
+</blockquote>
+<p>&#x6240;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x5728;<a href="https://github.com/rcore-os/rCore_tutorial/tree/ch9-pa4" target="_blank">&#x8FD9;&#x91CC;</a>&#x627E;&#x5230;&#x3002;</p>
 <p><div id="page-footer" class="localized-footer"><hr><p><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"></p>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <div id="gitalk-container"></div>
@@ -1233,7 +1607,7 @@
                 </a>
                 
                 
-                <a href="../chapter10/introduction.html" class="navigation navigation-next " aria-label="Next page: 第十章：同步互斥">
+                <a href="part5.html" class="navigation navigation-next " aria-label="Next page: 总结与展望">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1244,7 +1618,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"总结与展望","level":"1.11.4","depth":2,"next":{"title":"第十章：同步互斥","level":"1.12","depth":1,"path":"chapter10/introduction.md","ref":"chapter10/introduction.md","articles":[]},"previous":{"title":"[实现终端]","level":"1.11.3","depth":2,"path":"chapter9/part3.md","ref":"chapter9/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part4.md","mtime":"2020-02-13T08:47:45.404Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-05T06:24:28.045Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[文件读写]","level":"1.11.4","depth":2,"next":{"title":"总结与展望","level":"1.11.5","depth":2,"path":"chapter9/part5.md","ref":"chapter9/part5.md","articles":[]},"previous":{"title":"[实现终端]","level":"1.11.3","depth":2,"path":"chapter9/part3.md","ref":"chapter9/part3.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter9/part4.md","mtime":"2020-03-05T13:39:57.843Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-05T13:40:04.881Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
