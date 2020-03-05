@@ -18,6 +18,12 @@
 - 认真阅读 [ucore doc](https://learningos.github.io/ucore_os_webdocs/lab6/lab6_3_6_1_basic_method.html) 中 stride 调度算法部分。
 - 在 `process/scheduler.rs` 中创建 `StrideScheduler` ，为其实现 `Scheduler trait` 。
 
+```rust
+// 测试文件需要用到的 syscall id
+pub const SYS_SETPRIORITY: usize = 140;
+pub const SYS_TIMES: usize = 153;
+```
+
 > [stride 测试文件（依赖 sys_fork，sys_gettime）](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/stride_test.rs)
 >
 > `sys_fork` 为上一章要求实现的系统调用，如果未能实现，请向老师/助教提供无需 `sys_fork` 的测试用例（我没 xiang 想 yao 出 mo 优 yu 雅 bu 的 xiang 写 xie 法 le ，所以在这向大家征集了 QAQ）

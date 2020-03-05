@@ -12,7 +12,9 @@
 >
 > 练习方面：
 >
-> 在练习五的描述中，将 ``sys_fork`` 的 syscall id 设定为 $$220$$；
+> 在练习五的描述中，将 `sys_fork` 的 syscall id 设定为 $$220$$；
+>
+> 在联系六中增加了测试文件需要用到的 syscall id；
 >
 > 重写了练习八，新增了练习八的测试程序。
 >
@@ -56,7 +58,7 @@
 
 这是一个展示如何从零开始用 Rust 语言写一个基于 64 位 RISC-V 架构的操作系统的教程。完成这个教程后，你将可以在内核上运行用户态终端，并在终端内输入命令运行其他程序。
 
-我们很轻量级！截至目前的代码行数分布(ch9-pa4分支)为：
+我们很轻量级！截至目前的代码行数分布(ch9-pa4 分支)为：
 
 ```
 -------------------------------------------------------------------------------
@@ -83,7 +85,7 @@ SUM:                           288            613             25           3244
 
 ## 阅读在线文档并进行实验
 
-- [实验 ppt: rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/os2atc2019/os2atc.html)
+- [实验 ppt：rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/os2atc2019/os2atc.html)
 - [实验文档：rcore step-by-step tutorial](https://rcore-os.github.io/rCore_tutorial_doc/)
 - [实验代码：rcore step-by-step code](https://github.com/rcore-os/rCore_tutorial/)
 
@@ -91,5 +93,6 @@ SUM:                           288            613             25           3244
 
 对于章节内容有任何疑问及建议，请在对应页面最下面的评论区中发表观点。注意需要用 Github ID 登录后才能评论。
 
-## 
+##
+
 好了，那就让我们正式开始！
