@@ -7,7 +7,7 @@
    1. 现有页面替换算法框架的实现存在问题，请解释为什么，并提供你的解决方案（自然语言表述即可，无需编程实现） (10分)
 3. 编程实现（20分）：  
    编程解决：实现时钟页面替换算法。详见下文实验指导   
-   > 当前框架从master分支出发，实现了用于用户进程的fifo页面替换算法。请同学**自行merge** pagereplace分支的代码，然后在**仅修改fifo.rs**的要求下，实现时钟页面替换算法。
+   > 当前框架从master分支出发，实现了用于用户进程的fifo页面替换算法。请同学**自行merge** lab3-base分支的代码，然后在**仅修改fifo.rs**的要求下，实现时钟页面替换算法。
 
 ## 实验指导
 
@@ -43,4 +43,4 @@
      当发生缺页中断时，我们借助硬件提供的异常信息，获取当前发生缺页异常的虚拟地址，从而获取该虚拟地址所指向的页表项，将页表项传递给全局页面替换管理器PAGE_REPLACE_HANDLER的do_pgfault接口进行处理，修复映射关系。
 2. 测试  
    [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/init.rs)  
-   用该文件替换掉init.rs，并为MemorySet添加一个get_table接口（参考[这里](https://github.com/rcore-os/rCore_tutorial/blob/pgreplace_test/os/src/memory/memory_set/mod.rs#L112))。运行make qemu可以进行测试。
+   用该文件替换掉init.rs，并为MemorySet添加一个get_table接口（参考[这里](https://github.com/rcore-os/rCore_tutorial/blob/pgreplace_test/os/src/memory/memory_set/mod.rs#L112))。运行make run可以进行测试。
