@@ -50,7 +50,7 @@ impl ContextContent {
 - 将 $$\text{SPP}$$ 设置为 Supervisor ，使得使用 `sret` 返回后 CPU 的特权级为 S Mode 。
 - 设置 $$\text{SIE,SPIE}$$，这里的作用是 `sret` 返回后，在内核线程中使能异步中断。详情请参考[RISC-V 特权指令集文档](https://riscv.org/specifications/privileged-isa/)。
 
-我们还希望能够给线程传入参数，这只需要修改中断帧中的$$x_10,x_11,...,x_17 $$（即参数$$a_0,a_1,...,a_7$$ ）即可，`__trapret` 函数可以协助完成参数传递。
+我们还希望能够给线程传入参数，这只需要修改中断帧中的$$x_{10},x_{11},...,x_{17} $$（即参数$$a_0,a_1,...,a_7$$ ）即可，`__trapret` 函数可以协助完成参数传递。
 
 ```rust
 // src/context.rs
