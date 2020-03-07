@@ -31,3 +31,21 @@ pub const SYS_TIMES: usize = 153;
 > `sys_gettime` 返回当前 `timer::TICKS` 就可以了
 >
 > 由于 rcore 还不是很完善，尤其是 wait 机制，所以弱化了测例
+
+测试方法：``python3 test.py lab6``，注意，请多等待一下再退出 Qemu 。
+
+参考输出：
+```rust
+forking
+forking
+forking
+forking
+forking
+main: fork ok.
+thread 0 exited, exit code = 0
+thread 5 exited, exit code = 638400
+thread 4 exited, exit code = 528400
+thread 3 exited, exit code = 396800
+thread 2 exited, exit code = 269200
+thread 1 exited, exit code = 140000
+```

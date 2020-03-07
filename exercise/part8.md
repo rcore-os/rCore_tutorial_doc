@@ -28,18 +28,18 @@ pub fn sys_pipe(pipefd: &mut[i32; 2]) -> i64;
 3. 父进程关闭管道读端，子进程关闭管道写端。
 4. 父进程向管道中写入数据，子进程将管道中的数据读出。
 
+测试方法：``python3 test.py lab8``。
+
 其参考输出为：
 
 ```rust
 fd_read = 3, fd_write = 4
 forking
-message sent to child process pid 2!
+message sent to child process pid 1!
+thread 0 exited, exit code = 0
+message received in child process = Hello world!
 thread 1 exited, exit code = 0
->> message received in child process = Hello world!
-thread 2 exited, exit code = 0
 ```
-
-请忽略 '>>' 位置的不确定性对于程序输出带来的影响。
 
 ## 思考题
 1. 如果父进程还没写数据，子进程就开始读数据会怎么样？应如何解决？

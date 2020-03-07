@@ -102,6 +102,7 @@ pub fn sys_write(fd: usize, base: *const u8, len: usize) -> i64 {
 
 ```diff
 // usr/rust/src/io.rs
++pub const STDOUT: usize = 1;
 pub fn putchar(ch: char) {
 -   sys_write(ch as u8);
 +   sys_write(STDOUT, &ch as *const char as *const u8, 1);

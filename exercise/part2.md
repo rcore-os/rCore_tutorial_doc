@@ -10,7 +10,7 @@
 
 - First Fit 就是蛮力寻找第一块大小合适的连续内存进行分配。
 - 这里可以简单的用一维数组维护。由于没有性能要求，$$O(n^2)$$ 查找都行。（可以参考 ucore ，不过那个相对复杂一些）
-- 该测试在内核态进行，需要替换 `init.rs` 。（如此不优雅的硬编码是为了防止作弊，请谅解）
+- 测试方法：``python3 test.py lab2``，结果保存在 `lab2.result` 文件中。
 
 **说明：需要参考 `init.rs` 增加部分接口**
 
@@ -41,8 +41,6 @@ pub fn dealloc_frames(f: Frame, cnt: usize) {
 }
 ```
 
-> [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/init.rs)
->
-> 该测试文件包含了一些后续章节用到的 `init` ，简单将其注释掉就好
+> [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/pmm_test.rs)
 >
 > 如果输出了 `8/8` ，则表示通过测试，基 ying 本 gai 没有问题
