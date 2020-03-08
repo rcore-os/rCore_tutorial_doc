@@ -9,6 +9,7 @@ OS 在正确完成中断初始化（设置中断处理程序的起始地址，�
 
 	.section .text
 	.globl __alltraps
+    .align 4
 __alltraps:
 	SAVE_ALL
 	mv a0, sp
@@ -20,7 +21,7 @@ __trapret:
 	sret
 ```
 
-我们首先定义 `__alltraps` 函数作为所有中断处理程序的入口，这里我们首先通过 `SAVE_ALL` （汇编宏）来保存上下文环境，随后将当前栈顶地址 `sp` 的值给到寄存器 `a0` ，这是因为在 risc-v calling convention 中，规定 `a0` 保存函数输入的第一个参数，于是就相当于将栈顶地址传给函数 `rust_trap` 作为第一个参数。
+我们首先定义 `__alltraps` 函数作为所有中断处理程序的入口，这里我们首先通过 `SAVE_ALL` （汇编宏）来保存上下文环境，随后将当前栈顶地址 `sp` 的值给到寄存器 `a0` ，这是因为在 risc-v calling convention 中，规定 `a0` 保存函数输入的第一个参数，于是就相当于将栈顶地址传给函数 `rust_trap` 作为第一个参数。正如我们之前提及的，__alltraps 需要以四字节对齐。
 
 随后，我们通过 `jal` 调用 `rust_trap` 函数并在返回之后跳转到调用语句的下一条指令。实际上调用返回之后进入 `__trapret` 函数，这里我们通过 `RESTORE_ALL` （汇编宏）恢复中断之前的上下文环境，并最终通过一条 `sret` 指令跳转到 `sepc`指向的地址，即回到触发中断的那条指令所在地址。这会导致触发中断的那条指令又被执行一次。
 
@@ -181,8 +182,6 @@ pub fn init() {
         // 仍使用 Direct 模式
         // 将中断处理总入口设置为 __alltraps
         stvec::write(__alltraps as usize, stvec::TrapMode::Direct);
-        // 设置 sstatus 的 SIE 位
-        sstatus::set_sie();
     }
     println!("++++ setup interrupt! ++++");
 }
