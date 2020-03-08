@@ -9,7 +9,7 @@ OS 在正确完成中断初始化（设置中断处理程序的起始地址，�
 
 	.section .text
 	.globl __alltraps
-    .align 4
+	.align 4
 __alltraps:
 	SAVE_ALL
 	mv a0, sp
