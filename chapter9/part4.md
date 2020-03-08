@@ -114,7 +114,7 @@ pub fn putchar(ch: char) {
 ```diff
 //  usr/Makefile
 $(sfsimg): rcore-fs-fuse rust
-+   @dd if=/dev/zero of=$(out_dir)/temp bs=1K count=2
++   @dd if=/dev/zero of=$(out_dir)/temp bs=1k count=2
 	@rcore-fs-fuse --fs sfs $@ $(out_dir) zip 
 ```
 

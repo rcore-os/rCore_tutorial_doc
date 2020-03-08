@@ -27,6 +27,39 @@
 ### 内核态测试
 在运行内核态测试 (lab2/3) 之前，请确保 ``os/src/init.rs`` 存在且完成的是内核初始化的工作。
 评测脚本会直接将 ``os/src/init.rs`` 替换为对应的内核态测试程序 ``test/XX_test.rs`` 并 ``make run`` 。
+
+> **[info] 对于在做 lab2/3 而 tutorial 进度已经到第八章第二小节的同学**
+>
+> lab2/3 的测试程序中去掉了第八章之后 ``init.rs`` 中嵌入用户镜像的引用代码如下：
+>
+> ```rust
+> // os/src/init.rs
+> global_asm!(include_str!("link_user.S"));
+> ```
+>
+> 因此，为了能够通过测试脚本测试 lab2/3 ，一种可行的对于原版代码的修改方式为：
+>
+> 将下面的代码注释掉：
+>
+> ```rust
+> // os/src/fs/mod.rs
+> extern "C" {
+>    fn _user_img_start();
+>    fn _user_img_end();
+> };
+> let start = _user_img_start as usize;
+> let end = _user_img_end as usize;
+> Arc::new(unsafe { device::MemBuf::new(start, end) })
+> ```
+>
+> 并替换为
+>
+> ```rust
+> // os/src/fs/mod.rs
+> Arc::new(unsafe { device::MemBuf::new(0, 0) })
+> ```
+>
+
 ### 用户态测试
 在运行用户态测试 (lab5/6/8) 之前，请确保 ``os/src/process/mod.rs`` 存在，且在 ``process::init()`` 函数中会通过 ``execute('rust/user_shell', None)`` 会将用户终端加载到内存并放入进程池。
 如果用户态测试程序为 ``test/usr/XX_test.rs``，评测脚本会将上述提到的 ``rust/user_shell`` 替换为 ``rust/XX_test``，即不经过用户终端直接 ``make run `` 运行用户程序。目前脚本的功能并不完善，无法在所有进程结束后自动退出，因此我们等待数秒钟通过 `C-a + x` 退出 Qemu 让脚本继续运行。
