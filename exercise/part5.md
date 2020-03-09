@@ -7,12 +7,10 @@
 
 ## 实验指导
 
-* [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs)
-* 测试方法：``python3 test.py lab5``
-* 参考输出
+- [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs)
+- 测试方法：`python3 test.py lab5`
+- 参考输出
   ```rust
-  forking
-  forking
   I am father
   ret tid is: 2
   thread 0 exited, exit code = 0

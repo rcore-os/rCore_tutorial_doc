@@ -28,19 +28,26 @@ pub const SYS_TIMES: usize = 153;
 >
 > `sys_fork` 为上一章要求实现的系统调用，如果未能实现，请向老师/助教提供无需 `sys_fork` 的测试用例（我没 xiang 想 yao 出 mo 优 yu 雅 bu 的 xiang 写 xie 法 le ，所以在这向大家征集了 QAQ）
 >
-> `sys_gettime` 返回当前 `timer::TICKS` 就可以了
+> `sys_gettime` 直接返回 `timer::TICKS` ，记得在每次发生时钟中断时将其加一。或者直接返回 `get_cycle() / TIMEBASE` （参考下一章 `crate::timer::now`）。
 >
 > 由于 rcore 还不是很完善，尤其是 wait 机制，所以弱化了测例
 
-测试方法：``python3 test.py lab6``，注意，请多等待一下再退出 Qemu 。
+测试方法：`python3 test.py lab6` ，注意，请多等待一下再退出 Qemu 。
+
+多出来的 `>>` 是由于目前 `rcore` 的 `wait/fork` 不完善导致的（等一位哥哥来修复
+
+检察方式（大概）：，检察 `thread %d exited, exit code = %d` ，捕获 `exit code` ：
+
+```rust
+sort(code, code + 5);
+for i in 0..5 {
+    assert!((code[i] * 2 / code[0] + 1) / 2 == i + 1);
+}
+```
 
 参考输出：
+
 ```rust
-forking
-forking
-forking
-forking
-forking
 main: fork ok.
 thread 0 exited, exit code = 0
 thread 5 exited, exit code = 638400
