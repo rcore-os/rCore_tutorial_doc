@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>7. 同步互斥（TODO） · GitBook</title>
+        <title>7. 同步互斥 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -978,7 +978,7 @@
                 <a href="introduction.html">
             
                     
-                    练习题（施工中）
+                    练习题
             
                 </a>
             
@@ -1070,7 +1070,7 @@
                 <a href="part7.html">
             
                     
-                    7. 同步互斥（TODO）
+                    7. 同步互斥
             
                 </a>
             
@@ -1171,7 +1171,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >7. 同步互斥（TODO）</a>
+        <a href=".." >7. 同步互斥</a>
     </h1>
 </div>
 
@@ -1215,96 +1215,7 @@
 <p>&#x8FD9;&#x91CC;&#x7ED9;&#x51FA;&#x4E86; <code>rust std</code> &#x5E93;&#x4E2D; Mutext &#x5B9E;&#x73B0;&#x7684;&#x9B54;&#x6539;&#x7248;&#xFF0C;&#x4F60;&#x53EA;&#x9700;&#x8981;&#x5B8C;&#x6210;&#x4E24;&#x5904;&#xFF08;&#x5199;&#x4E86; <code>TODO</code> &#x7684;&#x5730;&#x65B9;&#xFF09;&#x7B80;&#x5355;&#x7684;&#x586B;&#x7A7A;&#x5373;&#x53EF;&#x3002;</p>
 <p>&#x5F53; <code>Mutex<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>T</span><span class="token punctuation">&gt;</span></span></code> &#x88AB;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x5360;&#x7528;&#x65F6;&#xFF0C;&#x5176;&#x5B83;&#x8BD5;&#x56FE;&#x8BBF;&#x95EE;&#x8BE5;&#x7EBF;&#x7A0B;&#x7684;&#x7EBF;&#x7A0B;&#x4F1A;&#x4E3B;&#x52A8;&#x8BA9;&#x51FA;&#x81EA;&#x5DF1;&#x7684;&#x65F6;&#x95F4;&#x7247;&#xFF0C;&#x7ED9;&#x5176;&#x5B83;&#x7EBF;&#x7A0B;&#x8C03;&#x5EA6;&#x3002;</p>
 <p>&#x800C;&#x5F53;&#x8D44;&#x6E90;&#x4F7F;&#x7528;&#x5B8C;&#x6BD5;&#x65F6;&#xFF0C;&#x5E94;&#x8BE5;&#x80FD;&#x591F;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#x8D44;&#x6E90;&#x3002;</p>
-<pre class="language-"><code class="lang-rust"><span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>interrupt<span class="token punctuation">::</span><span class="token punctuation">{</span>disable_and_store<span class="token punctuation">,</span> restore<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>process<span class="token punctuation">::</span>yield_now<span class="token punctuation">;</span>
-<span class="token keyword">use</span> core<span class="token punctuation">::</span>cell<span class="token punctuation">::</span>UnsafeCell<span class="token punctuation">;</span>
-<span class="token keyword">use</span> core<span class="token punctuation">::</span>default<span class="token punctuation">::</span>Default<span class="token punctuation">;</span>
-<span class="token keyword">use</span> core<span class="token punctuation">::</span>marker<span class="token punctuation">::</span>Sync<span class="token punctuation">;</span>
-<span class="token keyword">use</span> core<span class="token punctuation">::</span>ops<span class="token punctuation">::</span><span class="token punctuation">{</span>Deref<span class="token punctuation">,</span> DerefMut<span class="token punctuation">,</span> Drop<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token comment">/// This type provides MUTual EXclusion based on spinning.</span>
-<span class="token keyword">pub</span> <span class="token keyword">struct</span> Mutex<span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    lock<span class="token punctuation">:</span> UnsafeCell<span class="token operator">&lt;</span>bool<span class="token operator">&gt;</span><span class="token punctuation">,</span>
-    data<span class="token punctuation">:</span> UnsafeCell<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment">/// A guard to which the protected data can be accessed</span>
-<span class="token comment">///</span>
-<span class="token comment">/// When the guard falls out of scope it will release the lock.</span>
-<span class="token attribute attr-name">#[derive(Debug)]</span>
-<span class="token keyword">pub</span> <span class="token keyword">struct</span> MutexGuard<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized <span class="token operator">+</span> <span class="token lifetime-annotation symbol">&apos;a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    lock<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;a</span> <span class="token keyword">mut</span> bool<span class="token punctuation">,</span>
-    data<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">&apos;a</span> <span class="token keyword">mut</span> T<span class="token punctuation">,</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment">// Same unsafe impls as `std::sync::Mutex`</span>
-<span class="token keyword">unsafe</span> <span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized <span class="token operator">+</span> Send<span class="token operator">&gt;</span> Sync <span class="token keyword">for</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token keyword">unsafe</span> <span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized <span class="token operator">+</span> Send<span class="token operator">&gt;</span> Send <span class="token keyword">for</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token comment">/// Creates a new spinlock wrapping the supplied data.</span>
-    <span class="token keyword">pub</span> <span class="token keyword">const</span> <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>user_data<span class="token punctuation">:</span> T<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-        Mutex <span class="token punctuation">{</span>
-            lock<span class="token punctuation">:</span> UnsafeCell<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token keyword">false</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-            data<span class="token punctuation">:</span> UnsafeCell<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>user_data<span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/// Consumes this mutex, returning the underlying data.</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">into_inner</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> T <span class="token punctuation">{</span>
-        <span class="token comment">// We know statically that there are no outstanding references to</span>
-        <span class="token comment">// `self` so there&apos;s no need to lock.</span>
-        <span class="token keyword">let</span> Mutex <span class="token punctuation">{</span> data<span class="token punctuation">,</span> <span class="token punctuation">..</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">;</span>
-        data<span class="token punctuation">.</span><span class="token function">into_inner</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized<span class="token operator">&gt;</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">obtain_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// TODO</span>
-        <span class="token comment">// try to get lock</span>
-        <span class="token comment">// what to do if get fail?</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/// Locks the spinlock and returns a guard.</span>
-    <span class="token comment">///</span>
-    <span class="token comment">/// The returned value may be dereferenced for data access</span>
-    <span class="token comment">/// and the lock will be dropped when the guard falls out of scope.</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> MutexGuard<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">obtain_lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        MutexGuard <span class="token punctuation">{</span>
-            lock<span class="token punctuation">:</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token keyword">self</span><span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
-            data<span class="token punctuation">:</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token keyword">self</span><span class="token punctuation">.</span>data<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized <span class="token operator">+</span> Default<span class="token operator">&gt;</span> Default <span class="token keyword">for</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Mutex<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-        Mutex<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>Default<span class="token punctuation">::</span><span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized<span class="token operator">&gt;</span> Deref <span class="token keyword">for</span> MutexGuard<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token keyword">type</span> Target <span class="token operator">=</span> T<span class="token punctuation">;</span>
-    <span class="token keyword">fn</span> <span class="token function">deref</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span>T <span class="token punctuation">{</span>
-        <span class="token operator">&amp;</span><span class="token operator">*</span><span class="token keyword">self</span><span class="token punctuation">.</span>data
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized<span class="token operator">&gt;</span> DerefMut <span class="token keyword">for</span> MutexGuard<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">deref_mut</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> T <span class="token punctuation">{</span>
-        <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token operator">*</span><span class="token keyword">self</span><span class="token punctuation">.</span>data
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token punctuation">:</span> <span class="token operator">?</span>Sized<span class="token operator">&gt;</span> Drop <span class="token keyword">for</span> MutexGuard<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">&apos;a,</span> T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-    <span class="token comment">/// The dropping of the MutexGuard will release the lock it was created from.</span>
-    <span class="token keyword">fn</span> <span class="token function">drop</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// TODO</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
+<p>&#x4E92;&#x65A5;&#x9501;&#x6846;&#x67B6;&#x4EE3;&#x7801;&#xFF1A;<a href="https://github.com/rcore-os/rCore_tutorial_doc/tree/master/exercise/code/mutex.rs" target="_blank">mutex.rs</a></p>
 <blockquote>
 <p>&#x4E3A;&#x4EC0;&#x4E48;&#x9700;&#x8981;&#x5F15;&#x5165; <code>MutexGuard</code> &#xFF1F;&#xFF08;3 &#x5206;&#xFF09;</p>
 </blockquote>
@@ -1382,71 +1293,8 @@
 <ul>
 <li>&#x589E;&#x52A0;&#x8BA1;&#x65F6;&#x5668; <code>process/timer.rs</code></li>
 </ul>
-<p>&#x540E;&#x9762;&#x4F1A;&#x4F7F;&#x7528;&#x8BA1;&#x65F6;&#x5668;&#xFF0C;&#x5728;&#x7EBF;&#x7A0B;&#x7761;&#x7720;&#x65F6;&#x95F4;&#x5230;&#x4E86;&#x7684;&#x65F6;&#x5019;&#x5C06;&#x5176;&#x5524;&#x9192;&#xFF08;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8BBE;&#x7F6E;&#x4E3A; <code>wakeup(tid)</code> &#xFF09;&#x3002;</p>
-<pre class="language-"><code class="lang-rust"><span class="token comment">//! A naive timer</span>
-
-<span class="token keyword">use</span> alloc<span class="token punctuation">::</span><span class="token punctuation">{</span>boxed<span class="token punctuation">::</span>Box<span class="token punctuation">,</span> collections<span class="token punctuation">::</span>BinaryHeap<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token keyword">use</span> core<span class="token punctuation">::</span>cmp<span class="token punctuation">::</span>Ordering<span class="token punctuation">;</span>
-
-<span class="token comment">/// The type of callback function.</span>
-<span class="token keyword">type</span> Callback <span class="token operator">=</span> Box<span class="token operator">&lt;</span><span class="token keyword">dyn</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> Send <span class="token operator">+</span> Sync <span class="token operator">+</span> <span class="token lifetime-annotation symbol">&apos;static</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
-
-<span class="token keyword">struct</span> <span class="token function">Node</span><span class="token punctuation">(</span>u64<span class="token punctuation">,</span> Callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">impl</span> Ord <span class="token keyword">for</span> Node <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">cmp</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> other<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">Self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Ordering <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token operator">&lt;</span> other<span class="token number">.0</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> Ordering<span class="token punctuation">::</span>Greater<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token operator">&gt;</span> other<span class="token number">.0</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> Ordering<span class="token punctuation">::</span>Less<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> Ordering<span class="token punctuation">::</span>Equal<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span> Eq <span class="token keyword">for</span> Node <span class="token punctuation">{</span><span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span> PartialOrd <span class="token keyword">for</span> Node <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">partial_cmp</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> other<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">Self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Option<span class="token operator">&lt;</span>Ordering<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-        <span class="token function">Some</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">cmp</span><span class="token punctuation">(</span>other<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span> PartialEq <span class="token keyword">for</span> Node <span class="token punctuation">{</span>
-    <span class="token keyword">fn</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> other<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">Self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> bool <span class="token punctuation">{</span>
-        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token number">0</span> <span class="token operator">==</span> other<span class="token number">.0</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment">/// A naive timer</span>
-<span class="token attribute attr-name">#[derive(Default)]</span>
-<span class="token keyword">pub</span> <span class="token keyword">struct</span> Timer <span class="token punctuation">{</span>
-    events<span class="token punctuation">:</span> BinaryHeap<span class="token operator">&lt;</span>Node<span class="token operator">&gt;</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">impl</span> Timer <span class="token punctuation">{</span>
-    <span class="token comment">/// Add a timer with given `deadline`.</span>
-    <span class="token comment">///</span>
-    <span class="token comment">/// The `callback` will be called on timer expired.</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> deadline<span class="token punctuation">:</span> u64<span class="token punctuation">,</span> callback<span class="token punctuation">:</span> <span class="token keyword">impl</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> Send <span class="token operator">+</span> Sync <span class="token operator">+</span> <span class="token lifetime-annotation symbol">&apos;static)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">self</span><span class="token punctuation">.</span>events<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token function">Node</span><span class="token punctuation">(</span>deadline<span class="token punctuation">,</span> Box<span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/// Called on each tick.</span>
-    <span class="token comment">///</span>
-    <span class="token comment">/// The caller should give the current time `now`, and all expired timer will be trigger.</span>
-    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">tick</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> now<span class="token punctuation">:</span> u64<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">while</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>events<span class="token punctuation">.</span><span class="token function">peek</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> event<span class="token number">.0</span> <span class="token operator">&gt;</span> now <span class="token punctuation">{</span>
-                <span class="token keyword">return</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            <span class="token keyword">let</span> callback <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>events<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token punctuation">;</span>
-            <span class="token function">callback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
+<p>&#x8BA1;&#x65F6;&#x5668;&#x4EE3;&#x7801;&#xFF1A;<a href="https://github.com/rcore-os/rCore_tutorial_doc/tree/master/exercise/code/timer.rs" target="_blank">timer.rs</a></p>
+<p>&#x5230;&#x65F6;&#x95F4;&#x540E;&#x4F1A;&#x89E6;&#x53D1;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#xFF0C;&#x5BF9;&#x4E8E;&#x540E;&#x9762; <code>sleep</code> &#x7684;&#x7528;&#x6CD5;&#xFF0C;&#x5728;&#x7EBF;&#x7A0B;&#x7761;&#x7720;&#x65F6;&#x95F4;&#x5230;&#x4E86;&#x7684;&#x65F6;&#x5019;&#x5C06;&#x5176;&#x5524;&#x9192;&#xFF08;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8BBE;&#x7F6E;&#x4E3A; <code>wakeup(tid)</code> &#xFF09;&#x3002;</p>
 <ul>
 <li>&#x589E;&#x52A0; <code>sleep</code></li>
 </ul>
@@ -1521,6 +1369,7 @@
 <p>&#x4E3A;&#x4EC0;&#x4E48;&#x9700;&#x8981;&#x5728; <code>idle_main</code> &#x4E2D;&#x589E;&#x52A0;&#x4E00;&#x77AC;&#x95F4;&#x7684;&#x4E2D;&#x65AD;&#x5F00;&#x542F;&#xFF0C;&#x4E0D;&#x589E;&#x52A0;&#x8FD9;&#x90E8;&#x5206;&#x4F1A;&#x51FA;&#x73B0;&#x4EC0;&#x4E48;&#x95EE;&#x9898;&#xFF1F;&#xFF08;3 &#x5206;&#xFF09;</p>
 </blockquote>
 <h3 id="&#x5B9E;&#x73B0;-spawn">&#x5B9E;&#x73B0; <code>spawn</code></h3>
+<p>&#x7528;&#x4E8E;&#x901A;&#x8FC7;&#x51FD;&#x6570;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x3002;</p>
 <ul>
 <li><code>process/mod.rs</code></li>
 </ul>
@@ -1548,7 +1397,7 @@
 </code></pre>
 <h3 id="&#x54F2;&#x5B66;&#x5BB6;&#x5C31;&#x9910;&#x95EE;&#x9898;&#x6D4B;&#x8BD5;">&#x54F2;&#x5B66;&#x5BB6;&#x5C31;&#x9910;&#x95EE;&#x9898;&#x6D4B;&#x8BD5;</h3>
 <p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/mutex_test.rs" target="_blank">&#x6D4B;&#x8BD5;&#x6587;&#x4EF6;</a></p>
-<p>&#x5C06;&#x8BE5;&#x6587;&#x4EF6;&#x76F4;&#x63A5;&#x66FF;&#x6362; <code>init.rs</code> &#xFF0C;&#x4E94;&#x4E2A;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x5747;&#x6B63;&#x5E38;&#x9000;&#x51FA;&#x5219;&#x8868;&#x793A;&#x6D4B;&#x8BD5;&#x901A;&#x8FC7;&#x3002;</p>
+<p>&#x5C06;&#x8BE5;&#x6587;&#x4EF6;&#x76F4;&#x63A5;&#x66FF;&#x6362; <code>init.rs</code> &#xFF0C;&#x6CA1;&#x6709;&#x54F2;&#x5B66;&#x5BB6;&#x62FF;&#x9519;&#x53C9;&#x5B50;&#x4E14;&#x4E94;&#x4E2A;&#x5185;&#x6838;&#x7EBF;&#x7A0B;&#x5747;&#x6B63;&#x5E38;&#x9000;&#x51FA;&#x5219;&#x8868;&#x793A;&#x6D4B;&#x8BD5;&#x901A;&#x8FC7;&#x3002;</p>
 <ul>
 <li>&#x4FEE;&#x6539; <code>spie</code></li>
 </ul>
@@ -1643,7 +1492,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"7. 同步互斥（TODO）","level":"1.13.7","depth":2,"next":{"title":"8. 文件系统","level":"1.13.8","depth":2,"path":"exercise/part8.md","ref":"./exercise/part8.md","articles":[]},"previous":{"title":"6. CPU 调度","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part7.md","mtime":"2020-03-09T05:03:05.195Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-09T05:16:41.456Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"7. 同步互斥","level":"1.13.7","depth":2,"next":{"title":"8. 文件系统","level":"1.13.8","depth":2,"path":"exercise/part8.md","ref":"./exercise/part8.md","articles":[]},"previous":{"title":"6. CPU 调度","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part7.md","mtime":"2020-03-09T05:32:47.444Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-09T05:34:23.214Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

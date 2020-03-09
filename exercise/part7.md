@@ -34,97 +34,7 @@ mod mutex;
 
 而当资源使用完毕时，应该能够自动释放资源。
 
-```rust
-use crate::interrupt::{disable_and_store, restore};
-use crate::process::yield_now;
-use core::cell::UnsafeCell;
-use core::default::Default;
-use core::marker::Sync;
-use core::ops::{Deref, DerefMut, Drop};
-
-/// This type provides MUTual EXclusion based on spinning.
-pub struct Mutex<T: ?Sized> {
-    lock: UnsafeCell<bool>,
-    data: UnsafeCell<T>,
-}
-
-/// A guard to which the protected data can be accessed
-///
-/// When the guard falls out of scope it will release the lock.
-#[derive(Debug)]
-pub struct MutexGuard<'a, T: ?Sized + 'a> {
-    lock: &'a mut bool,
-    data: &'a mut T,
-}
-
-// Same unsafe impls as `std::sync::Mutex`
-unsafe impl<T: ?Sized + Send> Sync for Mutex<T> {}
-unsafe impl<T: ?Sized + Send> Send for Mutex<T> {}
-
-impl<T> Mutex<T> {
-    /// Creates a new spinlock wrapping the supplied data.
-    pub const fn new(user_data: T) -> Mutex<T> {
-        Mutex {
-            lock: UnsafeCell::new(false),
-            data: UnsafeCell::new(user_data),
-        }
-    }
-
-    /// Consumes this mutex, returning the underlying data.
-    pub fn into_inner(self) -> T {
-        // We know statically that there are no outstanding references to
-        // `self` so there's no need to lock.
-        let Mutex { data, .. } = self;
-        data.into_inner()
-    }
-}
-
-impl<T: ?Sized> Mutex<T> {
-    fn obtain_lock(&self) {
-        // TODO
-        // try to get lock
-        // what to do if get fail?
-    }
-
-    /// Locks the spinlock and returns a guard.
-    ///
-    /// The returned value may be dereferenced for data access
-    /// and the lock will be dropped when the guard falls out of scope.
-    pub fn lock(&self) -> MutexGuard<T> {
-        self.obtain_lock();
-        MutexGuard {
-            lock: unsafe { &mut *self.lock.get() },
-            data: unsafe { &mut *self.data.get() },
-        }
-    }
-}
-
-impl<T: ?Sized + Default> Default for Mutex<T> {
-    fn default() -> Mutex<T> {
-        Mutex::new(Default::default())
-    }
-}
-
-impl<'a, T: ?Sized> Deref for MutexGuard<'a, T> {
-    type Target = T;
-    fn deref(&self) -> &T {
-        &*self.data
-    }
-}
-
-impl<'a, T: ?Sized> DerefMut for MutexGuard<'a, T> {
-    fn deref_mut(&mut self) -> &mut T {
-        &mut *self.data
-    }
-}
-
-impl<'a, T: ?Sized> Drop for MutexGuard<'a, T> {
-    /// The dropping of the MutexGuard will release the lock it was created from.
-    fn drop(&mut self) {
-        // TODO
-    }
-}
-```
+互斥锁框架代码：[mutex.rs](https://github.com/rcore-os/rCore_tutorial_doc/tree/master/exercise/code/mutex.rs)
 
 > 为什么需要引入 `MutexGuard` ？（3 分）
 
@@ -204,73 +114,9 @@ fn sys_exec(path: *const u8) -> isize {
 
 - 增加计时器 `process/timer.rs`
 
-后面会使用计时器，在线程睡眠时间到了的时候将其唤醒（回调函数设置为 `wakeup(tid)` ）。
+计时器代码：[timer.rs](https://github.com/rcore-os/rCore_tutorial_doc/tree/master/exercise/code/timer.rs)
 
-```rust
-//! A naive timer
-
-use alloc::{boxed::Box, collections::BinaryHeap};
-use core::cmp::Ordering;
-
-/// The type of callback function.
-type Callback = Box<dyn FnOnce() + Send + Sync + 'static>;
-
-struct Node(u64, Callback);
-
-impl Ord for Node {
-    fn cmp(&self, other: &Self) -> Ordering {
-        if self.0 < other.0 {
-            return Ordering::Greater;
-        } else if self.0 > other.0 {
-            return Ordering::Less;
-        } else {
-            return Ordering::Equal;
-        }
-    }
-}
-
-impl Eq for Node {}
-
-impl PartialOrd for Node {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for Node {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-
-/// A naive timer
-#[derive(Default)]
-pub struct Timer {
-    events: BinaryHeap<Node>,
-}
-
-impl Timer {
-    /// Add a timer with given `deadline`.
-    ///
-    /// The `callback` will be called on timer expired.
-    pub fn add(&mut self, deadline: u64, callback: impl FnOnce() + Send + Sync + 'static) {
-        self.events.push(Node(deadline, Box::new(callback)));
-    }
-
-    /// Called on each tick.
-    ///
-    /// The caller should give the current time `now`, and all expired timer will be trigger.
-    pub fn tick(&mut self, now: u64) {
-        while let Some(event) = self.events.peek() {
-            if event.0 > now {
-                return;
-            }
-            let callback = self.events.pop().unwrap().1;
-            callback();
-        }
-    }
-}
-```
+到时间后会触发回调函数，对于后面 `sleep` 的用法，在线程睡眠时间到了的时候将其唤醒（回调函数设置为 `wakeup(tid)` ）。
 
 - 增加 `sleep`
 
@@ -348,6 +194,8 @@ impl Processor {
 
 ### 实现 `spawn`
 
+用于通过函数创建一个内核线程。
+
 - `process/mod.rs`
 
 ```rust
@@ -378,7 +226,7 @@ where
 
 [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/mutex_test.rs)
 
-将该文件直接替换 `init.rs` ，五个内核线程均正常退出则表示测试通过。
+将该文件直接替换 `init.rs` ，没有哲学家拿错叉子且五个内核线程均正常退出则表示测试通过。
 
 - 修改 `spie`
 
