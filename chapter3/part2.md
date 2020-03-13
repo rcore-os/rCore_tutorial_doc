@@ -68,45 +68,7 @@ pub extern "C" fn rust_main() -> ! {
 }
 ```
 
-使用 `make run`构建并运行，有结果，但不是想看到的：
-
-> **[danger] 非预期的显示结果**
-
-> ```rust
-> ++++ setup interrupt! ++++
-> ++++ setup interrupt! ++++
-> ......
-> ```
-
-### 开启内核态中断使能
-
-为何没有中断处理程序的显示，而是 qemu 模拟的 riscv 计算机不断地重新启动？仔细检查一下代码，发现在初始化阶段缺少使能中断这一步！
-事实上寄存器 `sstatus` 中有一控制位 `SIE`，表示 S 态全部中断的使能。如果没有设置这个`SIE`控制位，那在 S 态是不能正常接受时钟中断的。需要对下面的代码进行修改，在初始化阶段添加使能中断这一步：
-
-```rust
-diff --git a/os/src/interrupt.rs b/os/src/interrupt.rs
-...
-@@ -2,13 +2,15 @@ use riscv::register::{
-     scause,
-     sepc,
-     stvec,
--    sscratch
-+    sscratch,
-+    sstatus
- };
-
- pub fn init() {
-     unsafe {
-         sscratch::write(0);
-         stvec::write(trap_handler as usize, stvec::TrapMode::Direct);
-+        sstatus::set_sie();
-     }
-     println!("++++ setup interrupt! ++++");
- }
-
-```
-
-再使用 `make run`构建并运行，有预想的结果了！
+使用 `make run`构建并运行，你可能能看到以下的正确结果：
 
 > **[success] trap handled**
 >
@@ -116,8 +78,22 @@ diff --git a/os/src/interrupt.rs b/os/src/interrupt.rs
 > panicked at 'trap handled!', src/interrupt.rs:20:5
 > ```
 
-可见在进入中断处理程序之前，硬件为我们正确的设置好了 `scause,sepc` 寄存器；随后我们正确的进入了设定的中断处理程序。如果输出与预期不一致的话，可以在[这里][code]找到目前的代码进行参考。
+但是很不巧，你有差不多相同的概率看到以下和我们预期不同的的结果：
 
-到目前为止，虽然能够响应中断了，但在执行完中断处理程序后，系统还无法返回到之前中断处继续执行。如何做到？请看下一节。
+> **[danger] 非预期的显示结果**
+
+> ```rust
+> ++++ setup interrupt! ++++
+> ++++ setup interrupt! ++++
+> ......
+> ```
+
+内核进入了 Boot loop？
+
+### 保证异常处理入口对齐
+
+为何没有异常处理程序的显示，而是 qemu 模拟的 riscv 计算机不断地重新启动？根据 RV64 ISA，异常处理入口必须按照四字节对齐，但是我们现在的代码并没有保证这一点。因此我们在设置 stvec 的时候，事实上最低两位地址被置零了，发生异常的时候可能直接跳转到了我们的异常处理程序的第一条指令中间。显然，这很大概率会导致各种各样的奇怪条件，之后跑飞。
+
+很遗憾是，Rust 没有简单地办法保证一个符号的对齐，此外使用纯 Rust 实现 Trap handler 还有一些其他的问题：Rust 会在函数的开始和结尾加入一些额外的指令，控制栈寄存器等。因此如果要完成保存现场等工作，以便在异常处理程序完成后返回，Rust 单独是难以完成的。接下来几节中我们将通过提供使用汇编代码编写的异常处理程序来解决这些问题。
 
 [code]: https://github.com/rcore-os/rCore_tutorial/tree/ch3-pa2
