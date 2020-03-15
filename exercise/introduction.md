@@ -28,11 +28,11 @@
 
 在使用评测脚本之前，请确保自己的代码目录结构与 [master 分支](https://github.com/rcore-os/rCore_tutorial/tree/master) 基本一致，并将其中的 [评测脚本 `test.py`](https://github.com/rcore-os/rCore_tutorial/blob/master/test.py) 与 [放置测试程序的目录 `test/`](https://github.com/rcore-os/rCore_tutorial/tree/master/test) 还有 [Makefile](https://github.com/rcore-os/rCore_tutorial/blob/master/Makefile) 置于你的代码仓库的根目录中。
 测评脚本使用方法如下：
-`python3 test.py labX` ，其中$$X\in\{2,3,5,6,8\}$$，可以自动完成代码的替换工作(内核态、用户态的替换方式的细节参见下面)并进行评测，最后将运行结果放在 `labX.result` 文件中。如果这个过程没有出现错误(如编译错误、或环境配置有问题等)，评测脚本还会直接打开 `labX.result` 文件查看运行结果。不必担心替换会污染代码，脚本会自动完成备份和恢复工作。
+`python3 test.py labX` ，其中$$X\in\{2,3,5,6,7,8\}$$，可以自动完成代码的替换工作(内核态、用户态的替换方式的细节参见下面)并进行评测，最后将运行结果放在 `labX.result` 文件中。如果这个过程没有出现错误(如编译错误、或环境配置有问题等)，评测脚本还会直接打开 `labX.result` 文件查看运行结果。不必担心替换会污染代码，脚本会自动完成备份和恢复工作。
 
 ### 内核态测试
 
-在运行内核态测试 (lab2/3) 之前，请确保 `os/src/init.rs` 存在且完成的是内核初始化的工作。
+在运行内核态测试 (lab2/3/7) 之前，请确保 `os/src/init.rs` 存在且完成的是内核初始化的工作。
 评测脚本会直接将 `os/src/init.rs` 替换为对应的内核态测试程序 `test/XX_test.rs` 并 `make run` 。
 
 > **[info] 对于在做 lab2/3 而 tutorial 进度已经到第八章第二小节的同学**
