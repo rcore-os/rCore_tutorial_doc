@@ -6,7 +6,7 @@
 >
 > **2020-03-26**
 >
-> github.io 疑似被和谐，目前在 rcore-tutorial-doc.netlify.com/docs 维护自动更新的镜像。之后有时间的话更新配置文件。
+> github.io 疑似被和谐，目前在 rcore-tutorial-doc.netlify.com 维护自动更新的镜像。之后有时间的话更新配置文件。
 >
 > **2020-03-15**
 >
