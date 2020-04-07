@@ -8,31 +8,41 @@
 ## 实验指导
 
 - [测试文件](https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs)
+
 - 测试方法：`python3 test.py lab5`
-- 参考输出
+
+- 参考输出：
+  
+  - 该输出仅供参考；
+  - 因为调度的不确定性，线程结束的顺序甚至申请到的 `TID` 会有不同；
+  - 故你的输出不需要和该输出完全一样；
+  - 在评阅过程中，我们会人工抽查运行结果。
+  
   ```rust
-  I am father
-  ret tid is: 2
-  thread 0 exited, exit code = 0
-  forking
-  I am child
-  ret tid is: 0
-  thread 1 exited, exit code = 0
   I am child
   ret tid is: 0
   thread 2 exited, exit code = 0
+  I am father
+  ret tid is: 2
+  thread 1 exited, exit code = 0
   I am child
   ret tid is: 0
+  thread 3 exited, exit code = 0
+  I am father
+  ret tid is: 3
   thread 0 exited, exit code = 0
   ```
 
 思考以下问题：
 
 1. 如何控制子进程的返回值？（线程管理）
+   
    <p><font color="white">修改上下文中的 a0 寄存器。</font></p>
 2. 目前尚未实现进程切分，是否可以偷懒把线程当进程用？
+   
    <p><font color="white">目前，可以。（出于偷懒甚至不需要维护进程的父子关系）</font></p>
 3. 如何复制一个线程？（虚拟内存管理）
+   
    <p><font color="white">分配新的栈、新的页表，并将页表的内容进行复制和映射。</font></p>
 4. 为什么这道题这么难分值还和其它题一样？
    <p><font color="white">因为有现成的代码可以参考呀（小声）</font></p>
