@@ -1194,29 +1194,40 @@
 </ol>
 <h2 id="&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;">&#x5B9E;&#x9A8C;&#x6307;&#x5BFC;</h2>
 <ul>
-<li><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs" target="_blank">&#x6D4B;&#x8BD5;&#x6587;&#x4EF6;</a></li>
-<li>&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#xFF1A;<code>python3 test.py lab5</code></li>
-<li>&#x53C2;&#x8003;&#x8F93;&#x51FA;<pre class="language-"><code class="lang-rust">I am father
-ret tid is<span class="token punctuation">:</span> <span class="token number">2</span>
-thread <span class="token number">0</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
-forking
-I am child
+<li><p><a href="https://github.com/rcore-os/rCore_tutorial/blob/master/test/usr/fork_test.rs" target="_blank">&#x6D4B;&#x8BD5;&#x6587;&#x4EF6;</a></p>
+</li>
+<li><p>&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#xFF1A;<code>python3 test.py lab5</code></p>
+</li>
+<li><p>&#x53C2;&#x8003;&#x8F93;&#x51FA;&#xFF1A;</p>
+<ul>
+<li>&#x8BE5;&#x8F93;&#x51FA;&#x4EC5;&#x4F9B;&#x53C2;&#x8003;&#xFF1B;</li>
+<li>&#x56E0;&#x4E3A;&#x8C03;&#x5EA6;&#x7684;&#x4E0D;&#x786E;&#x5B9A;&#x6027;&#xFF0C;&#x7EBF;&#x7A0B;&#x7ED3;&#x675F;&#x7684;&#x987A;&#x5E8F;&#x751A;&#x81F3;&#x7533;&#x8BF7;&#x5230;&#x7684; <code>TID</code> &#x4F1A;&#x6709;&#x4E0D;&#x540C;&#xFF1B;</li>
+<li>&#x6545;&#x4F60;&#x7684;&#x8F93;&#x51FA;&#x4E0D;&#x9700;&#x8981;&#x548C;&#x8BE5;&#x8F93;&#x51FA;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#xFF1B;</li>
+<li>&#x5728;&#x8BC4;&#x9605;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x4F1A;&#x4EBA;&#x5DE5;&#x62BD;&#x67E5;&#x8FD0;&#x884C;&#x7ED3;&#x679C;&#x3002;</li>
+</ul>
+<pre class="language-"><code class="lang-rust">I am child
 ret tid is<span class="token punctuation">:</span> <span class="token number">0</span>
+thread <span class="token number">2</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
+I am father
+ret tid is<span class="token punctuation">:</span> <span class="token number">2</span>
 thread <span class="token number">1</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
 I am child
 ret tid is<span class="token punctuation">:</span> <span class="token number">0</span>
-thread <span class="token number">2</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
-I am child
-ret tid is<span class="token punctuation">:</span> <span class="token number">0</span>
+thread <span class="token number">3</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
+I am father
+ret tid is<span class="token punctuation">:</span> <span class="token number">3</span>
 thread <span class="token number">0</span> exited<span class="token punctuation">,</span> exit code <span class="token operator">=</span> <span class="token number">0</span>
 </code></pre>
 </li>
 </ul>
 <p>&#x601D;&#x8003;&#x4EE5;&#x4E0B;&#x95EE;&#x9898;&#xFF1A;</p>
 <ol>
-<li>&#x5982;&#x4F55;&#x63A7;&#x5236;&#x5B50;&#x8FDB;&#x7A0B;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#xFF1F;&#xFF08;&#x7EBF;&#x7A0B;&#x7BA1;&#x7406;&#xFF09;<p><font color="white">&#x4FEE;&#x6539;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x7684; a0 &#x5BC4;&#x5B58;&#x5668;&#x3002;</font></p></li>
-<li>&#x76EE;&#x524D;&#x5C1A;&#x672A;&#x5B9E;&#x73B0;&#x8FDB;&#x7A0B;&#x5207;&#x5206;&#xFF0C;&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x5077;&#x61D2;&#x628A;&#x7EBF;&#x7A0B;&#x5F53;&#x8FDB;&#x7A0B;&#x7528;&#xFF1F;<p><font color="white">&#x76EE;&#x524D;&#xFF0C;&#x53EF;&#x4EE5;&#x3002;&#xFF08;&#x51FA;&#x4E8E;&#x5077;&#x61D2;&#x751A;&#x81F3;&#x4E0D;&#x9700;&#x8981;&#x7EF4;&#x62A4;&#x8FDB;&#x7A0B;&#x7684;&#x7236;&#x5B50;&#x5173;&#x7CFB;&#xFF09;</font></p></li>
-<li>&#x5982;&#x4F55;&#x590D;&#x5236;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF1F;&#xFF08;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#xFF09;<p><font color="white">&#x5206;&#x914D;&#x65B0;&#x7684;&#x6808;&#x3001;&#x65B0;&#x7684;&#x9875;&#x8868;&#xFF0C;&#x5E76;&#x5C06;&#x9875;&#x8868;&#x7684;&#x5185;&#x5BB9;&#x8FDB;&#x884C;&#x590D;&#x5236;&#x548C;&#x6620;&#x5C04;&#x3002;</font></p></li>
+<li><p>&#x5982;&#x4F55;&#x63A7;&#x5236;&#x5B50;&#x8FDB;&#x7A0B;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#xFF1F;&#xFF08;&#x7EBF;&#x7A0B;&#x7BA1;&#x7406;&#xFF09;</p>
+<p><font color="white">&#x4FEE;&#x6539;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x7684; a0 &#x5BC4;&#x5B58;&#x5668;&#x3002;</font></p></li>
+<li><p>&#x76EE;&#x524D;&#x5C1A;&#x672A;&#x5B9E;&#x73B0;&#x8FDB;&#x7A0B;&#x5207;&#x5206;&#xFF0C;&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x5077;&#x61D2;&#x628A;&#x7EBF;&#x7A0B;&#x5F53;&#x8FDB;&#x7A0B;&#x7528;&#xFF1F;</p>
+<p><font color="white">&#x76EE;&#x524D;&#xFF0C;&#x53EF;&#x4EE5;&#x3002;&#xFF08;&#x51FA;&#x4E8E;&#x5077;&#x61D2;&#x751A;&#x81F3;&#x4E0D;&#x9700;&#x8981;&#x7EF4;&#x62A4;&#x8FDB;&#x7A0B;&#x7684;&#x7236;&#x5B50;&#x5173;&#x7CFB;&#xFF09;</font></p></li>
+<li><p>&#x5982;&#x4F55;&#x590D;&#x5236;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF1F;&#xFF08;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#xFF09;</p>
+<p><font color="white">&#x5206;&#x914D;&#x65B0;&#x7684;&#x6808;&#x3001;&#x65B0;&#x7684;&#x9875;&#x8868;&#xFF0C;&#x5E76;&#x5C06;&#x9875;&#x8868;&#x7684;&#x5185;&#x5BB9;&#x8FDB;&#x884C;&#x590D;&#x5236;&#x548C;&#x6620;&#x5C04;&#x3002;</font></p></li>
 <li>&#x4E3A;&#x4EC0;&#x4E48;&#x8FD9;&#x9053;&#x9898;&#x8FD9;&#x4E48;&#x96BE;&#x5206;&#x503C;&#x8FD8;&#x548C;&#x5176;&#x5B83;&#x9898;&#x4E00;&#x6837;&#xFF1F;<p><font color="white">&#x56E0;&#x4E3A;&#x6709;&#x73B0;&#x6210;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x5440;&#xFF08;&#x5C0F;&#x58F0;&#xFF09;</font></p>
 <p><font color="white">GitHub: rcore-os/rCore</font></p>
 
@@ -1310,7 +1321,7 @@ thread <span class="token number">0</span> exited<span class="token punctuation"
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"5. 用户进程（+ 虚拟内存管理 + 线程管理）","level":"1.13.5","depth":2,"next":{"title":"6. CPU 调度","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"previous":{"title":"4. 线程管理","level":"1.13.4","depth":2,"path":"exercise/part4.md","ref":"./exercise/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part5.md","mtime":"2020-03-15T04:50:59.615Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-26T08:33:40.807Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"5. 用户进程（+ 虚拟内存管理 + 线程管理）","level":"1.13.5","depth":2,"next":{"title":"6. CPU 调度","level":"1.13.6","depth":2,"path":"exercise/part6.md","ref":"./exercise/part6.md","articles":[]},"previous":{"title":"4. 线程管理","level":"1.13.4","depth":2,"path":"exercise/part4.md","ref":"./exercise/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"exercise/part5.md","mtime":"2020-04-08T04:14:25.274Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-04-08T04:17:04.958Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
