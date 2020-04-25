@@ -26,7 +26,7 @@ sfsimg := build/riscv64.img
 rcore-fs-fuse:
 ifeq ($(shell which rcore-fs-fuse),)
 	@echo Installing rcore-fs-fuse
-	@cargo install rcore-fs-fuse --git https://github.com/rcore-os/rcore-fs --rev d8d6119
+	@cargo install rcore-fs-fuse --git https://github.com/rcore-os/rcore-fs --rev 7f5eeac 
 endif
 
 rust:
@@ -64,8 +64,8 @@ export USER_IMG = usr/build/riscv64.img
 ```rust
 // Cargo.toml
 
-rcore-fs = { git = "https://github.com/rcore-os/rcore-fs", rev = "d8d61190"  }
-rcore-fs-sfs = { git = "https://github.com/rcore-os/rcore-fs", rev = "d8d61190"  }
+rcore-fs = { git = "https://github.com/rcore-os/rcore-fs", rev = "7f5eeac"  }
+rcore-fs-sfs = { git = "https://github.com/rcore-os/rcore-fs", rev = "7f5eeac"  }
 ```
 
 我们知道文件系统需要用到块设备驱动来控制底层的块设备（比如磁盘等）。但是这里我们还是简单暴力的将*磁盘*直接链接到内核中，因此这里的*磁盘设备*其实就是一段内存模拟的。这可比实现真实磁盘驱动要简单多了！但是，我们还是需要按照`Device`接口`read_at`、`write_at`和`sync`去实现。
