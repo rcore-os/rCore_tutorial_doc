@@ -37,7 +37,7 @@ Copyright (c) 2003-2019 Fabrice Bellard and the QEMU Project developers
 
 ### 使用 OpenSBI
 
-新版 Qemu 中内置了 [OpenSBI][opensbi] `firrmwire`（固件），它主要负责在操作系统运行前的硬件初始化和加载操作系统的功能。我们使用以下命令尝试运行一下：
+新版 Qemu 中内置了 [OpenSBI][opensbi] `firmware`（固件），它主要负责在操作系统运行前的硬件初始化和加载操作系统的功能。我们使用以下命令尝试运行一下：
 
 ```bash
 $ qemu-system-riscv64 \
