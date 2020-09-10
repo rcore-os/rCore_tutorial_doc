@@ -1205,27 +1205,27 @@
 <h3 id="&#x65F6;&#x949F;&#x521D;&#x59CB;&#x5316;">&#x65F6;&#x949F;&#x521D;&#x59CB;&#x5316;</h3>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/lib.rs</span>
 
-<span class="token keyword">mod</span> timer<span class="token punctuation">;</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">timer</span><span class="token punctuation">;</span>
 
 <span class="token comment">// src/timer.rs</span>
 
-<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>sbi<span class="token punctuation">::</span>set_timer<span class="token punctuation">;</span>
-<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span><span class="token punctuation">{</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>sbi<span class="token punctuation">::</span></span>set_timer<span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token namespace">riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span></span><span class="token punctuation">{</span>
     time<span class="token punctuation">,</span>
     sie
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token comment">// &#x5F53;&#x524D;&#x5DF2;&#x89E6;&#x53D1;&#x591A;&#x5C11;&#x6B21;&#x65F6;&#x949F;&#x4E2D;&#x65AD;</span>
-<span class="token keyword">pub</span> <span class="token keyword">static</span> <span class="token keyword">mut</span> TICKS<span class="token punctuation">:</span> usize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">static</span> <span class="token keyword">mut</span> <span class="token constant">TICKS</span><span class="token punctuation">:</span> <span class="token keyword">usize</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token comment">// &#x89E6;&#x53D1;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x65F6;&#x95F4;&#x95F4;&#x9694;</span>
 <span class="token comment">// &#x6570;&#x503C;&#x4E00;&#x822C;&#x7EA6;&#x4E3A; cpu &#x9891;&#x7387;&#x7684; 1% &#xFF0C; &#x9632;&#x6B62;&#x8FC7;&#x591A;&#x5360;&#x7528; cpu &#x8D44;&#x6E90;</span>
-<span class="token keyword">static</span> TIMEBASE<span class="token punctuation">:</span> u64 <span class="token operator">=</span> <span class="token number">100000</span><span class="token punctuation">;</span>
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">static</span> <span class="token constant">TIMEBASE</span><span class="token punctuation">:</span> <span class="token keyword">u64</span> <span class="token operator">=</span> <span class="token number">100000</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
         <span class="token comment">// &#x521D;&#x59CB;&#x5316;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x6B21;&#x6570;</span>
-        TICKS <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token constant">TICKS</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
         <span class="token comment">// &#x8BBE;&#x7F6E; sie &#x7684; TI &#x4F7F;&#x80FD; STIE &#x4F4D;</span>
-        sie<span class="token punctuation">::</span><span class="token function">set_stimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token namespace">sie<span class="token punctuation">::</span></span><span class="token function">set_stimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token comment">// &#x786C;&#x4EF6;&#x673A;&#x5236;&#x95EE;&#x9898;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x8BBE;&#x7F6E;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x95F4;&#x9694;</span>
     <span class="token comment">// &#x53EA;&#x80FD;&#x5F53;&#x6BCF;&#x4E00;&#x6B21;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x65F6;</span>
@@ -1233,34 +1233,34 @@
     <span class="token comment">// &#x8BBE;&#x7F6E;&#x4E3A;&#x5F53;&#x524D;&#x65F6;&#x95F4;&#x52A0;&#x4E0A; TIMEBASE</span>
     <span class="token comment">// &#x8FD9;&#x6B21;&#x8C03;&#x7528;&#x7528;&#x6765;&#x9884;&#x5904;&#x7406;</span>
     <span class="token function">clock_set_next_event</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;++++ setup timer!     ++++&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">&quot;++++ setup timer!     ++++&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clock_set_next_event</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">clock_set_next_event</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// &#x8C03;&#x7528; OpenSBI &#x63D0;&#x4F9B;&#x7684;&#x63A5;&#x53E3;&#x8BBE;&#x7F6E;&#x4E0B;&#x6B21;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x65F6;&#x95F4;</span>
-    <span class="token function">set_timer</span><span class="token punctuation">(</span><span class="token function">get_cycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> TIMEBASE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">set_timer</span><span class="token punctuation">(</span><span class="token function">get_cycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token constant">TIMEBASE</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// &#x83B7;&#x53D6;&#x5F53;&#x524D;&#x65F6;&#x95F4;</span>
-<span class="token keyword">fn</span> <span class="token function">get_cycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> u64 <span class="token punctuation">{</span>
-    time<span class="token punctuation">::</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> u64
+<span class="token keyword">fn</span> <span class="token function-definition function">get_cycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">u64</span> <span class="token punctuation">{</span>
+    <span class="token namespace">time<span class="token punctuation">::</span></span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token keyword">u64</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="&#x5F00;&#x542F;&#x5185;&#x6838;&#x6001;&#x4E2D;&#x65AD;&#x4F7F;&#x80FD;">&#x5F00;&#x542F;&#x5185;&#x6838;&#x6001;&#x4E2D;&#x65AD;&#x4F7F;&#x80FD;</h3>
 <p>&#x4E8B;&#x5B9E;&#x4E0A;&#x5BC4;&#x5B58;&#x5668; <code>sstatus</code> &#x4E2D;&#x6709;&#x4E00;&#x63A7;&#x5236;&#x4F4D; <code>SIE</code>&#xFF0C;&#x8868;&#x793A; S &#x6001;&#x5168;&#x90E8;&#x4E2D;&#x65AD;&#x7684;&#x4F7F;&#x80FD;&#x3002;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x8BBE;&#x7F6E;&#x8FD9;&#x4E2A;<code>SIE</code>&#x63A7;&#x5236;&#x4F4D;&#xFF0C;&#x90A3;&#x5728; S &#x6001;&#x662F;&#x4E0D;&#x80FD;&#x6B63;&#x5E38;&#x63A5;&#x53D7;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x7684;&#x3002;</p>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/interrupt.rs</span>
 
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
         <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token punctuation">{</span>
-            <span class="token keyword">fn</span> <span class="token function">__alltraps</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">fn</span> <span class="token function-definition function">__alltraps</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        sscratch<span class="token punctuation">::</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        stvec<span class="token punctuation">::</span><span class="token function">write</span><span class="token punctuation">(</span>__alltraps <span class="token keyword">as</span> usize<span class="token punctuation">,</span> stvec<span class="token punctuation">::</span>TrapMode<span class="token punctuation">::</span>Direct<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token namespace">sscratch<span class="token punctuation">::</span></span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token namespace">stvec<span class="token punctuation">::</span></span><span class="token function">write</span><span class="token punctuation">(</span>__alltraps <span class="token keyword">as</span> <span class="token keyword">usize</span><span class="token punctuation">,</span> <span class="token namespace">stvec<span class="token punctuation">::</span></span><span class="token class-name">TrapMode</span><span class="token punctuation">::</span><span class="token class-name">Direct</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">// &#x8BBE;&#x7F6E; sstatus &#x7684; SIE &#x4F4D;</span>
-        sstatus<span class="token punctuation">::</span><span class="token function">set_sie</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token namespace">sstatus<span class="token punctuation">::</span></span><span class="token function">set_sie</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;++++ setup interrupt! ++++&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">&quot;++++ setup interrupt! ++++&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="&#x54CD;&#x5E94;&#x65F6;&#x949F;&#x4E2D;&#x65AD;">&#x54CD;&#x5E94;&#x65F6;&#x949F;&#x4E2D;&#x65AD;</h3>
@@ -1272,43 +1272,43 @@
 </ol>
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/interrupt.rs</span>
 
-<span class="token keyword">use</span> riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span><span class="token punctuation">{</span>
-    scause<span class="token punctuation">::</span><span class="token punctuation">{</span>
+<span class="token keyword">use</span> <span class="token namespace">riscv<span class="token punctuation">::</span>register<span class="token punctuation">::</span></span><span class="token punctuation">{</span>
+    <span class="token namespace">scause<span class="token punctuation">::</span></span><span class="token punctuation">{</span>
         <span class="token keyword">self</span><span class="token punctuation">,</span>
-        Trap<span class="token punctuation">,</span>
-        Exception<span class="token punctuation">,</span>
-        Interrupt
+        <span class="token class-name">Trap</span><span class="token punctuation">,</span>
+        <span class="token class-name">Exception</span><span class="token punctuation">,</span>
+        <span class="token class-name">Interrupt</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     sepc<span class="token punctuation">,</span>
     stvec<span class="token punctuation">,</span>
     sscratch<span class="token punctuation">,</span>
     sstatus
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">::</span>timer<span class="token punctuation">::</span><span class="token punctuation">{</span>
-    TICKS<span class="token punctuation">,</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>timer<span class="token punctuation">::</span></span><span class="token punctuation">{</span>
+    <span class="token constant">TICKS</span><span class="token punctuation">,</span>
     clock_set_next_event
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[no_mangle]</span>
-<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">rust_trap</span><span class="token punctuation">(</span>tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> TrapFrame<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">rust_trap</span><span class="token punctuation">(</span>tf<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token class-name">TrapFrame</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// &#x6839;&#x636E;&#x4E2D;&#x65AD;&#x539F;&#x56E0;&#x5206;&#x7C7B;&#x8BA8;&#x8BBA;</span>
     <span class="token keyword">match</span> tf<span class="token punctuation">.</span>scause<span class="token punctuation">.</span><span class="token function">cause</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment">// &#x65AD;&#x70B9;&#x4E2D;&#x65AD;</span>
-        Trap<span class="token punctuation">::</span><span class="token function">Exception</span><span class="token punctuation">(</span>Exception<span class="token punctuation">::</span>Breakpoint<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">breakpoint</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> tf<span class="token punctuation">.</span>sepc<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Trap</span><span class="token punctuation">::</span><span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token class-name">Exception</span><span class="token punctuation">::</span><span class="token class-name">Breakpoint</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">breakpoint</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> tf<span class="token punctuation">.</span>sepc<span class="token punctuation">)</span><span class="token punctuation">,</span>
         <span class="token comment">// S&#x6001;&#x65F6;&#x949F;&#x4E2D;&#x65AD;</span>
-        Trap<span class="token punctuation">::</span><span class="token function">Interrupt</span><span class="token punctuation">(</span>Interrupt<span class="token punctuation">::</span>SupervisorTimer<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">super_timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        _ <span class="token operator">=&gt;</span> <span class="token function">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;undefined trap!&quot;</span><span class="token punctuation">)</span>
+        <span class="token class-name">Trap</span><span class="token punctuation">::</span><span class="token class-name">Interrupt</span><span class="token punctuation">(</span><span class="token class-name">Interrupt</span><span class="token punctuation">::</span><span class="token class-name">SupervisorTimer</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">super_timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        _ <span class="token operator">=&gt;</span> <span class="token macro property">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;undefined trap!&quot;</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// &#x65AD;&#x70B9;&#x4E2D;&#x65AD;&#x5904;&#x7406;&#xFF1A;&#x8F93;&#x51FA;&#x65AD;&#x70B9;&#x5730;&#x5740;&#x5E76;&#x6539;&#x53D8;&#x4E2D;&#x65AD;&#x8FD4;&#x56DE;&#x5730;&#x5740;&#x9632;&#x6B62;&#x6B7B;&#x5FAA;&#x73AF;</span>
-<span class="token keyword">fn</span> <span class="token function">breakpoint</span><span class="token punctuation">(</span>sepc<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> usize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;a breakpoint set @0x{:x}&quot;</span><span class="token punctuation">,</span> sepc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">breakpoint</span><span class="token punctuation">(</span>sepc<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">usize</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">&quot;a breakpoint set @0x{:x}&quot;</span><span class="token punctuation">,</span> sepc<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token operator">*</span>sepc <span class="token operator">+=</span> <span class="token number">2</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// S&#x6001;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x5904;&#x7406;</span>
-<span class="token keyword">fn</span> <span class="token function">super_timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">super_timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// &#x8BBE;&#x7F6E;&#x4E0B;&#x4E00;&#x6B21;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x89E6;&#x53D1;&#x65F6;&#x95F4;</span>
     <span class="token function">clock_set_next_event</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
@@ -1317,11 +1317,11 @@
         <span class="token comment">// &#x540E;&#x9762;&#x4F1A;&#x63D0;&#x5230;&#xFF0C;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x90FD;&#x80FD;&#x8BBF;&#x95EE;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;</span>
         <span class="token comment">// &#x5982;&#x679C;&#x540C;&#x65F6;&#x8FDB;&#x884C; +1 &#x64CD;&#x4F5C;&#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x8BA1;&#x6570;&#x9519;&#x8BEF;&#x6216;&#x66F4;&#x591A;&#x4E25;&#x91CD;bug</span>
         <span class="token comment">// &#x56E0;&#x6B64;&#x8FD9;&#x662F; unsafe &#x7684;&#xFF0C;&#x4E0D;&#x8FC7;&#x76EE;&#x524D;&#x5148;&#x4E0D;&#x7528;&#x7BA1;&#x8FD9;&#x4E2A;</span>
-        TICKS <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token constant">TICKS</span> <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
         <span class="token comment">// &#x6BCF;&#x89E6;&#x53D1; 100 &#x6B21;&#x65F6;&#x949F;&#x4E2D;&#x65AD;&#x5C06;&#x8BA1;&#x6570;&#x6E05;&#x96F6;&#x5E76;&#x8F93;&#x51FA;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>TICKS <span class="token operator">==</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            TICKS <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-            <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;* 100 ticks *&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token constant">TICKS</span> <span class="token operator">==</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token constant">TICKS</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">&quot;* 100 ticks *&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
     <span class="token comment">// &#x53D1;&#x751F;&#x5916;&#x754C;&#x4E2D;&#x65AD;&#x65F6;&#xFF0C;epc &#x6307;&#x5411;&#x7684;&#x6307;&#x4EE4;&#x6CA1;&#x6709;&#x5B8C;&#x6210;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x6B64;&#x8FD9;&#x91CC;&#x4E0D;&#x9700;&#x8981;&#x4FEE;&#x6539; epc</span>
@@ -1331,14 +1331,14 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/init.rs</span>
 
 <span class="token attribute attr-name">#[no_mangle]</span>
-<span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function">rust_main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
-    <span class="token keyword">crate</span><span class="token punctuation">::</span>interrupt<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">&quot;C&quot;</span> <span class="token keyword">fn</span> <span class="token function-definition function">rust_main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>interrupt<span class="token punctuation">::</span></span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">// &#x65F6;&#x949F;&#x521D;&#x59CB;&#x5316;</span>
-    <span class="token keyword">crate</span><span class="token punctuation">::</span>timer<span class="token punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>timer<span class="token punctuation">::</span></span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
-        <span class="token function">asm!</span><span class="token punctuation">(</span><span class="token string">&quot;ebreak&quot;</span><span class="token punctuation">::</span><span class="token punctuation">::</span><span class="token string">&quot;volatile&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">asm!</span><span class="token punctuation">(</span><span class="token string">&quot;ebreak&quot;</span><span class="token punctuation">::</span><span class="token punctuation">::</span><span class="token string">&quot;volatile&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token function">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;end of rust_main&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">panic!</span><span class="token punctuation">(</span><span class="token string">&quot;end of rust_main&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -1346,8 +1346,8 @@
 <pre class="language-"><code class="lang-rust"><span class="token comment">// src/lang_items.rs</span>
 
 <span class="token attribute attr-name">#[panic_handler]</span>
-<span class="token keyword">fn</span> <span class="token function">panic</span><span class="token punctuation">(</span>info<span class="token punctuation">:</span> <span class="token operator">&amp;</span>PanicInfo<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
-    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> info<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">panic</span><span class="token punctuation">(</span>info<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token class-name">PanicInfo</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">!</span> <span class="token punctuation">{</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{}&quot;</span><span class="token punctuation">,</span> info<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">loop</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -1355,10 +1355,10 @@
 <p>&#x6700;&#x540E;&#x7684;&#x7ED3;&#x679C;&#x786E;&#x5B9E;&#x5982;&#x6211;&#x4EEC;&#x6240;&#x60F3;&#xFF1A;</p>
 <blockquote>
 <p><strong>[success] breakpoint &amp; timer interrupt handling</strong></p>
-<pre class="language-"><code class="lang-rust"><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
-<span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro-rules function">timer!</span>     <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
+<pre class="language-"><code class="lang-rust"><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro property">interrupt!</span> <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
+<span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span> setup <span class="token macro property">timer!</span>     <span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span><span class="token operator">+</span>
 a breakpoint set <span class="token operator">@</span><span class="token number">0x8020002c</span>
-panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of rust_main<span class="token lifetime-annotation symbol">&apos;,</span> src<span class="token operator">/</span>init<span class="token punctuation">.</span>rs<span class="token punctuation">:</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">5</span>
+panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of rust_main&apos;<span class="token punctuation">,</span> src<span class="token operator">/</span>init<span class="token punctuation">.</span>rs<span class="token punctuation">:</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">5</span>
 <span class="token operator">*</span> <span class="token number">100</span> ticks <span class="token operator">*</span>
 <span class="token operator">*</span> <span class="token number">100</span> ticks <span class="token operator">*</span>
 <span class="token punctuation">...</span>
@@ -1432,7 +1432,7 @@ panicked at <span class="token lifetime-annotation symbol">&apos;end</span> of r
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"[时钟中断]","level":"1.5.5","depth":2,"next":{"title":"总结与展望","level":"1.5.6","depth":2,"path":"chapter3/part6.md","ref":"chapter3/part6.md","articles":[]},"previous":{"title":"[实现上下文环境保存与恢复]","level":"1.5.4","depth":2,"path":"chapter3/part4.md","ref":"chapter3/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part5.md","mtime":"2020-03-15T04:50:59.535Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-04-25T02:12:46.259Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"[时钟中断]","level":"1.5.5","depth":2,"next":{"title":"总结与展望","level":"1.5.6","depth":2,"path":"chapter3/part6.md","ref":"chapter3/part6.md","articles":[]},"previous":{"title":"[实现上下文环境保存与恢复]","level":"1.5.4","depth":2,"path":"chapter3/part4.md","ref":"chapter3/part4.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["hide-element","chapter-fold","katex","alerts","emphasize","-highlight","prism","localized-footer","mermaid-gb3"],"pluginsConfig":{"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"emphasize":{},"search":{},"localized-footer":{"filename":"extensions/comment/gitalk.html","hline":"true"},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"mermaid-gb3":{},"alerts":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter3/part5.md","mtime":"2020-09-09T11:31:56.895Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-09-10T06:57:01.716Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
